@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>meme-rename</title>
+    <link href="./meme-suite.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="main">
+      <script src="./meme-suite-logo.js" type="text/javascript">&gt;</script>
+      <h1>meme-rename</h1>
+
+      <p>
+        <b>Usage:</b> <code>meme-rename [options]</code>
+      </p>
+
+      <p><b>Description:</b></p>
+      <p>
+        Copy HTML files from MEME Suite programs to files with
+        distinct names to make it easier to share them:<br />
+        <code>
+                &lt;dest&gt;/&lt;program&gt;.&lt;last_dir&gt;.html
+        </code>
+        <br />
+        where &lt;last_dir&gt; is the last directory on the path, and
+        &lt;program&gt; is the name of the MEME Suite program.
+      </p>
+
+      <p><b>Input:</b></p>
+      <p>
+      The program takes the names of one or more output directories created by
+      MEME Suite programs such as MEME, CENTRIMO etc.
+
+      <p><b>Output:</b></p>
+      <p>
+      The program copies the main HTML file to the destination directory, giving
+      it a name based on the name of the output directory.
+      </p>
+
+      <p><b>Options:</b></p>
+
+      <ul>
+      <li><code>[&lt;<i>dir</i>&gt;]+ </code> - full path of MEME Suite program output directory</li>
+      <li><code>[-d &lt;<i>dest</i>&gt;] </code> - destination directory; default: .</li>
+      <li><code>[-h] - print help message </code></li>
+      </ul>
+
+      <p><b>Bugs:</b> None known.</p>
+
+    </div>
+  </body>
+</html>

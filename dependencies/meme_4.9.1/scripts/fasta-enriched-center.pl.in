@@ -1,0 +1,834 @@
+#!@WHICHPERL@
+# AUTHOR: Philip Machanick
+# CREATE DATE: 11 December 2009
+#
+# centre sequences on a "best" word selected as the word with lowest
+# hypergeometric p-value, varying a window size for words considered
+# positive (those outside the window are considered negative).
+
+use strict;
+use warnings;
+
+use Math::CDF qw(pbinom);
+
+use lib ('@PERLLIBDIR@');
+use PriorUtils qw(check_numeric read_seq_file);
+use HypergeometricDynProg qw(hypergeometric_dp);
+
+my $PGM = $0;      # name of program
+$PGM =~ s#.*/##;                # remove part up to last slash
+#@args = @ARGV;      # arguments to program
+my @args = ();
+
+#
+# defaults
+#
+# sequence alphabet choices
+#protein can include U (Sec) selenocysteine http://www.chem.qmul.ac.uk/iubmb/newsletter/1999/item3.html
+my $PROT_ALPHABET = "ACDEFGHIKLMNPQRSTUVWY"; 
+my $DNA_ALPHABET = "ACGT";    
+# set the alphabet: change if protein specified
+my $ALPHABET = $DNA_ALPHABET;
+my $DNAambigs = "URYKMSWBDHVN"; # IUPAC ambiguous letters
+
+# ambiguous characters: set to non-empty if allowed
+my $AMBIGS = $DNAambigs;
+
+$| = 1;        # flush after all prints
+$SIG{'INT'} = \&cleanup;  # interrupt handler
+# Note: so that interrupts work, always use for system calls:
+#   if ($status = system("$command")) {&cleanup($status)}
+
+my ($w_min, $w_max) = (5,20);
+my ($C_min, $C_max) = (20, 200); # should be > $w_min
+my $C_final;
+my $revcomp = 1;
+my $p_val = 0.05;
+my $THRES = 0.1; # threshold for doing accurate stats: if binomial p-val <= THRESH do hypergeometric
+
+my ($bonferroni, $verbose);
+
+my $usage = <<USAGE;    # usage message
+USAGE: $PGM @args [options]
+    options:
+        -len <len>  	  length of sequences to output
+                          default: <cmax>
+        -cmin <cmin>      minimum central window size
+                          default: $C_min
+        -cmax <cmax>      maximum central window size
+                          default: $C_max
+        -wmin <wmin>      minimum word size
+                          default: $w_min
+        -wmax <wmax>      maximum word size
+                          default: $w_max
+        -p <pthresh>      p-value threshold: 0 < pthresh <= 1
+                          default: $p_val
+        -b                Adjust p-value threshold using Bonferroni
+                          default: no correction
+        -flank <flank>    output flanking sequences to file <flank>
+        -norc		  count words only on given strand
+                          default: combine counts on both strands
+        -verbose          send extra stats to standard error
+                          default: no standard error output
+	-h                print this help message and exit
+
+    Reads DNA sequences in FASTA format.  For each sequence, it
+    outputs the length-<len> portion of the sequence around 
+    its most significant word.  The most significant word in a 
+    sequence is the most enriched word in the central regions 
+    of all sequences compared with all flanking regions.  
+    Enrichment is measured by the p-value of a hypergeometric 
+    test.  If no word in a given sequence has (adjusted) p-value 
+    below <pthresh>, then the word in the exact center of the 
+    sequence is considered the most enriched word.  
+
+    Enrichment is computed for all central windows of widths
+    [<cmin>, <cmin>+2, ..., N] where N <= <cmax>, and for
+    all words of width [<wmin>, <wmin>+1>, ..., <wmax>].
+    The most enriched word in a sequence is the one with the
+    best p-value over all window and word sizes.  
+    Words are counted on both strands and the counts combined 
+    unless -norc is given. In the event that more than one
+    word has the same best p-value, the most central word
+    is used to center the output.
+
+    The Bonferroni correction for multiple testing is based 
+    on the total number of words tested in a single sequence.  
+    This number depends on <cmax> and on how many word widths
+    are tested.  The p-value threshold for significant words 
+    is divided by this number.
+
+    Words containing ambiguous characters (Ns; others are not handled)
+    are not scored (i.e. a "best" word can never contain an "N").
+
+    The sequences output contain a modified FASTA sequence
+    header.  The modified header contains the original
+    sequence name and description, but with the following 
+    three fields inserted in between them::
+	<start of region> <enriched word> <word p-value>
+    Adding <start of region> to a position in the
+    sequence gives the coordinate of that position in
+    the original input sequence.  The word p-value is
+    corrected for multiple testing if -b is given using
+    the formula (1 - (1-p)**n), where n is the number
+    of words tested in a single sequence.
+
+    Any word containing an ambiguous character is not a candidate
+    for "best word".
+
+    Flanking sequences, if output, each have a FASTA name starting with
+    the name of the original sequence, with "-L" appended for the left
+    flanking sequence and "-R" for the right flanking sequence.
+
+    Reads from standard input.
+    Writes to standard output (and standard error in verbose mode).
+USAGE
+
+my $keepfile;
+
+while ($#ARGV >= 0) {
+  $_ = shift;
+  if ($_ eq "-h") {        # help
+    &print_usage("$usage", 0);
+  } elsif ($_ eq "-len") {
+    $C_final = shift; # final trimmed width; check width later
+    &print_usage("$usage", 1) unless (check_numeric($C_final, "int", 1));
+  } elsif ($_ eq "-cmin") {
+    $C_min = shift; # smallest window size
+    &print_usage("$usage", 1) unless (check_numeric($C_min, "int", 0));
+  } elsif ($_ eq "-cmax") {
+    $C_max = shift; # biggest window size
+    &print_usage("$usage", 1) unless (check_numeric($C_max, "int", 0));
+  } elsif ($_ eq "-wmin") {
+    $w_min = shift; # smallest motif size
+    &print_usage("$usage", 1) unless (check_numeric($w_min, "int", 0));
+  } elsif ($_ eq "-wmax") {
+    $w_max = shift; # biggest motif size
+    &print_usage("$usage", 1) unless (check_numeric($w_max, "int", 0));
+  } elsif ($_ eq "-p") {
+    $p_val = shift; # target p-value (reject if == 0 hence separate test)
+    &print_usage("$usage", 1) unless ($p_val && check_numeric($p_val, undef, 0, 1));
+  } elsif ($_ eq "-b") {
+    $bonferroni = 1;
+  } elsif ($_ eq "-flank") {
+    $keepfile = shift; # target p-value (reject if == 0 hence separate test)
+  } elsif ($_ eq "-norc") {
+    $revcomp = 0;
+  } elsif ($_ eq "-verbose") {
+    $verbose = 1;
+  } else {
+    &print_usage("bad arg: `$_'\n$usage", 1);
+  }
+}
+
+# both of these set by read_seq_file
+my @sequences;
+my $totalN;
+
+die "cmin = $C_min > cmax = $C_max" if $C_min > $C_max;
+die "wmin = $w_min > wmax = $w_max" if $w_min > $w_max;
+die "wmax = $w_max > cmin = $C_min" if $w_max > $C_min;
+
+# if we didn't define a trim width use the maximum window
+$C_final = $C_max unless $C_final;
+
+die "len ($C_final) must be between cmin ($C_min) and cmax ($C_max)"
+    unless $C_final >= $C_min && $C_final <= $C_max;
+
+# don't try to do centre sequences with too few "negatives"
+my $THRESHOLD = 3; # we want at least 3x positive window size
+my $LTHRESHOLD = $C_min*$THRESHOLD;
+
+my ($NAMEPOS, $SEQPOS, $COMMENTPOS) = (0, 1, 2); # order in read_fasta_sequence
+# reading from "-" = STDIN
+
+&read_seq_file ("-", \@sequences, \$totalN, $ALPHABET.$AMBIGS, undef, $verbose);
+
+my $N = @sequences;
+
+# should iterate over sizes; to get started just do a few
+# after first window size, only need redo stats for words that change to positive
+# so count_words returns a hash containing such words that an be extracted by
+#    foreach my $new_word (keys %$new_positive)
+my %word_scores;
+my @bestwords = ();
+
+# The Bonferroni correction is on the number of words that are candidates
+# for the best word in a given sequence.  So it is equal to the total
+# number of words that are tested in a sequence, assuming no duplicate
+# words.  The maximum number of words is tested for the window of size
+# $C_max.
+my $n_tests;
+if ($bonferroni) {
+  $n_tests = 0;
+  for (my $w = $w_min; $w <= $w_max; $w++) {
+    my $words_tested_in_seq = $C_max - $w + 1;
+    $n_tests += $revcomp ? 2 * $words_tested_in_seq : $words_tested_in_seq;
+  }
+} else {
+  $n_tests = 1;
+}
+my $target_p = $p_val/$n_tests;
+
+# For each word size w count all the words that occur in all sequences then,
+# for each centred window size C, split the count for each word into those
+# outside the centred window and those inside the centred window. Use these
+# counts to compute the hypergeometric p-value of each word, taking the centred
+# window as the sample from the "urn", and the total count of words as the "urn",
+# using the usual formulation of a cumulative hypergeometric p-value as the
+# probability of at least k red balls among n draws without replacement from
+# an urn with K red balls and N-K black ones. If the p-value >= a threshold
+# (target_p set by command line options -p and -b), do not consider a word as a
+# candidate for "best word". To reduce computation, the hypergeometric calculation
+# first computes as an estimate a binomial p-value (a reasonable approximation
+# with a large data set though it is a probability with replacement) and if that
+# p-value exceeds a threshold (set as THRESH in the code), sets the p-value
+# to 1. For each sequence, record the word with the lowest p-value (provided
+# that p-value < target_p) across all variations of C and w, and for each
+# sequence that has a "best" word, recentre on that best word. Trim all sequences
+# to the width specified by -len on the command line, or -cmax if -len is not
+# specified.
+
+
+for (my $w = $w_min; $w <= $w_max; $w++) {
+    # counts of positive and negative words (in and outside the window in interest)
+    my (%positive, %negative);
+    my $sites = $totalN - $N * ($w - 1); # total sites: N(L - w + 1)
+    # count every word as negative to start with
+    my $longenoughs = &count_all_as_negs (\@sequences, $w, \%negative, $revcomp, $LTHRESHOLD);
+    # now adjust positive count for each variation in window size C
+    my $C_old = 0;
+    # only go here if at least 1 sequence meets length threshold for smallest C
+    if ($longenoughs) {
+        for (my $C = $C_min; $C <= $C_max; $C+=2) {
+            my $new_positive = &count_words (\@sequences, $C, $w,
+                \%positive, \%negative, $C_old, $revcomp); # last arg is previous value of C
+            $C_old = $C;
+            my $poswords = $N * ($C - $w + 1); # total positive words in window
+            # now do stats on all words newly positive
+            foreach my $word (keys %$new_positive) {
+                my ($Npos, $Nneg) = ($positive{$word}{"count"}, $negative{$word}{"count"});
+                my $p = cum_hypergeometric_dp($Npos,$poswords,$Npos+$Nneg,$sites,$target_p,1);
+                if (!exists ($word_scores{$word}) || $word_scores{$word} > $p) {
+                    $word_scores{$word} = $p;
+                }
+            }
+            # for each sequence record its best word so far and its p-value
+            # skip those where L < C X threshold
+            &record_best_word (\@sequences, \@bestwords, \%word_scores, $w, $C, $revcomp, $THRESHOLD);
+        }
+    }
+}
+
+if ($verbose) {
+    print STDERR "---------best word per sequence---------\n";
+    foreach my $best (@bestwords) {
+        print STDERR "$$best[0], $$best[1]\n" if (defined($best));
+    }
+    print STDERR "---------word scores---------\n";
+    my @stats = ();
+    foreach my $word (keys %word_scores) {
+        push (@stats, [$word, $word_scores{$word}])
+    }
+    my @sorted_stats = sort { $$a[1] <=> $$b[1] } @stats;
+}
+
+&fasta_print_centred (\@sequences, \@bestwords, $target_p, $C_max, $w_max, $C_final,
+    $keepfile, $revcomp, $verbose);
+
+################################################################################
+#                       Subroutines                                            #
+################################################################################
+
+
+################################################################################
+#
+#       print_usage
+#
+#  Print the usage message and exit.
+#
+################################################################################
+sub print_usage {
+  my($usage, $status) = @_;
+ 
+  if (-c STDOUT) {      # standard output is a terminal
+    open(C, "| more");
+    print C $usage;
+    close C;
+  } else {        # standard output not a terminal
+    print STDERR $usage;
+  }
+
+  exit $status;
+}
+ 
+################################################################################
+#
+#       cleanup
+#
+#       cleanup stuff
+#
+################################################################################
+sub cleanup {
+  my($status, $msg) = @_;
+  if ($status && "$msg") {print STDERR "$msg: $status\n";}
+  exit($status);
+}
+
+################################################################################
+#	count_word
+#	
+#	if already in the given set, increment the count, otherwise
+#	create a new count and set as 1
+#       arguments:
+#        set: reference to hash indexed on word, contents a ref to hash
+#        containing elements including one indexed by "count" (see
+#        new_word_data for structure of hash entries).
+#        word: string containing the word to count
+#
+################################################################################
+sub count_word {
+  my ($set, $word) = @_;
+  if (exists($$set{$word})) {
+      $$set{$word}{"count"}++;
+  } else {
+      $$set{$word} = &new_word_data ();
+  }
+}
+
+################################################################################
+#	new_word_data
+#	
+#	create a hash table entry for a new word and return a reference to a hash
+#       each word has recorded for it the number of instances and its D score (the
+#       latter only set when it's in the positive set)
+#        no arguments
+#        returns:
+#            initialized hash element
+#
+################################################################################
+sub new_word_data {
+    my %new_entry;
+    $new_entry{"count"} = 1;
+    $new_entry{"Dscore"} = 0;
+    $new_entry{"bestDwidth"} = 0;
+    $new_entry{"pVal"} = 1;
+    $new_entry{"bestHPValWidth"} = 0;
+    return \%new_entry;
+}
+
+################################################################################
+#	move_count
+#	
+#	move a word's count from one set to another set by adjusting the
+#	respective counts by +1 and -1. The count sets are represented
+#   as hashes on word, passed here by reference; for structure of hash
+#   table entries, see new_word_data (each entry is a reference to one
+#   of these hashes).
+#   ASSUMES: source count exists and > 0
+#        arguments:
+#            word: index into hashes
+#            new_set: destination
+#            old_set: source
+#
+################################################################################
+
+sub move_count {
+      my(
+    $word,       # shift this word to
+    $new_set,    # new set count from
+    $old_set     # old set's count
+  ) = @_;
+
+  if (exists($$new_set{$word})) {
+        $$new_set{$word}{"count"}++;
+    } else {
+        $$new_set{$word} = &new_word_data ();
+    }
+    $$old_set{$word}{"count"}--;
+}
+
+################################################################################
+#
+#       count_all_as_negs
+#        arguments:
+#            sequences: ref to array of sequence data
+#            width: word size
+#            negative: ref to hash of negative counts indexed by word
+#            revcomp: both strands if defined
+#        updates negative
+#            returns number of sequences with length >= threshold
+#
+################################################################################
+
+sub count_all_as_negs {
+    my ($sequences, $width, $negative, $revcomp, $threshold) = @_;
+    my $N = @$sequences;
+    my $longenough = 0;
+    for (my $i = 0; $i < $N; $i++) {
+        my $seqdata = ${$sequences}[$i];
+        my $seq = $seqdata->[$SEQPOS];
+        my $L = length($seq);
+        $longenough += 1 if $L >= $threshold;
+        for  (my $j = 0; $j < $L-$width+1; $j++) {
+            my $word;
+            $word = &get_word ($seq, $j, $width, $revcomp);
+            if ($word) {
+                &count_word($negative, $word);
+            }
+        }
+    }
+    return $longenough;
+}
+
+################################################################################
+#
+#       fasta_print_centred
+#        arguments:
+#            sequences:  ref to array of sequence data
+#            bestwords:  ref to array 1 entry per sequence
+#                        containing [word, p-value, position]
+#            target_p:  p-value to use to decide whether to recentre
+#            C_max:     maximum window size; used to be named C, but C_max
+#			is passed in...
+#            w_default: use for width if no best word
+#            C_final:   width to trim to
+#            $keepfile: if defined file to write out discarded flanking sequences
+#            revcomp:   use both strands if defined
+#            verbose:   extra output if defined
+#        prints each FASTA sequence in sequences, centred to the most
+#        central position of its best word, if p < target_p -- otherwise
+#        doesn't adjust centering. Trims to width C
+#
+################################################################################
+sub fasta_print_centred {
+    my ($sequences, $bestwords, $target_p, $C_max, $w_default, $C_final,
+        $keepfile, $revcomp, $verbose) = @_;
+    my $N = @$sequences;
+    open(F, ">$keepfile") || die("Can't open -keep file $keepfile\n") if $keepfile;
+    for (my $i = 0; $i < $N; $i++) {		# foreach sequence
+        my $bestword_info = $$bestwords[$i];
+        my $bestword = defined($bestword_info)?$$bestword_info[0]:undef;
+        my $best_p = defined($$bestword_info[1]) ? $$bestword_info[1] : 1;
+        my $width = $bestword?length($bestword):$w_default;
+        my $seqdata = ${$sequences}[$i];
+        my $seq = $seqdata->[$SEQPOS];
+        my $L = length($seq);
+        my $centre = int(($L-$width)/2);
+        my $bestpos;
+        my $centerword = "no-significant-word-found";
+
+        # recentre if a significant word has lowest p-value
+        my ($pos_min, $pos_max) = &pos_min_max($L, $C_max, $width);
+        if ($best_p <= $target_p) {
+            foreach my $j ($pos_min..$pos_max) {
+                my $word;
+                $word = &get_word ($seq, $j, $width, $revcomp);
+                if ($word && $word eq $bestword) {
+                    print STDERR "$seqdata->[$NAMEPOS]: found `$word' = `$bestword'\n" if $verbose;
+                    if (!defined($bestpos) || abs($centre-$bestpos) > abs($centre-$j)) {
+                        $bestpos = $j;
+                    }
+                }
+            }
+          $centerword = $bestword if (defined $bestword);
+        }
+
+        if ($verbose) {
+            if (defined($bestpos)) {	# best word is significant
+                print STDERR "$seqdata->[$NAMEPOS]: best position $bestpos, best word `$bestword'\n" ;
+            } elsif (defined($bestword)) {	# best word not significant (p value not < thresh)
+                printf STDERR "$seqdata->[$NAMEPOS]: not centered, best word `%s' not significant\n",
+                    $best_p;
+            } else { # unable to score any word, should only happen if no word without an N in a sequence
+                print STDERR "$seqdata->[$NAMEPOS]: no best word\n" ;
+            }
+        }
+
+        my $centre_at = defined($bestpos) ? $bestpos+$width/2 : int($L/2)-1;
+        my $left = 1 + int($centre_at-$C_final/2);
+        # pathological case: sequences too short to centre without going off the edge
+        if ($left < 0) { # off the end of the string, reposition
+            $left = 0;
+        } elsif ($left+$C_final >= $L) { # same at other end of the string
+            $left = $L-$C_final;
+        }
+	# print ">seqname center_at bestword (corrected) best_p sequence_header
+        if ($bonferroni) { 
+          my $p = $best_p * $n_tests;
+          if ($p > 0.05) { $p = 1 - (1-$best_p)**$n_tests; }
+          $best_p = $p;
+        }
+        my $header = sprintf(" %.1f %s %.2e ", $left, $centerword, $best_p);
+        &fasta_print (\*STDOUT, $seqdata->[$NAMEPOS], substr($seq, $left, $C_final), 
+            $header .  $seqdata->[$COMMENTPOS]);
+        if ($keepfile) {
+            &fasta_print (\*F, $seqdata->[$NAMEPOS]."-L",
+                substr($seq, 0, $left), $seqdata->[$COMMENTPOS]);
+            # round up here to make correct for odd number-sized sequence
+            &fasta_print (\*F, $seqdata->[$NAMEPOS]."-R",
+                substr($seq, $left+$C_final, $L-($left+$C_final)+0.5), $seqdata->[$COMMENTPOS]);
+        }
+
+#        print ">".$seqdata->[$NAMEPOS];
+#        print " ".$seqdata->[$COMMENTPOS] if ($seqdata->[$COMMENTPOS]);
+#        print "\n";
+#        print substr($seq, $left, $C_final)."\n";
+    } # foreach sequence
+}
+
+################################################################################
+#
+#       fasta_print
+#          print a FASTA sequence given a reference to a file handle,
+#          a name, a comment (may be undef) and a sequence string
+#        arguments
+#            $outfile : file handle for output
+#            $name    : name to print after ">"
+#            $seq     : sequence data
+#            $comment : if defined add after >$name and space
+#
+################################################################################
+sub fasta_print {
+    my ($outfile, $name, $seq, $comment) = @_;
+        chomp $seq; #if trailing newline remove because we add one
+        print $outfile ">".$name;
+        print $outfile " ".$comment if $comment;
+        print $outfile "\n";
+        print $outfile $seq."\n";
+}
+
+################################################################################
+#
+#       record_best_word
+#        arguments:
+#            sequences: ref to array of sequence data
+#            bestwords: ref to array 1 entry per sequence
+#                       containing [word, p-value, position]
+#            word_scores: ref to hash indexed on word of p-value
+#            width: size of word currently under consideration
+#            threshold: total sequence length this size X window otherwise don't centre
+#        updates bestwords
+#
+################################################################################
+
+sub record_best_word {
+    my ($sequences, $bestwords, $word_scores, $width, $C, $revcomp, $threshold) = @_;
+    my $N = @$sequences;
+    for (my $i = 0; $i < $N; $i++) {
+        my $seqdata = ${$sequences}[$i];
+        my $seq = $seqdata->[$SEQPOS];
+        my $L = length($seq);
+        # don't find a "best word" for sequences shorter than threshold X window size
+        next if $L < $C*$threshold;
+        my ($pos_min, $pos_max) = pos_min_max($L,$C,$width);
+        my $p;
+        my $old_best_p = defined ($$bestwords[$i]) ? ${$bestwords[$i]}[1] : undef;
+        foreach my $j ($pos_min..$pos_max) {
+            my $word;
+            $word = &get_word ($seq, $j, $width, $revcomp);
+            if ($word && (!defined($p) || ${$word_scores}{$word} < $p )) {
+                $p = ${$word_scores}{$word};
+                if (!defined($old_best_p) || $p < $old_best_p) {
+                    $old_best_p = $p;
+                    $$bestwords[$i] = [$word, $p];
+                }
+            }
+            
+        }
+    }
+}
+
+################################################################################
+#
+#       count_words
+#
+#       for given window and word size, count the words that occur in the
+#       window as positive and any words that fall outside the window as
+#       negative.
+#
+#       arguments:
+#        sequences: reference to array, each element an reference to an
+#            array containing the name, sequence and comment from a read in
+#            FASTA file
+#        C: window size
+#        width: word size
+#        positive: reference hash (positive set): indexed on word,
+#            contains count for word
+#        negative: reference hash (negative set): indexed on word,
+#            contains count for word
+#        C_old: width previously used for counts; only count words
+#            that cross from negative to positive
+#        revcomp: both strands if defined
+#       updates the positive and negative counts
+#            if C_old defined (or != 0), we are widening the window
+#            therefore only count words that switch from positive
+#            to negative
+#       returns reference to hash indexed by word, with an entry for
+#            each word added to positive set = 1
+#
+################################################################################
+
+sub count_words {
+    my ($sequences, $C, $width, $positive, $negative, $C_old, $revcomp) = @_;
+    my $i = 0;
+    my %newpositives; # keep track of words added to the positive set
+    foreach my $seqdata (@$sequences) {
+        my $seq = $seqdata->[$SEQPOS];
+        my $L = length($seq);
+        my @j_neg_range = ();
+        my @j_pos_range = ();
+        my ($pos_min, $pos_max) = pos_min_max($L,$C,$width);
+        # if we previously counted, only transfer counts from negative to positive
+        # in the newly widened part of the window
+        if ($C_old) {
+            my ($pos_min_old, $pos_max_old) = pos_min_max($L,$C_old,$width);
+            @j_pos_range = ($pos_min..$pos_min_old-1) if $pos_min_old > $pos_min;
+            push (@j_pos_range, ($pos_max_old+1..$pos_max)) if $pos_max_old < $pos_max;
+        } else {
+            @j_pos_range = ($pos_min..$pos_max);
+        }
+        foreach my $j (@j_pos_range) {
+            my $word;
+            $word = &get_word ($seq, $j, $width, $revcomp);
+            if ($word) {
+                &move_count($word, $positive, $negative);
+                $newpositives{$word} = 1;
+            }
+        }
+        $i++;
+    }
+    return \%newpositives;
+}
+
+################################################################################
+#
+#       pos_min_max
+#
+#       set the range of positions in a window
+#
+#       arguments:
+#        L: sequence length
+#        C: window size
+#        w: word size
+#    returns index of first and last position in window size C, sequence length L
+#
+################################################################################
+sub pos_min_max {
+    my ($L, $C, $w) = @_;
+    return (int(($L-$C)/2), int(($L+$C)/2-$w));
+}
+
+################################################################################
+#
+#       ambiguous
+#
+#       test if a letter is in a string of ambigs; note: replaced in code
+#         by simple on-liner
+#
+#       arguments:
+#        letter: string that should be one letter (not checked)
+#        ambigs: string that should be set of ambiguous chars
+#    returns boolean result of checking is letter is in ambigs set
+#
+################################################################################
+
+sub ambiguous {
+    my ($letter, $ambigs) = @_;
+    return ($letter =~ /[$ambigs]/i); # match case insensitive to any ambiguous character?
+} 
+
+################################################################################
+#	canonical_reverse
+#	
+#	return reverse complement or the original string, whichever
+#	sorts as <= ("le"); this makes it possible to use a single
+#       key to refer to the equivalent word on both strands
+#
+#       argument:
+#            word to be complemented
+#
+################################################################################
+sub canonical_reverse {
+  my ($word) = @_;
+  $_ = $word;
+  tr/ACGTacgt/TGCAtgca/; # &reverse_complement($word): translate ...
+  my $reverse = reverse; # ... and reverse
+  return $reverse le $word ? $reverse : $word;
+}
+
+################################################################################
+#	get_word
+#	
+#	return the next word unless it overlaps a location containing an
+#       ambiguous letter; uses global $AMBIGS.
+#
+#       arguments:
+#            seq: sequence data string
+#            j: position in seq at which word starts
+#            width: width of word
+#            revcomp: set if both strands to be used
+#
+################################################################################
+
+sub get_word {
+    my ($seq, $j, $width, $revcomp) = @_;
+    my $word = substr($seq, $j, $width);
+    $_ = $word;
+    return "" if (/[$AMBIGS]/i);
+    #$word = &canonical_reverse($word) if ($revcomp);
+    #inlined for speed, only done here
+    if ($revcomp) {
+          tr/ACGTacgt/TGCAtgca/; # &reverse_complement($word)
+          my $reverse = reverse; # inline to save call overhead
+          $word = $reverse if $reverse le $word;
+    }
+    return $word;
+}
+
+################################################################################
+#	cum_hypergeometric_dp
+#	
+#	return the hypergeometric p-value; remember previous values to avoid
+#       recomputing. Allows short-circuiting to binomial p-value if > threshold
+#
+#       arguments:
+#            k: number selected
+#            n: number out of which selected
+#            K: total of selected class
+#            N: total sample size
+#            cutoff: if defined, take as maximum p value and return
+#            maxp: except if this is defined: if cutoff reached, return this
+#
+################################################################################
+
+my %cum_hyp_p;
+my $previous_Nn = "";
+sub cum_hypergeometric_dp {
+    my(
+    $k,
+    $n,
+    $K,
+    $N,
+    $cutoff,
+    $maxp
+  ) = @_;
+
+  # check cumulative binomial p-value to approximate exceeding useful threshold
+  my $p_bin = 1-pbinom($k-1, $n, $K/$N); 	# 1 - ppois($k, $n*$K/$N);
+  
+  if ($p_bin > $THRES) {
+    return &threshold($cutoff, $p_bin, $maxp);
+  }
+
+  # have we computed it already?
+  # nuke the cache if n or N change because we will never use those
+  # values again: runs out of memory on large examples if we don't do that
+  %cum_hyp_p = () if ("$N.$n" ne $previous_Nn);
+  $previous_Nn = "$N.$n";
+  my $key = "$k.$n.$K.$N";
+  my $old_cum_p = $cum_hyp_p{$key};
+  return ($old_cum_p) if (defined $old_cum_p);
+
+  # compute values not seen yet
+  my @p;
+  my $p = 0;
+  for (my $i=$k; $i<=$n; $i++) {
+    my $new_p;
+    if ($i > $K) { last; }
+    
+    $new_p = hypergeometric_dp($i, $n, $K, $N);
+
+    $p[$i-$k] = $new_p;
+
+    # cut if p is decreasing and past precision of double
+    $p += $new_p; 		  # minimum on p
+    if ($i>$k &&                  # not first one
+      ($p > 0 && $n != 0 && $N != 0) &&	  # avoid divide by zero
+      $k/$n > $K/$N &&            # p decreasing
+      $new_p/$p < 1e-16           # beyond precision of double
+    ) { last; }
+  }
+
+  # add p-values in sorted order to minimize roundoff loss
+  #$p = 0;
+  #foreach my $pval (sort {$a <=> $b} @p) {
+  #  $p += $pval;
+  #}
+
+  $p = &threshold ($cutoff, $p, $maxp);
+  # save new value
+  $cum_hyp_p{$key} = $p;
+
+  return $p;
+}
+
+################################################################################
+#	threshold 
+#	
+#	if we exceed a significance threshold return either the threshold or
+#   if defined, an alternative value
+#        arguments:
+#            cutoff: threshold at which we no longer consider values significant
+#            p: raw value
+#            maxp: if defined, used to replace p if at or past threshold
+#        returns:
+#            if p < threshold, p else if maxp defined, maxp, else threshold
+#
+################################################################################
+
+sub threshold {
+    my(
+    $cutoff,
+    $p,
+    $maxp
+  ) = @_;
+  if ($cutoff && $p >= $cutoff) {
+      if ($maxp) {
+          return $maxp;
+          } else {
+              return $cutoff;
+          }
+  }
+  return $p;
+}

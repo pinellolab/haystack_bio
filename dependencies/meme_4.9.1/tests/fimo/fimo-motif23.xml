@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Begin document body -->
+<cis-element-search
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://zlab.bu.edu/schema/cisml cisml.xsd"
+  xmlns="http://zlab.bu.edu/schema/cisml"
+  xmlns:mem="http://noble.gs.washington.edu/meme"
+>
+<program-name>fimo</program-name>
+<parameters>
+<pattern-file>common/crp0.meme.html</pattern-file>
+<sequence-file>motiph/spiked.fasta</sequence-file>
+<site-pvalue-cutoff>0.01</site-pvalue-cutoff>
+<sequence-filtering on-off="off"/>
+</parameters>
+<pattern accession="+1" name="+1">
+<scanned-sequence accession="Scer" name="Scer" length="2666">
+<matched-element start="8" stop="26" score="1506" pvalue="0.00170766">
+<sequence>TCTAATTAGACTCTCGAAA</sequence>
+</matched-element>
+<matched-element start="93" stop="111" score="1487" pvalue="0.00291433">
+<sequence>TTCAATAAAAGGAACACAT</sequence>
+</matched-element>
+<matched-element start="212" stop="230" score="1473" pvalue="0.00421257">
+<sequence>AGTAAAGAACTCCTCATAG</sequence>
+</matched-element>
+<matched-element start="264" stop="282" score="1457" pvalue="0.00625992">
+<sequence>CTTAAGCAAATGCGCTTAA</sequence>
+</matched-element>
+<matched-element start="329" stop="347" score="1470" pvalue="0.00454637">
+<sequence>AGCGTGTTGTATCTCAAAA</sequence>
+</matched-element>
+<matched-element start="331" stop="349" score="1503" pvalue="0.00186313">
+<sequence>CGTGTTGTATCTCAAAATG</sequence>
+</matched-element>
+<matched-element start="521" stop="539" score="1462" pvalue="0.00554643">
+<sequence>CTTAGTATGATTCATATTT</sequence>
+</matched-element>
+<matched-element start="610" stop="628" score="1451" pvalue="0.00721505">
+<sequence>CCTAAGACTGTTTATATTA</sequence>
+</matched-element>
+<matched-element start="650" stop="668" score="1449" pvalue="0.00755904">
+<sequence>ATTACTCGAGCCCGTAATA</sequence>
+</matched-element>
+<matched-element start="681" stop="699" score="1445" pvalue="0.00828779">
+<sequence>CTTAATAAATATTTCTATA</sequence>
+</matched-element>
+<matched-element start="923" stop="941" score="1448" pvalue="0.00773606">
+<sequence>CATAACGAACATCACAGAA</sequence>
+</matched-element>
+<matched-element start="942" stop="960" score="1513" pvalue="0.00138773">
+<sequence>TTTACATTTCTACACAATT</sequence>
+</matched-element>
+<matched-element start="995" stop="1013" score="1446" pvalue="0.00810038">
+<sequence>GTTCTACAAGTTCTCTTCA</sequence>
+</matched-element>
+<matched-element start="997" stop="1015" score="1442" pvalue="0.0088716">
+<sequence>TCTACAAGTTCTCTTCATG</sequence>
+</matched-element>
+<matched-element start="1014" stop="1032" score="1440" pvalue="0.00927933">
+<sequence>TGCGTTTTTGTTTATCTAT</sequence>
+</matched-element>
+<matched-element start="1024" stop="1042" score="1442" pvalue="0.0088716">
+<sequence>TTTATCTATCTTATTGAAT</sequence>
+</matched-element>
+<matched-element start="1073" stop="1091" score="1529" pvalue="0.00084403">
+<sequence>TTCGATGAACATTTCATAT</sequence>
+</matched-element>
+<matched-element start="1095" stop="1113" score="1523" pvalue="0.00102104">
+<sequence>TTTTATATGCTTCATAATT</sequence>
+</matched-element>
+<matched-element start="1127" stop="1145" score="1440" pvalue="0.00927933">
+<sequence>TCTATACAGAGTATTATCG</sequence>
+</matched-element>
+<matched-element start="1156" stop="1174" score="1450" pvalue="0.00738539">
+<sequence>CCTTTAGCTTGTCACTTAA</sequence>
+</matched-element>
+<matched-element start="1179" stop="1197" score="1467" pvalue="0.00490205">
+<sequence>TGCACTGCATTTCGAAAAG</sequence>
+</matched-element>
+<matched-element start="1201" stop="1219" score="1475" pvalue="0.00400169">
+<sequence>CTTAAGCAAGTTTATCATA</sequence>
+</matched-element>
+<matched-element start="1439" stop="1457" score="1483" pvalue="0.0032448">
+<sequence>CTTAATCCTTTCCTTTTAT</sequence>
+</matched-element>
+<matched-element start="1478" stop="1496" score="1452" pvalue="0.00704797">
+<sequence>TTTGTTTTTCATGGCCTTA</sequence>
+</matched-element>
+<matched-element start="1783" stop="1801" score="1466" pvalue="0.00502565">
+<sequence>TGCGAGTGCATTAGCACAG</sequence>
+</matched-element>
+<matched-element start="1875" stop="1893" score="1459" pvalue="0.00596588">
+<sequence>CCAAATGCGGGTAACTATT</sequence>
+</matched-element>
+<matched-element start="1938" stop="1956" score="1465" pvalue="0.00515185">
+<sequence>TTCAAGGCACTAATCAAAA</sequence>
+</matched-element>
+<matched-element start="2057" stop="2075" score="1519" pvalue="0.00115614">
+<sequence>CTCGTTACAGCTAGCATCT</sequence>
+</matched-element>
+<matched-element start="2085" stop="2103" score="1464" pvalue="0.00528069">
+<sequence>GGCATAGAGTTTCAGAAAT</sequence>
+</matched-element>
+<matched-element start="2242" stop="2260" score="1483" pvalue="0.0032448">
+<sequence>TTTGAAAAGATCCAAAAAT</sequence>
+</matched-element>
+<matched-element start="2291" stop="2309" score="1481" pvalue="0.00342162">
+<sequence>TTTGTCCTATACCTCAAGA</sequence>
+</matched-element>
+<matched-element start="2400" stop="2418" score="1489" pvalue="0.00276013">
+<sequence>TTTGATTGAGCCAGTGTAT</sequence>
+</matched-element>
+<matched-element start="2432" stop="2450" score="1561" pvalue="0.000278196">
+<sequence>TGCGAGCTATTCAATAAAT</sequence>
+</matched-element>
+<matched-element start="2466" stop="2484" score="1439" pvalue="0.00948892">
+<sequence>GTTGAAGCGGTTCTTTGAT</sequence>
+</matched-element>
+<matched-element start="2519" stop="2537" score="1455" pvalue="0.00656586">
+<sequence>TTAGATTCTTTTAACGACA</sequence>
+</matched-element>
+<matched-element start="2548" stop="2566" score="1486" pvalue="0.00299414">
+<sequence>TTTAATCATTGTATAAAAA</sequence>
+</matched-element>
+<matched-element start="54" stop="36" score="1465" pvalue="0.00706475">
+<sequence>TTGTACTGTAAAGGATAAA</sequence>
+</matched-element>
+<matched-element start="110" stop="92" score="1515" pvalue="0.00188619">
+<sequence>ATTCAATAAAAGGAACACA</sequence>
+</matched-element>
+<matched-element start="145" stop="127" score="1493" pvalue="0.00348707">
+<sequence>AAATGGGAAAAAGTCCAAA</sequence>
+</matched-element>
+<matched-element start="217" stop="199" score="1486" pvalue="0.00419245">
+<sequence>AAACGTGCAAAAAAGTAAA</sequence>
+</matched-element>
+<matched-element start="320" stop="302" score="1460" pvalue="0.00794739">
+<sequence>CTGAGCTAACAAGGATGAG</sequence>
+</matched-element>
+<matched-element start="329" stop="311" score="1489" pvalue="0.00387667">
+<sequence>CAAGGATGAGTTCTTCGGA</sequence>
+</matched-element>
+<matched-element start="346" stop="328" score="1463" pvalue="0.00740753">
+<sequence>GAGCGTGTTGTATCTCAAA</sequence>
+</matched-element>
+<matched-element start="573" stop="555" score="1494" pvalue="0.00339502">
+<sequence>ATAAGTAACATTCCGTGAA</sequence>
+</matched-element>
+<matched-element start="639" stop="621" score="1528" pvalue="0.00127702">
+<sequence>TTATATTAGGATTGTCAAG</sequence>
+</matched-element>
+<matched-element start="762" stop="744" score="1459" pvalue="0.00813439">
+<sequence>ATTTGATAAATGTGTAAAC</sequence>
+</matched-element>
+<matched-element start="771" stop="753" score="1508" pvalue="0.00230733">
+<sequence>ATGTGTAAACTAAGATAAG</sequence>
+</matched-element>
+<matched-element start="834" stop="816" score="1477" pvalue="0.00527236">
+<sequence>AGTTGGGAAAAGAAACAAC</sequence>
+</matched-element>
+<matched-element start="882" stop="864" score="1483" pvalue="0.00452958">
+<sequence>TAGTGTGTTATCATATAGC</sequence>
+</matched-element>
+<matched-element start="887" stop="869" score="1461" pvalue="0.00776395">
+<sequence>TGTTATCATATAGCGTAAG</sequence>
+</matched-element>
+<matched-element start="938" stop="920" score="1512" pvalue="0.00205781">
+<sequence>AATCATAACGAACATCACA</sequence>
+</matched-element>
+<matched-element start="1110" stop="1092" score="1457" pvalue="0.00851925">
+<sequence>TATTTTTATATGCTTCATA</sequence>
+</matched-element>
+<matched-element start="1134" stop="1116" score="1505" pvalue="0.0025111">
+<sequence>TGTTACTACGATCTATACA</sequence>
+</matched-element>
+<matched-element start="1206" stop="1188" score="1467" pvalue="0.00673519">
+<sequence>TTTCGAAAAGATGCTTAAG</sequence>
+</matched-element>
+<matched-element start="1249" stop="1231" score="1482" pvalue="0.0046469">
+<sequence>TTCGGTGAATTTATACAGA</sequence>
+</matched-element>
+<matched-element start="1348" stop="1330" score="1453" pvalue="0.00933406">
+<sequence>TTTGACTAAACAGCCCACA</sequence>
+</matched-element>
+<matched-element start="1385" stop="1367" score="1481" pvalue="0.00476676">
+<sequence>TAAGCAGACCTTTCTTGAA</sequence>
+</matched-element>
+<matched-element start="1564" stop="1546" score="1547" pvalue="0.000693348">
+<sequence>AATTACTAACTGCCTTACC</sequence>
+</matched-element>
+<matched-element start="1753" stop="1735" score="1472" pvalue="0.00596661">
+<sequence>TTATGCTATGATCATTAGT</sequence>
+</matched-element>
+<matched-element start="1971" stop="1953" score="1465" pvalue="0.00706475">
+<sequence>AAAAAAGGAGATTTGTAAA</sequence>
+</matched-element>
+<matched-element start="2034" stop="2016" score="1526" pvalue="0.00135788">
+<sequence>ATGGATGAACTTCGGTGCC</sequence>
+</matched-element>
+<matched-element start="2308" stop="2290" score="1453" pvalue="0.00933406">
+<sequence>TTTTGTCCTATACCTCAAG</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<pattern accession="+2" name="+2">
+</pattern>
+<pattern accession="+3" name="+3">
+</pattern>
+</cis-element-search>

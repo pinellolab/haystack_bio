@@ -1,0 +1,52 @@
+<hr/>
+<style type="text/css">
+  td.table_label {
+    width:20em;
+    vertical-align:top;
+  }
+  h5.section_label {
+    margin-top:5px;
+    margin-bottom:5px;
+  }
+  table.info {
+    margin-bottom:20px;
+  }
+</style>
+<!-- TMPL_IF NAME=description -->
+<h5 class="section_label">Description</h5>
+<pre><!-- TMPL_VAR ESCAPE=HTML NAME=description --></pre>
+<!-- /TMPL_IF -->
+
+<h5 class="section_label">Settings</h5>
+<table class="info">
+  <tr><td class="table_label">Motifs File</td>
+  <td><!-- TMPL_VAR ESCAPE=HTML NAME=motifs_orig_name --></td></tr>
+  <tr><td class="table_label">Primary Database</td>
+  <td><!-- TMPL_VAR NAME=db_name --></td></tr>
+  <!-- TMPL_IF NAME=db_multi -->
+  <tr><td class="table_label">Comparative Databases</td>
+  <td>
+  <ul>
+    <!-- TMPL_LOOP NAME=cdb_names -->
+    <li><!-- TMPL_VAR NAME=cdb_name --></li>
+    <!-- /TMPL_LOOP -->
+  </ul>
+  </td>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Significance threshold</td>
+  <td>&lt; <!-- TMPL_VAR ESCAPE=HTML NAME=qv_sig_threshold --></td></tr>
+</table>
+
+<h5 class="section_label">Motifs Details</h5>
+<table class="info">
+  <!-- TMPL_IF NAME=motifs_safe_name -->
+  <tr><td class="table_label">Command-line Safe Name</td>
+  <td><!-- TMPL_VAR NAME=motifs_name --></td></tr>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Type of Motifs</td>
+  <td><!-- TMPL_VAR NAME=motifs_alpha --></td></tr>
+  <tr><td class="table_label">Count of Motifs</td>
+  <td><!-- TMPL_VAR NAME=motifs_count --></td></tr>
+  <tr><td class="table_label">Summed Motifs Lengths</td>
+  <td><!-- TMPL_VAR NAME=motifs_cols --></td></tr>
+</table>

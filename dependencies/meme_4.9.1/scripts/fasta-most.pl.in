@@ -1,0 +1,89 @@
+#!@WHICHPERL@
+
+use strict;
+use warnings;
+
+use Fcntl qw(O_CREAT O_WRONLY O_TRUNC);
+use Getopt::Long;
+use Pod::Usage;
+
+=head1 NAME
+
+fasta-most - finds the most frequently occuring sequence length
+
+=head1 SYNOPSIS
+
+fasta-filter [options]
+
+ Options:
+  -min        <length>  minimum length to accept
+  -max        <length>  maximum length to accept
+
+ Reads fasta sequences on standard input.
+ Writes the most frequently occuring sequence length and it's count to 
+  standard output.
+
+=cut
+
+my $min = 1;
+my $max = undef;
+my $help = 0; #FALSE
+
+GetOptions(
+  "min=i" => \$min, 
+  "max=i" => \$max,
+  "help|?" => \$help
+) or pod2usage(2);
+
+pod2usage(1) if $help;
+pod2usage("Min must be larger or equal to zero.") if $min < 0;
+
+my $in_sequence = 0; # FALSE
+my $len = 0;
+my $line;
+my %lengths = ();
+
+while ($line = <STDIN>) {
+  if ($line =~ m/^>/) {
+    if ($in_sequence && $len >= $min && (!defined($max) || $len <= $max)) {
+      if ($lengths{$len}) {
+        $lengths{$len} += 1;
+      } else {
+        $lengths{$len} = 1;
+      }
+    }
+    $in_sequence = 1; # TRUE
+    $len = 0;
+  } elsif ($in_sequence) {
+    if ($line =~ m/^\s*((?:\S+\s*?)+)\s*$/) {
+      my @chunks = split(/\s+/, $1);
+      foreach my $chunk (@chunks) {
+        $len += length($chunk); 
+      }
+      $in_sequence = 0 if defined($max) && $len > $max;
+    }
+  }
+}
+if ($in_sequence && $len >= $min && (!defined($max) || $len <= $max)) {
+  if ($lengths{$len}) {
+    $lengths{$len} += 1;
+  } else {
+    $lengths{$len} = 1;
+  }
+}
+
+unless (%lengths) {
+  print "$min 0\n";
+} else {
+  my ($length, $count);
+  my ($best_length, $best_count);
+  keys %lengths; # reset iterator
+  foreach $length (sort {$b <=> $a} keys %lengths) {
+    $count = $lengths{$length};
+    if (!defined($best_count) || $count > $best_count) {
+      $best_length = $length;
+      $best_count = $count;
+    }
+  }
+  print "$best_length $best_count\n";
+}

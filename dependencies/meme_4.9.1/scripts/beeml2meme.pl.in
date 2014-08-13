@@ -1,0 +1,125 @@
+#!@WHICHPERL@ -w
+#
+# FILE: beeml2meme
+# AUTHOR: Timothy L. Bailey
+# CREATE DATE: Oct-23-2011
+# DESCRIPTION: Convert a file containing list of TFBS motif matrices from BEEML
+# to MEME output format.  BEEML format has the BEEML ID followed by the UNIPROBE ID.
+
+use warnings;
+use strict;
+
+use lib qw(@PERLLIBDIR@);
+
+use MotifUtils qw(matrix_to_intern intern_to_meme read_background_file);
+
+use Fcntl qw(O_RDONLY);
+use Getopt::Long;
+use Pod::Usage;
+
+=head1 SYNOPSIS
+
+beeml2meme [options] <matrix file>
+
+ Options:
+  -bg <background file>         file with background frequencies of letters
+				default: uniform background
+  -pseudo <total pseudocounts>  add <total pseudocounts> times letter
+                                background to each frequency; default: 0
+  -logodds                      print log-odds matrix, too;
+                                default: print frequency matrix only
+  -url <website>                website for the motif; The UNIPROBE ID is
+                                substituted for MOTIF_NAME; default: no url
+=cut
+
+# Set option defaults
+my $bg_file;
+my $pseudo_total = 0;
+my $print_logodds = 0;
+my $url_pattern = "";
+my $matrix_file;
+
+GetOptions("bg=s" => \$bg_file, "pseudo=f" => \$pseudo_total, "logodds" => \$print_logodds,
+  "url=s" => \$url_pattern) or pod2usage(2);
+#check matrix file
+pod2usage("A matrix file must be specified for the conversion.") unless @ARGV;
+$matrix_file = shift(@ARGV);
+pod2usage("Only one matrix file may be specified for the conversion.") if @ARGV;
+#check pseudo total
+pod2usage("Option -pseudo must have a positive value.") if ($pseudo_total < 0);
+
+# read the background file
+my %bg = &read_background_file(1, $bg_file);
+
+# Open the matrix file for reading.
+my $matrix_fp;
+sysopen($matrix_fp, $matrix_file, O_RDONLY) || die("Can't open $matrix_file.\n");
+
+# Read the input file.
+my $count = 0;
+my $num_bad = 0;
+my $line_number = 0;
+my %motifs;
+my $line;
+while ($line = <$matrix_fp>) {
+  $line_number++;
+  #check the line is an id line
+  my $id;
+  my $alt;
+  my $uniprobe;
+  if ($line =~ m/^# (\S+)\s+(\S+){0,1}/) {
+    $id = $1;
+    $alt = $2;
+    if (! defined $alt) { 
+      $alt = $id;
+      $uniprobe = '';
+    } else {
+      $uniprobe = $alt;
+      $uniprobe =~ s/^UP//;
+    }
+  } else {
+    die ("No matrix id found at line $line_number in file $matrix_file.\n");
+  }
+  # Read the motif energy terms (RT units). One line for each nucleotide,
+  # and convert to relative probabilities using exp(-x).
+  my %rows = ();
+  for(my $base_index = 0; $base_index < 4; $base_index++) {
+    $line = <$matrix_fp>;
+    $line_number++;
+    die ("Missing motif counts at line $line_number in file $matrix_file.\n") unless (defined $line);
+    chomp($line);
+    if ($line =~ m/^([ACGT])(.*)$/i) {
+      my $base = uc($1);
+      $_ = $2;
+      my $row = join(" ", map {2*exp(-$_)} split);	# convert energy to relative probability
+      $rows{$base} = $row;
+    } else {
+      die("Couldn't find base name at start of line.");
+    }
+  }
+  # make a matrix I can convert into a motif
+  my $matrix = $rows{A} . "\n" . $rows{C} . "\n" . $rows{G} . "\n" . $rows{T};
+  # make a url
+  my $url = $url_pattern;
+  $url =~ s/MOTIF_NAME/$uniprobe/g;
+  # set the names
+  my $motif_name = $id;
+  # try to convert the motif
+  my $nsites = 20;
+  my ($motif, $errors) = matrix_to_intern(\%bg, $matrix, 'col', $nsites, 
+    $pseudo_total, id => $motif_name, alt => $alt, url => $url, rescale => 1);
+  # display errors
+  print(STDERR join("\n", @{$errors}), "\n") if @{$errors};
+  # output motif
+  if ($motif) {
+    print STDOUT intern_to_meme($motif, $print_logodds, 1, !($count++));
+  } else {
+    $num_bad++;
+  }
+}
+
+print(STDERR "Converted $count motifs.\n");
+print(STDERR "$num_bad conversion errors.\n");
+
+
+close($matrix_fp);

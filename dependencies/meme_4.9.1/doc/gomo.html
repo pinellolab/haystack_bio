@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>GOMO - a Gene Ontology association tool for motifs</title>
+    <link href="./meme-suite-docs.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2><img src="./images/gomo_logo.png" alt="GOMO logo" /></h2>
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>gomo [options] &lt;go-term database&gt; &lt;scoring file&gt;+</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>The name <code>GOMO</code> stands for "Gene Ontology for Motifs."  
+      The program searches in a set of ranked genes for enriched GO terms
+      associated with high ranking genes. The genes can be ranked, for example,
+      by applying a motif scoring algorithms on their upstream sequence.</p>
+      
+      <p>The p-values for each GO-term are computed empirically by shuffling 
+      the gene identifiers in the ranking (ensuring consistancy across species)
+      to generate scores from the null hypothesis. Then q-values are derived
+      from these p-values following the method of Benjamini and Hochberg 
+      (where "q-value" is defined as the minimal false discovery rate at which 
+      a given GO-term is deemed significant).</p>
+    
+      <p>The program reports all GO terms that receive q-values smaller than a 
+      specified threshold, outputting a gomo score with emprically calculated 
+      p-values and q-values for each.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>GO Term Database</h4>
+      <div class="indent">
+        <p>a collection of GO terms mapped to to the sequences in the scoring
+        file. Database are provided by the webservices and are formated using a
+        simple tsv-format:<br />
+        <i>"GO-term" "Sequence identifiers separated by tabulator"</i> <br />
+        The exception to this rule is the first line which instead contains the 
+        url to lookup the gene ids. The url has ampersands (&amp;) replaced with
+        &amp;amp; and the place for the gene id marked by the token
+        "!!GENEID!!" .</p>
+      </div>
+
+      <h4>Scoring File</h4>
+      <div class="indent">
+        <p>a XML file which contains for each motif the sequences and their
+        score. The XML file uses the 
+        <a href="http://zlab.bu.edu/~phaverty/SupplementalData/CisML">CisML</a>
+        schema. When scoring data is available for multiple related species GOMO
+        can take multiple scoring files where the true sequence identifiers have
+        been mapped to their orthologs in the reference species for which the
+        go-term database was supplied.</p>
+      </div>
+    </div>
+      
+    <h3>Output</h3>
+    <div class="indent">
+      <p>GOMO will create a directory, named <code>gomo_out</code> by default.
+      Any existing output files in the directory will be overwritten. The
+      directory will contain:</p>
+      <ul>
+        <li>An XML file named <code>gomo.xml</code> providing the results in a
+        machine readable <a href="gomo-format.html">format</a>.</li>
+        <li>An HTML file named <code>gomo.html</code> providing the results in a
+        human readable format.</li>
+      </ul>
+      <p>The default output directory can be overridden using the
+      <span class="popt">--o</span> or <span class="popt">--oc</span> options
+      which are described below.</p>
+      <p>Additionally the user can override the creation of files altogether by
+      specifying the <span class="popt">--text</span> option which outputs to
+      standard out in a tab seperated values format:<br />
+      "Motif Identifier" "GO Term Identifier" "GOMO Score" "p-value"
+      "q-value"</p>
+      <p>By default GOMO calculates the ranksum statistics on the
+      <i>p</i>-values of each gene given in the 
+      <a href="http://zlab.bu.edu/~phaverty/SupplementalData/CisML">CisML</a> 
+      input file. Using the option <span class="popt">--gs</span> switches
+      the focus from the <i>p</i>-values to the scores. Any sequence failing to
+      provide a <i>p</i>-value will prompt GOMO to abort the calculations. The
+      same happens when any of the genes in the CisML file lacks a score
+      attribute and <span class="popt">--gs</span> was activated.</p>
+    </div>
+    <h3>Options:</h3> 
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th><th>Parameter</th><th>Description</th><th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--o</td><td><span class="pdat">name</span></td>
+            <td>Create a folder called <span class="pdat">name</span> and write
+            output files in it. This option is not compatible with -oc as only one
+            output folder is allowed.</td>
+            <td>The program behaves as if <code>-oc memechip_out</code> had been specified.</td>
+          </tr>
+          <tr>
+            <td class="popt">--oc</td><td><span class="pdat">name</span></td>
+            <td>Create a folder called <span class="pdat">name</span> but if it
+            already exists allow overwriting the contents. This option is not
+            compatible with -o as only one output folder is allowed.</td>
+            <td>The program behaves as if <code>-oc memechip_out</code> had been
+            specified.</td>
+          </tr>
+          <tr>
+            <td class="popt">--dag</td><td><span class="pdat">go dag file</span></td>
+            <td>Path to the optional <a href="godag-format.html"
+            >Gene Ontology DAG</a> to be used for identifying the most specific
+            terms in the gomo xml output so they can be highlighted in the html
+            output.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--text</td><td>&nbsp;</td>
+            <td>Output in tab separated values format to standard output. Will
+              not create an output directory or files.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--motif</td><td><span class="pdat">id</span></td>
+            <td>Use only the motif identified by <span class="pdat">id</span>.
+            This option may be repeated.</td>
+            <td>All motifs are used.</td>
+          </tr>
+          <tr>
+            <td class="popt">--shuffle_scores</td>
+            <td><span class="pdat">n</span></td>
+            <td>Number of times to shuffle the sequence = score assignment and
+            use the shuffled scores to generate empirical p-values.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--score_E_thresh</td>
+            <td><span class="pdat">n</span></td>
+            <td>Threshold used on the gene score <i>E</i>-values above which all
+            <i>E</i>-values become maximal in order to reduce the impact of
+            noise. Subsequently, this results in all genes having
+            <i>E</i>-values above the threshold to obtain the same rank in the
+            ranksum statistics. The threshold will be ignored when gene scores
+            are used (<span class="popt">--gs</span>).</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--t</td>
+            <td><span class="pdat">n</span></td>
+            <td>Threshold used on the q-values above which results are not
+            considered significant and subsequently will not be reported.
+            To show all results use a value of 1.0.</td>
+            <td>A threshold of 0.05 is used.</td>
+          </tr>
+          <tr>
+            <td class="popt">--min_gene_count</td>
+            <td><span class="pdat">n</span></td>
+            <td>Filter out GO-terms which are annotated with less genes.</td>
+            <td>A value of 1 is used which shows all results.</td>
+          </tr>
+          <tr>
+            <td class="popt">--gs</td><td>&nbsp;</td>
+            <td>Indicates that gene scores contained in the cisml file should be
+            used for the calculations.</td>
+            <td>Use the gene <i>p</i>-values.</td>
+          </tr>
+          <tr>  
+            <td class="popt">--nostatus</td><td>&nbsp;</td>
+            <td>Suppresses the progress information.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--verbosity</td><td>1|2|3|4|5</td>
+            <td>Set the verbosity of status reports to standard error.</td>
+            <td>The normal verbosity level of 2 is used.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

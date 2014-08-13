@@ -1,0 +1,50 @@
+Invoking:
+  fasta-get-markov -nostatus -m 1 < memechip_example_output_files/sample-dna-Klf1.fa 1> memechip_example_output_files/background
+Finished invoke:
+  name: bg  status: 0  time: 0.046947
+Invoking:
+  getsize memechip_example_output_files/sample-dna-Klf1.fa 1> $metrics
+Finished invoke:
+  name: count_seqs  status: 0  time: 0.023113
+Invoking:
+  fasta-most -min 50 < memechip_example_output_files/sample-dna-Klf1.fa 1> $metrics
+Finished invoke:
+  name: most_seqs  status: 0  time: 0.063329
+Invoking:
+  fasta-center -len 100 < memechip_example_output_files/sample-dna-Klf1.fa 1> memechip_example_output_files/seqs-centered
+Finished invoke:
+  name: center_seqs  status: 0  time: 0.078407
+Invoking:
+  fasta-dinucleotide-shuffle -f memechip_example_output_files/seqs-centered -t -dinuc 1> memechip_example_output_files/seqs-shuffled
+Finished invoke:
+  name: shuffle_seqs  status: 0  time: 3.763683
+Invoking:
+  fasta-subsample memechip_example_output_files/seqs-centered 600 -rest memechip_example_output_files/seqs-discarded 1> memechip_example_output_files/seqs-sampled
+Finished invoke:
+  name: sample_seqs  status: 0  time: 0.058703
+Invoking:
+  meme memechip_example_output_files/seqs-sampled -oc memechip_example_output_files/meme_out -dna -mod zoops -nmotifs 3 -minw 6 -maxw 30 -bfile memechip_example_output_files/background -revcomp -nostatus
+Finished invoke:
+  name: meme  status: 0  time: 827.704619
+Invoking:
+  dreme -v 1 -oc memechip_example_output_files/dreme_out -p memechip_example_output_files/seqs-centered -n memechip_example_output_files/seqs-shuffled -png
+Finished invoke:
+  name: dreme  status: 0  time: 37.598603
+Invoking:
+  centrimo -seqlen 500 -verbosity 1 -oc memechip_example_output_files/centrimo_out -bgfile memechip_example_output_files/background memechip_example_output_files/sample-dna-Klf1.fa memechip_example_output_files/meme_out/meme.xml memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: centrimo  status: 0  time: 36.978034
+Invoking:
+  tomtom -verbosity 1 -oc memechip_example_output_files/meme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc -bfile memechip_example_output_files/background memechip_example_output_files/meme_out/meme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: meme_tomtom  status: 0  time: 5.727229
+Invoking:
+  tomtom -verbosity 1 -oc memechip_example_output_files/dreme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc -bfile memechip_example_output_files/background memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: dreme_tomtom  status: 0  time: 4.298067
+Invoking:
+  tomtom -verbosity 1 -text -thresh 0.1 memechip_example_output_files/combined.meme memechip_example_output_files/combined.meme 1> memechip_example_output_files/motif_alignment.txt
+Finished invoke:
+  name: align  status: 0  time: 0.778322
+Writing output
+Done

@@ -1,0 +1,215 @@
+div.graph_box {
+  position: relative;
+}
+div.pop_graph_peak {
+  position:absolute; 
+  left: 0;
+  top: 0; 
+  z-index: 5; 
+  width: 10px;
+  height: 10px; 
+  opacity: 0.2; 
+  background-color: #3333ff;
+  visibility: hidden;
+}
+table.inputs {
+  margin-top: 20px;
+  border-collapse:collapse;
+}
+table.inputs * td, table.inputs * th {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+table.motifs {
+  margin-top: 20px;
+  border-collapse:collapse;
+}
+table.motifs * td, table.motifs * th {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+table.motifs * td.col_blocation, table.motifs * td.col_bwidth, 
+table.motifs * td.col_bsites, table.motifs * td.col_tsites,
+table.motifs * td.col_maxprob, table.motifs * td.col_problocation,
+table.motifs * td.col_nbinstested, table.motifs * td.col_score {
+  text-align: right;
+  padding-right: 40px;
+}
+table.motifs tbody:hover { 
+  background: #ddddff; 
+}
+table.motifs tbody tr:hover {
+  background: #ccccff; 
+}
+table.hide_db .col_db {
+  display: none;
+}
+table.hide_id .col_id {
+  display: none;
+}
+table.hide_name .col_name {
+  display: none;
+}
+table.hide_fisherpv .col_fisherpv {
+  display: none;
+}
+table.hide_evalue .col_evalue {
+  display: none;
+}
+table.hide_pvalue .col_pvalue {
+  display: none;
+}
+table.hide_MCC .col_MCC {
+  display: none;
+}
+table.hide_maxprob .col_maxprob {
+  display: none;
+}
+table.hide_bsites .col_bsites {
+  display: none;
+}
+table.hide_negbsites .col_negbsites {
+  display: none;
+}
+table.hide_blocation .col_blocation {
+  display: none;
+}
+table.hide_hpeak .col_problocation {
+  display: none;
+}
+table.hide_bwidth .col_bwidth {
+  display: none;
+}
+table.hide_tsites .col_tsites {
+  display: none;
+}
+table.hide_negtsites .col_negtsites {
+  display: none;
+}
+table.hide_nbinstested .col_nbinstested {
+  display: none;
+}
+table.hide_score .col_score {
+  display: none;
+}
+table.hide_negative_binomial .col_negative_binomial {
+  display: none;
+}
+table.hide_OEbins .col_OEbins {
+  display: none;
+}
+div.graph_options_section {
+  width:30%; 
+  float:right;
+}
+div.graph_options_section h5 {
+  margin-top: 10px;
+}
+table.graph_list {
+  border-collapse:collapse;
+}
+table.graph_list * td, table.graph_list * th {
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+th.deselect {
+  font-size:25px; 
+  cursor: default;
+}
+th.deselect:hover {
+  color: red;
+}
+div.filter {
+  display: inline-block;
+  padding-right: 10px;
+}
+div.swatch {
+  margin: auto;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 16px;
+  border: 1px solid black;
+  cursor: default;
+}
+div.swatch:hover {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  border: 3px outset black;
+}
+div.swatch:active {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  border: 3px inset black;
+}
+span.expander {
+  cursor: pointer;
+  font-size: larger;
+}
+div.pop_logo {
+  position:absolute;
+  z-index:1;
+  top:0px;
+  left:0px;
+  border: 3px outset black;
+  background-color: white;
+  display:none;
+}
+div.pop_colour {
+  position:absolute;
+  z-index:1;
+  top:0px;
+  left:0px;
+  margin-left: -13px;
+  margin-top: -13px;
+  display:none;
+
+}
+div.pop_content {
+  position:absolute;
+  z-index:1;
+  width:300px;
+  padding: 5px;
+  background: #E4ECEC;
+  font-size: 12px;
+  font-family: Arial;
+  border-style: double;
+  border-width: 3px;
+  border-color: #AA2244;
+  display:none;
+}
+
+span.arrow {
+  font-size: larger;
+  color: red;
+}
+
+#unused_colours div.swatch {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.no_swatch {
+  text-align: center;
+  font-size: larger;
+}
+
+input.error:enabled {
+  background: #FF5555;
+}
+
+tr.sub_peak {
+  display: none;
+}
+
+tbody.more > tr.sub_peak {
+  display: table-row;
+}

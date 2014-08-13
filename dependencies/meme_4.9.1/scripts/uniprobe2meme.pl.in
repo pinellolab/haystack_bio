@@ -1,0 +1,164 @@
+#!@WHICHPERL@ -w
+#
+# FILE: uniprobe2meme
+# AUTHOR: Timothy L. Bailey
+# CREATE DATE: 3/19/2009
+# DESCRIPTION: Convert a file containing list of TFBS motif matrices from 
+# UNIPROBE to MEME output format. 
+
+use warnings;
+use strict;
+
+use lib qw(@PERLLIBDIR@);
+
+use MotifUtils qw(matrix_to_intern intern_to_meme read_background_file);
+
+use Fcntl qw(O_RDONLY);
+use Getopt::Long;
+use Pod::Usage;
+
+=head1 SYNOPSIS
+
+uniprobe2meme [options]
+
+ Options: 
+  -skip <ID>                    skip this ID (may be repeated)
+  -numseqs <numseqs>            assume frequencies based on this many
+                                sequences; default: 20
+  -truncate_names               truncate motif names at first underscore
+  -numbers                      use numbers instead of strings as motif names
+  -bg <background file>         file with background frequencies of letters;
+                                default: uniform background
+  -pseudo <total pseudocounts>  add <total pseudocounts> times letter
+                                background to each frequency; default: 0
+  -logodds                      print log-odds matrix, too;
+                                default: print frequency matrix only
+  -url <website>                website for the motif; The untruncated ID is
+                                substituted for MOTIF_NAME; default: no url
+  -sg <sg_file_name>		file containing motif name and ID in 2 columns
+  -h                            print usage message
+
+  Read a UNIPROBE (concatenated) matrix file and convert to MEME format.
+
+  Reads standard input.
+  Writes standard output
+
+=cut
+
+# Set option defaults
+my %skips;
+my $num_seqs = 20;
+my $truncate_names = 0;
+my $use_numbers = 0;
+my $bg_file;
+my $pseudo_total = 0; # default total pseudocounts
+my $print_logodds = 0;
+my $url_pattern = '';
+my $sg_file_name = '';
+my $help;
+
+GetOptions("skip=s" => sub {$skips{$_[1]} = 1}, "numseqs=i" => \$num_seqs,
+  "truncate_names" => \$truncate_names, "numbers" => \$use_numbers, 
+  "bg=s" => \$bg_file, "pseudo=f" => \$pseudo_total, "logodds" => \$print_logodds,
+  "url=s" => \$url_pattern, "sg=s" => \$sg_file_name, "h" => \$help) or pod2usage(2);
+#check num seqs
+pod2usage("Option -numseqs must have a positive value.") if ($num_seqs < 0);
+#check pseudo total
+pod2usage("Option -pseudo must have a positive value.") if ($pseudo_total < 0);
+
+# output help if requested
+pod2usage(1) if $help;
+
+# Get the background model.
+my %bg = &read_background_file(1, $bg_file); #DNA background file
+
+# Get a dictionary of UniPROBE IDs indexed by motif name.
+my %name_id_dict = get_name_id_dict($sg_file_name);
+my %id_count = ();
+
+# Read the input file.
+my $num_skipped = 0;
+my $num_motifs = 0;
+my $num_bad = 0;
+my (%motifs, $motif_name, $motif_freqs);
+my %rows = ();
+my $name;
+while (my $line = <>) {
+  chomp($line);
+  next if ($line =~ /^\s*$/); # skip blank lines
+
+  # Split the line into name and everything else.
+  my ($first, $rest) = split('\t', $line, 2);
+  if ($first =~ /^\s*([ACGT]):$/i) { # frequency line
+    my $base = uc($1);
+    $rows{$base} = $rest;
+  } else { # found start of next motif
+    #check if there was a previous motif
+    conditional_motif_output();
+    #record information for new motif
+    chomp($first);
+    $name = $first;
+    %rows = ();
+  }
+}
+#check if there was a previous motif
+conditional_motif_output();
+
+
+print(STDERR "Converted $num_motifs motifs.\n");
+print(STDERR "Skipped $num_skipped motifs.\n");
+
+
+sub conditional_motif_output {
+  if (%rows) {
+    if ($skips{$name}) {
+      $num_skipped++;
+    } else {
+      my $trunc_name = $name;
+      $trunc_name =~ s/^([^_]+)_.*$/$1/;
+      my $id = $name_id_dict{$trunc_name};	# look up ID
+      my $uniprobe;
+      if (! defined $id) {
+        $id = $name;
+        $uniprobe = '';
+      } else {
+        $uniprobe = $id;
+        $uniprobe =~ s/^UP//;
+        # make the ID unique
+        my $ic = $id_count{$id}; 
+        if (! $ic) {
+          $ic = $id_count{$id} = 1;
+        }
+        $id_count{$id}++;
+        $id = $id . "_$ic";
+      }
+      my $url = $url_pattern;
+      $url =~ s/MOTIF_NAME/$uniprobe/g;
+      $name = $trunc_name if $truncate_names;
+      if ($use_numbers) {
+        $name = $num_motifs + 1;
+      }
+      my $matrix = $rows{A} . "\n" . $rows{C} . "\n" . $rows{G} . "\n" . $rows{T};
+      my ($motif, $errors) = matrix_to_intern(\%bg, $matrix, 'col', $num_seqs, $pseudo_total, id => $id, alt => $name, url => $url);
+      print(STDERR join("\n", @{$errors}), "\n") if @{$errors};
+      $num_bad++ unless $motif;
+      print intern_to_meme($motif, $print_logodds, 1, !($num_motifs++)) if $motif;
+    }
+  }
+}
+
+# read a UniPROBE screen-grab and get the motif name and uniprobe ID from the first two columns.
+sub get_name_id_dict {
+  my ($screen_grab_file_name) = @_;
+  my %dict = ();
+  if ($screen_grab_file_name) {
+    open(SG, "<$screen_grab_file_name") || die("Can't open screen-grab file: $!\n");
+    while(<SG>) {
+      my($name, $id, @rest) = split;
+      $dict{$name} = $id;
+      #print stderr "$name $id\n";
+    }
+  }
+  return(%dict);
+}
+  

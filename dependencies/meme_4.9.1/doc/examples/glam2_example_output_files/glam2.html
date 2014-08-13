@@ -1,0 +1,2387 @@
+<html>
+<head>
+<title>GLAM2</title>
+<style type="text/css">
+body {background: #D5F0FF}
+th {text-align: left}
+td.kk {font-family: monospace; font-weight: bold}
+td.jj {font-family: monospace; color: gray}
+td.N {color: green}
+td.Q {color: green}
+td.S {color: green}
+td.T {color: green}
+td.D {color: magenta}
+td.E {color: magenta}
+td.K {color: red}
+td.R {color: red}
+td.H {color: pink}
+td.G {color: orange}
+td.P {color: yellow}
+td.Y {color: turquoise}
+td.A {color: blue}
+td.C {color: blue}
+td.F {color: blue}
+td.I {color: blue}
+td.L {color: blue}
+td.M {color: blue}
+td.V {color: blue}
+td.W {color: blue}
+</style>
+</head>
+<body>
+<h1>GLAM2: Gapped Local Alignment of Motifs</h1>
+<p style="font-family: monospace"> Version 1056
+<br> glam2 -O glam2_example_output_files -M p At.fa
+</p>
+<p>If you use this program in your research, please cite:<b> MC Frith, NFW Saunders, B Kobe, TL Bailey, &quot;Discovering sequence motifs with arbitrary insertions and deletions&quot;, PLoS Computational Biology, <b>4</b>(5):e1000071, 2008.</b></p>
+<form enctype="application/x-www-form-urlencoded" method="POST" target="_new" action="http://meme.nbcr.net/meme/cgi-bin/process_request.cgi">
+<ul>
+</ul>
+<input type="hidden" name="-O" value="glam2_example_output_files">
+<input type="hidden" name="alphabet" value="p">
+<input type="hidden" name="seq_file" value="At.fa">
+<h2>Best Motif Found:</h2>
+<table>
+<tr>
+<th style="padding-right: 1em">NAME</th>
+<th style="padding-right: 1em">START</th>
+<th style="text-align: center" colspan=" 61 ">SITES</th>
+<th style="padding-left: 1em">END</th>
+<th style="padding-left: 1em">STRAND</th>
+<th style="padding-left: 1em">MARGINAL SCORE</th>
+</tr>
+<tbody>
+<tr>
+<td style="padding-right: 1em"> At1g01140.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 116 </td>
+<td class="kk E "> E </td>
+<td class="kk D "> D </td>
+<td class="kk E "> E </td>
+<td class="kk A "> A </td>
+<td class="kk R "> R </td>
+<td class="kk R "> R </td>
+<td class="kk Y "> Y </td>
+<td class="kk F "> F </td>
+<td class="kk Q "> Q </td>
+<td class="kk Q "> Q </td>
+<td class="kk L "> L </td>
+<td class="kk I "> I </td>
+<td class="kk N "> N </td>
+<td class="kk A "> A </td>
+<td class="kk V "> V </td>
+<td class="kk D "> D </td>
+<td class="kk Y "> Y </td>
+<td class="kk C "> C </td>
+<td class="kk H "> H </td>
+<td class="kk S "> S </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk R "> R </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk Y "> Y </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk L "> L </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk E "> E </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk A "> A </td>
+<td class="kk N "> N </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk V "> V </td>
+<td class="kk S "> S </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk S "> S </td>
+<td class="kk A "> A </td>
+<td style="padding-left: 1em;text-align: right"> 165 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 120. </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g01140.2_ </td>
+<td style="padding-right: 1em;text-align: right"> 116 </td>
+<td class="kk E "> E </td>
+<td class="kk D "> D </td>
+<td class="kk E "> E </td>
+<td class="kk A "> A </td>
+<td class="kk R "> R </td>
+<td class="kk R "> R </td>
+<td class="kk Y "> Y </td>
+<td class="kk F "> F </td>
+<td class="kk Q "> Q </td>
+<td class="kk Q "> Q </td>
+<td class="kk L "> L </td>
+<td class="kk I "> I </td>
+<td class="kk N "> N </td>
+<td class="kk A "> A </td>
+<td class="kk V "> V </td>
+<td class="kk D "> D </td>
+<td class="kk Y "> Y </td>
+<td class="kk C "> C </td>
+<td class="kk H "> H </td>
+<td class="kk S "> S </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk R "> R </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk Y "> Y </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk L "> L </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk E "> E </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk A "> A </td>
+<td class="kk N "> N </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk V "> V </td>
+<td class="kk S "> S </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk S "> S </td>
+<td class="kk A "> A </td>
+<td style="padding-left: 1em;text-align: right"> 165 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 120. </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g01140.3_ </td>
+<td style="padding-right: 1em;text-align: right"> 116 </td>
+<td class="kk E "> E </td>
+<td class="kk D "> D </td>
+<td class="kk E "> E </td>
+<td class="kk A "> A </td>
+<td class="kk R "> R </td>
+<td class="kk R "> R </td>
+<td class="kk Y "> Y </td>
+<td class="kk F "> F </td>
+<td class="kk Q "> Q </td>
+<td class="kk Q "> Q </td>
+<td class="kk L "> L </td>
+<td class="kk I "> I </td>
+<td class="kk N "> N </td>
+<td class="kk A "> A </td>
+<td class="kk V "> V </td>
+<td class="kk D "> D </td>
+<td class="kk Y "> Y </td>
+<td class="kk C "> C </td>
+<td class="kk H "> H </td>
+<td class="kk S "> S </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk R "> R </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk Y "> Y </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk L "> L </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk E "> E </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk A "> A </td>
+<td class="kk N "> N </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk V "> V </td>
+<td class="kk S "> S </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk S "> S </td>
+<td class="kk A "> A </td>
+<td style="padding-left: 1em;text-align: right"> 165 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 120. </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g01450.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 123 </td>
+<td class="kk L "> L </td>
+<td class="kk P "> P </td>
+<td class="kk V "> V </td>
+<td class="kk A "> A </td>
+<td class="kk V "> V </td>
+<td class="kk D "> D </td>
+<td class="kk L "> L </td>
+<td class="kk M "> M </td>
+<td class="kk L "> L </td>
+<td class="kk Q "> Q </td>
+<td class="kk I "> I </td>
+<td class="kk A "> A </td>
+<td class="kk L "> L </td>
+<td class="kk G "> G </td>
+<td class="kk M "> M </td>
+<td class="kk E "> E </td>
+<td class="kk Y "> Y </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk S "> S </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk R "> R </td>
+<td class="kk I "> I </td>
+<td class="kk Y "> Y </td>
+<td class="kk H "> H </td>
+<td class="kk G "> G </td>
+<td class="kk E "> E </td>
+<td class="kk L "> L </td>
+<td class="kk N "> N </td>
+<td class="kk P "> P </td>
+<td class="kk S "> S </td>
+<td class="kk N "> N </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk V "> V </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk R "> R </td>
+<td class="kk S "> S </td>
+<td class="kk N "> N </td>
+<td class="kk Q "> Q </td>
+<td class="jj"> S </td>
+<td class="jj"> G </td>
+<td class="jj"> D </td>
+<td class="jj"> G </td>
+<td class="jj"> Y </td>
+<td class="jj"> L </td>
+<td class="jj"> L </td>
+<td class="jj"> G </td>
+<td class="kk K "> K </td>
+<td class="kk I "> I </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk N "> N </td>
+<td class="kk S "> S </td>
+<td style="padding-left: 1em;text-align: right"> 180 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 44.0 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g01540.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 251 </td>
+<td class="kk W "> W </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk R "> R </td>
+<td class="kk M "> M </td>
+<td class="kk N "> N </td>
+<td class="kk I "> I </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk G "> G </td>
+<td class="kk M "> M </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk Y "> Y </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk E "> E </td>
+<td class="jj"> G </td>
+<td class="jj"> L </td>
+<td class="jj"> E </td>
+<td class="kk P "> P </td>
+<td class="kk K "> K </td>
+<td class="kk V "> V </td>
+<td class="kk V "> V </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk K "> K </td>
+<td class="kk S "> S </td>
+<td class="kk S "> S </td>
+<td class="kk N "> N </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk R "> R </td>
+<td class="kk Q "> Q </td>
+<td class="kk W "> W </td>
+<td class="kk N "> N </td>
+<td class="kk A "> A </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk V "> V </td>
+<td class="kk S "> S </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td style="padding-left: 1em;text-align: right"> 303 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 106. </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g01540.2_ </td>
+<td style="padding-right: 1em;text-align: right"> 251 </td>
+<td class="kk W "> W </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk R "> R </td>
+<td class="kk M "> M </td>
+<td class="kk N "> N </td>
+<td class="kk I "> I </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk G "> G </td>
+<td class="kk M "> M </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk Y "> Y </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk E "> E </td>
+<td class="jj"> G </td>
+<td class="jj"> L </td>
+<td class="jj"> E </td>
+<td class="kk P "> P </td>
+<td class="kk K "> K </td>
+<td class="kk V "> V </td>
+<td class="kk V "> V </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk K "> K </td>
+<td class="kk S "> S </td>
+<td class="kk S "> S </td>
+<td class="kk N "> N </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk R "> R </td>
+<td class="kk Q "> Q </td>
+<td class="kk W "> W </td>
+<td class="kk N "> N </td>
+<td class="kk A "> A </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk V "> V </td>
+<td class="kk S "> S </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td style="padding-left: 1em;text-align: right"> 303 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 106. </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g01560.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 140 </td>
+<td class="kk D "> D </td>
+<td class="kk D "> D </td>
+<td class="kk H "> H </td>
+<td class="kk S "> S </td>
+<td class="kk R "> R </td>
+<td class="kk F "> F </td>
+<td class="kk F "> F </td>
+<td class="kk L "> L </td>
+<td class="kk Y "> Y </td>
+<td class="kk Q "> Q </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk R "> R </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk K "> K </td>
+<td class="kk Y "> Y </td>
+<td class="kk V "> V </td>
+<td class="kk H "> H </td>
+<td class="kk S "> S </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk A "> A </td>
+<td class="kk N "> N </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk L "> L </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk S "> S </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk N "> N </td>
+<td class="kk A "> A </td>
+<td class="kk N "> N </td>
+<td class="kk C "> C </td>
+<td class="kk D "> D </td>
+<td class="kk L "> L </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk I "> I </td>
+<td class="kk G "> G </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk R "> R </td>
+<td style="padding-left: 1em;text-align: right"> 189 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 84.9 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g01740.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 151 </td>
+<td class="kk W "> W </td>
+<td class="kk A "> A </td>
+<td class="kk M "> M </td>
+<td class="kk R "> R </td>
+<td class="kk L "> L </td>
+<td class="kk R "> R </td>
+<td class="kk V "> V </td>
+<td class="kk A "> A </td>
+<td class="kk L "> L </td>
+<td class="kk Y "> Y </td>
+<td class="kk I "> I </td>
+<td class="kk S "> S </td>
+<td class="kk E "> E </td>
+<td class="kk A "> A </td>
+<td class="kk L "> L </td>
+<td class="kk E "> E </td>
+<td class="kk Y "> Y </td>
+<td class="kk C "> C </td>
+<td class="kk S "> S </td>
+<td class="kk N "> N </td>
+<td class="jj"> N </td>
+<td class="jj"> G </td>
+<td class="jj"> . </td>
+<td class="kk H "> H </td>
+<td class="kk T "> T </td>
+<td class="kk L "> L </td>
+<td class="kk Y "> Y </td>
+<td class="kk H "> H </td>
+<td class="kk . "> . </td>
+<td class="kk D "> D </td>
+<td class="kk L "> L </td>
+<td class="kk N "> N </td>
+<td class="kk A "> A </td>
+<td class="kk Y "> Y </td>
+<td class="kk R "> R </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="kk F "> F </td>
+<td class="kk D "> D </td>
+<td class="kk E "> E </td>
+<td class="kk E "> E </td>
+<td class="kk C "> C </td>
+<td class="kk N "> N </td>
+<td class="kk P "> P </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk R "> R </td>
+<td class="kk L "> L </td>
+<td class="kk S "> S </td>
+<td class="kk T "> T </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk M "> M </td>
+<td class="kk K "> K </td>
+<td style="padding-left: 1em;text-align: right"> 201 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 12.2 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g02970.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 346 </td>
+<td class="kk E "> E </td>
+<td class="kk R "> R </td>
+<td class="kk E "> E </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk V "> V </td>
+<td class="kk I "> I </td>
+<td class="kk M "> M </td>
+<td class="kk H "> H </td>
+<td class="kk Q "> Q </td>
+<td class="kk I "> I </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td class="kk A "> A </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk F "> F </td>
+<td class="kk V "> V </td>
+<td class="kk H "> H </td>
+<td class="kk E "> E </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk G "> G </td>
+<td class="kk I "> I </td>
+<td class="kk A "> A </td>
+<td class="kk H "> H </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk V "> V </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk D "> D </td>
+<td class="kk N "> N </td>
+<td class="kk I "> I </td>
+<td class="kk Y "> Y </td>
+<td class="kk I "> I </td>
+<td class="kk K "> K </td>
+<td class="kk . "> . </td>
+<td class="kk N "> N </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk C "> C </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk L "> L </td>
+<td class="kk G "> G </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk C "> C </td>
+<td class="kk A "> A </td>
+<td class="kk T "> T </td>
+<td style="padding-left: 1em;text-align: right"> 394 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 69.3 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g03740.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 311 </td>
+<td class="kk E "> E </td>
+<td class="kk P "> P </td>
+<td class="kk Q "> Q </td>
+<td class="kk V "> V </td>
+<td class="kk K "> K </td>
+<td class="kk C "> C </td>
+<td class="kk Y "> Y </td>
+<td class="kk M "> M </td>
+<td class="kk R "> R </td>
+<td class="kk Q "> Q </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk S "> S </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk E "> E </td>
+<td class="kk H "> H </td>
+<td class="kk C "> C </td>
+<td class="kk H "> H </td>
+<td class="kk S "> S </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk R "> R </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk K "> K </td>
+<td class="kk G "> G </td>
+<td class="kk S "> S </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk I "> I </td>
+<td class="kk D "> D </td>
+<td class="kk S "> S </td>
+<td class="kk K "> K </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk I "> I </td>
+<td class="kk A "> A </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk T "> T </td>
+<td style="padding-left: 1em;text-align: right"> 360 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 100. </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g03920.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 234 </td>
+<td class="kk E "> E </td>
+<td class="kk D "> D </td>
+<td class="kk E "> E </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td class="kk F "> F </td>
+<td class="kk Y "> Y </td>
+<td class="kk I "> I </td>
+<td class="kk A "> A </td>
+<td class="kk E "> E </td>
+<td class="kk S "> S </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk I "> I </td>
+<td class="kk E "> E </td>
+<td class="kk S "> S </td>
+<td class="kk I "> I </td>
+<td class="kk H "> H </td>
+<td class="kk N "> N </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk R "> R </td>
+<td class="kk N "> N </td>
+<td class="kk Y "> Y </td>
+<td class="kk I "> I </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk D "> D </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk R "> R </td>
+<td class="kk Y "> Y </td>
+<td class="kk G "> G </td>
+<td class="kk H "> H </td>
+<td class="kk L "> L </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk R "> R </td>
+<td class="kk L "> L </td>
+<td class="kk S "> S </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk C "> C </td>
+<td class="kk K "> K </td>
+<td style="padding-left: 1em;text-align: right"> 283 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 79.2 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g03930.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 102 </td>
+<td class="kk L "> L </td>
+<td class="kk K "> K </td>
+<td class="kk T "> T </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="kk M "> M </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk D "> D </td>
+<td class="kk Q "> Q </td>
+<td class="kk L "> L </td>
+<td class="kk I "> I </td>
+<td class="kk N "> N </td>
+<td class="kk R "> R </td>
+<td class="kk V "> V </td>
+<td class="kk E "> E </td>
+<td class="kk F "> F </td>
+<td class="kk M "> M </td>
+<td class="kk H "> H </td>
+<td class="kk T "> T </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk R "> R </td>
+<td class="kk G "> G </td>
+<td class="kk F "> F </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk D "> D </td>
+<td class="kk N "> N </td>
+<td class="kk F "> F </td>
+<td class="kk L "> L </td>
+<td class="kk M "> M </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk G "> G </td>
+<td class="kk R "> R </td>
+<td class="kk K "> K </td>
+<td class="kk A "> A </td>
+<td class="jj"> N </td>
+<td class="jj"> Q </td>
+<td class="jj"> V </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk Y "> Y </td>
+<td class="kk I "> I </td>
+<td class="kk I "> I </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk G "> G </td>
+<td class="kk K "> K </td>
+<td style="padding-left: 1em;text-align: right"> 154 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 86.4 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g04210.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 901 </td>
+<td class="kk M "> M </td>
+<td class="kk D "> D </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk L "> L </td>
+<td class="kk S "> S </td>
+<td class="kk I "> I </td>
+<td class="kk A "> A </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk S "> S </td>
+<td class="kk G "> G </td>
+<td class="kk A "> A </td>
+<td class="kk L "> L </td>
+<td class="kk M "> M </td>
+<td class="kk E "> E </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk S "> S </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk I "> I </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk K "> K </td>
+<td class="kk S "> S </td>
+<td class="kk E "> E </td>
+<td class="kk N "> N </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="kk I "> I </td>
+<td class="kk D "> D </td>
+<td class="kk . "> . </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk N "> N </td>
+<td class="kk Q "> Q </td>
+<td class="jj"> S </td>
+<td class="jj"> A </td>
+<td class="jj"> N </td>
+<td class="jj"> G </td>
+<td class="jj"> E </td>
+<td class="jj"> P </td>
+<td class="jj"> I </td>
+<td class="jj"> V </td>
+<td class="kk K "> K </td>
+<td class="kk L "> L </td>
+<td class="kk C "> C </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk D "> D </td>
+<td class="kk R "> R </td>
+<td class="kk A "> A </td>
+<td class="kk V "> V </td>
+<td style="padding-left: 1em;text-align: right"> 957 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 49.6 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g04440.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 102 </td>
+<td class="kk L "> L </td>
+<td class="kk K "> K </td>
+<td class="kk T "> T </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="kk M "> M </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk D "> D </td>
+<td class="kk Q "> Q </td>
+<td class="kk M "> M </td>
+<td class="kk I "> I </td>
+<td class="kk N "> N </td>
+<td class="kk R "> R </td>
+<td class="kk V "> V </td>
+<td class="kk E "> E </td>
+<td class="kk Y "> Y </td>
+<td class="kk M "> M </td>
+<td class="kk H "> H </td>
+<td class="kk V "> V </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk G "> G </td>
+<td class="kk F "> F </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk D "> D </td>
+<td class="kk N "> N </td>
+<td class="kk F "> F </td>
+<td class="kk L "> L </td>
+<td class="kk M "> M </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk G "> G </td>
+<td class="kk R "> R </td>
+<td class="kk K "> K </td>
+<td class="kk A "> A </td>
+<td class="jj"> N </td>
+<td class="jj"> Q </td>
+<td class="jj"> V </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk Y "> Y </td>
+<td class="kk I "> I </td>
+<td class="kk I "> I </td>
+<td class="kk D "> D </td>
+<td class="kk Y "> Y </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td style="padding-left: 1em;text-align: right"> 154 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 81.5 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g04700.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 869 </td>
+<td class="kk R "> R </td>
+<td class="kk R "> R </td>
+<td class="kk K "> K </td>
+<td class="kk K "> K </td>
+<td class="kk L "> L </td>
+<td class="kk M "> M </td>
+<td class="kk I "> I </td>
+<td class="kk T "> T </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk S "> S </td>
+<td class="kk A "> A </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk M "> M </td>
+<td class="kk E "> E </td>
+<td class="kk Y "> Y </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk M "> M </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk N "> N </td>
+<td class="kk I "> I </td>
+<td class="kk V "> V </td>
+<td class="kk H "> H </td>
+<td class="kk F "> F </td>
+<td class="kk D "> D </td>
+<td class="kk L "> L </td>
+<td class="kk K "> K </td>
+<td class="kk C "> C </td>
+<td class="kk D "> D </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk V "> V </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk P "> P </td>
+<td class="kk Q "> Q </td>
+<td class="jj"> R </td>
+<td class="jj"> P </td>
+<td class="jj"> I </td>
+<td class="jj"> C </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk V "> V </td>
+<td class="kk G "> G </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk S "> S </td>
+<td class="kk R "> R </td>
+<td style="padding-left: 1em;text-align: right"> 922 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 65.3 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g05100.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 104 </td>
+<td class="kk E "> E </td>
+<td class="kk A "> A </td>
+<td class="kk R "> R </td>
+<td class="kk V "> V </td>
+<td class="kk V "> V </td>
+<td class="kk K "> K </td>
+<td class="kk Y "> Y </td>
+<td class="kk T "> T </td>
+<td class="kk R "> R </td>
+<td class="kk Q "> Q </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk E "> E </td>
+<td class="kk Y "> Y </td>
+<td class="kk I "> I </td>
+<td class="kk H "> H </td>
+<td class="kk N "> N </td>
+<td class="jj"> S </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk G "> G </td>
+<td class="kk I "> I </td>
+<td class="kk A "> A </td>
+<td class="kk H "> H </td>
+<td class="kk C "> C </td>
+<td class="kk D "> D </td>
+<td class="kk I "> I </td>
+<td class="kk K "> K </td>
+<td class="kk G "> G </td>
+<td class="kk S "> S </td>
+<td class="kk N "> N </td>
+<td class="kk V "> V </td>
+<td class="kk L "> L </td>
+<td class="kk V "> V </td>
+<td class="kk G "> G </td>
+<td class="kk E "> E </td>
+<td class="kk N "> N </td>
+<td class="kk G "> G </td>
+<td class="kk E "> E </td>
+<td class="kk A "> A </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk I "> I </td>
+<td class="kk A "> A </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk C "> C </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td style="padding-left: 1em;text-align: right"> 154 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 90.7 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g05700.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 655 </td>
+<td class="kk W "> W </td>
+<td class="kk R "> R </td>
+<td class="kk Q "> Q </td>
+<td class="kk R "> R </td>
+<td class="kk L "> L </td>
+<td class="kk Q "> Q </td>
+<td class="kk I "> I </td>
+<td class="kk A "> A </td>
+<td class="kk L "> L </td>
+<td class="kk D "> D </td>
+<td class="kk A "> A </td>
+<td class="kk A "> A </td>
+<td class="kk Q "> Q </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk E "> E </td>
+<td class="kk Y "> Y </td>
+<td class="kk L "> L </td>
+<td class="kk H "> H </td>
+<td class="kk C "> C </td>
+<td class="jj"> G </td>
+<td class="jj"> C </td>
+<td class="jj"> K </td>
+<td class="kk P "> P </td>
+<td class="kk P "> P </td>
+<td class="kk I "> I </td>
+<td class="kk V "> V </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk V "> V </td>
+<td class="kk K "> K </td>
+<td class="kk T "> T </td>
+<td class="kk S "> S </td>
+<td class="kk N "> N </td>
+<td class="kk I "> I </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk N "> N </td>
+<td class="kk E "> E </td>
+<td class="kk K "> K </td>
+<td class="kk N "> N </td>
+<td class="kk R "> R </td>
+<td class="kk A "> A </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk S "> S </td>
+<td class="kk R "> R </td>
+<td style="padding-left: 1em;text-align: right"> 707 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 78.3 </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g06390.1_ </td>
+<td style="padding-right: 1em;text-align: right"> 168 </td>
+<td class="kk I "> I </td>
+<td class="kk F "> F </td>
+<td class="kk Y "> Y </td>
+<td class="kk V "> V </td>
+<td class="kk K "> K </td>
+<td class="kk L "> L </td>
+<td class="kk Y "> Y </td>
+<td class="kk T "> T </td>
+<td class="kk Y "> Y </td>
+<td class="kk Q "> Q </td>
+<td class="kk I "> I </td>
+<td class="kk F "> F </td>
+<td class="kk R "> R </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk Y "> Y </td>
+<td class="kk I "> I </td>
+<td class="kk H "> H </td>
+<td class="kk T "> T </td>
+<td class="jj"> V </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk P "> P </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk C "> C </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk V "> V </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk Q "> Q </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk V "> V </td>
+<td class="kk D "> D </td>
+<td class="kk P "> P </td>
+<td class="kk L "> L </td>
+<td class="kk T "> T </td>
+<td class="kk H "> H </td>
+<td class="kk Q "> Q </td>
+<td class="jj"> V </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk L "> L </td>
+<td class="kk C "> C </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk S "> S </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td style="padding-left: 1em;text-align: right"> 219 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 105. </td>
+</tr>
+<tr>
+<td style="padding-right: 1em"> At1g06390.2_ </td>
+<td style="padding-right: 1em;text-align: right"> 168 </td>
+<td class="kk I "> I </td>
+<td class="kk F "> F </td>
+<td class="kk Y "> Y </td>
+<td class="kk V "> V </td>
+<td class="kk K "> K </td>
+<td class="kk L "> L </td>
+<td class="kk Y "> Y </td>
+<td class="kk T "> T </td>
+<td class="kk Y "> Y </td>
+<td class="kk Q "> Q </td>
+<td class="kk I "> I </td>
+<td class="kk F "> F </td>
+<td class="kk R "> R </td>
+<td class="kk G "> G </td>
+<td class="kk L "> L </td>
+<td class="kk A "> A </td>
+<td class="kk Y "> Y </td>
+<td class="kk I "> I </td>
+<td class="kk H "> H </td>
+<td class="kk T "> T </td>
+<td class="jj"> V </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk P "> P </td>
+<td class="kk G "> G </td>
+<td class="kk V "> V </td>
+<td class="kk C "> C </td>
+<td class="kk H "> H </td>
+<td class="kk R "> R </td>
+<td class="kk D "> D </td>
+<td class="kk V "> V </td>
+<td class="kk K "> K </td>
+<td class="kk P "> P </td>
+<td class="kk Q "> Q </td>
+<td class="kk N "> N </td>
+<td class="kk L "> L </td>
+<td class="kk L "> L </td>
+<td class="kk V "> V </td>
+<td class="kk D "> D </td>
+<td class="kk P "> P </td>
+<td class="kk L "> L </td>
+<td class="kk T "> T </td>
+<td class="kk H "> H </td>
+<td class="kk Q "> Q </td>
+<td class="jj"> V </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="jj"> . </td>
+<td class="kk K "> K </td>
+<td class="kk L "> L </td>
+<td class="kk C "> C </td>
+<td class="kk D "> D </td>
+<td class="kk F "> F </td>
+<td class="kk G "> G </td>
+<td class="kk S "> S </td>
+<td class="kk A "> A </td>
+<td class="kk K "> K </td>
+<td style="padding-left: 1em;text-align: right"> 219 </td>
+<td style="padding-left: 1em;text-align: center"> + </td>
+<td style="padding-left: 1em"> 105. </td>
+</tr>
+</tbody>
+</table>
+<table> <tr> <td> Score: <b> 1277.07 </b></td>
+<td rowspan=2><img src="logo1.png"></td></tr>
+<tr><th><a href="logo_ssc1.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 1"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln1" value=".
+                  ********************...*********************........*********
+At1g01140.1_  116 EDEARRYFQQLINAVDYCHS...RGVYHRDLKPENLILDANGVL........KVSDFGLSA  165 + 120.
+At1g01140.2_  116 EDEARRYFQQLINAVDYCHS...RGVYHRDLKPENLILDANGVL........KVSDFGLSA  165 + 120.
+At1g01140.3_  116 EDEARRYFQQLINAVDYCHS...RGVYHRDLKPENLILDANGVL........KVSDFGLSA  165 + 120.
+At1g01450.1_  123 LPVAVDLMLQIALGMEYLHS...KRIYHGELNPSNILVKPRSNQSGDGYLLGKIFGFGLNS  180 + 44.0
+At1g01540.1_  251 WDIRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDRQWNA........KVSDFGLAK  303 + 106.
+At1g01540.2_  251 WDIRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDRQWNA........KVSDFGLAK  303 + 106.
+At1g01560.1_  140 DDHSRFFLYQLLRGLKYVHS...ANVLHRDLKPSNLLLNANCDL........KIGDFGLAR  189 + 84.9
+At1g01740.1_  151 WAMRLRVALYISEALEYCSNNG.HTLYH.DLNAYRVLFDEECNP........RLSTFGLMK  201 + 12.2
+At1g02970.1_  346 EREILVIMHQIAKALHFVHE...KGIAHLDVKPDNIYIK.NGVC........KLGDFGCAT  394 + 69.3
+At1g03740.1_  311 EPQVKCYMRQLLSGLEHCHS...RGVLHRDIKGSNLLIDSKGVL........KIADFGLAT  360 + 100.
+At1g03920.1_  234 EDEAKFYIAESVLAIESIHN...RNYIHRDIKPDNLLLDRYGHL........RLSDFGLCK  283 + 79.2
+At1g03930.1_  102 LKTVLMLADQLINRVEFMHT...RGFLHRDIKPDNFLMGLGRKANQV.....YIIDFGLGK  154 + 86.4
+At1g04210.1_  901 MDLALSIARDISGALMELHS...KDIIHRDIKSENVLID.LDNQSANGEPIVKLCDFDRAV  957 + 49.6
+At1g04440.1_  102 LKTVLMLADQMINRVEYMHV...KGFLHRDIKPDNFLMGLGRKANQV.....YIIDYGLAK  154 + 81.5
+At1g04700.1_  869 RRKKLMITLDSAFGMEYLHM...KNIVHFDLKCDNLLVNLRDPQRPIC....KVGDFGLSR  922 + 65.3
+At1g05100.1_  104 EARVVKYTRQILLGLEYIHNS..KGIAHCDIKGSNVLVGENGEA........KIADFGCAK  154 + 90.7
+At1g05700.1_  655 WRQRLQIALDAAQGLEYLHCGCKPPIVHRDVKTSNILLNEKNRA........KLADFGLSR  707 + 78.3
+At1g06390.1_  168 IFYVKLYTYQIFRGLAYIHTV..PGVCHRDVKPQNLLVDPLTHQV.......KLCDFGSAK  219 + 105.
+At1g06390.2_  168 IFYVKLYTYQIFRGLAYIHTV..PGVCHRDVKPQNLLVDPLTHQV.......KLCDFGSAK  219 + 105.
+.">
+<br><input type="submit" name="action" value="View alignment 1">
+<input type="hidden" name="pspm1" value="
+letter-probability matrix: alength= 20  w= 50 nsites= 19 E= 1
+0.0  0.0  0.0526315789474  0.368421052632  0.0  0.0  0.0  0.105263157895  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.210526315789  0.0 
+0.105263157895  0.0  0.421052631579  0.0  0.105263157895  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.105263157895  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0526315789474  0.105263157895  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.105263157895  0.0526315789474  0.0  0.105263157895  0.0526315789474  0.0  0.105263157895 
+0.315789473684  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0526315789474  0.0  0.315789473684  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.368421052632  0.105263157895  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0526315789474  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.157894736842  0.105263157895  0.0  0.0526315789474  0.210526315789  0.0526315789474  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.421052631579 
+0.263157894737  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0 
+0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.0  0.0  0.157894736842  0.157894736842  0.0  0.0  0.0  0.0  0.157894736842 
+0.0  0.0  0.157894736842  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.631578947368  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.315789473684  0.157894736842  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0 
+0.315789473684  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.157894736842  0.157894736842  0.0  0.263157894737  0.0  0.0526315789474  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0 
+0.368421052632  0.0  0.0  0.0  0.0  0.526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.578947368421  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.210526315789  0.0  0.157894736842  0.473684210526  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.736842105263 
+0.0  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.315789473684  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.368421052632  0.157894736842  0.0526315789474  0.0  0.0 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.315789473684  0.0  0.0  0.0  0.263157894737  0.0  0.315789473684  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.526315789474  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.315789473684  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0526315789474 
+0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.263157894737 
+0.0  0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.947368421053  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.894736842105  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.263157894737  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.368421052632  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.421052631579  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.210526315789  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.157894736842  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.105263157895  0.157894736842  0.0  0.315789473684  0.0  0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.105263157895  0.105263157895  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.105263157895  0.0526315789474  0.105263157895  0.0  0.105263157895  0.0 
+0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.263157894737  0.0  0.0 
+0.315789473684  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0  0.0526315789474  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.105263157895 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0 
+0.157894736842  0.157894736842  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0 
+0.0  0.0  0.894736842105  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0526315789474  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0  0.0  0.0 
+0.526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.105263157895  0.0526315789474  0.0  0.0 
+">
+<input type="submit" name="action" value="View PSPM 1">
+<br><i>Regular Expression for Motif: </i>
+<b> [EW]DE[ARV][KRL]R[YI][AT]LQ[IL][AI]N[AG][LV][AE]Y[ICL]HS.{0,3}[PKR]G[IV][LVY]HR?D[ILV]KP[SED]N[IL]L[LV]DA?NG[NV][QAL].{0,8}K[ILV]SDFGL[AS]K </b>
+<br>
+<h2>Replicates:</h2>
+<p>Check that at least some of these are similar to the best motif found.<br>If not, there may well be an even better motif.<BR>Click here to 
+<input type="submit" name="action" value="re-run GLAM2">
+with double the "maximum number of iterations without improvement" to find it.</p>
+<p>
+<table> <tr> <td> Score: <b> 1274.78 </b></td>
+<td rowspan=2><img src="logo2.png"></td></tr>
+<tr><th><a href="logo_ssc2.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 2"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln2" value=".
+                  *******************...******************........*************
+At1g01140.1_  116 EDEARRYFQQLINAVDYCH...SRGVYHRDLKPENLILDA........NGVLKVSDFGLSA  165 + 120.
+At1g01140.2_  116 EDEARRYFQQLINAVDYCH...SRGVYHRDLKPENLILDA........NGVLKVSDFGLSA  165 + 120.
+At1g01140.3_  116 EDEARRYFQQLINAVDYCH...SRGVYHRDLKPENLILDA........NGVLKVSDFGLSA  165 + 120.
+At1g01450.1_  123 LPVAVDLMLQIALGMEYLH...SKRIYHGELNPSNILVKPRSNQSGDGYLLGKIFGFGLNS  180 + 31.5
+At1g01540.1_  251 WDIRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDR........QWNAKVSDFGLAK  303 + 105.
+At1g01540.2_  251 WDIRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDR........QWNAKVSDFGLAK  303 + 105.
+At1g01560.1_  140 DDHSRFFLYQLLRGLKYVH...SANVLHRDLKPSNLLLNA........NCDLKIGDFGLAR  189 + 83.6
+At1g01740.1_  151 WAMRLRVALYISEALEYCSNN.GHTLYH.DLNAYRVLFDE........ECNPRLSTFGLMK  201 + 9.21
+At1g02970.1_  346 EREILVIMHQIAKALHFVH...EKGIAHLDVKPDNIYIK.........NGVCKLGDFGCAT  394 + 69.3
+At1g03740.1_  311 EPQVKCYMRQLLSGLEHCH...SRGVLHRDIKGSNLLIDS........KGVLKIADFGLAT  360 + 100.
+At1g03920.1_  234 EDEAKFYIAESVLAIESIH...NRNYIHRDIKPDNLLLDR........YGHLRLSDFGLCK  283 + 76.4
+At1g03930.1_  102 LKTVLMLADQLINRVEFMH...TRGFLHRDIKPDNFLMGLGRK.....ANQVYIIDFGLGK  154 + 86.3
+At1g04210.1_  901 MDLALSIARDISGALMELH...SKDIIHRDIKSENVLIDLDNQSANG.EPIVKLCDFDRAV  957 + 52.9
+At1g04440.1_  102 LKTVLMLADQMINRVEYMH...VKGFLHRDIKPDNFLMGLGRK.....ANQVYIIDYGLAK  154 + 87.4
+At1g04700.1_  869 RRKKLMITLDSAFGMEYLH...MKNIVHFDLKCDNLLVNLRDPQ....RPICKVGDFGLSR  922 + 65.9
+At1g05100.1_  104 EARVVKYTRQILLGLEYIHN..SKGIAHCDIKGSNVLVGE........NGEAKIADFGCAK  154 + 90.2
+At1g05700.1_  655 WRQRLQIALDAAQGLEYLHCGCKPPIVHRDVKTSNILLNE........KNRAKLADFGLSR  707 + 80.4
+At1g06390.1_  168 IFYVKLYTYQIFRGLAYIHT..VPGVCHRDVKPQNLLVDPL.......THQVKLCDFGSAK  219 + 105.
+At1g06390.2_  168 IFYVKLYTYQIFRGLAYIHT..VPGVCHRDVKPQNLLVDPL.......THQVKLCDFGSAK  219 + 105.
+.">
+<br><input type="submit" name="action" value="View alignment 2">
+<input type="hidden" name="pspm2" value="
+letter-probability matrix: alength= 20  w= 50 nsites= 19 E= 1
+0.0  0.0  0.0526315789474  0.368421052632  0.0  0.0  0.0  0.105263157895  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.210526315789  0.0 
+0.105263157895  0.0  0.421052631579  0.0  0.105263157895  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.105263157895  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0526315789474  0.105263157895  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.105263157895  0.0526315789474  0.0  0.105263157895  0.0526315789474  0.0  0.105263157895 
+0.315789473684  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0526315789474  0.0  0.315789473684  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.368421052632  0.105263157895  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0526315789474  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.157894736842  0.105263157895  0.0  0.0526315789474  0.210526315789  0.0526315789474  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.421052631579 
+0.263157894737  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0 
+0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.0  0.0  0.157894736842  0.157894736842  0.0  0.0  0.0  0.0  0.157894736842 
+0.0  0.0  0.157894736842  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.631578947368  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.315789473684  0.157894736842  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0 
+0.315789473684  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.157894736842  0.157894736842  0.0  0.263157894737  0.0  0.0526315789474  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0 
+0.368421052632  0.0  0.0  0.0  0.0  0.526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.578947368421  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.210526315789  0.0  0.157894736842  0.473684210526  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.736842105263 
+0.0  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.315789473684  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.421052631579  0.0526315789474  0.157894736842  0.0  0.0 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.315789473684  0.0  0.0  0.0  0.263157894737  0.0  0.315789473684  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.526315789474  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.315789473684  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0526315789474 
+0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.263157894737 
+0.0  0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.947368421053  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.894736842105  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.263157894737  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.368421052632  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.421052631579  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.210526315789  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.157894736842  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0 
+0.105263157895  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.315789473684  0.0  0.105263157895  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.105263157895 
+0.0  0.105263157895  0.0  0.0  0.0  0.368421052632  0.105263157895  0.0  0.0  0.0526315789474  0.0  0.157894736842  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0 
+0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0  0.157894736842  0.0  0.210526315789  0.0526315789474  0.0  0.0  0.263157894737  0.0  0.0 
+0.210526315789  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.315789473684  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.105263157895 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0 
+0.157894736842  0.157894736842  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0 
+0.0  0.0  0.894736842105  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0526315789474  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0  0.0  0.0 
+0.526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.105263157895  0.0526315789474  0.0  0.0 
+">
+<input type="submit" name="action" value="View PSPM 2">
+<br><i>Regular Expression for Motif: </i>
+<b> [EW]DE[ARV][KRL]R[YI][AT]LQ[IL][AI]N[AG][LV][AE]Y[ICL]H.{0,3}S[PKR]G[IV][LVY]HR?D[ILV]KP[SED]N[IL]L[LV]D[AL]?.{0,8}NG[QV][ALV]K[ILV]SDFGL[AS]K </b>
+<br>
+<table> <tr> <td> Score: <b> 1271.80 </b></td>
+<td rowspan=2><img src="logo3.png"></td></tr>
+<tr><th><a href="logo_ssc3.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 3"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln3" value=".
+                  ***.**************...********************........*************
+At1g01140.1_  119 ARR.YFQQLINAVDYCHS...RGVYHRDLKPENLILDANGV........LKVSDFGLSAFSR  168 + 120.
+At1g01140.2_  119 ARR.YFQQLINAVDYCHS...RGVYHRDLKPENLILDANGV........LKVSDFGLSAFSR  168 + 120.
+At1g01140.3_  119 ARR.YFQQLINAVDYCHS...RGVYHRDLKPENLILDANGV........LKVSDFGLSAFSR  168 + 120.
+At1g01450.1_  126 AVD.LMLQIALGMEYLHS...KRIYHGELNPSNILVKPRSNQSGDGYLLGKIFGFGLNSVKG  183 + 38.8
+At1g01540.1_  253 IRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDRQWN........AKVSDFGLAKLLG  306 + 101.
+At1g01540.2_  253 IRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDRQWN........AKVSDFGLAKLLG  306 + 101.
+At1g01560.1_  143 SRF.FLYQLLRGLKYVHS...ANVLHRDLKPSNLLLNANCD........LKIGDFGLARTKS  192 + 85.8
+At1g01740.1_  154 RLR.VALYISEALEYCSNNG.HTLYH.DLNAYRVLFDEECN........PRLSTFGLMKNSR  204 + 9.30
+At1g02970.1_  349 ILV.IMHQIAKALHFVHE...KGIAHLDVKPDNIYIK.NGV........CKLGDFGCATRLD  397 + 75.4
+At1g03740.1_  314 VKC.YMRQLLSGLEHCHS...RGVLHRDIKGSNLLIDSKGV........LKIADFGLATFFD  363 + 102.
+At1g03920.1_  237 AKF.YIAESVLAIESIHN...RNYIHRDIKPDNLLLDRYGH........LRLSDFGLCKPLD  286 + 75.8
+At1g03930.1_  105 VLM.LADQLINRVEFMHT...RGFLHRDIKPDNFLMG.LGRKANQ....VYIIDFGLGKKYR  157 + 90.8
+At1g04210.1_  904 ALS.IARDISGALMELHS...KDIIHRDIKSENVLID.LDNQSANGEPIVKLCDFDRAVPLR  960 + 54.9
+At1g04440.1_  105 VLM.LADQMINRVEYMHV...KGFLHRDIKPDNFLMG.LGRKANQ....VYIIDYGLAKKYR  157 + 85.9
+At1g04700.1_  872 KLM.ITLDSAFGMEYLHM...KNIVHFDLKCDNLLVN.LRDPQRPI...CKVGDFGLSRIKR  925 + 67.7
+At1g05100.1_  107 VVK.YTRQILLGLEYIHNS..KGIAHCDIKGSNVLVGENGE........AKIADFGCAKWVE  157 + 85.9
+At1g05700.1_  658 RLQ.IALDAAQGLEYLHCGCKPPIVHRDVKTSNILLNEKNR........AKLADFGLSRSFH  710 + 71.8
+At1g06390.1_  171 VKL.YTYQIFRGLAYIHTV..PGVCHRDVKPQNLLVDPLTHQ.......VKLCDFGSAKVLV  222 + 107.
+At1g06390.2_  171 VKL.YTYQIFRGLAYIHTV..PGVCHRDVKPQNLLVDPLTHQ.......VKLCDFGSAKVLV  222 + 107.
+.">
+<br><input type="submit" name="action" value="View alignment 3">
+<input type="hidden" name="pspm3" value="
+letter-probability matrix: alength= 20  w= 50 nsites= 19 E= 1
+0.315789473684  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0526315789474  0.0  0.315789473684  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.368421052632  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0526315789474  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.263157894737  0.0  0.0  0.0526315789474  0.210526315789  0.0526315789474  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.421052631579 
+0.263157894737  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0 
+0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.0  0.0  0.157894736842  0.157894736842  0.0  0.0  0.0  0.0  0.157894736842 
+0.0  0.0  0.157894736842  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.631578947368  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.315789473684  0.157894736842  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0 
+0.315789473684  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.157894736842  0.157894736842  0.0  0.263157894737  0.0  0.0526315789474  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0 
+0.368421052632  0.0  0.0  0.0  0.0  0.526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.578947368421  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.210526315789  0.0  0.157894736842  0.473684210526  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.736842105263 
+0.0  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.315789473684  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.368421052632  0.157894736842  0.0526315789474  0.0  0.0 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.315789473684  0.0  0.0  0.0  0.263157894737  0.0  0.315789473684  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.526315789474  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.315789473684  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0526315789474 
+0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.263157894737 
+0.0  0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.947368421053  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.894736842105  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.263157894737  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.368421052632  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.421052631579  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.210526315789  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.105263157895  0.315789473684  0.0  0.315789473684  0.0  0.105263157895  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.105263157895  0.0526315789474  0.0  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.105263157895  0.0  0.105263157895  0.0 
+0.0  0.0  0.105263157895  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0  0.157894736842  0.0  0.0  0.263157894737  0.0  0.0 
+0.210526315789  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.315789473684  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.105263157895 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0 
+0.157894736842  0.157894736842  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0 
+0.0  0.0  0.894736842105  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0526315789474  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0  0.0  0.0 
+0.526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.105263157895  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0526315789474  0.105263157895  0.105263157895  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.157894736842  0.0526315789474  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.157894736842  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0526315789474  0.0  0.105263157895 
+0.0  0.0  0.157894736842  0.0526315789474  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0526315789474  0.0  0.105263157895  0.0  0.0 
+">
+<input type="submit" name="action" value="View PSPM 3">
+<br><i>Regular Expression for Motif: </i>
+<b> [AV][KRL][MR].{0,1}[YI][AT]LQ[IL][AI]N[AG][LV][AE]Y[ICL]HS.{0,3}[PKR]G[IV][LVY]HR?D[ILV]KP[SED]N[IL]L[LV]D[APRE]?[LN]G[NV].{0,8}[ALV]K[ILV]SDFGL[AS]KF[LS]R </b>
+<br>
+<table> <tr> <td> Score: <b> 1257.40 </b></td>
+<td rowspan=2><img src="logo4.png"></td></tr>
+<tr><th><a href="logo_ssc4.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 4"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln4" value=".
+                  ****************...*****************........*****************
+At1g01140.1_  120 RRYFQQLINAVDYCHS...RGVYHRDLKPENLILDA........NGVLKVSDFGLSAFSRQ  169 + 120.
+At1g01140.2_  120 RRYFQQLINAVDYCHS...RGVYHRDLKPENLILDA........NGVLKVSDFGLSAFSRQ  169 + 120.
+At1g01140.3_  120 RRYFQQLINAVDYCHS...RGVYHRDLKPENLILDA........NGVLKVSDFGLSAFSRQ  169 + 120.
+At1g01450.1_  127 VDLMLQIALGMEYLHS...KRIYHGELNPSNILVKPRSNQSGDGYLLGKIFGFGLNSVK.G  183 + 31.5
+At1g01540.1_  255 MNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDR........QWNAKVSDFGLAKLL.G  306 + 98.4
+At1g01540.2_  255 MNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDR........QWNAKVSDFGLAKLL.G  306 + 98.4
+At1g01560.1_  144 RFFLYQLLRGLKYVHS...ANVLHRDLKPSNLLLNA........NCDLKIGDFGLARTK.S  192 + 86.0
+At1g01740.1_  155 LRVALYISEALEYCSNNG.HTLYH.DLNAYRVLFDE........ECNPRLSTFGLMKNSRD  205 + 13.7
+At1g02970.1_  350 LVIMHQIAKALHFVHE...KGIAHLDVKPDNIYIK.........NGVCKLGDFGCATRL.D  397 + 68.9
+At1g03740.1_  315 KCYMRQLLSGLEHCHS...RGVLHRDIKGSNLLIDS........KGVLKIADFGLATFF.D  363 + 99.8
+At1g03920.1_  238 KFYIAESVLAIESIHN...RNYIHRDIKPDNLLLDR........YGHLRLSDFGLCKPL.D  286 + 74.3
+At1g03930.1_  106 LMLADQLINRVEFMHT...RGFLHRDIKPDNFLMGLGRK.....ANQVYIIDFGLGKKYRD  158 + 92.4
+At1g04210.1_  905 LSIARDISGALMELHS...KDIIHRDIKSENVLIDLDNQSANG.EPIVKLCDFDRAVPLRS  961 + 55.3
+At1g04440.1_  106 LMLADQMINRVEYMHV...KGFLHRDIKPDNFLMGLGRK.....ANQVYIIDYGLAKKYRD  158 + 87.5
+At1g04700.1_  873 LMITLDSAFGMEYLHM...KNIVHFDLKCDNLLVNLRDPQ....RPICKVGDFGLSRIKRN  926 + 73.3
+At1g05100.1_  108 VKYTRQILLGLEYIHNS..KGIAHCDIKGSNVLVGE........NGEAKIADFGCAKWV.E  157 + 83.2
+At1g05700.1_  659 LQIALDAAQGLEYLHCGCKPPIVHRDVKTSNILLNE........KNRAKLADFGLSRSF.H  710 + 70.7
+At1g06390.1_  172 KLYTYQIFRGLAYIHTV..PGVCHRDVKPQNLLVDPL.......THQVKLCDFGSAKVL.V  222 + 104.
+At1g06390.2_  172 KLYTYQIFRGLAYIHTV..PGVCHRDVKPQNLLVDPL.......THQVKLCDFGSAKVL.V  222 + 104.
+.">
+<br><input type="submit" name="action" value="View alignment 4">
+<input type="hidden" name="pspm4" value="
+letter-probability matrix: alength= 20  w= 50 nsites= 19 E= 1
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.368421052632  0.105263157895  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0526315789474  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.157894736842  0.105263157895  0.0  0.0526315789474  0.210526315789  0.0526315789474  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.421052631579 
+0.263157894737  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0 
+0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.0  0.0  0.157894736842  0.157894736842  0.0  0.0  0.0  0.0  0.157894736842 
+0.0  0.0  0.157894736842  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.631578947368  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.315789473684  0.157894736842  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0 
+0.315789473684  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.157894736842  0.157894736842  0.0  0.263157894737  0.0  0.0526315789474  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0 
+0.368421052632  0.0  0.0  0.0  0.0  0.526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.578947368421  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.210526315789  0.0  0.157894736842  0.473684210526  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.736842105263 
+0.0  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.315789473684  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.368421052632  0.157894736842  0.0526315789474  0.0  0.0 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.315789473684  0.0  0.0  0.0  0.263157894737  0.0  0.315789473684  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.526315789474  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.315789473684  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0526315789474 
+0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.263157894737 
+0.0  0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.947368421053  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.894736842105  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.263157894737  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.368421052632  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.421052631579  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.210526315789  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.157894736842  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0 
+0.105263157895  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.315789473684  0.0  0.105263157895  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.105263157895 
+0.0  0.105263157895  0.0  0.0  0.0  0.368421052632  0.105263157895  0.0  0.0  0.0526315789474  0.0  0.157894736842  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0 
+0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0  0.157894736842  0.0  0.210526315789  0.0526315789474  0.0  0.0  0.263157894737  0.0  0.0 
+0.210526315789  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.315789473684  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.105263157895 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0 
+0.157894736842  0.157894736842  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0 
+0.0  0.0  0.894736842105  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0526315789474  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0  0.0  0.0 
+0.526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.105263157895  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0526315789474  0.105263157895  0.105263157895  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.157894736842  0.0526315789474  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.157894736842  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0526315789474  0.0  0.105263157895 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.315789473684  0.0526315789474  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.157894736842  0.0  0.105263157895  0.0  0.105263157895  0.0  0.0 
+">
+<input type="submit" name="action" value="View PSPM 4">
+<br><i>Regular Expression for Motif: </i>
+<b> [KRL]R[YI][AT]LQ[IL][AI]N[AG][LV][AE]Y[ICL]HS.{0,3}[PKR]G[IV][LVY]HR?D[ILV]KP[SED]N[IL]L[LV]D[AL]?.{0,8}NG[QV][ALV]K[ILV]SDFGL[AS]KF[LS]R?D </b>
+<br>
+<table> <tr> <td> Score: <b> 1254.89 </b></td>
+<td rowspan=2><img src="logo5.png"></td></tr>
+<tr><th><a href="logo_ssc5.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 5"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln5" value=".
+                  ***************...****************........*******************
+At1g01140.1_  120 RRYFQQLINAVDYCH...SRGVYHRDLKPENLIL........DANGV.LKVSDFGLSAFSR  168 + 118.
+At1g01140.2_  120 RRYFQQLINAVDYCH...SRGVYHRDLKPENLIL........DANGV.LKVSDFGLSAFSR  168 + 118.
+At1g01140.3_  120 RRYFQQLINAVDYCH...SRGVYHRDLKPENLIL........DANGV.LKVSDFGLSAFSR  168 + 118.
+At1g01450.1_  127 VDLMLQIALGMEYLH...SKRIYHGELNPSNILVKPRSNQSGDGYLL.GKIFGFGLNSVKG  183 + 34.1
+At1g01540.1_  255 MNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILL........DRQWN.AKVSDFGLAKLLG  306 + 102.
+At1g01540.2_  255 MNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILL........DRQWN.AKVSDFGLAKLLG  306 + 102.
+At1g01560.1_  144 RFFLYQLLRGLKYVH...SANVLHRDLKPSNLLL........NANCD.LKIGDFGLARTKS  192 + 85.2
+At1g01740.1_  155 LRVALYISEALEYCSNN.GHTLYH.DLNAYRVLF........DEECN.PRLSTFGLMKNSR  204 + 7.75
+At1g02970.1_  350 LVIMHQIAKALHFVH...EKGIAHLDVKPDNIYI.........KNGV.CKLGDFGCATRLD  397 + 67.7
+At1g03740.1_  315 KCYMRQLLSGLEHCH...SRGVLHRDIKGSNLLI........DSKGV.LKIADFGLATFFD  363 + 101.
+At1g03920.1_  238 KFYIAESVLAIESIH...NRNYIHRDIKPDNLLL........DRYGH.LRLSDFGLCKPLD  286 + 75.5
+At1g03930.1_  106 LMLADQLINRVEFMH...TRGFLHRDIKPDNFLMGL......GRKANQVYIIDFGLGKKYR  157 + 90.6
+At1g04210.1_  905 LSIARDISGALMELH...SKDIIHRDIKSENVLIDLDNQSA.NGEPI.VKLCDFDRAVPLR  960 + 46.6
+At1g04440.1_  106 LMLADQMINRVEYMH...VKGFLHRDIKPDNFLMGL......GRKANQVYIIDYGLAKKYR  157 + 91.7
+At1g04700.1_  873 LMITLDSAFGMEYLH...MKNIVHFDLKCDNLLVNLR.....DPQRPICKVGDFGLSRIKR  925 + 69.4
+At1g05100.1_  108 VKYTRQILLGLEYIHN..SKGIAHCDIKGSNVLV........GENGE.AKIADFGCAKWVE  157 + 84.4
+At1g05700.1_  659 LQIALDAAQGLEYLHCGCKPPIVHRDVKTSNILL........NEKNR.AKLADFGLSRSFH  710 + 70.7
+At1g06390.1_  172 KLYTYQIFRGLAYIHT..VPGVCHRDVKPQNLLV........DPLTHQVKLCDFGSAKVLV  222 + 104.
+At1g06390.2_  172 KLYTYQIFRGLAYIHT..VPGVCHRDVKPQNLLV........DPLTHQVKLCDFGSAKVLV  222 + 104.
+.">
+<br><input type="submit" name="action" value="View alignment 5">
+<input type="hidden" name="pspm5" value="
+letter-probability matrix: alength= 20  w= 50 nsites= 19 E= 1
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.368421052632  0.105263157895  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0526315789474  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.157894736842  0.105263157895  0.0  0.0526315789474  0.210526315789  0.0526315789474  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.421052631579 
+0.263157894737  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0 
+0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.0  0.0  0.157894736842  0.157894736842  0.0  0.0  0.0  0.0  0.157894736842 
+0.0  0.0  0.157894736842  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.631578947368  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.315789473684  0.157894736842  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0 
+0.315789473684  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.157894736842  0.157894736842  0.0  0.263157894737  0.0  0.0526315789474  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0 
+0.368421052632  0.0  0.0  0.0  0.0  0.526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.578947368421  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.210526315789  0.0  0.157894736842  0.473684210526  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.736842105263 
+0.0  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.315789473684  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.421052631579  0.0526315789474  0.157894736842  0.0  0.0 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.315789473684  0.0  0.0  0.0  0.263157894737  0.0  0.315789473684  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.526315789474  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.315789473684  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0526315789474 
+0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.263157894737 
+0.0  0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.947368421053  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.894736842105  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.263157894737  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.368421052632  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.421052631579  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.631578947368  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.210526315789  0.0  0.0  0.157894736842  0.0  0.105263157895  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.157894736842  0.0  0.263157894737  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.210526315789  0.105263157895  0.0  0.315789473684  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.105263157895 
+0.105263157895  0.105263157895  0.0  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0526315789474  0.0  0.0526315789474  0.0  0.105263157895  0.0  0.105263157895  0.0 
+0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0526315789474  0.0  0.263157894737  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0 
+0.210526315789  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.315789473684  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.105263157895 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0 
+0.157894736842  0.157894736842  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0 
+0.0  0.0  0.894736842105  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0526315789474  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0  0.0  0.0 
+0.526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.105263157895  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0526315789474  0.105263157895  0.105263157895  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.157894736842  0.0526315789474  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.157894736842  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0526315789474  0.0  0.105263157895 
+0.0  0.0  0.157894736842  0.0526315789474  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0526315789474  0.0  0.105263157895  0.0  0.0 
+">
+<input type="submit" name="action" value="View PSPM 5">
+<br><i>Regular Expression for Motif: </i>
+<b> [KRL]R[YI][AT]LQ[IL][AI]N[AG][LV][AE]Y[ICL]H.{0,3}S[PKR]G[IV][LVY]HR?D[ILV]KP[SED]N[IL]L[LV].{0,8}D?[AR][KN]G[NV][QI]?[ALV]K[ILV]SDFGL[AS]KF[LS]R </b>
+<br>
+<table> <tr> <td> Score: <b> 1234.81 </b></td>
+<td rowspan=2><img src="logo6.png"></td></tr>
+<tr><th><a href="logo_ssc6.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 6"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln6" value=".
+                  *************..******************.....****.**************
+At1g01140.1_  122 YFQQLINAVDYCH..SR.GVYHRDLKPENLILD.....ANGV..LKVSDFGLSAFSR  168 + 115.
+At1g01140.2_  122 YFQQLINAVDYCH..SR.GVYHRDLKPENLILD.....ANGV..LKVSDFGLSAFSR  168 + 115.
+At1g01140.3_  122 YFQQLINAVDYCH..SR.GVYHRDLKPENLILD.....ANGV..LKVSDFGLSAFSR  168 + 115.
+At1g01450.1_  129 LMLQIALGMEYLH..SK.RIYHGELNPSNILVK.....PRSN.QSGDG.YLLGKIFG  175 + 24.8
+At1g01540.1_  257 IILGMAKGLAYLHEGLEPKVVHRDIKSSNILLD.....RQWN..AKVSDFGLAKLLG  306 + 102.
+At1g01540.2_  257 IILGMAKGLAYLHEGLEPKVVHRDIKSSNILLD.....RQWN..AKVSDFGLAKLLG  306 + 102.
+At1g01560.1_  146 FLYQLLRGLKYVH..SA.NVLHRDLKPSNLLLN.....ANCD..LKIGDFGLARTKS  192 + 84.6
+At1g02970.1_  352 IMHQIAKALHFVH..EK.GIAHLDVKPDNIYIK......NGV..CKLGDFGCATRLD  397 + 67.0
+At1g03740.1_  317 YMRQLLSGLEHCH..SR.GVLHRDIKGSNLLID.....SKGV..LKIADFGLATFFD  363 + 101.
+At1g03920.1_  240 YIAESVLAIESIH..NR.NYIHRDIKPDNLLLD.....RYGH..LRLSDFGLCKPLD  286 + 69.0
+At1g03930.1_  108 LADQLINRVEFMH..TR.GFLHRDIKPDNFLMGLG...RKAN.QVYIIDFGLGKKYR  157 + 92.5
+At1g04210.1_  907 IARDISGALMELH..SK.DIIHRDIKSENVLIDLDNQSANGEPIVKLCDFDRAVPLR  960 + 42.9
+At1g04440.1_  108 LADQMINRVEYMH..VK.GFLHRDIKPDNFLMGLG...RKAN.QVYIIDYGLAKKYR  157 + 93.3
+At1g04700.1_  875 ITLDSAFGMEYLH..MK.NIVHFDLKCDNLLVNLRD..PQRP.ICKVGDFGLSRIKR  925 + 70.8
+At1g05100.1_  110 YTRQILLGLEYIHN.SK.GIAHCDIKGSNVLVG.....ENGE..AKIADFGCAKWVE  157 + 88.2
+At1g05700.1_  661 IALDAAQGLEYLHCGCKPPIVHRDVKTSNILLN.....EKNR..AKLADFGLSRSFH  710 + 73.1
+At1g06390.1_  174 YTYQIFRGLAYIH..TVPGVCHRDVKPQNLLVD.....PLTH.QVKLCDFGSAKVLV  222 + 109.
+At1g06390.2_  174 YTYQIFRGLAYIH..TVPGVCHRDVKPQNLLVD.....PLTH.QVKLCDFGSAKVLV  222 + 109.
+.">
+<br><input type="submit" name="action" value="View alignment 6">
+<input type="hidden" name="pspm6" value="
+letter-probability matrix: alength= 20  w= 49 nsites= 18 E= 1
+0.0  0.0  0.0  0.0  0.0555555555556  0.0  0.0  0.333333333333  0.0  0.166666666667  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.444444444444 
+0.222222222222  0.0  0.0  0.0  0.166666666667  0.0  0.0  0.166666666667  0.0  0.0555555555556  0.166666666667  0.0  0.0  0.0  0.0  0.0  0.222222222222  0.0  0.0  0.0 
+0.0555555555556  0.0  0.111111111111  0.0  0.0  0.0  0.0555555555556  0.0  0.0  0.277777777778  0.0  0.0  0.0  0.166666666667  0.166666666667  0.0  0.0  0.0  0.0  0.166666666667 
+0.0  0.0  0.166666666667  0.0555555555556  0.0  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.666666666667  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0555555555556  0.0  0.0  0.0  0.0  0.0  0.0  0.333333333333  0.0  0.333333333333  0.166666666667  0.0  0.0  0.0  0.0  0.111111111111  0.0  0.0  0.0  0.0 
+0.333333333333  0.0  0.0  0.0  0.111111111111  0.0  0.0  0.277777777778  0.0  0.166666666667  0.0  0.0  0.0  0.0  0.0  0.0555555555556  0.0  0.0555555555556  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0555555555556  0.0555555555556  0.0  0.0  0.166666666667  0.166666666667  0.0  0.277777777778  0.0  0.0555555555556  0.166666666667  0.0555555555556  0.0  0.0  0.0  0.0 
+0.333333333333  0.0  0.0  0.0  0.0  0.555555555556  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.111111111111  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0555555555556  0.0  0.555555555556  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.277777777778  0.0  0.0 
+0.222222222222  0.0  0.166666666667  0.444444444444  0.0  0.0  0.0555555555556  0.0  0.0555555555556  0.0  0.0555555555556  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0555555555556  0.111111111111  0.0  0.0555555555556  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0555555555556  0.0  0.0  0.0  0.722222222222 
+0.0  0.222222222222  0.0  0.0  0.0  0.0  0.0  0.222222222222  0.0  0.333333333333  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.111111111111  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0555555555556  0.0  0.0555555555556  0.0  0.0  0.0  0.0  0.0  0.111111111111  0.0555555555556  0.0555555555556  0.0  0.0  0.0  0.444444444444  0.166666666667  0.0555555555556  0.0  0.0 
+0.0555555555556  0.0  0.0  0.111111111111  0.0  0.0  0.0  0.0  0.388888888889  0.0  0.0  0.0  0.0  0.0  0.333333333333  0.0  0.0  0.111111111111  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.277777777778  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0555555555556  0.0  0.0  0.555555555556  0.0  0.0  0.111111111111  0.0  0.0  0.166666666667  0.0555555555556  0.0  0.0555555555556  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.111111111111  0.0  0.0  0.333333333333  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.5  0.0  0.0555555555556 
+0.111111111111  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.111111111111  0.0  0.222222222222  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.222222222222  0.0  0.222222222222 
+0.0  0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0555555555556  0.0  0.0  0.0555555555556  0.0555555555556  0.0  0.0  0.0  0.0555555555556  0.0  0.0  0.0  0.0  0.777777777778  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.944444444444  0.0555555555556  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.444444444444  0.0  0.333333333333  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.222222222222  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.944444444444  0.0  0.0  0.0555555555556  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0555555555556  0.0  0.0  0.0  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.611111111111  0.0  0.0  0.166666666667  0.0555555555556  0.0  0.0  0.0 
+0.0  0.0  0.277777777778  0.222222222222  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.111111111111  0.0  0.388888888889  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.111111111111  0.0  0.0  0.277777777778  0.0  0.5  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.111111111111  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.166666666667  0.0  0.777777777778  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0555555555556 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.166666666667  0.0  0.444444444444  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.277777777778  0.0  0.0 
+0.0  0.0  0.555555555556  0.0  0.0  0.166666666667  0.0  0.0  0.111111111111  0.0  0.0  0.166666666667  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.277777777778  0.0  0.0  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.222222222222  0.0  0.277777777778  0.0555555555556  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.222222222222  0.111111111111  0.0  0.388888888889  0.0  0.166666666667  0.0555555555556  0.0  0.0  0.0  0.0  0.0555555555556 
+0.111111111111  0.0555555555556  0.0  0.0  0.0  0.444444444444  0.0  0.0  0.0  0.0  0.0  0.0555555555556  0.0  0.0  0.0555555555556  0.0555555555556  0.111111111111  0.0  0.111111111111  0.0 
+0.0  0.0  0.0555555555556  0.111111111111  0.0  0.0  0.166666666667  0.0  0.0  0.0  0.0  0.277777777778  0.0555555555556  0.0  0.0555555555556  0.0  0.0  0.277777777778  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.277777777778  0.0  0.0  0.0  0.0  0.0  0.0 
+0.222222222222  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.333333333333  0.0  0.0  0.0  0.0  0.0  0.0555555555556  0.0  0.277777777778  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0555555555556  0.0  0.0  0.777777777778  0.0  0.0  0.0  0.0  0.0  0.0555555555556  0.0  0.0  0.0  0.0  0.111111111111 
+0.0  0.0  0.0555555555556  0.0  0.0  0.0  0.0  0.277777777778  0.0  0.333333333333  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.333333333333  0.0  0.0 
+0.166666666667  0.166666666667  0.0  0.0  0.0  0.222222222222  0.0  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.333333333333  0.0  0.0  0.0  0.0 
+0.0  0.0  0.944444444444  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.888888888889  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.111111111111 
+0.0  0.0  0.0555555555556  0.0  0.0  0.888888888889  0.0  0.0  0.0  0.0555555555556  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.722222222222  0.0  0.0  0.0  0.0  0.0555555555556  0.111111111111  0.0  0.0  0.0  0.0 
+0.555555555556  0.0555555555556  0.0  0.0  0.0  0.111111111111  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.277777777778  0.0  0.0  0.0  0.0 
+0.166666666667  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.5  0.0  0.0  0.0  0.0  0.0  0.166666666667  0.0  0.111111111111  0.0555555555556  0.0  0.0 
+0.0  0.0  0.0  0.0  0.222222222222  0.0  0.0  0.111111111111  0.111111111111  0.111111111111  0.0  0.0  0.111111111111  0.0  0.0555555555556  0.0555555555556  0.0555555555556  0.111111111111  0.0555555555556  0.0 
+0.0  0.0  0.0  0.0  0.166666666667  0.0  0.0  0.0  0.111111111111  0.388888888889  0.0  0.0  0.0  0.0  0.0  0.166666666667  0.0  0.0555555555556  0.0  0.111111111111 
+0.0  0.0  0.166666666667  0.0555555555556  0.0  0.166666666667  0.0555555555556  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.388888888889  0.0555555555556  0.0  0.111111111111  0.0  0.0 
+">
+<input type="submit" name="action" value="View PSPM 6">
+<br><i>Regular Expression for Motif: </i>
+<b> [YI][AT]LQ[IL][AI]N[AG][LV][AE]Y[ICL]H.{0,2}S[KR]P?G[IV][LVY]HRD[ILV]KP[SED]N[IL]L[LV]D.{0,5}[APR]?[KN]G[NV].{0,1}[QI]?[ALV]K[ILV][SG]D?FGL[AS]KFLR </b>
+<br>
+<table> <tr> <td> Score: <b> 982.689 </b></td>
+<td rowspan=2><img src="logo7.png"></td></tr>
+<tr><th><a href="logo_ssc7.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 7"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln7" value=".
+                  **********************.......*********......**************.............*****
+At1g01140.1_  136 RGVYHRDLKPENLILD.ANGVL.......KVSDFGLSAFS....RQVRED.GLLHTAC.............GTPNY  185 + 106.
+At1g01140.2_  136 RGVYHRDLKPENLILD.ANGVL.......KVSDFGLSAFS....RQVRED.GLLHTAC.............GTPNY  185 + 106.
+At1g01140.3_  136 RGVYHRDLKPENLILD.ANGVL.......KVSDFGLSAFS....RQVRED.GLLHTAC.............GTPNY  185 + 106.
+At1g01450.1_  143 KRIYHGELNPSNILVKPRSNQSGDGYLLGKIFGFGLNSVKG...FS.SKSASLTSQNE..............NFPF  200 + 17.3
+At1g01540.1_  274 PKVVHRDIKSSNILLD.RQWNA.......KVSDFGLAKL.....LG.SES.SYVTTRVM............GTFGY  322 + 100.
+At1g01540.2_  274 PKVVHRDIKSSNILLD.RQWNA.......KVSDFGLAKL.....LG.SES.SYVTTRVM............GTFGY  322 + 100.
+At1g01560.1_  160 ANVLHRDLKPSNLLLN.ANCDL.......KIGDFGLAR......TK.SET.DFMTEYVV.............TRWY  206 + 75.0
+At1g01740.1_  173 HTLYH.DLNAYRVLFD.EECNP.......RLSTFGLMKNS....RD.GKS..Y.STNLAF............TPPE  219 + 3.93
+At1g02970.1_  366 KGIAHLDVKPDNIYIK..NGVC.......KLGDFGCAT......RL.DKS..L.PVEE.............GDARY  409 + 38.4
+At1g03740.1_  331 RGVLHRDIKGSNLLID.SKGVL.......KIADFGLATF.....FDPAKSVSLTSHVV..............TLWY  379 + 74.8
+At1g03920.1_  254 RNYIHRDIKPDNLLLD.RYGHL.......RLSDFGLCKPLDCSVID.GED..FTVGNA.............GSGGG  305 + 52.4
+At1g03930.1_  122 RGFLHRDIKPDNFLMG.LGRKANQV....YIIDFGLGKKY....RD.LQTHRHIPYRENKNLT........GTARY  179 + 76.3
+At1g04210.1_  921 KDIIHRDIKSENVLID.LDNQSANGEPIVKLCDFDRA.......VP.LRS..HLHGCCIAHVGIPPPNICVGTPRW  985 + 42.0
+At1g04440.1_  122 KGFLHRDIKPDNFLMG.LGRKANQV....YIIDYGLAKKY....RD.LQTHKHIPYRENKNLT........GTARY  179 + 72.4
+At1g04700.1_  889 KNIVHFDLKCDNLLVNLRDPQRPIC....KVGDFGLSR......IK.RNT..LVSGGVR............GTLPW  939 + 54.4
+At1g05100.1_  125 KGIAHCDIKGSNVLVG.ENGEA.......KIADFGCAK......W..VEP..EITEPVR............GTPAF  170 + 54.4
+At1g05700.1_  678 PPIVHRDVKTSNILLN.EKNRA.......KLADFGLSRS.....FH.TESRSHVSTLVA............GTPGY  727 + 81.4
+At1g06390.1_  189 PGVCHRDVKPQNLLVDPLTHQV.......KLCDFGSAKVL....VK.GEP..NISYIC..............SRYY  236 + 87.0
+At1g06390.2_  189 PGVCHRDVKPQNLLVDPLTHQV.......KLCDFGSAKVL....VK.GEP..NISYIC..............SRYY  236 + 87.0
+.">
+<br><input type="submit" name="action" value="View alignment 7">
+<input type="hidden" name="pspm7" value="
+letter-probability matrix: alength= 20  w= 50 nsites= 19 E= 1
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.315789473684  0.0  0.0  0.0  0.263157894737  0.0  0.315789473684  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.526315789474  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.315789473684  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0526315789474 
+0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.263157894737 
+0.0  0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.947368421053  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.894736842105  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.263157894737  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.368421052632  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.263157894737  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.421052631579  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.578947368421  0.0  0.0  0.157894736842  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.210526315789  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0  0.0  0.263157894737  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0  0.105263157895  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.105263157895  0.0  0.0  0.315789473684  0.0  0.105263157895  0.0  0.0526315789474  0.105263157895  0.0  0.0  0.0526315789474 
+0.0  0.105263157895  0.0  0.0  0.0  0.368421052632  0.105263157895  0.0  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.105263157895  0.0 
+0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0  0.263157894737  0.0526315789474  0.0  0.0  0.263157894737  0.0  0.0 
+0.315789473684  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.105263157895  0.0  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.789473684211  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.105263157895 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0 
+0.157894736842  0.157894736842  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0 
+0.0  0.0  0.894736842105  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0526315789474  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0  0.0  0.0 
+0.526315789474  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.105263157895  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.105263157895  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0526315789474  0.157894736842  0.0526315789474  0.0 
+0.0  0.0  0.263157894737  0.0  0.0  0.105263157895  0.0526315789474  0.0  0.210526315789  0.0526315789474  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0 
+0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.210526315789  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.210526315789  0.210526315789  0.0526315789474  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.578947368421  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0526315789474  0.0  0.105263157895  0.0526315789474  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.421052631579  0.210526315789  0.0  0.0  0.0 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.263157894737  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.210526315789  0.0  0.0  0.368421052632  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.210526315789  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.210526315789  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.368421052632  0.210526315789  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.105263157895  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.368421052632  0.0526315789474  0.0  0.210526315789 
+0.157894736842  0.0526315789474  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.105263157895  0.0  0.0526315789474  0.0  0.157894736842  0.0526315789474  0.0  0.210526315789  0.0  0.0  0.0526315789474  0.0  0.0526315789474 
+0.0526315789474  0.315789473684  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.684210526316  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.157894736842  0.736842105263  0.0  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.368421052632  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0 
+0.0526315789474  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.157894736842  0.0  0.210526315789  0.0  0.0  0.0  0.105263157895  0.105263157895 
+0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.684210526316 
+">
+<input type="submit" name="action" value="View PSPM 7">
+<br><i>Regular Expression for Motif: </i>
+<b> [PKR]G[IV][LVY]HR?D[ILV]KP[SED]N[IL]L[LV]D[PL]?[ARL]?NG[QV][AL].{0,7}K[ILV]SDFGL[AS]K?.{0,6}R[DK]?[PV]?[GSR][KE][SDT][AHRV]?[SG]?[HL][IVL]?[HST][TY]R[CEV].{0,13}G?TP[GR]Y </b>
+<br>
+<table> <tr> <td> Score: <b> 946.651 </b></td>
+<td rowspan=2><img src="logo8.png"></td></tr>
+<tr><th><a href="logo_ssc8.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 8"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln8" value=".
+                  ****.************........*...*********************************
+At1g01140.1_  177 HTAC.GTPNYVAPEVLSDK......G...YDGAAADVWSCGVILFVLMAGYLPFDEPNLMTL  228 + 104.
+At1g01140.2_  177 HTAC.GTPNYVAPEVLSDK......G...YDGAAADVWSCGVILFVLMAGYLPFDEPNLMTL  228 + 104.
+At1g01140.3_  177 HTAC.GTPNYVAPEVLSDK......G...YDGAAADVWSCGVILFVLMAGYLPFDEPNLMTL  228 + 104.
+At1g01450.1_  196 EN.F..PFIWYSPEVLEEQEQSGTAGSL.KYSDKSDVYSFGMVSFELLTGKVPFEDSHLQGD  253 + 39.4
+At1g01540.1_  314 TRVM.GTFGYVAPEYACT.......G...MLNEKSDIYSFGILIMEIITGRNPVDYSRPQGE  364 + 90.0
+At1g01540.2_  314 TRVM.GTFGYVAPEYACT.......G...MLNEKSDIYSFGILIMEIITGRNPVDYSRPQGE  364 + 90.0
+At1g01560.1_  199 EYVV..TRWYRAPELLL........NCS.EYTAAIDIWSVGCILGEIMTREPLFPGRDYVQQ  249 + 79.8
+At1g01740.1_  208 SYST..NLAFTPPEYLRT.......G...RITAESVIYSFGTLLLDLLTGKH.IPPSHALDL  256 + 31.7
+At1g02970.1_  400 LPVEEGDARYMPQEILNE.......DY..EHLDKVDIFSLGVTVYELIKGSP.LTESRNQSL  451 + 27.0
+At1g03740.1_  372 SHVV..TLWYRPPELLL........GAS.HYGVGVDLWSTGCILGELYAGKPILPGKTEVEQ  422 + 53.5
+At1g03920.1_  334 ST.V.GTPDYIAPEVLL........KK..GYGMECDWWSLGAIMYEMLVGYPPFYADDPMST  383 + 54.4
+At1g03930.1_  171 KNLT.GTARYASVNTHL........GV..EQSRRDDLEALGYVLMYFLKGSLPWQGLKAGTK  221 + 58.6
+At1g04210.1_  976 PNICVGTPRWMSPEVFRAMHEQ...N...FYGLEVDIWSFGCLIFELLTLQNPYFDLSELQI 1031 + 65.0
+At1g04440.1_  171 KNLT.GTARYASVNTHL........GI..EQSRRDDLESLGYLLMYFLRGSLPWQGLRAGTK  221 + 60.7
+At1g04700.1_  931 GGVR.GTLPWMAPELLN........GSSNRVSEKVDVFSFGIVMWEILTGEEPYANLHCGAI  983 + 59.9
+At1g05100.1_  162 EPVR.GTPAFMAPEAAR........GE..RQGKESDIWAVGCTVIEMVTGSQPWIGAD.FTD  211 + 63.5
+At1g05700.1_  718 STLVAGTPGYLDPLCFET.......N...GLNEKSDIYSFGVVLLEMITGKT.VIKES.QTK  767 + 47.6
+At1g06390.1_  229 SYIC..SRYYRAPELIF........GAT.EYTASIDIWSAGCVLAELLLGQPLFPGENSVDQ  279 + 86.6
+At1g06390.2_  229 SYIC..SRYYRAPELIF........GAT.EYTASIDIWSAGCVLAELLLGQPLFPGENSVDQ  279 + 86.6
+.">
+<br><input type="submit" name="action" value="View alignment 8">
+<input type="hidden" name="pspm8" value="
+letter-probability matrix: alength= 20  w= 50 nsites= 19 E= 1
+0.0  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.157894736842  0.0  0.105263157895  0.0526315789474  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.105263157895  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.210526315789  0.105263157895  0.0  0.105263157895  0.0  0.263157894737  0.0  0.0  0.210526315789 
+0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.368421052632  0.0  0.0 
+0.0  0.315789473684  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.105263157895  0.0  0.157894736842  0.210526315789  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.684210526316  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.105263157895  0.736842105263  0.0  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.368421052632  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0 
+0.105263157895  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.210526315789  0.0  0.0  0.0  0.105263157895  0.105263157895 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.736842105263 
+0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.210526315789  0.0  0.0  0.0  0.210526315789  0.0  0.0526315789474  0.263157894737  0.0  0.0526315789474 
+0.578947368421  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.210526315789  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.842105263158  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.842105263158  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.315789473684  0.0  0.157894736842 
+0.157894736842  0.0  0.0  0.0  0.105263157895  0.0  0.105263157895  0.105263157895  0.0  0.526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.105263157895  0.0  0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.263157894737  0.0  0.105263157895  0.0  0.0  0.157894736842  0.157894736842  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.0  0.0  0.736842105263  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.315789473684  0.0526315789474  0.105263157895  0.0526315789474  0.0  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.157894736842 
+0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.157894736842  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0526315789474  0.0  0.368421052632 
+0.0  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0526315789474  0.0  0.157894736842  0.0  0.0  0.0  0.210526315789  0.210526315789  0.0  0.0  0.0 
+0.368421052632  0.0  0.105263157895  0.210526315789  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0526315789474  0.0  0.0 
+0.210526315789  0.0  0.0  0.210526315789  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.105263157895  0.0  0.0  0.0  0.0 
+0.157894736842  0.0526315789474  0.105263157895  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.210526315789  0.0  0.0 
+0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.526315789474  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0526315789474  0.0 
+0.0  0.0  0.0  0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.526315789474  0.263157894737 
+0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.894736842105  0.0  0.0  0.0  0.0 
+0.105263157895  0.157894736842  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0526315789474  0.315789473684  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.263157894737  0.0  0.105263157895 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.315789473684  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.578947368421  0.105263157895  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.105263157895  0.0  0.0 
+0.105263157895  0.0  0.0  0.0  0.263157894737  0.105263157895  0.0  0.0526315789474  0.0  0.105263157895  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.105263157895 
+0.0  0.0  0.0526315789474  0.684210526316  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.105263157895 
+0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.210526315789  0.0  0.526315789474  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.473684210526  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0526315789474 
+0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.105263157895  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.473684210526  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.894736842105  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.157894736842  0.105263157895  0.210526315789  0.0  0.0  0.0  0.210526315789 
+0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0  0.0  0.263157894737  0.0  0.157894736842  0.315789473684  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.157894736842  0.0  0.0  0.631578947368  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.421052631579  0.0  0.0  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.157894736842  0.105263157895 
+0.0526315789474  0.0  0.263157894737  0.0526315789474  0.0526315789474  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.263157894737  0.105263157895  0.0  0.0  0.0526315789474  0.0  0.0  0.0526315789474 
+0.0526315789474  0.0  0.105263157895  0.210526315789  0.0  0.368421052632  0.0  0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895 
+0.0526315789474  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.0  0.0526315789474  0.210526315789  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.263157894737  0.0  0.0  0.0  0.0 
+0.0  0.0  0.157894736842  0.0  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.0  0.0  0.263157894737  0.0  0.0  0.210526315789  0.105263157895  0.0526315789474  0.0  0.0  0.0 
+0.157894736842  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.105263157895  0.210526315789  0.0  0.0  0.263157894737  0.0  0.0  0.0  0.210526315789  0.0  0.0 
+0.0526315789474  0.0  0.157894736842  0.0526315789474  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.105263157895  0.368421052632  0.0  0.0  0.0 
+0.0  0.0  0.105263157895  0.105263157895  0.0  0.0  0.0  0.105263157895  0.157894736842  0.263157894737  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0526315789474  0.0  0.0  0.0 
+">
+<input type="submit" name="action" value="View PSPM 8">
+<br><i>Regular Expression for Motif: </i>
+<b> S[NTY]V?[CV].{0,1}G?TPRY[MRV][AS]PE[LV]LL.{0,8}G.{0,3}EY[STG][AE][AEK][SV]D[IV][YW]S[FL]G[CV][ILV]L[FM]E[IL][IML][AT]G[KSY][LP]P?F[DP][EG][LS][NR]L?[MQV]T[LQ] </b>
+<br>
+<table> <tr> <td> Score: <b> 659.250 </b></td>
+<td rowspan=2><img src="logo9.png"></td></tr>
+<tr><th><a href="logo_ssc9.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 9"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln9" value=".
+                  *****************..............................********************.*************
+At1g01140.1_   33 VKYAKNTVTGDQAAIKILDREKV........................FRHKMVEQLKREISTMKLIK.HPNVVEIIEVMAS   88 + 91.8
+At1g01140.2_   33 VKYAKNTVTGDQAAIKILDREKV........................FRHKMVEQLKREISTMKLIK.HPNVVEIIEVMAS   88 + 91.8
+At1g01140.3_   33 VKYAKNTVTGDQAAIKILDREKV........................FRHKMVEQLKREISTMKLIK.HPNVVEIIEVMAS   88 + 91.8
+At1g01450.1_   41 QYKEI.TWLGESFALRH..............................FFGDI.DALLPQITPLLSLS.HPNIVYYLCGFTD   88 + 7.11
+At1g01540.1_  168 VYRGI.LTDGTKVAVKNLLN...........................NRGQAEKEFKVEVEVIGRVR.HKNLVRLLGYCVE  219 + 74.5
+At1g01540.2_  168 VYRGI.LTDGTKVAVKNLLN...........................NRGQAEKEFKVEVEVIGRVR.HKNLVRLLGYCVE  219 + 74.5
+At1g01560.1_   54 VCAAWNSETGEEVAIKKIGNAFGNI......................IDAKR.T.L.REIKLLKHMD.HDNVIAIIDIIRP  108 + 50.7
+At1g01740.1_   70 VYQGK.LENHMKIAIKRFSGTA.........................WPDPR.QFL.EEARLVGQLR.SKRMANLLGYCCE  121 + 20.9
+At1g02970.1_  263 VFKVLKRMDGCLYAVKHSTRKLY........................LDSERRKAM.MEVQALAALGFHENIVGYYSSWFE  318 + 19.4
+At1g03740.1_  227 VYRARDLLHNKIVALKKVRFDL.........................NDMESVKFMAREIIVMRRLD.HPNVLKLEGLITA  281 + 43.1
+At1g03920.1_  153 VVREI..NTGHVFAMKKLKKSEM........................LRRGQVEHVRAERNLLAEVD.SNCIVKLYCSFQD  206 + 13.3
+At1g03930.1_   23 LYLGINVQTGEEVAVKLESVKTKHPQLHYESKLYMLLQGGTGVPNLKWYGVEGDYNVMVIDLLGP.S.LEDLFNYCNRKLS  101 + 30.3
+At1g04210.1_  797 LIRCK..LGSTEAVVKMRTLEVSGASLDD..................IRTFEYTCL.GEVRILGALK.HDCIVELYGHEIS  855 + 19.4
+At1g04440.1_   23 IFLGVNVQTGEEVAVKLEPLRARHPQLHYESKLYMLLQGGTGIPHLKWFGVEGEFNCMVIDLLGP.S.MEEFFNYCSRSFS  101 + 32.0
+At1g04700.1_  780 VYYGK..WRGTDVAIKRIKNSCFSGGSS...................EQARQTKDFWREARILANLH.HPNVVAFYGVVPD  838 + 53.7
+At1g05100.1_   17 VSAATCHESGETLAVKSA.............................EFHRS.EFLQREAKILSSLN.SPYVIGYRGCEIT   66 + 30.3
+At1g05700.1_  575 VYHGF..YDNLQVAVKLLSETS.........................AQGFK.E.FRSEVEVLVRVH.HVNLTALIGYFHE  625 + 34.1
+At1g06390.1_   84 VFQAKCLETGESVAIKKV.............................LQDRRYK.N.RELQLMRPMD.HPNVISLKHCFFS  132 + 85.8
+At1g06390.2_   84 VFQAKCLETGESVAIKKV.............................LQDRRYK.N.RELQLMRPMD.HPNVISLKHCFFS  132 + 85.8
+.">
+<br><input type="submit" name="action" value="View alignment 9">
+<input type="hidden" name="pspm9" value="
+letter-probability matrix: alength= 20  w= 50 nsites= 19 E= 1
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.789473684211  0.0  0.0 
+0.0  0.0526315789474  0.0  0.0  0.210526315789  0.0  0.0  0.0526315789474  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.421052631579 
+0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.105263157895  0.105263157895  0.0  0.0  0.0  0.157894736842  0.263157894737  0.0  0.0  0.0  0.0  0.210526315789 
+0.421052631579  0.0526315789474  0.0  0.105263157895  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.263157894737  0.421052631579  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0 
+0.0  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.315789473684  0.0  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.210526315789  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0526315789474  0.0526315789474  0.0  0.105263157895  0.0  0.0  0.105263157895  0.157894736842  0.105263157895  0.0526315789474 
+0.0  0.0  0.210526315789  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.473684210526  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.789473684211  0.0526315789474  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0  0.0526315789474  0.157894736842  0.368421052632  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.210526315789  0.0  0.0  0.0  0.0526315789474  0.157894736842  0.0526315789474  0.0  0.0  0.0  0.210526315789  0.0  0.157894736842  0.0526315789474  0.0526315789474  0.0  0.0 
+0.210526315789  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.526315789474  0.0  0.0526315789474 
+0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.105263157895  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.947368421053  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.157894736842  0.263157894737  0.157894736842  0.0526315789474  0.105263157895  0.0  0.0  0.105263157895  0.0526315789474  0.0  0.0  0.0  0.0 
+0.0526315789474  0.0  0.0  0.105263157895  0.210526315789  0.0  0.0  0.105263157895  0.0  0.210526315789  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0 
+0.0  0.0  0.157894736842  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.210526315789  0.368421052632  0.0  0.0  0.0  0.0  0.0526315789474 
+0.105263157895  0.0  0.157894736842  0.0  0.0  0.315789473684  0.210526315789  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0  0.0 
+0.0  0.0  0.0526315789474  0.105263157895  0.105263157895  0.0526315789474  0.0  0.0  0.210526315789  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.210526315789  0.0  0.0  0.105263157895  0.0  0.0 
+0.105263157895  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.157894736842  0.0  0.0  0.105263157895  0.263157894737  0.105263157895  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.105263157895  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.263157894737  0.0  0.157894736842 
+0.0  0.0  0.105263157895  0.368421052632  0.0  0.0  0.0  0.0  0.368421052632  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.105263157895  0.0  0.0  0.0 
+0.105263157895  0.0526315789474  0.0526315789474  0.105263157895  0.210526315789  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0  0.0  0.0  0.421052631579  0.105263157895  0.210526315789  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0 
+0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737  0.0526315789474  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0  0.0526315789474  0.0526315789474  0.0 
+0.0526315789474  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.0  0.473684210526  0.0526315789474  0.0  0.105263157895  0.0  0.0 
+0.0  0.0  0.0  0.842105263158  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.421052631579  0.0  0.105263157895  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.263157894737  0.0  0.0 
+0.0  0.0  0.105263157895  0.157894736842  0.0  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.0  0.0526315789474  0.0  0.157894736842  0.157894736842  0.157894736842  0.0526315789474  0.0  0.0  0.0 
+0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.368421052632  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.157894736842  0.210526315789  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.105263157895  0.0  0.526315789474  0.315789473684  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0 
+0.157894736842  0.0  0.0  0.0  0.0  0.315789473684  0.0  0.0  0.210526315789  0.0526315789474  0.0  0.0  0.0  0.0  0.157894736842  0.0526315789474  0.0  0.0526315789474  0.0  0.0 
+0.105263157895  0.0  0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.0  0.0526315789474  0.210526315789  0.0526315789474  0.210526315789  0.105263157895  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.368421052632  0.157894736842  0.0  0.0  0.0  0.0  0.0  0.0  0.210526315789  0.0  0.0 
+0.0  0.0  0.263157894737  0.0  0.0  0.0526315789474  0.105263157895  0.0  0.210526315789  0.0  0.0  0.0526315789474  0.0  0.0  0.157894736842  0.157894736842  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.736842105263  0.0  0.0  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0  0.0 
+0.0  0.0  0.105263157895  0.157894736842  0.0  0.0  0.0  0.0  0.157894736842  0.0  0.0  0.0526315789474  0.473684210526  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0 
+0.0  0.105263157895  0.0526315789474  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.684210526316  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.210526315789  0.0  0.210526315789  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.473684210526  0.0  0.0 
+0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.210526315789  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.526315789474  0.0  0.0 
+0.157894736842  0.0  0.0  0.210526315789  0.0  0.105263157895  0.0  0.0  0.105263157895  0.0  0.0  0.157894736842  0.0  0.0  0.105263157895  0.105263157895  0.0  0.0  0.0  0.0526315789474 
+0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.210526315789  0.0  0.473684210526  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.263157894737 
+0.0  0.105263157895  0.0  0.0526315789474  0.0  0.0  0.0  0.263157894737  0.105263157895  0.210526315789  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.210526315789 
+0.0  0.105263157895  0.0526315789474  0.157894736842  0.0  0.421052631579  0.105263157895  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.0  0.105263157895  0.0  0.0  0.0  0.0 
+0.0  0.157894736842  0.0  0.0  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.0526315789474  0.0  0.0  0.0  0.0  0.105263157895  0.105263157895  0.0  0.210526315789  0.0  0.210526315789 
+0.0  0.157894736842  0.0  0.105263157895  0.263157894737  0.0  0.0  0.105263157895  0.0526315789474  0.0  0.157894736842  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0526315789474  0.0526315789474  0.0 
+0.157894736842  0.0526315789474  0.0  0.0  0.210526315789  0.0  0.0526315789474  0.105263157895  0.0  0.0526315789474  0.0  0.0  0.0526315789474  0.0526315789474  0.0526315789474  0.0  0.105263157895  0.105263157895  0.0  0.0 
+0.0526315789474  0.0  0.157894736842  0.263157894737  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0526315789474  0.0  0.0  0.421052631579  0.0526315789474  0.0  0.0  0.0 
+">
+<input type="submit" name="action" value="View PSPM 9">
+<br><i>Regular Expression for Motif: </i>
+<b> V[FY][RY][AG][IK][CN]?[LT]?E[DT]G[ET][EQ][AV]A[IV]KK.{0,30}[FL][QR][GH][KR]R[VY]?[KE][FQ]?[NLF]K?RE[IV].[LV][ML][GK][PR][LV]?[DK].{0,1}HPN[ILV][IV]E[IYL][ILY]G[VY]FF[ES] </b>
+<br>
+<table> <tr> <td> Score: <b> 380.013 </b></td>
+<td rowspan=2><img src="logo10.png"></td></tr>
+<tr><th><a href="logo_ssc10.png">logo with ssc</a></td></tr></table>
+<input type="submit" name="action" value="Scan alignment 10"><b> against sequence databases using <a href="http://meme.nbcr.net/meme/doc/glam2scan_man.html">GLAM2SCAN.</a></b>
+<input type="hidden" name="aln10" value=".
+                  ********************************.**************
+At1g01140.1_  234 KAEFSCPPWFSQGAKRVI.KRILEPNPITRIS.IAELLEDEWFK.KG  277 + 77.0
+At1g01140.2_  236 KAEFSCPPWFSQGAKRVI.KRILEPNPITRIS.IAELLEDEWFK.KG  279 + 77.0
+At1g01140.3_  234 KAEFSCPPWFSQGAKRVI.KRILEPNPITRIS.IAELLEDEWFK.KG  277 + 77.0
+At1g01450.1_  262 GERPLFPFNSPKFITNLT.KRCWHADPNQRPT.FSSISRILRYI.KR  305 + 40.1
+At1g01540.1_   53 NRKPRADFASAAIATPPISKEIKEIVPAQNQSVPAEIQVDIGKIEHR   99 + 41.8
+At1g01540.2_   53 NRKPRADFASAAIATPPISKEIKEIVPAQNQSVPAEIQVDIGKIEHR   99 + 41.8
+At1g01740.1_  271 EGQFSD.SDGTELV.RLT.SCCLQYEARERPN.IKSLVTALISLQKD  313 + 7.19
+At1g02970.1_  456 GKLPLL.PGHSLQLQQLL.KTMMDRDPKRRPS.ARELLDHPMFDRIR  499 + 22.0
+At1g03740.1_  458 KVSEMF.KDFPASVLSLL.ETLLSIDPDHRSS.ADRALESEYFKTKP  501 + 28.4
+At1g03920.1_  393 HLKFPEESRLSRGARDLIGKLLCSVNQRLGSTGASQIKAHPWFEGVQ  439 + 21.0
+At1g03930.1_  221 KKQKYDRISEKKVATPIE.VLCKNQ.PSEFVS.YFRYCRSLRFDDKP  264 + 37.7
+At1g04210.1_ 1068 DLTESD.LDTMRFLIDVF.HQCTEESPSDRLN.AGDLHEMILSRKKR 1111 + 10.3
+At1g04440.1_  221 KKQKYDKISEKKRLTPVE.VLCKNF.PPEFTS.YFLYVRSLRFEDKP  264 + 32.3
+At1g04700.1_  991 TLRPPVPERCEAEWRKLM.EQCWSFDPGVRPS.FTEIVERLRSMTVA 1035 + 20.3
+At1g05100.1_  223 GELPELPCSLTEQAKDFLGKCLKKE.ATERWT.ASQLLNHPFLVNKE  267 + 22.1
+At1g06390.1_  314 PWHKVFHKRMPPEAIDLA.SRLLQYSPSLRCT.ALEACAHPFFNELR  358 + 60.5
+At1g06390.2_  314 PWHKVFHKRMPPEAIDLA.SRLLQYSPSLRCT.ALEACAHPFFNELR  358 + 60.5
+.">
+<br><input type="submit" name="action" value="View alignment 10">
+<input type="hidden" name="pspm10" value="
+letter-probability matrix: alength= 20  w= 46 nsites= 17 E= 1
+0.0  0.0  0.0588235294118  0.0588235294118  0.0  0.176470588235  0.0588235294118  0.0  0.352941176471  0.0  0.0  0.117647058824  0.117647058824  0.0  0.0  0.0  0.0588235294118  0.0  0.0  0.0 
+0.176470588235  0.0  0.0  0.117647058824  0.0  0.0588235294118  0.0  0.0  0.176470588235  0.176470588235  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0  0.0588235294118  0.117647058824  0.0 
+0.0  0.0  0.0  0.176470588235  0.0  0.0  0.117647058824  0.0  0.176470588235  0.117647058824  0.0  0.0  0.0  0.176470588235  0.117647058824  0.0588235294118  0.0588235294118  0.0  0.0  0.0 
+0.0  0.0  0.0  0.117647058824  0.294117647059  0.0  0.0  0.0  0.235294117647  0.0  0.0  0.0  0.352941176471  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.117647058824  0.0588235294118  0.0  0.117647058824  0.0  0.117647058824  0.294117647059  0.0  0.117647058824  0.0  0.117647058824 
+0.117647058824  0.176470588235  0.235294117647  0.0588235294118  0.235294117647  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0588235294118  0.0  0.0 
+0.0  0.0  0.117647058824  0.0588235294118  0.0  0.0  0.117647058824  0.0  0.0588235294118  0.0  0.0  0.0  0.352941176471  0.0  0.0588235294118  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0588235294118  0.0  0.0588235294118  0.176470588235  0.0  0.0  0.117647058824  0.176470588235  0.0588235294118  0.0  0.0  0.235294117647  0.0  0.0  0.117647058824  0.0  0.0  0.0  0.0 
+0.117647058824  0.0  0.176470588235  0.0  0.0  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.0588235294118  0.0  0.0  0.235294117647  0.176470588235  0.0  0.0  0.176470588235  0.0 
+0.0  0.0588235294118  0.0  0.117647058824  0.235294117647  0.0588235294118  0.0588235294118  0.0  0.0  0.117647058824  0.117647058824  0.0  0.0  0.0  0.0  0.176470588235  0.0588235294118  0.0  0.0  0.0 
+0.117647058824  0.0  0.0  0.0588235294118  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0588235294118  0.0  0.235294117647  0.0  0.0  0.294117647059  0.117647058824  0.0  0.0  0.0 
+0.235294117647  0.0  0.0  0.117647058824  0.0  0.0  0.0  0.0  0.176470588235  0.0588235294118  0.0  0.0  0.117647058824  0.176470588235  0.117647058824  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.176470588235  0.117647058824  0.235294117647  0.0  0.117647058824  0.0  0.0588235294118  0.0  0.0  0.0  0.117647058824  0.0588235294118  0.0588235294118  0.0  0.0588235294118  0.0  0.0 
+0.588235294118  0.0  0.0  0.0  0.0  0.0  0.0  0.0588235294118  0.0  0.176470588235  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.117647058824  0.0588235294118  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.176470588235  0.235294117647  0.0588235294118  0.0  0.0  0.0  0.0588235294118  0.117647058824  0.0  0.294117647059  0.0  0.0  0.0 
+0.0  0.0  0.294117647059  0.0  0.0  0.0  0.0  0.0  0.0588235294118  0.0  0.0  0.0588235294118  0.235294117647  0.0588235294118  0.235294117647  0.0588235294118  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0588235294118  0.0  0.0  0.0588235294118  0.0  0.470588235294  0.0  0.0  0.117647058824  0.0  0.0  0.0  0.0  0.294117647059  0.0  0.0 
+0.117647058824  0.0  0.0  0.117647058824  0.0588235294118  0.0  0.0  0.352941176471  0.0  0.176470588235  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.117647058824  0.0  0.0  0.0588235294118  0.0  0.529411764706  0.0  0.0  0.0  0.0  0.0  0.0  0.176470588235  0.0  0.117647058824  0.0  0.0 
+0.0  0.117647058824  0.0  0.117647058824  0.0  0.0  0.0  0.0  0.0  0.176470588235  0.0  0.0  0.0  0.117647058824  0.352941176471  0.0  0.117647058824  0.0  0.0  0.0 
+0.0  0.352941176471  0.0  0.0  0.0  0.0  0.0  0.294117647059  0.0  0.294117647059  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.0  0.294117647059  0.411764705882  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.0588235294118  0.0  0.117647058824  0.0 
+0.0  0.0  0.0588235294118  0.352941176471  0.0  0.0  0.0588235294118  0.0  0.0588235294118  0.0  0.0  0.117647058824  0.0  0.176470588235  0.0  0.176470588235  0.0  0.0  0.0  0.0 
+0.0588235294118  0.0  0.0  0.117647058824  0.117647058824  0.0  0.0  0.176470588235  0.0  0.0  0.0  0.0  0.176470588235  0.0588235294118  0.0588235294118  0.0  0.0  0.0588235294118  0.0  0.176470588235 
+0.0  0.0  0.235294117647  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.235294117647  0.0  0.0  0.0  0.176470588235  0.0  0.117647058824  0.0  0.0 
+0.117647058824  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.823529411765  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.0 
+0.117647058824  0.0  0.0588235294118  0.0  0.0  0.0588235294118  0.0  0.176470588235  0.0588235294118  0.0  0.0  0.0588235294118  0.0588235294118  0.0  0.117647058824  0.235294117647  0.0588235294118  0.0  0.0  0.0 
+0.0  0.0  0.0588235294118  0.235294117647  0.0  0.0  0.0588235294118  0.0  0.0  0.176470588235  0.0  0.0  0.0  0.176470588235  0.0588235294118  0.0  0.176470588235  0.0588235294118  0.0  0.0 
+0.0  0.0  0.0  0.0  0.117647058824  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0  0.705882352941  0.0  0.0  0.0  0.0  0.0 
+0.0  0.117647058824  0.0  0.0  0.0  0.0  0.0  0.176470588235  0.0  0.0588235294118  0.0  0.0  0.235294117647  0.117647058824  0.0  0.117647058824  0.0588235294118  0.0588235294118  0.0588235294118  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0  0.0  0.588235294118  0.294117647059  0.0  0.0  0.0 
+0.411764705882  0.0  0.0  0.0  0.117647058824  0.0  0.0  0.235294117647  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0  0.0  0.0  0.0  0.0  0.117647058824 
+0.294117647059  0.0  0.0588235294118  0.0  0.117647058824  0.0588235294118  0.0  0.0  0.0588235294118  0.117647058824  0.0  0.0  0.0  0.0  0.0588235294118  0.176470588235  0.0588235294118  0.0  0.0  0.0 
+0.0  0.0  0.0588235294118  0.529411764706  0.0  0.0  0.0  0.0  0.0  0.0588235294118  0.0  0.0  0.0  0.117647058824  0.117647058824  0.117647058824  0.0  0.0  0.0  0.0 
+0.176470588235  0.0  0.0  0.0  0.0  0.0  0.0  0.294117647059  0.0  0.411764705882  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.117647058824 
+0.0  0.176470588235  0.0  0.0  0.0  0.0  0.0588235294118  0.0  0.0588235294118  0.352941176471  0.0  0.0  0.0  0.117647058824  0.0  0.0588235294118  0.0  0.176470588235  0.0  0.0 
+0.176470588235  0.0  0.0588235294118  0.352941176471  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0588235294118  0.0  0.0  0.176470588235  0.0  0.0588235294118  0.117647058824  0.0  0.0 
+0.0588235294118  0.0  0.294117647059  0.0  0.0  0.0  0.294117647059  0.0588235294118  0.0  0.0  0.0588235294118  0.0  0.0  0.0  0.0588235294118  0.176470588235  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.235294117647  0.0  0.0  0.0  0.176470588235  0.0  0.294117647059  0.0  0.0  0.294117647059  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.176470588235  0.117647058824  0.0  0.0588235294118  0.0  0.0588235294118  0.0588235294118  0.0  0.0  0.0  0.235294117647  0.0  0.0  0.0  0.235294117647  0.0588235294118 
+0.0  0.0  0.0  0.0  0.588235294118  0.0  0.0  0.0  0.117647058824  0.0588235294118  0.0  0.0  0.0  0.0  0.0  0.176470588235  0.0  0.0  0.0  0.0588235294118 
+0.0  0.0  0.117647058824  0.117647058824  0.0  0.0  0.0  0.176470588235  0.235294117647  0.0588235294118  0.0588235294118  0.117647058824  0.0  0.0  0.0588235294118  0.0  0.0  0.0588235294118  0.0  0.0 
+0.0  0.0  0.117647058824  0.235294117647  0.0  0.0588235294118  0.0  0.0  0.0588235294118  0.0  0.0  0.0588235294118  0.0  0.0588235294118  0.0588235294118  0.0  0.117647058824  0.0  0.0  0.0 
+0.0  0.0  0.0  0.0  0.0  0.0  0.117647058824  0.0588235294118  0.588235294118  0.117647058824  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.117647058824  0.0  0.0 
+0.0588235294118  0.0  0.0588235294118  0.0588235294118  0.0  0.176470588235  0.0  0.0  0.0  0.0  0.0  0.0  0.176470588235  0.0588235294118  0.411764705882  0.0  0.0  0.0  0.0  0.0 
+">
+<input type="submit" name="action" value="View PSPM 10">
+<br><i>Regular Expression for Motif: </i>
+<b> K..[PKF]S[DF]P?PRF[PS]AGA[KT]?[DPR][LV]I[SG]?KR[ICL][KL]E.[SDN]?PSERP[ST].{0,1}[IA]AE[IL]LE[DH][PEL][RW]FKE?KR </b>
+<br>
+</p>
+<input type="hidden" name="data" value="
+>At1g01140.1_4-2-4_SnRK3.12 SNF1-related Protein Kinase, subfamily 3  
+MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQAAIKILDREKVFRHKM
+VEQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGGELFDKIAQQGRLKEDEAR
+RYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSAFSRQVREDGLLHTAC
+GTPNYVAPEVLSDKGYDGAAADVWSCGVILFVLMAGYLPFDEPNLMTLYKRICKAEFSCP
+PWFSQGAKRVIKRILEPNPITRISIAELLEDEWFKKGYKPPSFDQDDEDITIDDVDAAFS
+NSKECLVTEKKEKPVSMNAFELISSSSEFSLENLFEKQAQLVKKETRFTSQRSASEIMSK
+MEETAKPLGFNVRKDNYKIKMKGDKSGRKGQLSVATEVFEVAPSLHVVELRKTGGDTLEF
+HKFYKNFSSGLKDVVWNTDAAAEEQKQ
+>At1g01140.2_SnRK3.12 SNF1-related Protein Kinase, subfamily 3  
+MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQAAIKILDREKVFRHKM
+VEQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGGELFDKIAQQGRLKEDEAR
+RYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSAFSRQVREDGLLHTAC
+GTPNYVAPEVLSDKGYDGAAADVWSCGVILFVLMAGYLPFDEPNLMTLYKRVRICKAEFS
+CPPWFSQGAKRVIKRILEPNPITRISIAELLEDEWFKKGYKPPSFDQDDEDITIDDVDAA
+FSNSKECLVTEKKEKPVSMNAFELISSSSEFSLENLFEKQAQLVKKETRFTSQRSASEIM
+SKMEETAKPLGFNVRKDNYKIKMKGDKSGRKGQLSVATEVFEVAPSLHVVELRKTGGDTL
+EFHKFYKNFSSGLKDVVWNTDAAAEEQKQ
+>At1g01140.3_SnRK3.12 SNF1-related Protein Kinase, subfamily 3  
+MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQAAIKILDREKVFRHKM
+VEQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGGELFDKIAQQGRLKEDEAR
+RYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSAFSRQVREDGLLHTAC
+GTPNYVAPEVLSDKGYDGAAADVWSCGVILFVLMAGYLPFDEPNLMTLYKRICKAEFSCP
+PWFSQGAKRVIKRILEPNPITRISIAELLEDEWFKKGYKPPSFDQDDEDITIDDVDAAFS
+NSKECLVTEKKEKPVSMNAFELISSSSEFSLENLFEKQAQLVKKETRFTSQRSASEIMSK
+MEETAKPLGFNVRKDNYKIKMKGDKSGRKGQLSVATEVFEVAPSLHVVELRKTGGDTLEF
+HKVCDSFYKNFSSGLKDVVWNTDAAAEEQKQ
+>At1g01450.1_2-1-1 putative protein kinase  
+MADFLLKHLGDGNESPKLFPSSLLDNTKDYQVKKRLGNGSQYKEITWLGESFALRHFFGD
+IDALLPQITPLLSLSHPNIVYYLCGFTDEEKKECFLVMELMRKTLGMHIKEVCGPRKKNT
+LSLPVAVDLMLQIALGMEYLHSKRIYHGELNPSNILVKPRSNQSGDGYLLGKIFGFGLNS
+VKGFSSKSASLTSQNENFPFIWYSPEVLEEQEQSGTAGSLKYSDKSDVYSFGMVSFELLT
+GKVPFEDSHLQGDKMSRNIRAGERPLFPFNSPKFITNLTKRCWHADPNQRPTFSSISRIL
+RYIKRFLALNPECYSSSQQDPSIAPTVDYCEIETKLLQKLSWESTELTKVSQVPFQMFAY
+RVVERAKTCEKDNLREPSESGSEWASCSEDEGGAGSDEQLSYAKERRLSCSSNDVGMSKK
+QVSNLLKRASSLKPIQKPGEIIISQYIYIYIGSLTNMNLVTCTNFFVLCH
+>At1g01540.1_1-6-3 Putative protein kinase  
+MSVYDAAFLNTELSKPTSIFGLRLWVVIGILLGSLIVIALFLLSLCLTSRRKNRKPRADF
+ASAAIATPPISKEIKEIVPAQNQSVPAEIQVDIGKIEHRVVFSDRVSSGESRGTASASET
+ASYSGSGNCGPEVSHLGWGRWYTLRELEAATNGLCEENVIGEGGYGIVYRGILTDGTKVA
+VKNLLNNRGQAEKEFKVEVEVIGRVRHKNLVRLLGYCVEGAYRMLVYDFVDNGNLEQWIH
+GDVGDVSPLTWDIRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDRQWNAKVSDFG
+LAKLLGSESSYVTTRVMGTFGYVAPEYACTGMLNEKSDIYSFGILIMEIITGRNPVDYSR
+PQGEVFDKHIQSSLCFCKWSYYVSWL
+>At1g01540.2_Putative protein kinase  
+MSVYDAAFLNTELSKPTSIFGLRLWVVIGILLGSLIVIALFLLSLCLTSRRKNRKPRADF
+ASAAIATPPISKEIKEIVPAQNQSVPAEIQVDIGKIEHRVVFSDRVSSGESRGTASASET
+ASYSGSGNCGPEVSHLGWGRWYTLRELEAATNGLCEENVIGEGGYGIVYRGILTDGTKVA
+VKNLLNNRGQAEKEFKVEVEVIGRVRHKNLVRLLGYCVEGAYRMLVYDFVDNGNLEQWIH
+GDVGDVSPLTWDIRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDRQWNAKVSDFG
+LAKLLGSESSYVTTRVMGTFGYVAPEYACTGMLNEKSDIYSFGILIMEIITGRNPVDYSR
+PQGETNLVDWLKSMVGNRRSEEVVDPKIPEPPSSKALKRVLLVALRCVDPDANKRPKMGH
+IIHMLEAEDLLYRDERRTTRDHGSRERQETAVVAAGSESGESGSRHHQQKQR
+>At1g01560.1_4-5-1_MPK11 MAP kinase 11  
+MSIEKPFFGDDSNRGVSINGGRYVQYNVYGNLFEVSKKYVPPLRPIGRGASGIVCAAWNS
+ETGEEVAIKKIGNAFGNIIDAKRTLREIKLLKHMDHDNVIAIIDIIRPPQPDNFNDVHIV
+YELMDTDLHHIIRSNQPLTDDHSRFFLYQLLRGLKYVHSANVLHRDLKPSNLLLNANCDL
+KIGDFGLARTKSETDFMTEYVVTRWYRAPELLLNCSEYTAAIDIWSVGCILGEIMTREPL
+FPGRDYVQQLRLITEVNFSLFHLTILFRFNLKKEH
+>At1g01740.1_1-16-1 putative protein kinase  
+MGGQSSKIGTCCSHKTTALEAPDVENKENGEVNGVHSFREYSLEQLKIATSCFALENVVS
+EHGETAPNVVYQGKLENHMKIAIKRFSGTAWPDPRQFLEEARLVGQLRSKRMANLLGYCC
+EGGERLLVAEFMPNETLAKHLFHWDTEPMKWAMRLRVALYISEALEYCSNNGHTLYHDLN
+AYRVLFDEECNPRLSTFGLMKNSRDGKSYSTNLAFTPPEYLRTGRITAESVIYSFGTLLL
+DLLTGKHIPPSHALDLIRDRNLQTLTDSCLEGQFSDSDGTELVRLTSCCLQYEARERPNI
+KSLVTALISLQKDTEVLSHVLMGLPQSGTFASPPSPFAEACSGKDLTSMVEILEKIGYKD
+DEDLSFMWTEQMQEAINSKKKGDIAFRRKDFSEAIEFYTQFLDLGMISATVLVRRSQSYL
+MSNMAKEALDDAMKAQGISPVWYVALYLQSAALSVLGMEKESQIALTEGSILEARKISAS
+TQN
+>At1g02970.1_4-3-1 putative protein kinase  
+MFEKNGRTLLAKRKTQGTIKTRASKKIRKMEGTLERHSLLQFGQLSKISFENRPSSNVAS
+SAFQGLLDSDSSELRNQLGSADSDANCGEKDFILSQDFFCTPDYITPDNQNLMSGLDISK
+DHSPCPRSPVKLNTVKSKRCRQESFTGNHSNSTWSSKHRVDEQENDDIDTDEVMGDKLQA
+NQTERTGYVSQAAVALRCRAMPPPCLKNPYVLNQSETATDPFGHQRSKCASFLPVSTSGD
+GLSRYLTDFHEIRQIGAGHFSRVFKVLKRMDGCLYAVKHSTRKLYLDSERRKAMMEVQAL
+AALGFHENIVGYYSSWFENEQLYIQLELCDHSLSALPKKSSLKVSEREILVIMHQIAKAL
+HFVHEKGIAHLDVKPDNIYIKNGVCKLGDFGCATRLDKSLPVEEGDARYMPQEILNEDYE
+HLDKVDIFSLGVTVYELIKGSPLTESRNQSLNIKEGKLPLLPGHSLQLQQLLKTMMDRDP
+KRRPSARELLDHPMFDRIRG
+>At1g03740.1_4-5-2 putative protein kinase  
+MGCVNSRHRPFRRKSTTLKESSEEKRSSRIDSSRRIDDWIQPEDGFDRLSNSGDAKVRLI
+ESEMFSTSRCHDHQIGKILENPATVAHMDRVVHDQELRRASSAVVDSDLDIDPKVVKAKL
+DRWNSKDSKVRLIESEKLSSSMFSEHHQIEKGVEKPEVEASVRVVHRELKRGSSIVSPKD
+AERKQVAAGWPSWLVSVAGESLVDWAPRRANTFEKLEKIGQGTYSSVYRARDLLHNKIVA
+LKKVRFDLNDMESVKFMAREIIVMRRLDHPNVLKLEGLITAPVSSSLYLVFEYMDHDLLG
+LSSLPGVKFTEPQVKCYMRQLLSGLEHCHSRGVLHRDIKGSNLLIDSKGVLKIADFGLAT
+FFDPAKSVSLTSHVVTLWYRPPELLLGASHYGVGVDLWSTGCILGELYAGKPILPGKTEV
+EQLHKIFKLCGSPTENYWRKQKLPSSAGFKTAIPYRRKVSEMFKDFPASVLSLLETLLSI
+DPDHRSSADRALESEYFKTKPFACDPSNLPKYPPSKEIDAKMRDEAKRQQPMRAEKQEDK
+TL
+>At1g03920.1_4-2-6 putative protein kinase  
+MDSARSWFHKFQPRDKPRKKDMFSGSTYGGGVTETTVPDGGNDTETATKLPPLGGDGEAL
+SNSTKQKVAAAKQYIENHYKEQMKNLNERKERRTTLEKKLADADVCEEDQTNLMKFLEKK
+ETEYMRLQRHKMGADDFELLTMIGKGAFGEVRVVREINTGHVFAMKKLKKSEMLRRGQVE
+HVRAERNLLAEVDSNCIVKLYCSFQDNEYLYLIMEYLPGGDMMTLLMRKDTLSEDEAKFY
+IAESVLAIESIHNRNYIHRDIKPDNLLLDRYGHLRLSDFGLCKPLDCSVIDGEDFTVGNA
+GSGGGSESVSTTPKRSQQEQLEHWQKNRRMLAYSTVGTPDYIAPEVLLKKGYGMECDWWS
+LGAIMYEMLVGYPPFYADDPMSTCRKIVNWKTHLKFPEESRLSRGARDLIGKLLCSVNQR
+LGSTGASQIKAHPWFEGVQWEKIYQMEAAFIPEVNDDLDTQNFEKFDEEDNQTQAPSRTG
+PWRKMLSSKDINFVGYTYKNFEIVNDYQVPGIAELKKKESKSKRPSVKSLFESESDSSSS
+GSEQQTINRSYSNPTPRGMEPNLRRLDSE
+>At1g03930.1_3-1-1-1_ADK1 protein kinase ADK1  
+MDLVIGGKFKLGRKIGSGSFGELYLGINVQTGEEVAVKLESVKTKHPQLHYESKLYMLLQ
+GGTGVPNLKWYGVEGDYNVMVIDLLGPSLEDLFNYCNRKLSLKTVLMLADQLINRVEFMH
+TRGFLHRDIKPDNFLMGLGRKANQVYIIDFGLGKKYRDLQTHRHIPYRENKNLTGTARYA
+SVNTHLGVEQSRRDDLEALGYVLMYFLKGSLPWQGLKAGTKKQKYDRISEKKVATPIEVL
+CKNQPSEFVSYFRYCRSLRFDDKPDYSYLKRLFRDLFIREGYQFDYVFDWTVLKYPQIGS
+SSGSSSRTRNHTTANPGLTAGASLEKQERIAGKETRENRFSGAVEAFSRRHPATSTTRDR
+SASRNSVDGPLSKHPPGDSERPRSSSRYGSSSRRAIPSSSRPSSAGGPSDSRSSSRLVTS
+TGGVGTVSNRASTSQRIQAGNESRTSSFSRAARNTREDPLRRSLELLTLRK
+>At1g04210.1_protein kinase ADK1  
+MDSKIKKPANLIEDADIDGGSESDSTISSVLSLEDDSVVDVSGQNLEFSLLDNVDDSVKG
+LYFFRNVFNLIPKSIGGLGRLRKLKFFSNEIDLFPPELGNLVNLEYLQVKISSPGFGDGL
+SWDKLKGLKELELTKVPKRSSALTLLSEISGLKCLTRLSVCHFSIRYLPPEIGCLKSLEY
+LDLSFNKIKSLPNEIGYLSSLTFLKVAHNRLMELSPVLALLQNLESLDVSNNRLTTLHPL
+DLNLMPRLQILNLRYNKLPSYCWIPTWIQCNFEGNYEEMGVDTCSSSMVEMDVFETPYEN
+NVITVPHKGSHRNPLNMSTGISSISRCFSARKSSKRWKRRQYYFQQRARQERLNNSRKWK
+GEVPPEGLSLKMEVEETGKQGMKVPQNTDRGSVDNSCSDENDKLFEEASVITSEEEESSL
+KADVVSDNSQCVETQLTSERDNYESCEIKTSSPSSGDAPGTVDYNSSSERKKPNNKSKRC
+SEKYLDNPKGSKCHKLSTDITNLSRKYSSNSFCSTEDSLPDGFFDAGRDRPFMTLSKYEK
+VLPLDSREVILLDRAKDEVLDAITLSARALVARLKKLNCLTPDVDQVSIDNLQVASFLAL
+FVSDHFGGSDRTAIIERTRKAVSGTNYQKPFICTCLTGNQDDLAALNKQVSTTAEDAILS
+DVCEKSLRSIKSKRNSIVVPLGKLQFGICRHRALLMKYLCDRMEPPVPCELVRGYLDFMP
+HAWNIVPVKQGSSWVRMVVDACRPHDIREDTDQEYFCRYIPLNRLNESIRIKEKLEPGCS
+VSSLSTGKGVERANSSLIRCKLGSTEAVVKMRTLEVSGASLDDIRTFEYTCLGEVRILGA
+LKHDCIVELYGHEISSKWITSENGNEHRVLQSSILMEHIKGGSLKGHIEKLSEAGKHHVP
+MDLALSIARDISGALMELHSKDIIHRDIKSENVLIDLDNQSANGEPIVKLCDFDRAVPLR
+SHLHGCCIAHVGIPPPNICVGTPRWMSPEVFRAMHEQNFYGLEVDIWSFGCLIFELLTLQ
+NPYFDLSELQIHESLQNGKRPKLPKKLETLISETEEEESTNKLSEVFDLTESDLDTMRFL
+IDVFHQCTEESPSDRLNAGDLHEMILSRKKRE
+>At1g04440.1_3-1-1-1 putative casein kinase I  
+MDRVVGGKFKLGRKLGSGSFGEIFLGVNVQTGEEVAVKLEPLRARHPQLHYESKLYMLLQ
+GGTGIPHLKWFGVEGEFNCMVIDLLGPSMEEFFNYCSRSFSLKTVLMLADQMINRVEYMH
+VKGFLHRDIKPDNFLMGLGRKANQVYIIDYGLAKKYRDLQTHKHIPYRENKNLTGTARYA
+SVNTHLGIEQSRRDDLESLGYLLMYFLRGSLPWQGLRAGTKKQKYDKISEKKRLTPVEVL
+CKNFPPEFTSYFLYVRSLRFEDKPDYSYLKRLFRDLFIREGYQFDYVFDWTILRYPQFGS
+SSSSNSKPRPTLRPAMNIPVPSADKAEKPPIGQDSRERFSGVFEAYTRRNGSGTGVQADQ
+SSRPRTSENVLASKDTQNQERPNSLSRNLSSSRKAIAGSSVRATSSADFTENRLSRLIPN
+NDRSSTTLRTQFAPSSSSVATKAAPTRAARDITLQSLELLSIGNSKRK
+>At1g04700.1_2-1-4-1_Raf16 MAP kinase kinase kinase Raf16  
+MRMEFPGSSNQHLGRDRFNGEVGCGNNCSQTGEEFSNEFLRDFGAQRRLQHGGVNRNVEG
+NYNNRHLVYEDFNRILGLQRVDSNMSEGINSSNGYFAESNVADSPRKMFQTAISDVYLPE
+VLKLLCSFGGRILQRPGDGKLRYIGGETRIISIRKHVGLNELMHKTYALCNHPHTIKYQL
+PGEDLDALISVCSDEDLLHMIEEYQEAETKAGSQRIRVFLVPSTESSESPKIFHERNMNI
+NRNTNQQTDIDHYQYVSALNGIVDVSPQKSSSGQSGTSQTTQFGNASEFSPTFHLRDSPT
+SVHTWEHKDSNSPTFMKPYGNTNAVHFMPKMQIPRNSFGQQSPPTSPFSVHKRANTDVPY
+FADQNGFFDPYLAAPNFPQQNRFFFETTTQKQKHPEVNLHDRRPSDDIYPHGQAYIGAEK
+MTLKKNALSDPQLHDESQINNGLEAFTKQPWKILRKNLRVVATSKWEDSDDIYFNNPEGK
+RCKELELTKEVPNSWINRDNNPDSFDQATKKQDGSNSNSSFSPNYFSPNHQPAAQITSSD
+SQDSGSSVFSLSVNTNENYLDCSREKFNGFQHDMSLDILIRSHTSATDQLCSTTKSSDKA
+DYSSPNTNFPVVFLRQEPMIPRHDLETNSDDSDTQKSLPREESIHYSGLPLRKVGSRETT
+FMHTQGSDDFFKSKLLGPQLIVEDVTNEVISDNLLSATIVPQVNRESDDDHKSYTREKEI
+TNADHESEMEEKYKKSRNTDDSFSEAAMVEIEAGIYGLQIIKNTDLEDLHELGSGTFGTV
+YYGKWRGTDVAIKRIKNSCFSGGSSEQARQTKDFWREARILANLHHPNVVAFYGVVPDGP
+GGTMATVTEYMVNGSLRHVLQRKDRLLDRRKKLMITLDSAFGMEYLHMKNIVHFDLKCDN
+LLVNLRDPQRPICKVGDFGLSRIKRNTLVSGGVRGTLPWMAPELLNGSSNRVSEKVDVFS
+FGIVMWEILTGEEPYANLHCGAIIGGIVNNTLRPPVPERCEAEWRKLMEQCWSFDPGVRP
+SFTEIVERLRSMTVALQPKRRT
+>At1g05100.1_4-4-1_MAPKKK18 MAP kinase kinase kinase 18  
+MNWTRGKTLGRGSTATVSAATCHESGETLAVKSAEFHRSEFLQREAKILSSLNSPYVIGY
+RGCEITREPFHNNGEATTYSLLMEYAPYGTLTDVATKNGGFIDEARVVKYTRQILLGLEY
+IHNSKGIAHCDIKGSNVLVGENGEAKIADFGCAKWVEPEITEPVRGTPAFMAPEAARGER
+QGKESDIWAVGCTVIEMVTGSQPWIGADFTDPVSVLYRVGYLGELPELPCSLTEQAKDFL
+GKCLKKEATERWTASQLLNHPFLVNKEPELVTGLVTNSPTSVTDQMFWRSVEEEVSEDRS
+SWWECHEDERIGVLSWIGHVVVESTWDLDGEDWITVRRN
+>At1g05700.1_1-8-1 putative light repressible receptor protein  
+MEEFRFLYLIYSAAFALCLVVSVLAQDQSGFISIDCGIPSGSSYKDDTTGINYVSDSSFV
+ETGVSKSIPFTAQRQLQNLRSFPEGSRNCYTLIPIQGKGKKYLIRASFMYGNYDGENGSP
+EFDLFLGGNIWDTVLLSNGSSIVSKEVVYLSQSENIFVCLGNKGKGTPFISTLELRFLGN
+DNTTYDSPNGALFFSRRWDLRSLMGSPVRYDDDVYDRIWIPRNFGYCREINTSLPVTSDN
+NSYSLSSLVMSTAMTPINTTRPITMTLENSDPNVRYFVYMHFAEVEDLSLKPNQTREFDI
+SINGVTVAAGFSPKYLQTNTFFLNPESQSKIAFSLVRTPKSTLPPIVNALEIYVANSFSQ
+SLTNQEDGDAVTSLKTSYKVKKNWHGDPCLPNDYIWEGLNCSYDSLTPPRITSLNLSSSG
+LTGHISSSFSNLTMIQELDLSNNGLTGDIPEFLSKLKFLRVLNLENNTLTGSVPSELLER
+SNTGSFSLRLGENPGLCTEISCRKSNSKKLVIPLVASFAALFILLLLSGVFWRIRNRRNN
+PMAKSENKLLFTFADVIKMTNNFGQVLGKGGFGTVYHGFYDNLQVAVKLLSETSAQGFKE
+FRSEVEVLVRVHHVNLTALIGYFHEGDQMGLIYEFMANGNMADHLAGKYQHTLSWRQRLQ
+IALDAAQGLEYLHCGCKPPIVHRDVKTSNILLNEKNRAKLADFGLSRSFHTESRSHVSTL
+VAGTPGYLDPLCFETNGLNEKSDIYSFGVVLLEMITGKTVIKESQTKRVHVSDWVISILR
+STNDVNNVIDSKMAKDFDVNSVWKVVELALSSVSQNVSDRPNMPHIVRGLNECLQREESN
+KNY
+>At1g06390.1_4-5-4_ASK-iota GSK3/shaggy-like protein kinase iota  
+MASLPLGPQPHALAPPLQLHDGDALKRRPELDSDKEMSAAVIEGNDAVTGHIISTTIGGK
+NGEPKQTISYMAERVVGTGSFGIVFQAKCLETGESVAIKKVLQDRRYKNRELQLMRPMDH
+PNVISLKHCFFSTTSRDELFLNLVMEYVPETLYRVLRHYTSSNQRMPIFYVKLYTYQIFR
+GLAYIHTVPGVCHRDVKPQNLLVDPLTHQVKLCDFGSAKVLVKGEPNISYICSRYYRAPE
+LIFGATEYTASIDIWSAGCVLAELLLGQPLFPGENSVDQLVEIIKVLGTPTREEIRCMNP
+NYTDFRFPQIKAHPWHKVFHKRMPPEAIDLASRLLQYSPSLRCTALEACAHPFFNELREP
+NARLPNGRPLPPLFNFKQELGGASMELINRLIPEHVRRQMSTGLQNS
+>At1g06390.2_ASK-iota GSK3/shaggy-like protein kinase iota  
+MASLPLGPQPHALAPPLQLHDGDALKRRPELDSDKEMSAAVIEGNDAVTGHIISTTIGGK
+NGEPKQTISYMAERVVGTGSFGIVFQAKCLETGESVAIKKVLQDRRYKNRELQLMRPMDH
+PNVISLKHCFFSTTSRDELFLNLVMEYVPETLYRVLRHYTSSNQRMPIFYVKLYTYQIFR
+GLAYIHTVPGVCHRDVKPQNLLVDPLTHQVKLCDFGSAKVLVKGEPNISYICSRYYRAPE
+LIFGATEYTASIDIWSAGCVLAELLLGQPLFPGENSVDQLVEIIKVLGTPTREEIRCMNP
+NYTDFRFPQIKAHPWHKVFHKRMPPEAIDLASRLLQYSPSLRCTALEACAHPFFNELREP
+NARLPNGRPLPPLFNFKQELGGASMELINRLIPEHVRRQMSTGLQNS
+
+">
+</form></body>
+</html>

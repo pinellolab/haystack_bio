@@ -1,0 +1,80 @@
+GLAM2SCAN
+Version 1056
+
+glam2scan p At.glam2 At.fa
+
+                             **************************************..************
+At1g01140.1_4-2-4_SnRK3. 114 LKEDEARRYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSA 165 + 128.
+
+                             **************************************..************
+At1g01140.2_SnRK3.12     114 LKEDEARRYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSA 165 + 128.
+
+                             **************************************..************
+At1g01140.3_SnRK3.12     114 LKEDEARRYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSA 165 + 128.
+
+                             *********************.*****************...************
+At1g06390.1_4-5-4_ASK-io 166 MPIFYVKLYTYQIFRGLAYIHTVPGVCHRDVKPQNLLVDPLTHQVKLCDFGSAK 219 + 120.
+
+                             *********************.*****************...************
+At1g06390.2_ASK-iota     166 MPIFYVKLYTYQIFRGLAYIHTVPGVCHRDVKPQNLLVDPLTHQVKLCDFGSAK 219 + 120.
+
+                             **************************************..************
+At1g03740.1_4-5-2        309 FTEPQVKCYMRQLLSGLEHCHSRGVLHRDIKGSNLLIDSKGVLKIADFGLAT 360 + 118.
+
+                             *********************...*****************..************
+At1g01540.1_1-6-3        249 LTWDIRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDRQWNAKVSDFGLAK 303 + 118.
+
+                             *********************...*****************..************
+At1g01540.2_Putative     249 LTWDIRMNIILGMAKGLAYLHEGLEPKVVHRDIKSSNILLDRQWNAKVSDFGLAK 303 + 118.
+
+                             **************************************.....************
+At1g04440.1_3-1-1-1      100 FSLKTVLMLADQMINRVEYMHVKGFLHRDIKPDNFLMGLGRKANQVYIIDYGLAK 154 + 110.
+
+                             **************************************..************
+At1g01560.1_4-5-1_MPK11  138 LTDDHSRFFLYQLLRGLKYVHSANVLHRDLKPSNLLLNANCDLKIGDFGLAR 189 + 108.
+
+                             **************************************.....************
+At1g03930.1_3-1-1-1_ADK1 100 LSLKTVLMLADQLINRVEFMHTRGFLHRDIKPDNFLMGLGRKANQVYIIDFGLGK 154 + 107.
+
+                             *********************.*****************..************
+At1g05100.1_4-4-1_MAPKKK 102 IDEARVVKYTRQILLGLEYIHNSKGIAHCDIKGSNVLVGENGEAKIADFGCAK 154 + 106.
+
+                             **************************************..************
+At1g03920.1_4-2-6        232 LSEDEAKFYIAESVLAIESIHNRNYIHRDIKPDNLLLDRYGHLRLSDFGLCK 283 + 106.
+
+                             *********************...*****************..************
+At1g05700.1_1-8-1        653 LSWRQRLQIALDAAQGLEYLHCGCKPPIVHRDVKTSNILLNEKNRAKLADFGLSR 707 + 103.
+
+                             **************************************.************
+At1g02970.1_4-3-1        344 VSEREILVIMHQIAKALHFVHEKGIAHLDVKPDNIYIKNGVCKLGDFGCAT 394 + 103.
+
+                             **************************************......************
+At1g04700.1_2-1-4-1_Raf1 867 LDRRKKLMITLDSAFGMEYLHMKNIVHFDLKCDNLLVNLRDPQRPICKVGDFGLSR 922 + 103.
+
+                             **************************************.........************
+At1g04210.1_protein      899 VPMDLALSIARDISGALMELHSKDIIHRDIKSENVLIDLDNQSANGEPIVKLCDFDRAV 957 + 91.1
+
+                             **************************************..........************
+At1g01450.1_2-1-1        121 LSLPVAVDLMLQIALGMEYLHSKRIYHGELNPSNILVKPRSNQSGDGYLLGKIFGFGLNS 180 + 83.9
+
+                             *********************..*****************..************
+At1g01740.1_1-16-1       149 MKWAMRLRVALYISEALEYCSNNGHTLYH.DLNAYRVLFDEECNPRLSTFGLMK 201 + 71.8
+
+                             ******************.********************....................************
+At1g04210.1_protein      943 NGEPIVKLCDFDRAVPLRSHLHGCCIAHVGIPPPNICVGTPRWMSPEVFRAMHEQNFYGLEVDIWSFGCLI 1013 + -35.4
+
+                             **************************************..************
+At1g05700.1_1-8-1        290 LKPNQTRE.FDISINGVT.V.AAGFSPKYLQTNTFFLNPESQSKIA.FSLVR 337 + -40.5
+
+                             ****************.**.***.....*****************...************
+At1g01540.1_1-6-3        218 VEGAYRMLVYDFVDNGNLEQWIHGDVGDVSPLT.WDIRM.NIILGMAKGLAYLHE.GLEP 274 + -41.1
+
+                             ****************.**.***.....*****************...************
+At1g01540.2_Putative     218 VEGAYRMLVYDFVDNGNLEQWIHGDVGDVSPLT.WDIRM.NIILGMAKGLAYLHE.GLEP 274 + -41.1
+
+                             *********************....*****************...............************
+At1g03740.1_4-5-2        138 LSSSMFSE.HHQIEKGVEKP.EVEASVRVVHRELKRGSSIVSPKDAERKQVAAGWPSWLVSVAGESLVD 204 + -42.1
+
+                             *********************.....*****************.......************
+At1g04210.1_protein      542 LPLDSREVILLDRAKD.EVLDAITLSARALV.ARLKKLNCLTPDVDQVSIDNLQVASF.LAL 600 + -42.1
+

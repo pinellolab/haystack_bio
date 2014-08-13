@@ -1,0 +1,44 @@
+<!--
+FILE: ama-qvalues.html
+AUTHOR: J Johnson
+CREATE DATE: 31 August 2010
+PROJECT: MEME Suite
+-->
+<head>
+<title>ama-qvalues</title>
+<link href="./meme-suite.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+</head>
+<body>
+<div id="main">
+<script src="./meme-suite-logo.js" type="text/javascript">></script>
+<h1>ama-qvalues</h1>
+<p><b>Usage:</b> <code>ama-qvalues [options]</code></p>
+<p><b>Description:</b></p>
+<p>
+Read an AMA output file and output each sequence name, p-value
+and q-value.  At the end of file, the value of pi_0 (number of
+sequences not showing significant binding to motif) is shown,
+unless there are fewer than 100 p-values in the input.
+</p>
+<p><b>Input:</b></p>
+<p>Reads <code>standard input</code> expecting an AMA output file.
+<p><b>Options:</b></p>
+<dl>
+  <dt>-seed &lt;seed&gt;</dt>
+  <dd>seed for random numbers; default: 1</dd>
+  <dt>-bootstraps &lt;boot&gt;</dt>
+  <dd>number of bootstraps to perform while computing pi_0; default: 1000</dd>
+</dl>
+<p><b>Output:</b></p>
+<p>
+For each sequence in the input, outputs the sequence name, the p-value of the sequence and the
+q-value (minimum false discovery rate).
+</p>
+<p>If there are more than 99 sequences with p-values in the input then it provides an estimate of
+the number of sequences that contain the motif, otherwise known as the pi_0.</p>
+<p><b>See also:</b></p>
+<p><a href="qvalue.html">qvalue utility</a></p>
+</div>
+</body>
+</html>

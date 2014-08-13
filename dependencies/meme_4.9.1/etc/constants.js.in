@@ -1,0 +1,1 @@
+var site_url = "@SITE_URL@";
