@@ -17,7 +17,8 @@ In particualar, Haystack highlights enriched TF motifs in  variable and cell-typ
 
 A summary of the pipeline and an example on H3k27ac data is shown in the following figure:
 
-![Haystack Pipeline](http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/figure_paper.png  =100x20)
+<img src="http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/figure_paper.png" alt="Haystack Pipeline" style="width:400">
+
 
 (A) Haystack overview: modules and corresponding functions. (B) Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted.  (C) Motif analysis on the regions specific for the H1hesc cell line: Sox2 is significant; q-value, motif logo and average profile are calculated. (D) Transcription factor activity for Sox2 in H1esc (red star) compared to the other cell types (black circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif.  
 
