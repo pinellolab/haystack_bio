@@ -17,12 +17,22 @@ In particualar, Haystack highlights enriched TF motifs in  variable and cell-typ
 
 A summary of the pipeline and an example on H3k27ac data is shown in the following figure:
 
-![Haystack Pipeline](http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/figure_paper.png)
+![Haystack Pipeline](http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/Final_figure.png)
 
-(A) Haystack overview: modules and corresponding functions. (B) Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted.  (C) Motif analysis on the regions specific for the H1hesc cell line: Sox2 is significant; q-value, motif logo and average profile are calculated. (D) Transcription factor activity for Sox2 in H1esc (red star) compared to the other cell types (black circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif.  
+
+**(A)** Haystack overview: modules and corresponding functions. **(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted.  **(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. **(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif.   
 
 Haystack was designed to be highly modular. The whole pipeline can be called using the _haystack_pipeline_ command or alternatively the different modules can be used and combined indipendently.  For example it is possible to use only the motif analysis calling the _haystack_motifs_ module on a given set of genomic regions. A nice description of each module is present in the **_How to use HAYSTACK_** section.
 
+Precomputed Analysis
+--------------------
+
+We have run Haystack on several ENCODE datasets for which you can download the the precomputed results (variability tracks, hotspots, specific regions, enriched motifs and activity planes):
+
+1. Analysis on 12 ChIP-seq tracks of H3k27ac in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27ac.tar.gz
+2. Analysis on  17 DNase-seq tracks in human cell lines + gene expression: (Gain) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE.tar.gz  and (Loss) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE_DEPLETED.tar.gz
+3. Analysis on  10 RRBS-seq tracks of DNA-Methylation in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_Methylation.tar.gz
+4. Analysis on 17 ChIP-seq tracks of H3k27me3 in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27me3.tar.gz
 
 Installation
 ------------
@@ -38,7 +48,7 @@ From the Haystack-master folder created run the following command:
 
   <code>python INSTALL_HAYSTACK.py</code>
 
-The script will try to install HAYSTACK in your HOME folder and will setup all the dependencies, eventually asking to install automatically the missing ones for you.
+The script will try to install HAYSTACK in your HOME folder and will setup all the dependencies, eventually asking to install automatically the missing ones for you (you don't need root privileges to install packages in your home directory).
 
 If you want to install HAYSTACK on a different location run the following command:
 
