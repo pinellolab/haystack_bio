@@ -201,10 +201,12 @@ for motif_gene_filename in glob.glob(os.path.join(haystack_motifs_output_folder,
             if USE_ZSCORE:
                 #correlation 
                 ro=np.corrcoef(tf_values,ds_values)[0,1]
-                info('Gene:%s TF z-score:%.2f Targets z-score:%.2f  Correlation:%.2f' %(gene_name,tf_value,ds_value,ro))
+
             
                 tf_value=tf_values[target_cell_type]
                 ds_value=ds_values[target_cell_type]
+
+                info('Gene:%s TF z-score:%.2f Targets z-score:%.2f  Correlation:%.2f' %(gene_name,tf_value,ds_value,ro))
             
                 #make plots
                 if (tf_value>0 and np.abs(ro)>0.3) or plot_all:
