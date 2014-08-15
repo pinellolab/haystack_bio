@@ -48,7 +48,7 @@ From the Haystack-master folder created run the following command:
 
   <code>python INSTALL_HAYSTACK.py</code>
 
-The script will try to install HAYSTACK in your HOME folder and will setup all the dependencies, eventually asking to install automatically the missing ones for you.
+The script will try to install HAYSTACK in your HOME folder and will setup all the dependencies, eventually asking to install automatically the missing ones for you (You don't need root privileges to install packages in your home directory).
 
 If you want to install HAYSTACK on a different location run the following command:
 
