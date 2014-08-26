@@ -60,6 +60,10 @@ The current version is compatible only with Unix like operating systems on 64 bi
 - Ubuntu 12.04 LTS
 - OSX Maverick and Mountain Lion
 - Cygwin x86_64 (1.7) on Windows 7/8 64 bit
+ 
+If you have an outdated Linux distribution and have problem running Haystack you should download instead this setup file:
+
+http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_old_architectures_setup_with_genomes.zip
 
 Operating System Notes
 ----------------------
