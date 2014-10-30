@@ -7,8 +7,9 @@ import glob
 import shutil
 import argparse
 import logging
+import pickle as cp
 
-HAYSTACK_VERSION=0.1
+HAYSTACK_VERSION=0.2
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -30,7 +31,29 @@ def check_file(filename):
         error('I cannot open the file:'+filename)
         sys.exit(1)
 
+def which(program):
+    import os
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            path = path.strip('"')
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
+
+def determine_path(folder):
+    return os.path.dirname(which('haystack_pipeline')).replace('bin',folder)
+
+system_env=cp.load( open( os.path.join(determine_path('bin'),'system_env.pickle')))
+#print system_env
 
 print '\n[H A Y S T A C K   P I P E L I N E]'
 print('\n-SELECTION OF HOTSPOTS OF VARIABILITY AND ENRICHED MOTIFS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
@@ -174,7 +197,7 @@ cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s
              ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
              '--transformation %s' % transformation )
 print cmd_to_run
-sb.call(cmd_to_run ,shell=True)        
+sb.call(cmd_to_run ,shell=True,env=system_env)        
 
 #CALL HAYSTACK MOTIFS
 motif_directory=os.path.join(output_directory,'HAYSTACK_MOTIFS')
@@ -185,7 +208,7 @@ for sample_name in sample_names:
     #print specific_regions_filename,bg_regions_filename
     cmd_to_run='haystack_motifs %s %s --bed_bg_filename %s --output_directory %s --name %s' % (specific_regions_filename,genome_name, bg_regions_filename,motif_directory, sample_name)
     print cmd_to_run
-    sb.call(cmd_to_run,shell=True)
+    sb.call(cmd_to_run,shell=True,env=system_env)
 
     if USE_GENE_EXPRESSION:
             #CALL HAYSTACK TF ACTIVITY 
@@ -193,5 +216,5 @@ for sample_name in sample_names:
             if os.path.exists(motifs_output_folder):
                 cmd_to_run='haystack_tf_activity_plane %s %s %s --output_directory %s'  %(motifs_output_folder,sample_names_tf_activity_filename,sample_name,tf_activity_directory)
                 print cmd_to_run
-                sb.call(cmd_to_run,shell=True) 
+                sb.call(cmd_to_run,shell=True,env=system_env) 
      

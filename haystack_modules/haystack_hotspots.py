@@ -15,8 +15,11 @@ import argparse
 import logging
 from bioutilities import Genome_2bit
 import xml.etree.cElementTree as ET
+import pickle as cp
 
-HAYSTACK_VERSION=0.1
+HAYSTACK_VERSION=0.2
+
+
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -81,6 +84,10 @@ def query_yes_no(question, default="yes"):
 
 def determine_path(folder):
     return os.path.dirname(which('haystack_hotspots')).replace('bin',folder)
+
+system_env=cp.load( open( os.path.join(determine_path('bin'),'system_env.pickle')))
+#print system_env
+
 
 def check_file(filename):
     try:
@@ -211,7 +218,7 @@ if os.path.exists(genome_2bit):
 else:
         info("\nIt seems you don't have the required genome file.")
         if query_yes_no('Should I download it for you?'):
-                sb.call('download_genome %s' %genome_name,shell=True)
+                sb.call('download_genome %s' %genome_name,shell=True,env=system_env)
                 if os.path.exists(genome_2bit):
                         info('Genome correctly downloaded!')
                         genome=Genome_2bit(genome_2bit)
@@ -257,7 +264,7 @@ if not os.path.exists(intermediate_directory):
 
 if not os.path.exists(genome_sorted_bins_file) or recompute_all:
         info('Creating bins of %dbp for %s in %s' %(bin_size,chr_len_filename,genome_sorted_bins_file))
-        sb.call('bedtools makewindows -g %s -w %s |  bedtools sort -i stdin |' %  (chr_len_filename, bin_size)+ "perl -nle 'print "+'"$_\t$.";'+"' /dev/stdin> %s" % genome_sorted_bins_file,shell=True)
+        sb.call('bedtools makewindows -g %s -w %s |  bedtools sort -i stdin |' %  (chr_len_filename, bin_size)+ "perl -nle 'print "+'"$_\t$.";'+"' /dev/stdin> %s" % genome_sorted_bins_file,shell=True,env=system_env)
         
 
 #convert bam files to genome-wide rpm tracks
@@ -272,7 +279,7 @@ for base_name,bam_filename in zip(sample_names,bam_filenames):
     if  input_is_bigwig and which('bigWigAverageOverBed'):
                     if not os.path.exists(binned_rpm_filename) or recompute_all:
                             cmd='bigWigAverageOverBed %s %s  /dev/stdout | sort -s -n -k 1,1 | cut -f5 > %s' % (bam_filename,genome_sorted_bins_file,binned_rpm_filename)
-                            sb.call(cmd,shell=True)
+                            sb.call(cmd,shell=True,env=system_env)
                             shutil.copy2(bam_filename,bigwig_filename)
 
     else:    
@@ -280,7 +287,7 @@ for base_name,bam_filename in zip(sample_names,bam_filenames):
                     info('Computing Scaling Factor...')
                     cmd='samtools view -c -F 512 %s' % bam_filename
                     #print cmd
-                    proc=sb.Popen(cmd, stdout=sb.PIPE,shell=True)
+                    proc=sb.Popen(cmd, stdout=sb.PIPE,shell=True,env=system_env)
                     (stdout, stderr) = proc.communicate()
                     #print stdout,stderr
                     scaling_factor=(1.0/float(stdout.strip()))*1000000
@@ -292,13 +299,13 @@ for base_name,bam_filename in zip(sample_names,bam_filenames):
                     #print cmd
 
             
-                    proc=sb.call(cmd,shell=True)
+                    proc=sb.call(cmd,shell=True,env=system_env)
 
             if which('bedGraphToBigWig'):
                 if not os.path.exists(bigwig_filename) or recompute_all:
                         info('Converting BedGraph to BigWig')
                         cmd='bedGraphToBigWig %s %s %s' %(rpm_filename,chr_len_filename,bigwig_filename)
-                        proc=sb.call(cmd,shell=True)
+                        proc=sb.call(cmd,shell=True,env=system_env)
 
             else:
                 info('Sorry I cannot create the bigwig file.\nPlease download and install bedGraphToBigWig from here: http://hgdownload.cse.ucsc.edu/admin/exe/ and add to your PATH')
@@ -306,7 +313,7 @@ for base_name,bam_filename in zip(sample_names,bam_filenames):
             if not os.path.exists(binned_rpm_filename) or recompute_all:      
                     info('Make constant binned (%dbp) rpm values file' % bin_size)
                     cmd='bedtools sort -i %s |  bedtools map -a %s -b stdin -c 4 -o mean -null 0.0 | cut -f5 > %s'   %(rpm_filename,genome_sorted_bins_file,binned_rpm_filename)
-                    proc=sb.call(cmd,shell=True)
+                    proc=sb.call(cmd,shell=True,env=system_env)
             
             try:    
                     os.remove(rpm_filename)
@@ -355,7 +362,7 @@ if which('bedGraphToBigWig'):
                     coord_quantile.dropna().to_csv(normalized_output_filename,sep='\t',header=False,index=False)
             
                     cmd='bedGraphToBigWig %s %s %s' %(normalized_output_filename,chr_len_filename,normalized_output_filename_bigwig)
-                    proc=sb.call(cmd,shell=True)
+                    proc=sb.call(cmd,shell=True,env=system_env)
                     try:
                             os.remove(normalized_output_filename)
                     except:
@@ -420,7 +427,7 @@ if not os.path.exists(bw_iod_track_filename) or recompute_all:
         info('Generating variability track in bigwig format in:%s' % bw_iod_track_filename)
 
         coordinates_bin.to_csv(bedgraph_iod_track_filename,sep='\t',header=False,index=False)
-        sb.call('bedGraphToBigWig %s %s %s' % (bedgraph_iod_track_filename,chr_len_filename,bw_iod_track_filename ),shell=True)
+        sb.call('bedGraphToBigWig %s %s %s' % (bedgraph_iod_track_filename,chr_len_filename,bw_iod_track_filename ),shell=True,env=system_env)
         try:
                 os.remove(bedgraph_iod_track_filename)
         except:
@@ -441,7 +448,7 @@ bed_hpr_fileaname=os.path.join(output_directory,'SELECTED_VARIABILITY_HOTSPOT.be
 
 if not os.path.exists(bed_hpr_fileaname) or recompute_all:  
         info('Writing the HPRs in: %s' % bed_hpr_fileaname)
-        sb.call('bedtools sort -i %s | bedtools merge -i stdin >  %s' %(bedgraph_hpr_filename,bed_hpr_fileaname),shell=True)
+        sb.call('bedtools sort -i %s | bedtools merge -i stdin >  %s' %(bedgraph_hpr_filename,bed_hpr_fileaname),shell=True,env=system_env)
 
 #os.remove(bedgraph_hpr_filename)
 
@@ -475,7 +482,7 @@ for col in df_chip_hpr_zscore:
                 coord_zscore.dropna().to_csv(specific_output_filename,sep='\t',header=False,index=False)
 
                 info('Writing:%s' % specific_output_bed_filename )
-                sb.call('bedtools sort -i %s | bedtools merge -i stdin >  %s' %(specific_output_filename,specific_output_bed_filename),shell=True)
+                sb.call('bedtools sort -i %s | bedtools merge -i stdin >  %s' %(specific_output_filename,specific_output_bed_filename),shell=True,env=system_env)
 
 
 #write background
@@ -496,7 +503,7 @@ for col in df_chip_hpr_zscore:
                 coord_zscore.dropna().to_csv(bg_output_filename,sep='\t',header=False,index=False)
 
                 info('Writing:%s' % bg_output_bed_filename )
-                sb.call('bedtools sort -i %s | bedtools merge -i stdin >  %s' %(bg_output_filename,bg_output_bed_filename),shell=True)    
+                sb.call('bedtools sort -i %s | bedtools merge -i stdin >  %s' %(bg_output_filename,bg_output_bed_filename),shell=True,env=system_env)    
 
 
 ###plot selection

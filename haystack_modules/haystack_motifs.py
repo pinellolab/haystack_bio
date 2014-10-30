@@ -1,7 +1,6 @@
 #python modules
 import multiprocessing
 import subprocess as sb
-import cPickle as cp
 import os
 import sys
 import random
@@ -13,6 +12,7 @@ import shutil
 from collections import defaultdict
 import codecs
 import platform
+import pickle as cp
 
 #dependencies
 from bioutilities import Genome_2bit, Coordinate, Sequence, Fimo
@@ -31,7 +31,7 @@ from jinja2 import Environment, FileSystemLoader
 from external import estimate_qvalues,generate_weblogo
 
 
-HAYSTACK_VERSION=0.1
+HAYSTACK_VERSION=0.2
 
 #configure logger
 #logging.basicConfig(level=logging.DEBUG,
@@ -130,6 +130,7 @@ def which(program):
 def determine_path(folder):
     return os.path.dirname(which('haystack_motifs')).replace('bin',folder)
 
+system_env=cp.load( open( os.path.join(determine_path('bin'),'system_env.pickle')))
 
 def cygwin_path(path):
     return '"%s"' % sb.check_output('cygpath -w %s' % path,shell=True).strip()
@@ -416,7 +417,7 @@ def run_haystack():
     else:
         info("\nIt seems you don't have the required genome file.")
         if query_yes_no('Should I download it for you?'):
-            sb.call('download_genome %s' %genome_name,shell=True)
+            sb.call('download_genome %s' %genome_name,shell=True,env=system_env)
             if os.path.exists(genome_2bit):
                 info('Genome correctly downloaded!')
                 genome=Genome_2bit(genome_2bit)
@@ -727,10 +728,10 @@ def run_haystack():
                     
                 if gene_ids_to_names_filename:
                     sb.call('java -jar '+peak_annotator_path+' -u TSS -p %s -a %s -s %s -o %s &> %s' \
-                            %(regions,gene_annotations_filename,gene_ids_to_names_filename,genes_list_directory,os.path.join(genes_list_directory,'log_peakannotator.txt')),  shell=True)
+                            %(regions,gene_annotations_filename,gene_ids_to_names_filename,genes_list_directory,os.path.join(genes_list_directory,'log_peakannotator.txt')),  shell=True,env=system_env)
                 else:
                     sb.call('java -jar '+peak_annotator_path+' -u TSS -p %s -a %s  -o %s &> %s' \
-                            %(regions,gene_annotations_filename,genes_list_directory,os.path.join(genes_list_directory,'log_peakannotator.txt')),  shell=True)
+                            %(regions,gene_annotations_filename,genes_list_directory,os.path.join(genes_list_directory,'log_peakannotator.txt')),  shell=True,env=system_env)
 
                 
                 genes_url=os.path.join('genes_lists',motif_ids[i]+'_motif_region_in_target.tss.bed')

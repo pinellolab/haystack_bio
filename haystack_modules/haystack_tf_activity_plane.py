@@ -16,7 +16,7 @@ import argparse
 from itertools import chain
 import logging
 
-HAYSTACK_VERSION=0.1
+HAYSTACK_VERSION=0.2
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -239,17 +239,17 @@ for motif_gene_filename in glob.glob(os.path.join(haystack_motifs_output_folder,
  
             else:  
                 info('Gene:%s TF expression ratio:%.2f Targets expression ratio:%.2f' %(gene_name,tf_values,ds_values,))
-                x_min=min(-2,tf_values*1.1)
+                x_min=min(0,tf_values*1.1)
                 x_max=max(2,tf_values*1.1)
-                y_min=min(-2,ds_values*1.1)
+                y_min=min(0,ds_values*1.1)
                 y_max=max(2,ds_values*1.1)
                 
-                if (tf_values>1.2) & (np.abs(ds_values>1.2)) or plot_all:
+                if (tf_values>1.2) & ((ds_values>1.2)|(ds_values<0.8)) or plot_all:
                     fig = plt.figure( figsize=(10, 10), dpi=80, facecolor='w', edgecolor='w')
                     ax = fig.add_subplot(111)
                     plt.grid()
-                    plt.plot([x_min,x_max],[0,0],'k')
-                    plt.plot([0,0],[y_min,y_max],'k')
+                    plt.plot([x_min,x_max],[1,1],'k')
+                    plt.plot([1,1],[y_min,y_max],'k')
                     ax.plot(tf_values,ds_values,'*r',markersize=30,linestyle='None',label=target_cell_type)
 
                     ax.set_aspect('equal')
