@@ -153,7 +153,7 @@ How to use HAYSTACK
 -------------------
 HAYSTACK consists of 5 modules:
 
-1) **haystack_hotspots**: find the regions that are variable across different ChIP-seq, DNase-seq or Bisulfite-seq tracks. The input is a folder containing bam files (with PCR duplicates removed) or bigwig (must be .bw), or a tab delimited text file with two columns containing: 1. the sample name and 2. the path of the corresponding .bam/.bw file. For example you can write inside a file called _samples_names_hotspot.txt_ something like that:
+1) **haystack_hotspots**: find the regions that are variable across different ChIP-seq, DNase-seq or Bisulfite-seq tracks (only BigWig processed file are supported for methylation data). The input is a folder containing bam files (with PCR duplicates removed) or bigwig (must be .bw), or a tab delimited text file with two columns containing: 1. the sample name and 2. the path of the corresponding .bam/.bw file. For example you can write inside a file called _samples_names_hotspot.txt_ something like that:
 ```
 K562	./INPUT_DATA/K562H3k27ac_sorted_rmdup.bam	
 GM12878	./INPUT_DATA/Gm12878H3k27ac_sorted_rmdup.bam	
