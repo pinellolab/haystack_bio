@@ -265,10 +265,6 @@ for file_name in src_files:
     if (os.path.isfile(full_file_name)):
         shutil.copy(full_file_name, dest)    
 
-#COPY current env for subprocess
-system_env=os.environ
-cp.dump(system_env,open(os.path.join(dest,'system_env.pickle'),'w+'))
-
 #ADD HAYSTACK TO PATH
 home = expanduser("~")
 shell=os.environ["SHELL"].split('/')[-1]
@@ -277,8 +273,11 @@ shell_profile=None
 line_to_add=None    
 
 if shell=='bash':
-    shell_profile='.bash_profile'
-
+    if CURRENT_PLATFORM=='Darwin': 
+        shell_profile='.bash_profile'
+    else:
+        shell_profile='.bashrc'
+        
 elif shell=='sh' or shell=='ksh':
     shell_profile='.profile'
     
@@ -301,18 +300,17 @@ if not os.path.exists(os.path.join(home,shell_profile)) or not line_to_add in  o
             print 'I cannot determine automatically the shell you are using. Please add the folder %s to your PATH manually!' % BIN_FOLDER
         print '\nExecuting:%s' % cmd_add_path
         sb.call(cmd_add_path,shell=True)
-
-        sb.call('source ~/%s' % shell_profile,shell=True)
-
-        if shell=='bash' and os.path.exists(os.path.join(home,'.profile')):
-            cmd_add_path="echo '%s'  >> ~/%s" % (line_to_add,'.profile') #fix for new ubuntu
-            sb.call('source ~/%s' % '.profile',shell=True)
-            
+        sb.call(line_to_add,shell=True)
         print '\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!'
     else:
         print '\nOK.\n\nNOTE: to run HAYSTACK all the files in %s should be in your PATH' % BIN_FOLDER
 else:
     print '\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!'    
+
+#COPY current env for subprocess
+os.environ['PATH']=('%s:' % BIN_FOLDER) +os.environ['PATH']
+system_env=os.environ
+cp.dump(system_env,open(os.path.join(dest,'system_env.pickle'),'w+'))
 
     
             
