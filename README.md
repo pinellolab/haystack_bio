@@ -91,7 +91,7 @@ Operating System Notes
   wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
   unzip haystack_setup_with_genomes.zip
   cd Haystack-master/
-  sh create_binary_unix.sh #this is the optional command to recompile the binary
+  sh create_binary_unix.sh #this command  is OPTIONAL and should be used ONLY if you want to recompile the binary
   python INSTALL_HAYSTACK.py
   ```
  
