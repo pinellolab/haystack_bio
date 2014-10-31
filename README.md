@@ -2,7 +2,7 @@ HAYSTACK
 ========
 Epigenetic Variability and Motif Analysis Pipeline       
 --------------------------------------------------
-**Current version**: 0.1
+**Current version**: 0.2
 
 Summary
 -------
@@ -67,6 +67,43 @@ http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_old_architectures_setup_
 
 Operating System Notes
 ----------------------
+**UBUNTU (tested on 14.04 LTS) in the Amazon Web Service (AWS) Cloud**
+
+1. Launch and connect to the Amazon Instance you have chosen from the AWS console (is suggested to use an m3.large ) or to your Ubuntu machine.
+
+2. Create a swap partition (**this step is only for the AWS cloud**)
+  ```
+  sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=20096
+  sudo chown root:root /mnt/swapfile
+  sudo chmod 600 /mnt/swapfile
+  sudo mkswap /mnt/swapfile
+  sudo swapon /mnt/swapfile
+  sudo sh -c "echo '/mnt/swapfile swap swap defaults 0 0' >> /etc/fstab"
+  sudo swapon -a
+  ```
+3. Install dependencies
+  ```
+  sudo apt-get update && sudo apt-get install git default-jre python-setuptools python-pip  python-dev python-numpy         python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose  python-pil  python-imaging python-setuptools unzip ghostscript make gcc g++ zlib1g-dev zlib1g -y && sudo pip install git+https://github.com/pyinstaller/pyinstaller.git bx-python
+  ```
+
+4. Install Haystack 
+  ```
+  wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
+  unzip haystack_setup_with_genomes.zip
+  cd Haystack-master/
+  sh create_binary_unix.sh #this is the optional command to recompile the binary
+  python INSTALL_HAYSTACK.py
+  ```
+ 
+5. Download and run the test dataset
+  ```
+  cd && source .bash_profile
+  wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_test_dataset_h3k27ac.tar.gz
+  tar xvzf haystack_test_dataset_h3k27ac.tar.gz
+  cd TEST_DATASET
+  haystack_pipeline samples_names.txt hg19
+  ```
+
 **Apple OSX**
 
 To install HAYSTACK on OSX you need the _Command Line Tools_ (usually shipped with Xcode). 
