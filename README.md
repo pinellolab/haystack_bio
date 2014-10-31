@@ -57,7 +57,7 @@ If you want to install HAYSTACK on a different location run the following comman
 The current version is compatible only with Unix like operating systems on 64 bit architectures and was tested on:
 - CentOS 6.5
 - Debian 6.0
-- Ubuntu 12.04 LTS
+- Ubuntu 12.04 and 14.04 LTS
 - OSX Maverick and Mountain Lion
 - Cygwin x86_64 (1.7) on Windows 7/8 64 bit
  
