@@ -97,7 +97,7 @@ Operating System Notes
  
 5. Download and run the test dataset
   ```
-  cd && source .bash_profile
+  cd && source .bashrc
   wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_test_dataset_h3k27ac.tar.gz
   tar xvzf haystack_test_dataset_h3k27ac.tar.gz
   cd TEST_DATASET
