@@ -69,7 +69,7 @@ class Genome_2bit:
         counting=self.estimate_background()
         with open(filename,'w+') as outfile:
             for nt in counting.keys():
-                outfile.write('%s\t%2.4f\n' % (nt,counting[nt]))
+                outfile.write('%s\t%2.4f\n' % (nt.upper(),counting[nt]))
 
     def write_chr_len(self,filename):
         with open(filename,'w+') as outfile:
