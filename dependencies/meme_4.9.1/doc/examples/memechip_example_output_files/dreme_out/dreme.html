@@ -1,0 +1,3462 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>DREME</title>
+<style type="text/css">
+    
+    /* START INCLUDED FILE "meme.css" */
+        /* The following is the content of meme.css */
+        body { background-color:white; font-size: 12px; font-family: Verdana, Arial, Helvetica, sans-serif;}
+
+        div.help {
+          display: inline-block;
+          margin: 0px;
+          padding: 0px;
+          width: 12px;
+          height: 13px;
+          cursor: pointer;
+          background-image: url("help.gif");
+          background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAANAQMAAACn5x0BAAAAAXNSR0IArs4c6QAAAAZQTFRFAAAAnp6eqp814gAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH2gMJBQgGYqhNZQAAACZJREFUCNdj+P+BoUGAoV+AYeYEEGoWYGgTYGgRAAm2gRGQ8f8DAOnhC2lYnqs6AAAAAElFTkSuQmCC");
+        }
+
+        div.help2 {
+          color: #999;
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          border: 1px solid #999;
+          font-size: 13px;
+          line-height:12px;
+          font-family: Helvetica, sans-serif;
+          font-weight: bold;
+          font-style: normal;
+          cursor: pointer;
+        }
+        div.help2:hover {
+          color: #000;
+          border-color: #000;
+        }
+        
+        p.spaced { line-height: 1.8em;}
+        
+        span.citation { font-family: "Book Antiqua", "Palatino Linotype", serif; color: #004a4d;}
+
+        p.pad { padding-left: 30px; padding-top: 5px; padding-bottom: 10px;}
+
+        td.jump { font-size: 13px; color: #ffffff; background-color: #00666a;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        a.jump { margin: 15px 0 0; font-style: normal; font-variant: small-caps;
+          font-weight: bolder; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h2.mainh {font-size: 1.5em; font-style: normal; margin: 15px 0 0;
+          font-variant: small-caps; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h2.line {border-bottom: 1px solid #CCCCCC; font-size: 1.5em; font-style: normal;
+          margin: 15px 0 0; padding-bottom: 3px; font-variant: small-caps;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h4 {border-bottom: 1px solid #CCCCCC; font-size: 1.2em; font-style: normal;
+          margin: 10px 0 0; padding-bottom: 3px; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h5 {margin: 0px}
+
+        a.help { font-size: 9px; font-style: normal; text-transform: uppercase;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        div.pad { padding-left: 30px; padding-top: 5px; padding-bottom: 10px;}
+        
+        div.pad1 { margin: 10px 5px;}
+
+        div.pad2 { margin: 25px 5px 5px;}
+        h2.pad2 { padding: 25px 5px 5px;}
+
+        div.pad3 { padding: 5px 0px 10px 30px;}
+
+        div.box { border: 2px solid #CCCCCC; padding:10px;}
+
+        div.bar { border-left: 7px solid #00666a; padding:5px; margin-top:25px; }
+
+        div.subsection {margin:25px 0px;}
+
+        img {border:0px none;}
+
+        th.majorth {text-align:left;}
+        th.minorth {font-weight:normal; text-align:left; width:8em; padding: 3px 0px;}
+        th.actionth {font-weight:normal; text-align:left;}
+
+        .strand_name {text-align:left;}
+        .strand_side {padding:0px 10px;}
+        .strand_start {padding:0px 10px;}
+        .strand_pvalue {text-align:center; padding:0px 10px;}
+        .strand_lflank {text-align:right; padding-right:5px; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace; color:gray;}
+        .strand_seq {text-align:center; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace;}
+        .strand_rflank {text-align:left; padding-left:5px; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace; color:gray;}
+
+        .block_td {height:25px;}
+        .block_container {position:relative; width:98%; height:25px; padding:0px; margin: 0px 0px 0px 1em;}
+        .block_motif {position:absolute; z-index:3; height:12px; top:0px; text-align:center; vertical-align:middle; background-color:cyan;}
+        .block_rule {position:absolute; z-index:2; width:100%; height:1px; top:12px; left:0px; background-color:gray;}
+        .block_plus_sym {position:absolute; z-index:4; line-height:12px; top:0px; left:-1em;}
+        .block_minus_sym {position:absolute; z-index:4; line-height:12px; top:13px; left:-1em;}
+
+        .tic_major {position:absolute; border-left:2px solid blue; height:0.5em; top:0em;}
+        .tic_minor {position:absolute; border-left:1px solid blue; height:0.2em; top:0em;}
+        .tic_label {position:absolute; top:0.5em;  height: 1em; text-align:center; vertical-align:middle}
+
+        .explain h5 {font-size:1em; margin-left: 1em;}
+
+        div.doc {margin-left: 2em; margin-bottom: 3em;}
+        
+        div.tabArea {
+          font-size: 80%;
+          font-weight: bold;
+        }
+
+        a.tab {
+          background-color: #ddddff;
+          border: 1px solid #000000;
+          padding: 2px 1em 2px 1em;
+          text-decoration: none;
+        }
+        div.tabArea.base a.tab {
+          border-top-width: 0px;
+        }
+        div.tabArea.top a.tab {
+          border-bottom-width: 0px;
+        }
+
+        a.tab, a.tab:visited {
+          color: #808080;
+        }
+
+        a.tab:hover {
+          background-color: #d0d0d0;
+          color: #606060;
+        }
+        a.tab.activeTab, a.tab.activeTab:hover, a.tab.activeTab:visited {
+          background-color: #f0f0f0;
+          color: #000000;
+        }
+        div.tabMain {
+          border: 1px solid #000000;
+          background-color: #ffffff;
+          padding: 5px;
+          margin-right: 5px;
+        }
+        th.trainingset {
+          border-bottom: thin dashed black; 
+          font-weight:normal; 
+          padding:0px 10px;
+        }
+        .dnaseq {
+          font-weight: bold; 
+          font-size: large; 
+          font-family: 'Courier New', Courier, monospace;
+        }
+        .dna_A {
+          color: rgb(204,0,0);
+        }
+        .dna_C {
+          color: rgb(0,0,204);
+        }
+        .dna_G {
+          color: rgb(255,179,0);
+        }
+        .dna_T {
+          color: rgb(0,128,0);
+        }
+    /* END INCLUDED FILE "meme.css" */
+    
+  
+    
+    /* START INCLUDED FILE "dreme-to-html.css" */
+      table.dreme_motifs tr th, table.dreme_motifs tr td {
+        padding: 0px 10px;
+      }
+
+      div.popup_wrapper {
+        position:fixed; 
+        z-index:2;
+        width:100%; 
+        height:0; 
+        top:50%; 
+        left:0;
+      }
+
+      div.popup {
+        width: 400px; 
+        z-index:2;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 5px;
+        background: #FFF;
+        border-style: double;
+        border-width: 5px;
+        border-color: #00666a;
+        position:relative; 
+      }
+
+      div.grey_background {
+        position:fixed; 
+        z-index: 1;
+        background-color: #000;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+        filter: alpha(opacity=50);
+        opacity: 0.5;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+
+      }
+      td.symaction {
+        text-align: center;
+      }
+      *.symaction {
+        font-size: 20px;
+      }
+
+      div.close {
+        cursor: pointer;
+        border: 1px solid black; 
+        width:15px; 
+        height:15px; 
+        line-height:15px; /* this causes vertical centering */
+        text-align:center; 
+        background-color:#FFF; 
+        color:#000; 
+        font-size:15px;
+        font-family:monospace;
+      }
+
+      div.close:hover {
+        color:#FFF;
+        background-color:#000; 
+      }
+
+      div.navnum {
+        width:100%; 
+        height:20px; 
+        line-height:20px; 
+        text-align:center; 
+        font-size:medium;
+      }
+
+      a.navarrow {
+        font-size: 30px;
+        text-decoration:none;
+      }
+
+      a.inactive {
+        color:#CCC;
+      }
+
+      div.actionbutton { 
+        cursor: pointer;
+        font-size: 18px;
+        line-height:20px; 
+        padding: 5px; 
+        margin: 10px 0; 
+        border: 1px solid black;
+      }
+
+      div.actionbutton:hover {
+        color:#FFF;
+        background-color:#000;
+      }
+
+      div.pop_content {
+        position:absolute;
+        z-index:1;
+        width:300px;
+        padding: 5px;
+        background: #E4ECEC;
+        font-size: 12px;
+        font-family: Arial;
+        border-style: double;
+        border-width: 3px;
+        border-color: #AA2244;
+        display:none;
+      }
+      span.sort_dir {
+        text-decoration: none;
+      }
+
+      div.section_title {
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      div.section_title.inactive {
+        color: #000;
+      }
+
+      div.section_title.inactive:hover {
+        color: #000;
+        text-decoration:underline;
+      }
+
+      div.section_title label {
+        cursor: pointer;
+      }
+
+      span.ellipsis {
+        display: inline-block;
+        border: 1px solid black;
+        padding: 0 2px;
+        margin: 0 2px;
+      }
+
+      div.section_title.inactive:hover span.ellipsis {
+        color: #FFF;
+        background-color: #000;
+      }
+
+      div.section_title.inactive span.toggle {
+        color: #000;
+      }
+
+      div.section_data {
+        margin-left: 20px;
+      }
+      tr.rule td, tr.rule th {
+        border-bottom: 1px solid #CCC;
+      }
+
+      h1.compact, h2.compact, h3.compact, h4.compact, h5.compact, h6.compact {
+        margin:0; 
+        padding:0;
+      }
+
+      ul.programs {
+        margin-top: 0;
+        padding-top: 0;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        margin-left: 0;
+        padding-left: 0;
+        list-style: none;
+        border-bottom: 1px solid black;
+      }
+
+      ul.programs li {
+        border: 1px solid black;
+        border-bottom-width: 0;
+        background-color: #EFE;
+        cursor: default;
+      }
+
+      ul.programs li.active {
+        background-color: #CFC;
+      }
+
+      ul.programs li.selected {
+        background-color: #262;
+        color: #FFF;
+      }
+
+      div.programs_scroll {
+        width: 100%; 
+        height: 90px; 
+        overflow-y: auto; 
+        overflow-x: hidden;
+        margin: 0 auto; 
+      }
+    /* END INCLUDED FILE "dreme-to-html.css" */
+    
+  </style>
+<script type="text/javascript">
+      var pos_count = 820;
+      var neg_count = 820;
+      var motif_seqs = [];
+      motif_seqs[1] = ["m01", "MCRCCCW", "WGGGYGK", 7, 474, 384, 77, 6.7e-068, 2.2e-063, 2.2e-063, [["ACACCCA", 99, 12, 1.5e-019, 4.9e-015], ["ACACCCT", 93, 18, 1.8e-014, 6.0e-010], ["ACGCCCT", 45, 3, 3.8e-011, 1.3e-006], ["ACGCCCA", 39, 2, 2.6e-010, 8.5e-006], ["CCACCCA", 69, 19, 1.8e-008, 5.8e-004], ["CCGCCCT", 31, 5, 5.3e-006, 1.7e-001], ["CCACCCT", 49, 16, 1.8e-005, 5.9e-001], ["CCGCCCA", 21, 5, 1.2e-003, 3.8e+001]]];
+      motif_seqs[2] = ["m02", "TTATCW", "WGATAA", 6, 285, 255, 49, 6.0e-042, 1.9e-037, 4.4e-038, [["TTATCT", 157, 20, 1.2e-030, 4.0e-026], ["TTATCA", 114, 29, 1.9e-014, 6.0e-010]]];
+      motif_seqs[3] = ["m03", "ARATA", "TATYT", 5, 259, 227, 140, 1.6e-007, 5.0e-003, 1.3e-018, [["AGATA", 135, 73, 2.6e-006, 8.3e-002], ["AAATA", 108, 76, 7.6e-003, 2.4e+002]]];
+      motif_seqs[4] = ["m04", "CCMCACCC", "GGGTGKGG", 8, 29, 29, 2, 1.9e-007, 5.7e-003, 3.3e-035, [["CCCCACCC", 14, 0, 5.8e-005, 1.8e+000], ["CCACACCC", 15, 2, 1.1e-003, 3.4e+001]]];
+      motif_seqs[5] = ["m05", "ACAGMTG", "CAKCTGT", 7, 66, 65, 20, 2.7e-007, 8.2e-003, 5.2e-003, [["ACAGATG", 27, 6, 1.4e-004, 4.3e+000], ["ACAGCTG", 38, 14, 5.0e-004, 1.5e+001]]];
+
+    
+    /* START INCLUDED FILE "delay_draw.js" */
+      // 
+      // return true if any part of the passed element is visible in the viewport
+      //
+      function element_in_viewport(elem) {
+        var rect = elem.getBoundingClientRect();
+        return (
+            rect.top < (window.innerHeight || document.body.clientHeight) &&
+            rect.bottom > 0 &&
+            rect.left < (window.innerWidth || document.body.clientWidth) &&
+            rect.right > 0
+            );
+      }
+
+      //
+      // Functions to delay a drawing task until it is required or it would not lag the display to do so
+      //
+
+      // a list of items still to be drawn
+      var drawable_list = [];
+      // the delay between drawing objects that are not currently visible
+      var draw_delay = 1;
+      // the delay after a user interaction
+      var user_delay = 300;
+      // the delay after a user has stopped scrolling and is viewing the stuff drawn on the current page
+      var stop_delay = 300;
+      // the timer handle; allows resetting of the timer after user interactions
+      var draw_timer = null;
+
+      //
+      // Drawable
+      //
+      // elem - a page element which defines the position on the page that drawing is to be done
+      // task - an object with the method run which takes care of painting the object
+      //
+      var Drawable = function(elem, task) {
+        this.elem = elem;
+        this.task = task;
+      }
+
+      //
+      // Drawable.is_visible
+      //
+      // Determines if the element is visible in the viewport
+      //
+      Drawable.prototype.is_visible = function() {
+        return element_in_viewport(this.elem);
+      }
+
+      //
+      // Drawable.run
+      //
+      // Run the task held by the drawable
+      Drawable.prototype.run = function() {
+        if (this.task) this.task.run();
+        this.task = null;
+      }
+
+      //
+      // Drawable.run
+      //
+      // Run the task iff visible
+      // returns true if the task ran or has already run
+      Drawable.prototype.run_visible = function() {
+        if (this.task) {
+          if (element_in_viewport(this.elem)) {
+            this.task.run();
+            this.task = null;
+            return true;
+          }
+          return false;
+        } else {
+          return true;
+        }
+      }
+
+      //
+      // draw_on_screen
+      //
+      // Checks each drawable object and draws those on screen.
+      //
+      function draw_on_screen() {
+        var found = false;
+        for (var i = 0; i < drawable_list.length; i++) {
+          if (drawable_list[i].run_visible()) {
+            drawable_list.splice(i--, 1);
+            found = true;
+          }
+        }
+        return found;
+      }
+
+      //
+      // process_draw_tasks
+      //
+      // Called on a delay to process the next avaliable
+      // draw task.
+      //
+      function process_draw_tasks() {
+        var delay = draw_delay;
+        draw_timer = null;
+        if (drawable_list.length == 0) return; //no more tasks
+        if (draw_on_screen()) {
+          delay = stop_delay; //give the user a chance to scroll
+        } else {
+          //get next task
+          var drawable = drawable_list.shift();
+          drawable.task.run();
+        }
+        //allow UI updates between tasks
+        draw_timer = window.setTimeout("process_draw_tasks()", delay);
+      }
+
+      //
+      // delayed_process_draw_tasks
+      //
+      // Call process_draw_tasks after a short delay.
+      // The delay serves to group multiple redundant events.       
+      // Should be set as event handler for onscroll and onresize.
+      //
+      function delayed_process_draw_tasks() {
+        //reset the timer
+        if (drawable_list.length > 0) { 
+          if (draw_timer != null) clearTimeout(draw_timer);
+          draw_timer = window.setTimeout("process_draw_tasks()", user_delay);
+        }
+      }
+
+      //
+      // add_draw_task
+      //
+      // Add a drawing task to be called immediately if it is
+      // visible, or to be called on a delay to reduce stuttering
+      // effect on the web browser.
+      function add_draw_task(elem, task) {
+        drawable = new Drawable(elem, task);
+        if (drawable.is_visible()) {
+          task.run();
+        } else {
+          drawable_list.push(drawable);
+          //reset timer
+          if (draw_timer != null) clearTimeout(draw_timer);
+          draw_timer = window.setTimeout("process_draw_tasks()", user_delay);
+        }
+      }
+
+    /* END INCLUDED FILE "delay_draw.js" */
+    
+  
+    
+    /* START INCLUDED FILE "motif_logo.js" */
+//======================================================================
+// start Alphabet object
+//======================================================================
+var Alphabet = function (alphabet, bg) {
+  "use strict";
+  var is_letter, is_prob, pos, letter, parts, i, freq;
+  //variable prototype
+  this.freqs = new Array();
+  this.alphabet = new Array();
+  this.letter_count = 0;
+  //construct
+  is_letter = /^\w$/;
+  is_prob = /^((1(\.0+)?)|(0(\.\d+)?))$/;
+  for (pos = 0; pos < alphabet.length; pos++) {
+    letter = alphabet.charAt(pos);
+    if (is_letter.test(letter)) {
+      this.alphabet[this.letter_count] = letter.toUpperCase();
+      this.freqs[this.letter_count] = -1;
+      this.letter_count++;
+    }
+  }
+  if (typeof bg !== "undefined") {
+    parts = bg.split(/\s+/);
+    for (i = 0, pos = 0; (i + 1) < parts.length; i += 2) {
+      letter = parts[i];
+      freq = parts[i+1];
+      if (is_letter.test(letter) && is_prob.test(freq)) {
+        letter = letter.toUpperCase();          //find the letter it matches
+        for (;pos < this.letter_count; pos++) {
+          if (this.alphabet[pos] == letter) {
+            break;
+          }
+        }
+        if (pos >= this.letter_count) {
+          throw new Error("NOT_IN_ALPHABET");
+        }
+        this.freqs[pos] = (+freq);
+      }
+    }
+  } else {
+    //assume uniform background
+    freq = 1.0 / this.letter_count;
+    for (pos = 0; pos < this.letter_count; pos++) {
+      this.freqs[pos] = freq;
+    }
+  }
+};
+
+
+Alphabet.prototype.get_ic = function() {
+  "use strict";
+  if (this.is_nucleotide()) {
+    return 2;
+  } else {
+    return Math.log(20) / Math.LN2;
+  }
+};
+
+Alphabet.prototype.get_size = function() {
+  "use strict";
+  return this.letter_count;
+};
+
+Alphabet.prototype.get_letter = function(alph_index) {
+  "use strict";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  return this.alphabet[alph_index];
+};
+
+Alphabet.prototype.get_bg_freq = function(alph_index) {
+  "use strict";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  if (this.freqs[alph_index] == -1) {
+    throw new Error("BG_FREQ_NOT_SET");
+  }
+  return this.freqs[alph_index];
+};
+
+Alphabet.prototype.get_colour = function(alph_index) {
+  "use strict";
+  var red, blue, orange, green, yellow, purple, magenta, pink, turquoise;
+  red = "rgb(204,0,0)";
+  blue = "rgb(0,0,204)";
+  orange = "rgb(255,179,0)";
+  green = "rgb(0,128,0)";
+  yellow = "rgb(255,255,0)";
+  purple = "rgb(204,0,204)";
+  magenta = "rgb(255,0,255)";
+  pink = "rgb(255,204,204)";
+  turquoise = "rgb(51,230,204)";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  if (this.is_nucleotide()) {
+    switch (this.alphabet[alph_index]) {
+      case "A":
+        return red;
+      case "C":
+        return blue;
+      case "G":
+        return orange;
+      case "T":
+        return green;
+      default:
+        throw new Error("Invalid nucleotide letter");
+    }
+  } else {
+    switch (this.alphabet[alph_index]) {
+      case "A":
+      case "C":
+      case "F":
+      case "I":
+      case "L":
+      case "V":
+      case "W":
+      case "M":
+        return blue;
+      case "N":
+      case "Q":
+      case "S":
+      case "T":
+        return green;
+      case "D":
+      case "E":
+        return magenta;
+      case "K":
+      case "R":
+        return red;
+      case "H":
+        return pink;
+      case "G":
+        return orange;
+      case "P":
+        return yellow;
+      case "Y":
+        return turquoise;
+      default:
+        throw new Error("Invalid protein letter");
+    }
+  }
+  return "black";
+};
+
+Alphabet.prototype.is_ambig = function(alph_index) {
+  "use strict";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  if (this.is_nucleotide()) {
+    return ("ACGT".indexOf(this.alphabet[alph_index]) == -1);
+  } else {
+    return ("ACDEFGHIKLMNPQRSTVWY".indexOf(this.alphabet[alph_index]) == -1);
+  }
+};
+
+Alphabet.prototype.get_index = function(letter) {
+  "use strict";
+  var i;
+  for (i = 0; i < this.letter_count; i++) {
+    if (this.alphabet[i] == letter.toUpperCase()) {
+      return i;
+    }
+  }
+  throw new Error("UNKNOWN_LETTER");
+};
+
+Alphabet.prototype.is_nucleotide = function() {
+  "use strict";
+  //TODO basic method, make better
+  if (this.letter_count < 20) {
+    return true;
+  }
+  return false;
+};
+
+Alphabet.prototype.toString = function() {
+  "use strict";
+  return (this.is_nucleotide() ? "Nucleotide" : "Protein") + 
+    " Alphabet " + (this.alphabet.join(""));
+};
+
+//======================================================================
+// end Alphabet object
+//======================================================================
+
+//======================================================================
+// start Symbol object
+//======================================================================
+var Symbol = function(alph_index, scale, alphabet) {
+  "use strict";
+  //variable prototype
+  this.symbol = alphabet.get_letter(alph_index);
+  this.scale = scale;
+  this.colour = alphabet.get_colour(alph_index);
+};
+
+Symbol.prototype.get_symbol = function() {
+  "use strict";
+  return this.symbol;
+};
+
+Symbol.prototype.get_scale = function() {
+  "use strict";
+  return this.scale;
+};
+
+Symbol.prototype.get_colour = function() {
+  "use strict";
+  return this.colour;
+};
+
+Symbol.prototype.toString = function() {
+  "use strict";
+  return this.symbol + " " + (Math.round(this.scale*1000)/10) + "%";
+};
+
+function compare_symbol(sym1, sym2) {
+  "use strict";
+  if (sym1.get_scale() < sym2.get_scale()) {
+    return -1;
+  } else if (sym1.get_scale() > sym2.get_scale()) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+//======================================================================
+// end Symbol object
+//======================================================================
+
+//======================================================================
+// start Pspm object
+//======================================================================
+var Pspm = function(matrix, name, ltrim, rtrim, nsites, evalue) {
+  "use strict";
+  var row, col, data, row_sum, delta, evalue_re;
+  if (typeof name !== "string") {
+    name = "";
+  }
+  this.name = name;
+  //construct
+  if (matrix instanceof Pspm) {
+    // copy constructor
+    this.alph_length = matrix.alph_length;
+    this.motif_length = matrix.motif_length;
+    this.name = matrix.name;
+    this.nsites = matrix.nsites;
+    this.evalue = matrix.evalue;
+    this.ltrim = matrix.ltrim;
+    this.rtrim = matrix.rtrim;
+    this.pspm = [];
+    for (row = 0; row < matrix.motif_length; row++) {
+      this.pspm[row] = [];
+      for (col = 0; col < matrix.alph_length; col++) {
+        this.pspm[row][col] = matrix.pspm[row][col];
+      }
+    }
+  } else {
+    // check parameters
+    if (typeof ltrim === "undefined") {
+      ltrim = 0;
+    } else if (typeof ltrim !== "number" || ltrim % 1 !== 0 || ltrim < 0) {
+      throw new Error("ltrim must be a non-negative integer, got: " + ltrim);
+    }
+    if (typeof rtrim === "undefined") {
+      rtrim = 0;
+    } else if (typeof rtrim !== "number" || rtrim % 1 !== 0 || rtrim < 0) {
+      throw new Error("rtrim must be a non-negative integer, got: " + rtrim);
+    }
+    if (typeof nsites !== "undefined") {
+      if (typeof nsites !== "number" || nsites <= 0) {
+        throw new Error("nsites must be a positive number, got: " + nsites);
+      }
+    }
+    if (typeof evalue !== "undefined") {
+      if (typeof evalue === "number") {
+        if (evalue < 0) {
+          throw new Error("evalue must be a non-negative number, got: " + evalue);
+        }
+      } else if (typeof evalue === "string") {
+        evalue_re = /^((?:[+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)|inf)$/;
+        if (!evalue_re.test(evalue)) {
+          throw new Error("evalue must be a non-negative number, got: " + evalue);
+        }
+      } else {
+        throw new Error("evalue must be a non-negative number, got: " + evalue);
+      }
+    }
+    // set properties
+    this.name = name;
+    this.nsites = nsites;
+    this.evalue = evalue;
+    this.ltrim = ltrim;
+    this.rtrim = rtrim;
+    if (typeof matrix === "string") {
+      // string constructor
+      data = parse_pspm_string(matrix);
+      this.alph_length = data["alph_length"];
+      this.motif_length = data["motif_length"];
+      this.pspm = data["pspm"];
+      if (typeof this.evalue === "undefined") {
+        if (typeof data["evalue"] !== "undefined") {
+          this.evalue = data["evalue"];
+        } else {
+          this.evalue = 0;
+        }
+      }
+      if (typeof this.nsites === "undefined") {
+        if (typeof data["nsites"] === "number") {
+          this.nsites = data["nsites"];
+        } else {
+          this.nsites = 20;
+        }
+      }
+    } else {
+      // assume pspm is a nested array
+      this.motif_length = matrix.length;
+      this.alph_length = (matrix.length > 0 ? matrix[0].length : 0);
+      if (typeof this.nsites === "undefined") {
+        this.nsites = 20;
+      }
+      if (typeof this.evalue === "undefined") {
+        this.evalue = 0;
+      }
+      this.pspm = [];
+      // copy pspm and check
+      for (row = 0; row < this.motif_length; row++) {
+        if (this.alph_length != matrix[row].length) {
+          throw new Error("COLUMN_MISMATCH");
+        }
+        this.pspm[row] = [];
+        row_sum = 0;
+        for (col = 0; col < this.alph_length; col++) {
+          this.pspm[row][col] = matrix[row][col];
+          row_sum += this.pspm[row][col];
+        }
+        delta = 0.1;
+        if (isNaN(row_sum) || (row_sum > 1 && (row_sum - 1) > delta) || 
+            (row_sum < 1 && (1 - row_sum) > delta)) {
+          throw new Error("INVALID_SUM");
+        }
+      }
+    }
+  }
+};
+
+Pspm.prototype.copy = function() {
+  "use strict";
+  return new Pspm(this);
+};
+
+Pspm.prototype.reverse_complement = function(alphabet) {
+  "use strict";
+  var x, y, temp, a_index, c_index, g_index, t_index, i, row, temp_trim;
+  if (this.alph_length != alphabet.get_size()) {
+    throw new Error("ALPHABET_MISMATCH");
+  }
+  if (!alphabet.is_nucleotide()) {
+    throw new Error("NO_PROTEIN_RC");
+  }
+  //reverse
+  x = 0;
+  y = this.motif_length-1;
+  while (x < y) {
+    temp = this.pspm[x];
+    this.pspm[x] = this.pspm[y];
+    this.pspm[y] = temp;
+    x++;
+    y--;
+  }
+  //complement
+  a_index = alphabet.get_index("A");
+  c_index = alphabet.get_index("C");
+  g_index = alphabet.get_index("G");
+  t_index = alphabet.get_index("T");
+  for (i = 0; i < this.motif_length; i++) {
+    row = this.pspm[i];
+    //swap A and T
+    temp = row[a_index];
+    row[a_index] = row[t_index];
+    row[t_index] = temp;
+    //swap C and G
+    temp = row[c_index];
+    row[c_index] = row[g_index];
+    row[g_index] = temp;
+  }
+  //swap triming
+  temp_trim = this.ltrim;
+  this.ltrim = this.rtrim;
+  this.rtrim = temp_trim;
+  //note that ambigs are ignored because they don't effect motifs
+  return this; //allow function chaining...
+};
+
+Pspm.prototype.get_stack = function(position, alphabet) {
+  "use strict";
+  var row, stack_ic, alphabet_ic, stack, i, sym;
+  if (this.alph_length != alphabet.get_size()) {
+    throw new Error("ALPHABET_MISMATCH");
+  }
+  row = this.pspm[position];
+  stack_ic = this.get_stack_ic(position, alphabet);
+  alphabet_ic = alphabet.get_ic();
+  stack = [];
+  for (i = 0; i < this.alph_length; i++) {
+    if (alphabet.is_ambig(i)) {
+      continue;
+    }
+    sym = new Symbol(i, row[i]*stack_ic/alphabet_ic, alphabet);
+    if (sym.get_scale() <= 0) {
+      continue;
+    }
+    stack.push(sym);
+  }
+  stack.sort(compare_symbol);
+  return stack;
+};
+
+Pspm.prototype.get_stack_ic = function(position, alphabet) {
+  "use strict";
+  var row, H, i;
+  if (this.alph_length != alphabet.get_size()) {
+    throw new Error("ALPHABET_MISMATCH");
+  }
+  row = this.pspm[position];
+  H = 0;
+  for (i = 0; i < this.alph_length; i++) {
+    if (alphabet.is_ambig(i)) {
+      continue;
+    }
+    if (row[i] === 0) {
+      continue;
+    }
+    H -= (row[i] * (Math.log(row[i]) / Math.LN2));
+  }
+  return alphabet.get_ic() - H;
+};
+
+Pspm.prototype.get_error = function(alphabet) {
+  "use strict";
+  var asize;
+  if (this.nsites === 0) {
+    return 0;
+  }
+  if (alphabet.is_nucleotide()) {
+    asize = 4;
+  } else {
+    asize = 20;
+  }
+  return (asize-1) / (2 * Math.log(2)*this.nsites);
+};
+
+Pspm.prototype.get_motif_length = function() {
+  "use strict";
+  return this.motif_length;
+};
+
+Pspm.prototype.get_alph_length = function() {
+  "use strict";
+  return this.alph_length;
+};
+
+Pspm.prototype.get_left_trim = function() {
+  "use strict";
+  return this.ltrim;
+};
+
+Pspm.prototype.get_right_trim = function() {
+  "use strict";
+  return this.rtrim;
+};
+
+Pspm.prototype.as_pspm = function() {
+  "use strict";
+  var out, row, col;
+  out = "letter-probability matrix: alength= " + this.alph_length + 
+      " w= " + this.motif_length + " nsites= " + this.nsites + 
+      " E= " + (typeof this.evalue === "number" ? 
+          this.evalue.toExponential() : this.evalue) + "\n";
+  for (row = 0; row < this.motif_length; row++) {
+    for (col = 0; col < this.alph_length; col++) {
+      if (col !== 0) {
+        out += " ";
+      }
+      out += this.pspm[row][col].toFixed(6);
+    }
+    out += "\n";
+  }
+  return out;
+};
+
+Pspm.prototype.as_pssm = function(alphabet, pseudo) {
+  "use strict";
+  var out, log2, total, row, col, p, bg, p2, score;
+  if (typeof pseudo === "undefined") {
+    pseudo = 0.1;
+  } else if (typeof pseudo !== "number") {
+    throw new Error("Expected number for pseudocount");
+  }
+  out = "log-odds matrix: alength= " + this.alph_length + 
+      " w= " + this.motif_length + 
+      " E= " + (typeof this.evalue == "number" ? 
+          this.evalue.toExponential() : this.evalue) + "\n";
+  log2 = Math.log(2);
+  total = this.nsites + pseudo;
+  for (row = 0; row < this.motif_length; row++) {
+    for (col = 0; col < this.alph_length; col++) {
+      if (col !== 0) {
+        out += " ";
+      }
+      p = this.pspm[row][col];
+      // to avoid log of zero we add a pseudo count
+      bg = alphabet.get_bg_freq(col);
+      p2 = (p * this.nsites + bg * pseudo) / total;
+      // now calculate the score
+      score = -10000;
+      if (p2 > 0) {
+        score = Math.round((Math.log(p2 / bg) / log2) * 100);
+      }
+      out += score;
+    }
+    out += "\n";
+  }
+  return out;
+};
+
+Pspm.prototype.toString = function() {
+  "use strict";
+  var str, i, row;
+  str = "";
+  for (i = 0; i < this.pspm.length; i++) {
+    row = this.pspm[i];
+    str += row.join("\t") + "\n";
+  }
+  return str;
+};
+
+function parse_pspm_properties(str) {
+  "use strict";
+  var parts, i, eqpos, before, after, properties, prop, num, num_re;
+  num_re = /^((?:[+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)|inf)$/;
+  parts = trim(str).split(/\s+/);
+  // split up words containing =
+  for (i = 0; i < parts.length;) {
+    eqpos = parts[i].indexOf("=");
+    if (eqpos != -1) {
+      before = parts[i].substr(0, eqpos);
+      after = parts[i].substr(eqpos+1);
+      if (before.length > 0 && after.length > 0) {
+        parts.splice(i, 1, before, "=", after);
+        i += 3;
+      } else if (before.length > 0) {
+        parts.splice(i, 1, before, "=");
+        i += 2;
+      } else if (after.length > 0) {
+        parts.splice(i, 1, "=", after);
+        i += 2;
+      } else {
+        parts.splice(i, 1, "=");
+        i++;
+      }
+    } else {
+      i++;
+    }
+  }
+  properties = {};
+  for (i = 0; i < parts.length; i += 3) {
+    if (parts.length - i < 3) {
+      throw new Error("Expected PSPM property was incomplete. "+
+          "Remaing parts are: " + parts.slice(i).join(" "));
+    }
+    if (parts[i+1] !== "=") {
+      throw new Error("Expected '=' in PSPM property between key and " +
+          "value but got " + parts[i+1]); 
+    }
+    prop = parts[i].toLowerCase();
+    num = parts[i+2];
+    if (!num_re.test(num)) {
+      throw new Error("Expected numeric value for PSPM property '" + 
+          prop + "' but got '" + num + "'");
+    }
+    properties[prop] = num;
+  }
+  return properties;
+}
+
+function parse_pspm_string(pspm_string) {
+  "use strict";
+  var header_re, lines, first_line, line_num, col_num, alph_length, 
+      motif_length, nsites, evalue, pspm, i, line, match, props, parts,
+      j, prob;
+  header_re = /^letter-probability\s+matrix:(.*)$/i;
+  lines = pspm_string.split(/\n/);
+  first_line = true;
+  line_num = 0;
+  col_num = 0;
+  alph_length;
+  motif_length;
+  nsites;
+  evalue;
+  pspm = [];
+  for (i = 0; i < lines.length; i++) {
+    line = trim(lines[i]);
+    if (line.length === 0) { 
+      continue;
+    }
+    // check the first line for a header though allow matrices without it
+    if (first_line) {
+      first_line = false;
+      match = header_re.exec(line);
+      if (match !== null) {
+        props = parse_pspm_properties(match[1]);
+        if (props.hasOwnProperty("alength")) {
+          alph_length = parseFloat(props["alength"]);
+          if (alph_length != 4 && alph_length != 20) {
+            throw new Error("PSPM property alength should be 4 or 20" +
+                " but got " + alph_length);
+          }
+        }
+        if (props.hasOwnProperty("w")) {
+          motif_length = parseFloat(props["w"]);
+          if (motif_length % 1 !== 0 || motif_length < 1) {
+            throw new Error("PSPM property w should be an integer larger " +
+                "than zero but got " + motif_length);
+          }
+        }
+        if (props.hasOwnProperty("nsites")) {
+          nsites = parseFloat(props["nsites"]);
+          if (nsites <= 0) {
+            throw new Error("PSPM property nsites should be larger than " +
+                "zero but got " + nsites);
+          }
+        }
+        if (props.hasOwnProperty("e")) {
+          evalue = props["e"];
+          if (evalue < 0) {
+            throw new Error("PSPM property evalue should be " +
+                "non-negative but got " + evalue);
+          }
+        }
+        continue;
+      }
+    }
+    pspm[line_num] = [];
+    col_num = 0;
+    parts = line.split(/\s+/);
+    for (j = 0; j < parts.length; j++) {
+      prob = parseFloat(parts[j]);
+      if (prob != parts[j] || prob < 0 || prob > 1) {
+        throw new Error("Expected probability but got '" + parts[j] + "'"); 
+      }
+      pspm[line_num][col_num] = prob;
+      col_num++;
+    }
+    line_num++;
+  }
+  if (typeof motif_length === "number") {
+    if (pspm.length != motif_length) {
+      throw new Error("Expected PSPM to have a motif length of " + 
+          motif_length + " but it was actually " + pspm.length);
+    }
+  } else {
+    motif_length = pspm.length;
+  }
+  if (typeof alph_length !== "number") {
+    alph_length = pspm[0].length;
+    if (alph_length != 4 && alph_length != 20) {
+      throw new Error("Expected length of first row in the PSPM to be " +
+          "either 4 or 20 but got " + alph_length);
+    }
+  }
+  for (i = 0; i < pspm.length; i++) {
+    if (pspm[i].length != alph_length) {
+      throw new Error("Expected PSPM row " + i + " to have a length of " + 
+          alph_length + " but the length was " + pspm[i].length);
+    }
+  }
+  return {"pspm": pspm, "motif_length": motif_length, 
+    "alph_length": alph_length, "nsites": nsites, "evalue": evalue};
+}
+//======================================================================
+// end Pspm object
+//======================================================================
+
+//======================================================================
+// start Logo object
+//======================================================================
+
+var Logo = function(alphabet, fine_text) {
+  "use strict";
+  this.alphabet = alphabet;
+  this.fine_text = fine_text;
+  this.pspm_list = [];
+  this.pspm_column = [];
+  this.rows = 0;
+  this.columns = 0;
+};
+
+Logo.prototype.add_pspm = function(pspm, column) {
+  "use strict";
+  var col;
+  if (typeof column === "undefined") {
+    column = 0;
+  } else if (column < 0) {
+    throw new Error("Column index out of bounds.");
+  }
+  this.pspm_list[this.rows] = pspm;
+  this.pspm_column[this.rows] = column;
+  this.rows++;
+  col = column + pspm.get_motif_length();
+  if (col > this.columns) {
+    this.columns = col;
+  }
+};
+
+Logo.prototype.get_columns = function() {
+  "use strict";
+  return this.columns;
+};
+
+Logo.prototype.get_rows = function() {
+  "use strict";
+  return this.rows;
+};
+
+Logo.prototype.get_pspm = function(row_index) {
+  "use strict";
+  if (row_index < 0 || row_index >= this.rows) {
+    throw new Error("INDEX_OUT_OF_BOUNDS");
+  }
+  return this.pspm_list[row_index];
+};
+
+Logo.prototype.get_offset = function(row_index) {
+  "use strict";
+  if (row_index < 0 || row_index >= this.rows) {
+    throw new Error("INDEX_OUT_OF_BOUNDS");
+  }
+  return this.pspm_column[row_index];
+};
+
+//======================================================================
+// end Logo object
+//======================================================================
+
+//======================================================================
+// start RasterizedAlphabet
+//======================================================================
+
+// Rasterize Alphabet
+// 1) Measure width of text at default font for all symbols in alphabet
+// 2) sort in width ascending
+// 3) Drop the top and bottom 10% (designed to ignore outliers like 'W' and 'I')
+// 4) Calculate the average as the maximum scaling factor (designed to stop I becoming a rectangular blob).
+// 5) Assume scale of zero would result in width of zero, interpolate scale required to make perfect width font
+// 6) Draw text onto temp canvas at calculated scale
+// 7) Find bounds of drawn text
+// 8) Paint on to another canvas at the desired height (but only scaling width to fit if larger).
+var RasterizedAlphabet = function(alphabet, font, target_width) {
+  "use strict";
+  var default_size, safety_pad, canvas, ctx, middle, baseline, widths, count,
+      letters, i, letter, size, tenpercent, avg_width, scale, 
+      target_height, raster;
+  //variable prototypes
+  this.lookup = []; //a map of letter to index
+  this.rasters = []; //a list of rasters
+  this.dimensions = []; //a list of dimensions
+
+  //construct
+  default_size = 60; // size of square to assume as the default width
+  safety_pad = 20; // pixels to pad around so we don't miss the edges
+  // create a canvas to do our rasterizing on
+  canvas = document.createElement("canvas");
+  // assume the default font would fit in a canvas of 100 by 100
+  canvas.width = default_size + 2 * safety_pad;
+  canvas.height = default_size + 2 * safety_pad;
+  // check for canvas support before attempting anything
+  if (!canvas.getContext) {
+    throw new Error("NO_CANVAS_SUPPORT");
+  }
+  ctx = canvas.getContext('2d');
+  // check for html5 text drawing support
+  if (!supports_text(ctx)) {
+    throw new Error("NO_CANVAS_TEXT_SUPPORT");
+  }
+  // calculate the middle
+  middle = Math.round(canvas.width / 2);
+  // calculate the baseline
+  baseline = Math.round(canvas.height - safety_pad);
+  // list of widths
+  widths = [];
+  count = 0;
+  letters = [];
+  //now measure each letter in the alphabet
+  for (i = 0; i < alphabet.get_size(); ++i) {
+    if (alphabet.is_ambig(i)) {
+      continue; //skip ambigs as they're never rendered
+    }
+    letter = alphabet.get_letter(i);
+    letters.push(letter);
+    this.lookup[letter] = count;
+    //clear the canvas
+    canvas.width = canvas.width;
+    // get the context and prepare to draw our width test
+    ctx = canvas.getContext('2d');
+    ctx.font = font;
+    ctx.fillStyle = alphabet.get_colour(i);
+    ctx.textAlign = "center";
+    ctx.translate(middle, baseline);
+    // draw the test text
+    ctx.fillText(letter, 0, 0);
+    //measure
+    size = canvas_bounds(ctx, canvas.width, canvas.height);
+    if (size.width === 0) {
+      throw new Error("INVISIBLE_LETTER"); //maybe the fill was white on white?
+    }
+    widths.push(size.width);
+    this.dimensions[count] = size;
+    count++;
+  }
+  //sort the widths
+  widths.sort(function(a,b) {return a - b;});
+  //drop 10% of the items off each end
+  tenpercent = Math.floor(widths.length / 10);
+  for (i = 0; i < tenpercent; ++i) {
+    widths.pop();
+    widths.shift();
+  }
+  //calculate average width
+  avg_width = 0;
+  for (i = 0; i < widths.length; ++i) {
+    avg_width += widths[i];
+  }
+  avg_width /= widths.length;
+  // calculate scales
+  for (i = 0; i < this.dimensions.length; ++i) {
+    size = this.dimensions[i];
+    // calculate scale
+    scale = target_width / Math.max(avg_width, size.width);
+    // estimate scaled height
+    target_height = size.height * scale;
+    // create an approprately sized canvas
+    raster = document.createElement("canvas");
+    raster.width = target_width; // if it goes over the edge too bad...
+    raster.height = target_height + safety_pad * 2;
+    // calculate the middle
+    middle = Math.round(raster.width / 2);
+    // calculate the baseline
+    baseline = Math.round(raster.height - safety_pad);
+    // get the context and prepare to draw the rasterized text
+    ctx = raster.getContext('2d');
+    ctx.font = font;
+    ctx.fillStyle = alphabet.get_colour(i);
+    ctx.textAlign = "center";
+    ctx.translate(middle, baseline);
+    ctx.save();
+    ctx.scale(scale, scale);
+    // draw the rasterized text
+    ctx.fillText(letters[i], 0, 0);
+    ctx.restore();
+    this.rasters[i] = raster;
+    this.dimensions[i] = canvas_bounds(ctx, raster.width, raster.height);
+  }
+};
+
+function canvas_bounds(ctx, cwidth, cheight) {
+  "use strict";
+  var data, r, c, top_line, bottom_line, left_line, right_line, 
+      txt_width, txt_height;
+  data = ctx.getImageData(0, 0, cwidth, cheight).data;
+  r = 0; c = 0; // r: row, c: column
+  top_line = -1; bottom_line = -1; left_line = -1; right_line = -1;
+  txt_width = 0; txt_height = 0;
+  // Find the top-most line with a non-white pixel
+  for (r = 0; r < cheight; r++) {
+    for (c = 0; c < cwidth; c++) {
+      if (data[r * cwidth * 4 + c * 4 + 3]) {
+        top_line = r;
+        break;
+      }
+    }
+    if (top_line != -1) {
+      break;
+    }
+  }
+  
+  //find the last line with a non-white pixel
+  if (top_line != -1) {
+    for (r = cheight-1; r >= top_line; r--) {
+      for(c = 0; c < cwidth; c++) {
+        if(data[r * cwidth * 4 + c * 4 + 3]) {
+          bottom_line = r;
+          break;
+        }
+      }
+      if (bottom_line != -1) {
+        break;
+      }
+    }
+    txt_height = bottom_line - top_line + 1;
+  }
+
+  // Find the left-most line with a non-white pixel
+  for (c = 0; c < cwidth; c++) {
+    for (r = 0; r < cheight; r++) {
+      if (data[r * cwidth * 4 + c * 4 + 3]) {
+        left_line = c;
+        break;
+      }
+    }
+    if (left_line != -1) {
+      break;
+    }
+  }
+
+  //find the right most line with a non-white pixel
+  if (left_line != -1) {
+    for (c = cwidth-1; c >= left_line; c--) {
+      for(r = 0; r < cheight; r++) {
+        if(data[r * cwidth * 4 + c * 4 + 3]) {
+          right_line = c;
+          break;
+        }
+      }
+      if (right_line != -1) {
+        break;
+      }
+    }
+    txt_width = right_line - left_line + 1;
+  }
+
+  //return the bounds
+  return {bound_top: top_line, bound_bottom: bottom_line, 
+    bound_left: left_line, bound_right: right_line, width: txt_width, 
+    height: txt_height};
+}
+
+RasterizedAlphabet.prototype.draw = function(ctx, letter, dx, dy, dWidth, dHeight) {
+  "use strict";
+  var index, raster, size;
+  index = this.lookup[letter];
+  raster = this.rasters[index];
+  size = this.dimensions[index];
+  ctx.drawImage(raster, 0, size.bound_top -1, raster.width, size.height+1, dx, dy, dWidth, dHeight);
+};
+
+//======================================================================
+// end RasterizedAlphabet
+//======================================================================
+
+//======================================================================
+// start LogoMetrics object
+//======================================================================
+
+var LogoMetrics = function(ctx, logo_columns, logo_rows, allow_space_for_names) {
+  "use strict";
+  var i, row_height;
+  if (typeof allow_space_for_names === "undefined") {
+    allow_space_for_names = false;
+  }
+  //variable prototypes
+  this.pad_top = 5;
+  this.pad_left = 10;
+  this.pad_right = 5;
+  this.pad_bottom = 0;
+  this.pad_middle = 20;
+  this.name_height = 14;
+  this.name_font = "bold " + this.name_height + "px Times, sans-serif";
+  this.name_spacer = 0;
+  this.y_label = "bits";
+  this.y_label_height = 12;
+  this.y_label_font = "bold " + this.y_label_height + "px Helvetica, sans-serif";
+  this.y_label_spacer = 3;
+  this.y_num_height = 12;
+  this.y_num_width = 0;
+  this.y_num_font = "bold " + this.y_num_height + "px Helvetica, sans-serif";
+  this.y_tic_width = 5;
+  this.stack_pad_left = 0;
+  this.stack_font = "bold 25px Helvetica, sans-serif";
+  this.stack_height = 90;
+  this.stack_width = 26;
+  this.stacks_pad_right = 5;
+  this.x_num_above = 2;
+  this.x_num_height = 12;
+  this.x_num_width = 0;
+  this.x_num_font = "bold " + this.x_num_height + "px Helvetica, sans-serif";
+  this.fine_txt_height = 6;
+  this.fine_txt_above = 2;
+  this.fine_txt_font = "normal " + this.fine_txt_height + "px Helvetica, sans-serif";
+  this.letter_metrics = new Array();
+  this.summed_width = 0;
+  this.summed_height = 0;
+  //calculate the width of the y axis numbers
+  ctx.font = this.y_num_font;
+  for (i = 0; i <= 2; i++) {
+    this.y_num_width = Math.max(this.y_num_width, ctx.measureText("" + i).width);
+  }
+  //calculate the width of the x axis numbers (but they are rotated so it becomes height)
+  ctx.font = this.x_num_font;
+  for (i = 1; i <= logo_columns; i++) {
+    this.x_num_width = Math.max(this.x_num_width, ctx.measureText("" + i).width);
+  }
+  
+  //calculate how much vertical space we want to draw this
+  //first we add the padding at the top and bottom since that's always there
+  this.summed_height += this.pad_top + this.pad_bottom;
+  //all except the last row have the same amount of space allocated to them
+  if (logo_rows > 1) {
+    row_height = this.stack_height + this.pad_middle;
+    if (allow_space_for_names) {
+      row_height += this.name_height;
+      //the label is allowed to overlap into the spacer
+      row_height += Math.max(this.y_num_height/2, this.name_spacer); 
+      //the label is allowed to overlap the space used by the other label
+      row_height += Math.max(this.y_num_height/2, this.x_num_height + this.x_num_above); 
+    } else {
+      row_height += this.y_num_height/2; 
+      //the label is allowed to overlap the space used by the other label
+      row_height += Math.max(this.y_num_height/2, this.x_num_height + this.x_num_above); 
+    }
+    this.summed_height += row_height * (logo_rows - 1);
+  }
+  //the last row has the name and fine text below it but no padding
+  this.summed_height += this.stack_height + this.y_num_height/2;
+  if (allow_space_for_names) {
+    this.summed_height += this.fine_txt_height + this.fine_txt_above + this.name_height;
+    this.summed_height += Math.max(this.y_num_height/2, 
+        this.x_num_height + this.x_num_above + this.name_spacer);
+  } else {
+    this.summed_height += Math.max(this.y_num_height/2, 
+        this.x_num_height + this.x_num_above + this.fine_txt_height + this.fine_txt_above);
+  }
+
+  //calculate how much horizontal space we want to draw this
+  //first add the padding at the left and right since that's always there
+  this.summed_width += this.pad_left + this.pad_right;
+  //add on the space for the y-axis label
+  this.summed_width += this.y_label_height + this.y_label_spacer;
+  //add on the space for the y-axis
+  this.summed_width += this.y_num_width + this.y_tic_width;
+  //add on the space for the stacks
+  this.summed_width += (this.stack_pad_left + this.stack_width) * logo_columns;
+  //add on the padding after the stacks (an offset from the fine text)
+  this.summed_width += this.stacks_pad_right;
+
+};
+
+//======================================================================
+// end LogoMetrics object
+//======================================================================
+
+//found this trick at http://talideon.com/weblog/2005/02/detecting-broken-images-js.cfm
+function image_ok(img) {
+  "use strict";
+  // During the onload event, IE correctly identifies any images that
+  // weren't downloaded as not complete. Others should too. Gecko-based
+  // browsers act like NS4 in that they report this incorrectly.
+  if (!img.complete) {
+    return false;
+  }
+  // However, they do have two very useful properties: naturalWidth and
+  // naturalHeight. These give the true size of the image. If it failed
+  // to load, either of these should be zero.
+  if (typeof img.naturalWidth !== "undefined" && img.naturalWidth === 0) {
+    return false;
+  }
+  // No other way of checking: assume it's ok.
+  return true;
+}
+  
+function supports_text(ctx) {
+  "use strict";
+  if (!ctx.fillText) {
+    return false;
+  }
+  if (!ctx.measureText) {
+    return false;
+  }
+  return true;
+}
+
+//draws the scale, returns the width
+function draw_scale(ctx, metrics, alphabet_ic) {
+  "use strict";
+  var tic_height, i;
+  tic_height = metrics.stack_height / alphabet_ic;
+  ctx.save();
+  ctx.lineWidth = 1.5;
+  ctx.translate(metrics.y_label_height, metrics.y_num_height/2);
+  //draw the axis label
+  ctx.save();
+  ctx.font = metrics.y_label_font;
+  ctx.translate(0, metrics.stack_height/2);
+  ctx.save();
+  ctx.rotate(-(Math.PI / 2));
+  ctx.textAlign = "center";
+  ctx.fillText("bits", 0, 0);
+  ctx.restore();
+  ctx.restore();
+
+  ctx.translate(metrics.y_label_spacer + metrics.y_num_width, 0);
+
+  //draw the axis tics
+  ctx.save();
+  ctx.translate(0, metrics.stack_height);
+  ctx.font = metrics.y_num_font;
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  for (i = 0; i <= alphabet_ic; i++) {
+    //draw the number
+    ctx.fillText("" + i, 0, 0);
+    //draw the tic
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(metrics.y_tic_width, 0);
+    ctx.stroke();
+    //prepare for next tic
+    ctx.translate(0, -tic_height);
+  }
+  ctx.restore();
+
+  ctx.translate(metrics.y_tic_width, 0);
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(0, metrics.stack_height);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function draw_stack_num(ctx, metrics, row_index) {
+  "use strict";
+  ctx.save();
+  ctx.font = metrics.x_num_font;
+  ctx.translate(metrics.stack_width / 2, metrics.stack_height + metrics.x_num_above);
+  ctx.save();
+  ctx.rotate(-(Math.PI / 2));
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "right";
+  ctx.fillText("" + (row_index + 1), 0, 0);
+  ctx.restore();
+  ctx.restore();
+}
+
+function draw_stack(ctx, metrics, symbols, raster) {
+  "use strict";
+  var preferred_pad, sym_min, i, sym, sym_height, pad;
+  preferred_pad = 0;
+  sym_min = 5;
+
+  ctx.save();//1
+  ctx.translate(0, metrics.stack_height);
+  for (i = 0; i < symbols.length; i++) {
+    sym = symbols[i];
+    sym_height = metrics.stack_height * sym.get_scale();
+    
+    pad = preferred_pad;
+    if (sym_height - pad < sym_min) {
+      pad = Math.min(pad, Math.max(0, sym_height - sym_min));
+    }
+    sym_height -= pad;
+
+    //translate to the correct position
+    ctx.translate(0, -(pad/2 + sym_height));
+    //draw
+    raster.draw(ctx, sym.get_symbol(), 0, 0, metrics.stack_width, sym_height);
+    //translate past the padding
+    ctx.translate(0, -(pad/2));
+  }
+  ctx.restore();//1
+}
+
+function draw_dashed_line(ctx, pattern, start, x1, y1, x2, y2) {
+  "use strict";
+  var x, y, len, i, dx, dy, tlen, theta, mulx, muly, lx, ly;
+  dx = x2 - x1;
+  dy = y2 - y1;
+  tlen = Math.pow(dx*dx + dy*dy, 0.5);
+  theta = Math.atan2(dy,dx);
+  mulx = Math.cos(theta);
+  muly = Math.sin(theta);
+  lx = [];
+  ly = [];
+  for (i = 0; i < pattern; ++i) {
+    lx.push(pattern[i] * mulx);
+    ly.push(pattern[i] * muly);
+  }
+  i = start;
+  x = x1;
+  y = y1;
+  len = 0;
+  ctx.beginPath();
+  while (len + pattern[i] < tlen) {
+    ctx.moveTo(x, y);
+    x += lx[i];
+    y += ly[i];
+    ctx.lineTo(x, y);
+    len += pattern[i];
+    i = (i + 1) % pattern.length;
+    x += lx[i];
+    y += ly[i];
+    len += pattern[i];
+    i = (i + 1) % pattern.length;
+  }
+  if (len < tlen) {
+    ctx.moveTo(x, y);
+    x += mulx * (tlen - len);
+    y += muly * (tlen - len);
+    ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+}
+
+function draw_trim_background(ctx, metrics, pspm, offset) {
+  "use strict";
+  var lwidth, rwidth, mwidth, rstart;
+  lwidth = metrics.stack_width * pspm.get_left_trim();
+  rwidth = metrics.stack_width * pspm.get_right_trim();
+  mwidth = metrics.stack_width * pspm.get_motif_length();
+  rstart = mwidth - rwidth;
+  ctx.save();//s8
+  ctx.translate(offset * metrics.stack_width, 0);
+  ctx.fillStyle = "rgb(240, 240, 240)";
+  if (pspm.get_left_trim() > 0) {
+    ctx.fillRect(0, 0, lwidth, metrics.stack_height);
+  }
+  if (pspm.get_right_trim() > 0) {
+    ctx.fillRect(rstart, 0, rwidth, metrics.stack_height);
+  }
+  ctx.fillStyle = "rgb(51, 51, 51)";
+  if (pspm.get_left_trim() > 0) {
+    draw_dashed_line(ctx, [3], 0, lwidth-0.5, 0, lwidth-0.5,  metrics.stack_height);
+  }
+  if (pspm.get_right_trim() > 0) {
+    draw_dashed_line(ctx, [3], 0, rstart+0.5, 0, rstart+0.5,  metrics.stack_height);
+  }
+  ctx.restore();//s8
+}
+
+function size_logo_on_canvas(logo, canvas, show_names, scale) {
+  "use strict";
+  var draw_name, metrics;
+  draw_name = (typeof show_names === "boolean" ? show_names : (logo.get_rows() > 1));
+  if (canvas.width !== 0 && canvas.height !== 0) {
+    return;
+  }
+  metrics = new LogoMetrics(canvas.getContext('2d'), 
+      logo.get_columns(), logo.get_rows(), draw_name);
+  if (typeof scale == "number") {
+    //resize the canvas to fit the scaled logo
+    canvas.width = metrics.summed_width * scale;
+    canvas.height = metrics.summed_height * scale;
+  } else {
+    if (canvas.width === 0 && canvas.height === 0) {
+      canvas.width = metrics.summed_width;
+      canvas.height = metrics.summed_height;
+    } else if (canvas.width === 0) {
+      canvas.width = metrics.summed_width * (canvas.height / metrics.summed_height);
+    } else if (canvas.height === 0) {
+      canvas.height = metrics.summed_height * (canvas.width / metrics.summed_width);
+    }
+  }
+}
+
+function draw_logo_on_canvas(logo, canvas, show_names, scale) {
+  "use strict";
+  var draw_name, ctx, metrics, raster, pspm_i, pspm, 
+      offset, col_index, motif_position;
+  draw_name = (typeof show_names === "boolean" ? show_names : (logo.get_rows() > 1));
+  ctx = canvas.getContext('2d');
+  //assume that the user wants the canvas scaled equally so calculate what the best width for this image should be
+  metrics = new LogoMetrics(ctx, logo.get_columns(), logo.get_rows(), draw_name);
+  if (typeof scale == "number") {
+    //resize the canvas to fit the scaled logo
+    canvas.width = metrics.summed_width * scale;
+    canvas.height = metrics.summed_height * scale;
+  } else {
+    if (canvas.width === 0 && canvas.height === 0) {
+      scale = 1;
+      canvas.width = metrics.summed_width;
+      canvas.height = metrics.summed_height;
+    } else if (canvas.width === 0) {
+      scale = canvas.height / metrics.summed_height;
+      canvas.width = metrics.summed_width * scale;
+    } else if (canvas.height === 0) {
+      scale = canvas.width / metrics.summed_width;
+      canvas.height = metrics.summed_height * scale;
+    } else {
+      scale = Math.min(canvas.width / metrics.summed_width, canvas.height / metrics.summed_height);
+    }
+  }
+  // cache the raster based on the assumption that we will be drawing a lot
+  // of logos the same size
+  if (typeof draw_logo_on_canvas.raster_scale === "number" && 
+      Math.abs(draw_logo_on_canvas.raster_scale - scale) < 0.1) {
+    raster = draw_logo_on_canvas.raster_cache;
+  } else {
+    raster = new RasterizedAlphabet(logo.alphabet, metrics.stack_font, metrics.stack_width * scale * 2);
+    draw_logo_on_canvas.raster_cache = raster;
+    draw_logo_on_canvas.raster_scale = scale;
+  }
+  ctx = canvas.getContext('2d');
+  ctx.save();//s1
+  ctx.scale(scale, scale);
+  ctx.save();//s2
+  ctx.save();//s7
+  //create margin
+  ctx.translate(metrics.pad_left, metrics.pad_top);
+  for (pspm_i = 0; pspm_i < logo.get_rows(); ++pspm_i) {
+    pspm = logo.get_pspm(pspm_i);
+    offset = logo.get_offset(pspm_i);
+    //optionally draw name if this isn't the last row or is the only row 
+    if (draw_name && (logo.get_rows() == 1 || pspm_i != (logo.get_rows()-1))) {
+      ctx.save();//s4
+      ctx.translate(metrics.summed_width/2, metrics.name_height);
+      ctx.font = metrics.name_font;
+      ctx.textAlign = "center";
+      ctx.fillText(pspm.name, 0, 0);
+      ctx.restore();//s4
+      ctx.translate(0, metrics.name_height + 
+          Math.min(0, metrics.name_spacer - metrics.y_num_height/2));
+    }
+    //draw scale
+    draw_scale(ctx, metrics, logo.alphabet.get_ic());
+    ctx.save();//s5
+    //translate across past the scale
+    ctx.translate(metrics.y_label_height + metrics.y_label_spacer + 
+        metrics.y_num_width + metrics.y_tic_width, 0);
+    //draw the trimming background
+    if (pspm.get_left_trim() > 0 || pspm.get_right_trim() > 0) {
+      draw_trim_background(ctx, metrics, pspm, offset);
+    }
+    //draw letters
+    ctx.translate(0, metrics.y_num_height / 2);
+    for (col_index = 0; col_index < logo.get_columns(); col_index++) {
+      ctx.translate(metrics.stack_pad_left,0);
+      if (col_index >= offset && col_index < (offset + pspm.get_motif_length())) {
+        motif_position = col_index - offset;
+        draw_stack_num(ctx, metrics, motif_position);
+        draw_stack(ctx, metrics, pspm.get_stack(motif_position, logo.alphabet), raster);
+      }
+      ctx.translate(metrics.stack_width, 0);
+    }
+    ctx.restore();//s5
+    ////optionally draw name if this is the last row but isn't the only row 
+    if (draw_name && (logo.get_rows() != 1 && pspm_i == (logo.get_rows()-1))) {
+      //translate vertically past the stack and axis's        
+      ctx.translate(0, metrics.y_num_height/2 + metrics.stack_height + 
+          Math.max(metrics.y_num_height/2, metrics.x_num_above + metrics.x_num_width + metrics.name_spacer));
+
+      ctx.save();//s6
+      ctx.translate(metrics.summed_width/2, metrics.name_height);
+      ctx.font = metrics.name_font;
+      ctx.textAlign = "center";
+      ctx.fillText(pspm.name, 0, 0);
+      ctx.restore();//s6
+      ctx.translate(0, metrics.name_height);
+    } else {
+      //translate vertically past the stack and axis's        
+      ctx.translate(0, metrics.y_num_height/2 + metrics.stack_height + 
+          Math.max(metrics.y_num_height/2, metrics.x_num_above + metrics.x_num_width));
+    }
+    //if not the last row then add middle padding
+    if (pspm_i != (logo.get_rows() -1)) {
+      ctx.translate(0, metrics.pad_middle);
+    }
+  }
+  ctx.restore();//s7
+  ctx.translate(metrics.summed_width - metrics.pad_right, metrics.summed_height - metrics.pad_bottom);
+  ctx.font = metrics.fine_txt_font;
+  ctx.textAlign = "right";
+  ctx.fillText(logo.fine_text, 0,0);
+  ctx.restore();//s2
+  ctx.restore();//s1
+}
+
+function create_canvas(c_width, c_height, c_id, c_title, c_display) {
+  "use strict";
+  var canvas = document.createElement("canvas");
+  //check for canvas support before attempting anything
+  if (!canvas.getContext) {
+    return null;
+  }
+  var ctx = canvas.getContext('2d');
+  //check for html5 text drawing support
+  if (!supports_text(ctx)) {
+    return null;
+  }
+  //size the canvas
+  canvas.width = c_width;
+  canvas.height = c_height;
+  canvas.id = c_id;
+  canvas.title = c_title;
+  canvas.style.display = c_display;
+  return canvas;
+}
+
+function logo_1(alphabet, fine_text, pspm) {
+  "use strict";
+  var logo = new Logo(alphabet, fine_text);
+  logo.add_pspm(pspm);
+  return logo;
+}
+
+function logo_2(alphabet, fine_text, target, query, query_offset) {
+  "use strict";
+  var logo = new Logo(alphabet, fine_text);
+  if (query_offset < 0) {
+    logo.add_pspm(target, -query_offset);
+    logo.add_pspm(query);
+  } else {
+    logo.add_pspm(target);
+    logo.add_pspm(query, query_offset);
+  }      
+  return logo;
+}
+
+/*
+ * Specifies an alternate source for an image.
+ * If the image with the image_id specified has
+ * not loaded then a generated logo will be used 
+ * to replace it.
+ *
+ * Note that the image must either have dimensions
+ * or a scale must be set.
+ */
+function alternate_logo(logo, image_id, scale) {
+  "use strict";
+  var image = document.getElementById(image_id);
+  if (!image) {
+    alert("Can't find specified image id (" +  image_id + ")");
+    return;
+  }
+  //if the image has loaded then there is no reason to use the canvas
+  if (image_ok(image)) {
+    return;
+  }
+  //the image has failed to load so replace it with a canvas if we can.
+  var canvas = create_canvas(image.width, image.height, image_id, image.title, image.style.display);
+  if (canvas === null) {
+    return;
+  }
+  //draw the logo on the canvas
+  draw_logo_on_canvas(logo, canvas, null, scale);
+  //replace the image with the canvas
+  image.parentNode.replaceChild(canvas, image);
+}
+
+/*
+ * Specifes that the element with the specified id
+ * should be replaced with a generated logo.
+ */
+function replace_logo(logo, replace_id, scale, title_txt, display_style) {
+  "use strict";
+  var element = document.getElementById(replace_id);
+  if (!replace_id) {
+    alert("Can't find specified id (" + replace_id + ")");
+    return;
+  }
+  //found the element!
+  var canvas = create_canvas(50, 120, replace_id, title_txt, display_style);
+  if (canvas === null) {
+    return;
+  }
+  //draw the logo on the canvas
+  draw_logo_on_canvas(logo, canvas, null, scale);
+  //replace the element with the canvas
+  element.parentNode.replaceChild(canvas, element);
+}
+
+/*
+ * Fast string trimming implementation found at
+ * http://blog.stevenlevithan.com/archives/faster-trim-javascript
+ *
+ * Note that regex is good at removing leading space but
+ * bad at removing trailing space as it has to first go through
+ * the whole string.
+ */
+function trim (str) {
+  "use strict";
+  var ws, i;
+  str = str.replace(/^\s\s*/, '');
+  ws = /\s/; i = str.length;
+  while (ws.test(str.charAt(--i)));
+  return str.slice(0, i + 1);
+}
+    /* END INCLUDED FILE "motif_logo.js" */
+    
+  
+    
+    /* START INCLUDED FILE "dreme-to-html.js" */
+      var expansion_lookup = [];
+
+      /*
+       * show_hidden
+       *
+       * Looks for specially named elements and switches to the shown view
+       */
+      function show_hidden(prefix) {
+        document.getElementById(prefix + '_activator').style.display = 'none';
+        document.getElementById(prefix + '_deactivator').style.display = 'block';
+        document.getElementById(prefix + '_data').style.display = 'block';
+      }
+      /*
+       * hide_shown
+       *
+       * Looks for specially named elements and switches to the hidden view
+       */
+      function hide_shown(prefix) {
+        document.getElementById(prefix + '_activator').style.display = 'block';
+        document.getElementById(prefix + '_deactivator').style.display = 'none';
+        document.getElementById(prefix + '_data').style.display = 'none';
+      }
+
+      function click_download_tab(tab) {
+        document.getElementById("download_tab_num").value = tab;
+        for (var i = 1; i <= 3; i++) {
+          document.getElementById('download_tab_'+i).className = "tab" + (i==tab ? " activeTab" : "");
+          document.getElementById('download_pnl_'+i).style.display = (i==tab ? "block" : "none");
+        }
+        document.getElementById('download_button').style.visibility = (tab==3 ? "visible" : "hidden");
+      }
+
+
+      /*
+       * searches child nodes in depth first order and returns the
+       * first it finds with the className specified.
+       */
+      function find_child_element_by_class(node, className) {
+        var patt = new RegExp("\\b" + className + "\\b");
+
+        if (node.nodeType == Node.ELEMENT_NODE && 
+            patt.test(node.className)) {
+          return node;
+        } else {
+          var result = null;
+          for (var i = 0; i < node.childNodes.length; i++) {
+            result = find_child_element_by_class(node.childNodes[i], className);
+            if (result != null) break;
+          }
+          return result;
+        }
+      }
+
+      function find_parent_element_by_class(node, className) {
+        var patt = new RegExp("\\b" + className + "\\b");
+        if (node.nodeType == Node.ELEMENT_NODE && 
+            patt.test(node.className)) {
+          return node;
+        } else if (node.parentNode != null) {
+          return find_parent_element_by_class(node.parentNode, className);
+        }
+        return null;
+      }
+
+      /*
+       * expand
+       *
+       * Expand the extra data section for a motif.
+       */
+      function expand(num) {
+        // get motif data
+        var motif_info = motif_seqs[num];
+        var motif_id = motif_info[0];
+        var seq = motif_info[1];
+        var rcseq = motif_info[2];
+        var length = motif_info[3];
+        var nsites = motif_info[4];
+        var p_hits = motif_info[5];
+        var n_hits = motif_info[6];
+        var pvalue = motif_info[7];
+        var evalue = motif_info[8];
+        var uevalue = motif_info[9];
+        var matches = motif_info[10];
+        // find the location to insert the expanded motif data
+        var table = document.getElementById('dreme_motifs');
+        var motif_row = document.getElementById('motif_row_' + num);
+        var exp_row = table.insertRow(motif_row.rowIndex + 1);
+        exp_row.id = 'exp_row_' + num;
+        var cell = exp_row.insertCell(0);
+        cell.colSpan = 9;
+        // create the DOM to insert
+        var exp = document.getElementById('expanded_motif').firstChild.cloneNode(true);
+        // update fields
+        set_content_to_text(find_child_element_by_class(exp, 'name'), seq);
+        set_content_to_text(find_child_element_by_class(exp, 'num'), num);
+        var img = find_child_element_by_class(exp, 'img_nc');
+        img.src = motif_id + "nc_" + seq + ".png";
+        var imgrc = find_child_element_by_class(exp, 'img_rc');
+        imgrc.src = motif_id + "rc_" + rcseq + ".png";
+        // fill in the details
+        var details = find_child_element_by_class(exp, 'details');
+        set_content_to_text(find_child_element_by_class(details, 'positives'), p_hits);
+        set_content_to_text(find_child_element_by_class(details, 'negatives'), n_hits);
+        set_content_to_text(find_child_element_by_class(details, 'pvalue'), pvalue);
+        set_content_to_text(find_child_element_by_class(details, 'evalue'), evalue);
+        set_content_to_text(find_child_element_by_class(details, 'uevalue'), uevalue);
+        
+        // fill in match table
+        var match_row = find_child_element_by_class(exp, 'match');
+        var tbody = match_row.parentNode;
+        for (var i = 0; i < matches.length; i++) {
+          var match = matches[i];
+          var cseq = match[0];
+          var cpos = match[1];
+          var cneg = match[2];
+          var cpval = match[3].toExponential(1);
+          var ceval = match[4].toExponential(1);
+          var row = match_row.cloneNode(true);
+          var td_cseq = find_child_element_by_class(row, 'dnaseq');
+          set_content_to_text(td_cseq, cseq);
+          colour_dna_seq(td_cseq);
+          set_content_to_text(find_child_element_by_class(row, 'positives'), cpos);
+          set_content_to_text(find_child_element_by_class(row, 'negatives'), cneg);
+          set_content_to_text(find_child_element_by_class(row, 'pvalue'), cpval);
+          set_content_to_text(find_child_element_by_class(row, 'evalue'), ceval);
+          tbody.appendChild(row);
+        }
+        tbody.removeChild(match_row);
+        // append the expanded information
+        cell.appendChild(exp);
+        // hide the old row
+        motif_row.style.display = 'none';
+        update_headers();
+      }
+
+      function expanded_num(elem) {
+        var exp = find_parent_element_by_class(elem, 'expanded_motif');
+        var num = parseInt(nodes_text(text_nodes(find_child_element_by_class(exp, 'num'))));
+        return num;
+      }
+
+      function contract(contained_node) {
+        var table = document.getElementById('dreme_motifs');
+        var num = expanded_num(contained_node);
+        var motif_row = document.getElementById('motif_row_' + num);
+        var exp_row = document.getElementById('exp_row_' + num);
+
+        motif_row.style.display = 'table-row';
+        table.deleteRow(exp_row.rowIndex);
+        update_headers();
+      }
+
+      function update_headers() {
+        var motif_row_patt = new RegExp("\\bmotif_row\\b");
+        var motif_head_patt = new RegExp("\\bmotif_head\\b");
+        var table = document.getElementById('dreme_motifs');
+        var header = table.tHead.getElementsByTagName('tr')[0];
+        header.style.display = 'none';
+        var trs = table.tBodies[0].getElementsByTagName('tr');
+        var needHeader = true;
+        for (var i = 0; i < trs.length; i++) {
+          var row = trs[i];
+          if (row.style.display == 'none') continue;
+          if (motif_row_patt.test(row.className)) {
+            if (needHeader) {
+              var dupHeader = header.cloneNode(true);
+              dupHeader.style.display = 'table-row';
+              row.parentNode.insertBefore(dupHeader, row);
+              needHeader = false;
+              i++;
+            }
+          } else if (motif_head_patt.test(row.className)) {
+            table.deleteRow(row.rowIndex);
+            i--;
+          } else {
+            needHeader = true;
+          }
+        }
+      }
+
+      function set_content_to_text(ele, text) {
+        while(ele.hasChildNodes()) {
+          ele.removeChild(ele.firstChild);
+        }
+        ele.appendChild(document.createTextNode(text));
+      }
+
+      function both_setup(pos) {
+        // get the total number of motifs
+        var nmotifs = parseInt(document.getElementById('nmotifs').value, 10);
+        // set the motif that we're submitting
+        document.getElementById('submit_motif').value = (pos == 0 ? 'all' : pos);
+        document.getElementById('send_to_selector').style.display = (pos == 0 ? 'none' : 'block');
+        document.getElementById('send_to_title_1').style.display = (pos == 0 ? 'none' : 'block');
+        document.getElementById('send_to_title_2').style.display = (pos == 0 ? 'block' : 'none');
+
+        if (pos != 0) {
+          // get the information for the position
+          var motif_seq = motif_seqs[pos];
+          var motif_id = motif_seq[0];
+          var seq = motif_seq[1];
+          var rcseq = motif_seq[2];
+          // set the motif number
+          // set the titles of both popups
+          set_content_to_text(document.getElementById('send_to_name'), seq);
+          set_content_to_text(document.getElementById('download_name'), seq);
+          // set the images
+          var nc_img = "" + motif_id + "nc_" + seq + ".png";
+          var rc_img = "" + motif_id + "rc_" + rcseq + ".png";
+          var img;
+          img = document.getElementById('send_to_img');
+          img.src = nc_img;
+          img.style.display = "inline";
+          img = document.getElementById('send_to_rcimg');
+          img.src = rc_img;
+          img.style.display = "inline";
+          img = document.getElementById('download_img');
+          img.src = nc_img;
+          img.style.display = "inline";
+          img = document.getElementById('download_rcimg');
+          img.src = rc_img;
+          img.style.display = "inline";
+          // hide the canvas
+          document.getElementById('send_to_can').style.display = "none";
+          document.getElementById('send_to_rccan').style.display = "none";
+          document.getElementById('download_can').style.display = "none";
+          document.getElementById('download_rccan').style.display = "none";
+          // get some motif details
+          var pspm_text = document.getElementById("pspm"+ pos).value;
+          var pspm = new Pspm(pspm_text);
+          var alpha = new Alphabet(document.getElementById("alphabet").value, 
+              document.getElementById("bgfreq").value);
+          document.getElementById('download_pspm').value = pspm.as_pspm();
+          document.getElementById('download_pssm').value = pspm.as_pssm(alpha);
+          // set the width and height defaults
+          document.getElementById('logo_width').value = pspm.get_motif_length();
+          document.getElementById('logo_height').value = 7.5;
+          // hide and show the arrows
+          var prevclass = (pos == 1 ? "navarrow inactive" : "navarrow");
+          var nextclass = (pos == nmotifs ? "navarrow inactive" : "navarrow");
+          document.getElementById('prev_arrow_1').className = prevclass;
+          document.getElementById('prev_arrow_2').className = prevclass;
+          document.getElementById('next_arrow_1').className = nextclass;
+          document.getElementById('next_arrow_2').className = nextclass;
+          set_content_to_text(document.getElementById('pop_num_1'), pos);
+          set_content_to_text(document.getElementById('pop_num_2'), pos);
+        }
+      }
+
+      function both_change(inc) {
+        var motif_num = parseInt(document.getElementById('submit_motif').value, 10);
+        var nmotifs = parseInt(document.getElementById('nmotifs').value, 10);
+        var orig = motif_num;
+        motif_num += inc;
+        if (motif_num > nmotifs) motif_num = nmotifs;
+        else if (motif_num < 1) motif_num = 1;
+        if (orig != motif_num) both_setup(motif_num);
+      }
+
+      function both_hide() {
+        document.getElementById('grey_out_page').style.display = 'none';
+        document.getElementById('download').style.display = 'none';
+        document.getElementById('send_to').style.display = 'none';
+      }
+
+      /*
+       * lookup the information on a motif and prepare the
+       * popup for sending it to another program
+       */
+      function send_to_popup(pos) {
+        both_setup(pos);
+        var program = find_child_element_by_class(document.getElementById('programs'), 'selected').id;
+        var task = highlight_submit_task(null, submit_programs[program]);
+        highlight_submit_program(program, submit_tasks[task]);
+        update_submit_text(task, program);
+        // show the send to page
+        var grey_out = document.getElementById('grey_out_page');
+        grey_out.style.display = 'block';
+        var send_to_pop = document.getElementById('send_to');
+        send_to_pop.style.display = 'block';
+      }
+
+      function send_to_popup2(elem) {
+        send_to_popup(expanded_num(elem));
+      }
+
+      function send_to_submit() {
+        var program = find_child_element_by_class(document.getElementById('programs'), 'selected').id;
+        // set the hidden fields on the form
+        document.getElementById('submit_program').value = program;
+        // send the form
+        document.getElementById('submit_form').submit();
+        both_hide();
+      }
+
+      function download_popup(pos) {
+        both_setup(pos);
+        click_download_tab(document.getElementById("download_tab_num").value);
+        document.getElementById('submit_program').value = "LOGO";
+        // show the download page
+        var grey_out = document.getElementById('grey_out_page');
+        grey_out.style.display = 'block';
+        var download_pop = document.getElementById('download');
+        download_pop.style.display = 'block';
+      }
+
+      function download_popup2(elem) {
+        download_popup(expanded_num(elem));
+      }
+
+      function download_submit() {
+        var format = document.getElementById('logo_format').value;
+        var orient = document.getElementById('logo_rc').value;
+        var ssc = document.getElementById('logo_ssc').value;
+        var width = document.getElementById('logo_width').value;
+        var height = document.getElementById('logo_height').value;
+        document.getElementById('submit_format').value = format;
+        document.getElementById('submit_rc').value = orient;
+        document.getElementById('submit_ssc').value = ssc;
+        document.getElementById('submit_width').value = width;
+        document.getElementById('submit_height').value = height;
+        document.getElementById('submit_form').submit();
+        both_hide();
+      }
+
+      function FixLogoTask(num, rc) {
+        this.num = num;
+        this.rc = rc;
+        this.run = FixLogoTask_run;
+      }
+
+      function FixLogoTask_run() {
+        var pspm_text = document.getElementById("pspm" + this.num).value;
+        var alpha = new Alphabet("ACGT");
+        var pspm = new Pspm(pspm_text);
+        if (this.rc) pspm = pspm.reverse_complement(alpha);
+        var imgid = "small_" + (this.rc ? "rc_" : "") + "logo_" + this.num;
+
+        var image = document.getElementById(imgid);
+
+        var canvas = create_canvas(pspm.get_motif_length() *15, 50, image.id, 
+            image.title, image.style.display);
+        if (canvas == null) return;
+
+        var logo = logo_1(alpha, "DREME", pspm);
+        draw_logo_on_canvas(logo, canvas);
+        image.parentNode.replaceChild(canvas, image);
+      }
+
+      function fix_popup_logo(image, canvasid, rc) {
+        var motif_num = parseInt(document.getElementById('submit_motif').value, 10);
+        var pspm_text = document.getElementById("pspm" + motif_num).value;
+        var alpha = new Alphabet("ACGT");
+        var pspm = new Pspm(pspm_text);
+        if (rc) pspm = pspm.reverse_complement(alpha);
+        image.style.display = "none";
+        //check for canvas support before attempting anything
+        var canvas = document.getElementById(canvasid);
+        if (!canvas.getContext) return;
+        if (!supports_text(canvas.getContext('2d'))) return;
+        canvas.height = 90;
+        canvas.width = 170;
+        canvas.style.display = "inline";
+        var logo = logo_1(alpha, "DREME", pspm);
+        draw_logo_on_canvas(logo, canvas, false);
+      }
+
+      function fix_expanded_logo(image, rc) {
+        var motif_num = expanded_num(image);
+        var pspm_text = document.getElementById("pspm" + motif_num).value;
+        var alpha = new Alphabet("ACGT");
+        var pspm = new Pspm(pspm_text);
+        if (rc) pspm = pspm.reverse_complement(alpha);
+        //check for canvas support before attempting anything
+        var canvas = document.createElement('canvas');
+        if (!canvas.getContext) return;
+        if (!supports_text(canvas.getContext('2d'))) return;
+        canvas.height = 150;
+        canvas.width = 0;
+        draw_logo_on_canvas(logo_1(alpha, "DREME", pspm), canvas, false);
+        image.parentNode.replaceChild(canvas, image);
+      }
+
+      function text_nodes(container) {
+        var textNodes = [];
+        var stack = [container];
+        // depth first search to maintain ordering when flattened 
+        while (stack.length > 0) {
+          var node = stack.pop();
+          if (node.nodeType == Node.TEXT_NODE) {
+            textNodes.push(node);
+          } else {
+            for (var i = node.childNodes.length-1; i >= 0; i--) {
+              stack.push(node.childNodes[i]);
+            }
+          }
+        }
+        return textNodes;
+      }
+
+      function node_text(node) {
+        if (node === undefined) {
+          return '';
+        } else if (node.textContent) {
+          return node.textContent;
+        } else if (node.innerText) {
+          return node.innerText;
+        } else {
+          return '';
+        }
+      }
+
+      function nodes_text(nodes, separator) {
+        if (separator === undefined) separator = '';
+        var text = '';
+        if (nodes.length > 0) {
+          text += node_text(nodes[0]);
+        }
+        for (var i = 1; i < nodes.length; i++) {
+          text += separator + node_text(nodes[i]);
+        }
+        return text;
+      }
+
+      function colour_dna_seq(container) {
+        var textnodes = text_nodes(container);
+        for (var i = 0; i < textnodes.length; i++) {
+          var node = textnodes[i];
+          container.replaceChild(create_dna_seq(node_text(node)), node);
+        }
+      }
+
+      function create_dna_seq(seq) {
+        var out = document.createElement('span');
+        var last = 0;
+        for (var i = 0; i < seq.length; i++) {
+          var letter = seq.charAt(i);
+          if (letter == 'A' || letter == 'C' || letter == 'G' || letter == 'T') { 
+            if (last < i) {
+              out.appendChild(document.createTextNode(seq.substring(last, i)));
+            }
+            var coloured_letter = document.createElement('span');
+            coloured_letter.className = "dna_" + letter;
+            coloured_letter.appendChild(document.createTextNode(letter));
+            out.appendChild(coloured_letter);
+            last = i + 1;
+          }
+        }
+        if (last < seq.length) {
+          out.appendChild(document.createTextNode(seq.substring(last)));
+        }
+        return out;
+      }
+
+      function sort_table(colEle, compare_function) {
+        //find the parent of colEle that is either a td or th
+        var cell = colEle;
+        while (true) {
+          if (cell == null) return;
+          if (cell.nodeType == Node.ELEMENT_NODE && 
+              (cell.tagName.toLowerCase() == "td" || cell.tagName.toLowerCase() == "th")) {
+            break;
+          }
+          cell = cell.parentNode;
+        }
+        //find the parent of cell that is a tr
+        var row = cell;
+        while (true) {
+          if (row == null) return;
+          if (row.nodeType == Node.ELEMENT_NODE && row.tagName.toLowerCase() == "tr") {
+            break;
+          }
+          row = row.parentNode;
+        }
+        //find the parent of row that is a table
+        var table = row;
+        while (true) {
+          if (table == null) return;
+          if (table.nodeType == Node.ELEMENT_NODE && table.tagName.toLowerCase() == "table") {
+            break;
+          }
+          table = table.parentNode;
+        }
+        var column_index = cell.cellIndex;
+        // do a bubble sort, because the tables are so small it doesn't matter
+        var change;
+        var trs = table.tBodies[0].getElementsByTagName('tr');
+        var already_sorted = true;
+        var reverse = false;
+        while (true) {
+          do {
+            change = false;
+            for (var i = 0; i < trs.length -1; i++) {
+              var v1 = nodes_text(text_nodes(trs[i].cells[column_index]));
+              var v2 = nodes_text(text_nodes(trs[i+1].cells[column_index]));
+              if (reverse) {
+                var tmp = v1;
+                v1 = v2;
+                v2 = tmp;
+              }
+              if (compare_function(v1, v2) > 0) {
+                exchange(trs[i], trs[i+1], table);
+                change = true;
+                already_sorted = false;
+                trs = table.tBodies[0].getElementsByTagName('tr');
+              }
+            }
+          } while (change);
+          if (reverse) break;// we've sorted twice so exit
+          if (!already_sorted) break;// sort did something so exit
+          // when it's sorted one way already then sort the opposite way
+          reverse = true;
+        }
+        update_sort_arrows(row, column_index, reverse);
+      }
+
+      function update_sort_arrows(row, column_index, reverse) {
+        var ascending = "\u25BC";
+        var descending = "\u25B2";
+        var dir = (reverse ? descending : ascending);
+        for (var i = 0; i < row.cells.length; i++) {
+          var arrow = find_child_element_by_class(row.cells[i], "sort_dir");
+          if (arrow == null) continue;
+          if (i == column_index) {
+            set_content_to_text(arrow, dir);
+          } else {
+            set_content_to_text(arrow, "");
+          }
+        }
+      }
+    
+      function exchange(oRowI, oRowJ, oTable) {
+        var i = oRowI.rowIndex;
+        var j = oRowJ.rowIndex;
+         if (i == j+1) {
+          oTable.tBodies[0].insertBefore(oRowI, oRowJ);
+        } if (j == i+1) {
+          oTable.tBodies[0].insertBefore(oRowJ, oRowI);
+        } else {
+            var tmpNode = oTable.tBodies[0].replaceChild(oRowI, oRowJ);
+            if(typeof(oRowI) != "undefined") {
+              oTable.tBodies[0].insertBefore(tmpNode, oRowI);
+            } else {
+              oTable.appendChild(tmpNode);
+            }
+        }
+      }
+
+      function compare_numbers(v1, v2) {
+        var f1 = parseFloat(v1);
+        var f2 = parseFloat(v2);
+        if (f1 < f2) {
+          return -1;
+        } else if (f1 > f2) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+
+      function compare_counts(v1, v2) {
+        var re = /(\d+)\/\d+/;
+        var m1 = re.exec(v1);
+        var m2 = re.exec(v2);
+        if (m1 == null && m2 == null) return 0;
+        if (m1 == null) return -1;
+        if (m2 == null) return 1;
+        return compare_numbers(m1[1], m2[1]);
+      }
+
+      function compare_strings(v1, v2) {
+        return v1.localeCompare(v2);
+      }
+      /*
+       * coords
+       *
+       * Calculates the x and y offset of an element.
+       * From http://www.quirksmode.org/js/findpos.html
+       */
+      function coords(elem) {
+        var myX = myY = 0;
+        if (elem.offsetParent) {
+          do {
+            myX += elem.offsetLeft;
+            myY += elem.offsetTop;
+          } while (elem = elem.offsetParent);
+        }
+        return [myX, myY];
+      }
+      /*
+       * help
+       *
+       * Moves around help pop-ups so they appear
+       * below an activator.
+       */
+      function help(activator, popup_id) {
+        if (help.popup === undefined) {
+          help.popup = null;
+        }
+        if (help.activator === undefined) {
+          help.activator = null;
+        }
+
+        if (typeof(activator) == 'undefined') { // no activator so hide
+          help.popup.style.display = 'none';
+          help.popup = null;
+          return;
+        }
+        var pop = document.getElementById(popup_id);
+        if (pop == help.popup) {
+          if (activator == help.activator) {
+            //hide popup (as we've already shown it for the current help button)
+            help.popup.style.display = 'none';
+            help.popup = null;
+            return; // toggling complete!
+          }
+        } else if (help.popup != null) {
+          //activating different popup so hide current one
+          help.popup.style.display = 'none';
+        }
+        help.popup = pop;
+        help.activator = activator;
+
+        //must make the popup visible to measure it or it has zero width
+        pop.style.display = 'block';
+        var xy = coords(activator);
+        var padding = 10;
+        var edge_padding = 15;
+        var scroll_padding = 15;
+
+        var pop_left = (xy[0] + (activator.offsetWidth / 2)  - (pop.offsetWidth / 2));
+        var pop_top = (xy[1] + activator.offsetHeight + padding);
+
+        // ensure the box is not past the top or left of the page
+        if (pop_left < 0) pop_left = edge_padding;
+        if (pop_top < 0) pop_top = edge_padding;
+        // ensure the box does not cause horizontal scroll bars
+        var page_width = null;
+        if (window.innerWidth) {
+          page_width = window.innerWidth;
+        } else if (document.body) {
+          page_width = document.body.clientWidth;
+        }
+        if (page_width) {
+          if (pop_left + pop.offsetWidth > page_width) {
+            pop_left = page_width - pop.offsetWidth - edge_padding - scroll_padding; //account for scrollbars
+          }
+        }
+
+        pop.style.left = pop_left + "px";
+        pop.style.top = pop_top + "px";
+      }
+
+      var submit_tasks = [];
+      submit_tasks['search_motifs'] = ['TOMTOM'];
+      submit_tasks['search_sequences'] = ['FIMO'];
+      submit_tasks['rank_sequences'] = ['MAST'];
+      submit_tasks['predict_go'] = ['GOMO'];
+      submit_tasks['infer_tf'] = ['SPAMO'];
+      var submit_programs = [];
+      submit_programs['TOMTOM'] = ['search_motifs'];
+      submit_programs['FIMO'] = ['search_sequences'];
+      submit_programs['MAST'] = ['rank_sequences'];
+      submit_programs['GOMO'] = ['predict_go'];
+      submit_programs['SPAMO'] = ['infer_tf'];
+      var submit_descriptions = [];
+      submit_descriptions['TOMTOM'] = "Find similar motifs in published " + 
+          "libraries or a library you supply.";
+      submit_descriptions['FIMO'] = "Find motif occurences in sequence data.";
+      submit_descriptions['MAST'] = "Rank sequences by affinity to groups " + 
+          "of motifs.";
+      submit_descriptions['GOMO'] = "Identify possible roles (Gene Ontology " + 
+          "terms) for motifs.";
+      submit_descriptions['SPAMO'] = "Find other motifs that are enriched at " +
+          "specific close spacings which might imply the existance of a complex.";
+
+
+      function click_submit_task(ele) {
+        var task = ele.id;
+        var program = highlight_submit_program(null, submit_tasks[task]);
+        highlight_submit_task(task, submit_programs[program]);
+        update_submit_text(task, program);
+      }
+
+      function click_submit_program(ele) {
+        var program = ele.id;
+        var task = highlight_submit_task(null, submit_programs[program]);
+        highlight_submit_program(program, submit_tasks[task]);
+        update_submit_text(task, program);
+      }
+
+      function update_submit_text(task, program) {
+        var task_ele = document.getElementById(task);
+        var program_ele = document.getElementById(program);
+        set_content_to_text(document.getElementById('program_action'), 
+            nodes_text(text_nodes(task_ele)));
+        set_content_to_text(document.getElementById('program_name'), 
+            nodes_text(text_nodes(program_ele)));
+        set_content_to_text(document.getElementById('program_desc'), 
+            submit_descriptions[program]);
+      }
+
+      function highlight_submit_task(select, highlights) {
+        var tasks_ul = document.getElementById('tasks');
+        var all_tasks = tasks_ul.getElementsByTagName('li');
+        var li;
+        var originally_selected = null;
+        // deselect everything in the tasks list
+        for (var i = 0; i < all_tasks.length; i++) {
+          li = all_tasks[i];
+          if (li.className == "selected") {
+            originally_selected = li;
+          }
+          li.className = "";
+        }
+        // highlight everything in the highlights list
+        for (var i = 0; i < highlights.length; i++) {
+          var li = document.getElementById(highlights[i]);
+          li.className = "active";
+        }
+        // check if we're setting the selected item specifically
+        if (select != null) {
+          li = document.getElementById(select);
+          li.className = "selected";
+          return select;
+        } else {
+          // if the originally selected item is allowed then keep it
+          // otherwise move to the first element of the highlight list
+          if (originally_selected != null && 
+              originally_selected.className == "active") {
+            originally_selected.className = "selected";
+            return originally_selected.id;
+          } else if (highlights.length > 0) {
+            li = document.getElementById(highlights[0]);
+            li.className = "selected";
+            return highlights[0];
+          }
+          return null;
+        }
+      }
+
+
+      function highlight_submit_program(select, highlights) {
+        var programs_ul = document.getElementById('programs');
+        var all_programs = programs_ul.getElementsByTagName('li');
+        var li;
+        var originally_selected = null;
+        // deselect everything in the programs list
+        for (var i = 0; i < all_programs.length; i++) {
+          li = all_programs[i];
+          if (li.className == "selected") {
+            originally_selected = li;
+          }
+          li.className = "";
+        }
+        // highlight everything in the highlights list
+        for (var i = 0; i < highlights.length; i++) {
+          var li = document.getElementById(highlights[i]);
+          li.className = "active";
+        }
+        // check if we're setting the selected item specifically
+        if (select != null) {
+          li = document.getElementById(select);
+          li.className = "selected";
+          return select;
+        } else {
+          // if the originally selected item is allowed then keep it
+          // otherwise move to the first element of the highlight list
+          if (originally_selected != null && 
+              originally_selected.className == "active") {
+            originally_selected.className = "selected";
+            return originally_selected.id;
+          } else if (highlights.length > 0) {
+            li = document.getElementById(highlights[0]);
+            li.className = "selected";
+            return highlights[0];
+          }
+          return null;
+        }
+      }
+
+      //
+      // See http://stackoverflow.com/questions/814613/how-to-read-get-data-from-a-url-using-javascript
+      // Slightly modified with information from
+      // https://developer.mozilla.org/en/DOM/window.location
+      //
+      function parse_params() {
+        var search = window.location.search;
+        var queryStart = search.indexOf("?") + 1;
+        var queryEnd   = search.indexOf("#") + 1 || search.length + 1;
+        var query      = search.slice(queryStart, queryEnd - 1);
+        var params  = {};
+
+        if (query === search || query === "") return params;
+
+        var nvPairs = query.replace(/\+/g, " ").split("&");
+
+        for (var i=0; i<nvPairs.length; i++) {
+          var nv = nvPairs[i].split("=");
+          var n  = decodeURIComponent(nv[0]);
+          var v  = decodeURIComponent(nv[1]);
+          // allow a name to be used multiple times
+          // storing each value in the array
+          if ( !(n in params) ) {
+            params[n] = [];
+          }
+          params[n].push(nv.length === 2 ? v : null);
+        }
+        return params;
+      }
+
+      /*
+       * page_loaded
+       *
+       * Called when the page has loaded for the first time.
+       */
+      function page_loaded() {
+        post_load_setup();
+      }
+
+      /*
+       * page_loaded
+       *
+       * Called when a cached page is reshown.
+       */
+      function page_shown(e) {
+        if (e.persisted) post_load_setup();
+      }
+
+      /*
+       * post_load_setup
+       *
+       * Setup state that is dependant on everything having been loaded already.
+       */
+      function post_load_setup() {
+        update_scrollpad();
+        var params = parse_params();
+        if (params["more"]) {
+          var seq_to_num = {};
+          for (var i = 0; i < motif_seqs.length; i++) {
+            if (motif_seqs[i]) {
+              seq_to_num[motif_seqs[i][1]] = i;
+            }
+          }
+          var more_list = params["more"];
+          for (var i = 0; i < more_list.length; i++) {
+            var num = seq_to_num[more_list[i]];
+            if (num !== undefined) {
+              expand(num);
+              var exp_row = document.getElementById('exp_row_' + num);
+              exp_row.scrollIntoView(true);
+            }
+          }
+          
+        }
+      }
+
+      /*
+       * update_scrollpad
+       *
+       * Creates padding at the bottom of the page to allow
+       * scrolling of anything into view.
+       */
+      function update_scrollpad() {
+        var elem = (document.compatMode === "CSS1Compat") ? 
+            document.documentElement : document.body;
+        document.getElementById("scrollpad").style.height = Math.abs(elem.clientHeight - 100) + "px";
+      }
+
+    /* END INCLUDED FILE "dreme-to-html.js" */
+    
+  </script>
+</head>
+<body onload="page_loaded()" onpageshow="page_shown(event)" onresize="update_scrollpad()">
+<form id="submit_form" method="post" action="http://meme.nbcr.net/meme/cgi-bin/meme_request.cgi" target="_blank">
+<!--+++++++++++++++START DATA+++++++++++++++-->
+<input type="hidden" name="version" value="MEME version 4.9.1">
+<input type="hidden" name="alphabet" id="alphabet" value="ACGT">
+<input type="hidden" name="strands" value="+ -">
+<input type="hidden" name="bgsrc" value="dataset">
+<input type="hidden" name="bgfreq" id="bgfreq" value="A 0.246 C 0.253 G 0.250 T 0.251">
+<input type="hidden" name="name" value="seqs-centered">
+<input type="hidden" name="nmotifs" id="nmotifs" value="5">
+<!--data for motif 1-->
+<input type="hidden" id="motifblock1" name="motifname1" value="MCRCCCW">
+<input type="hidden" id="pspm1" name="pspm1" value="
+letter-probability matrix: alength= 4 w= 7 nsites= 474 E= 2.2e-063
+0.632911 0.367089 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.710970 0.000000 0.289030 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.508439 0.000000 0.000000 0.491561
+">
+<!--data for motif 2-->
+<input type="hidden" id="motifblock2" name="motifname2" value="TTATCW">
+<input type="hidden" id="pspm2" name="pspm2" value="
+letter-probability matrix: alength= 4 w= 6 nsites= 285 E= 1.9e-037
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+0.000000 1.000000 0.000000 0.000000
+0.424561 0.000000 0.000000 0.575439
+">
+<!--data for motif 3-->
+<input type="hidden" id="motifblock3" name="motifname3" value="ARATA">
+<input type="hidden" id="pspm3" name="pspm3" value="
+letter-probability matrix: alength= 4 w= 5 nsites= 259 E= 5.0e-003
+1.000000 0.000000 0.000000 0.000000
+0.436293 0.000000 0.563707 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+">
+<!--data for motif 4-->
+<input type="hidden" id="motifblock4" name="motifname4" value="CCMCACCC">
+<input type="hidden" id="pspm4" name="pspm4" value="
+letter-probability matrix: alength= 4 w= 8 nsites= 29 E= 5.7e-003
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.517241 0.482759 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+">
+<!--data for motif 5-->
+<input type="hidden" id="motifblock5" name="motifname5" value="ACAGMTG">
+<input type="hidden" id="pspm5" name="pspm5" value="
+letter-probability matrix: alength= 4 w= 7 nsites= 66 E= 8.2e-003
+1.000000 0.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 1.000000 0.000000
+0.409091 0.590909 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000 0.000000
+">
+<!--+++++++++++++++FINISHED DATA++++++++++++-->
+<input type="hidden" name="program" id="submit_program" value="TOMTOM"><input type="hidden" name="motif" id="submit_motif" value="all"><input type="hidden" name="logoformat" id="submit_format" value="png"><input type="hidden" name="logorc" id="submit_rc" value="false"><input type="hidden" name="logossc" id="submit_ssc" value="false"><input type="hidden" name="logowidth" id="submit_width" value=""><input type="hidden" name="logoheight" id="submit_height" value="7.5">
+</form>
+<div class="pop_content" id="pop_motifs_name">
+<p>
+        The name of the motif uses the IUPAC codes for nucleotides which has 
+        a different letter to represent each of the 15 possible combinations.
+      </p>
+<p>
+        The name is itself a representation of the motif though the position
+        weight matrix is not directly equalivant as it is generated from the
+        sites found that matched the letters given in the name.
+      </p>
+<p><a href="http://meme.nbcr.net/meme/doc/alphabets.html">
+        Read more about the MEME suite's use of the IUPAC alphabets.
+        </a></p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_motifs_logo">
+<p>The logo of the motif.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_motifs_rc_logo">
+<p>The logo of the reverse complement motif.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_motifs_evalue">
+<p>The E-value is the enrichment p-value times the number of candidate 
+        motifs tested.</p>
+<p>The enrichment p-value is calculated using the Fisher Exact Test for 
+        enrichment of the motif in the positive sequences.</p>
+<p>Note that the counts used in the Fisher Exact Test are made after 
+        erasing sites that match previously found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_motifs_uevalue">
+<p>The E-value of the motif calculated without erasing the sites of 
+        previously found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_more">
+<p>Show more information on the motif.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_submit">
+<p>Submit your motif to another MEME Suite program.</p>
+<h5>Supported Programs</h5>
+<dl>
+<dt>Tomtom</dt>
+<dd>Tomtom is a tool for searching for similar known motifs. 
+          [<a href="http://meme.nbcr.net/meme/tomtom-intro.html">manual</a>]</dd>
+<dt>MAST</dt>
+<dd>MAST is a tool for searching biological sequence databases for 
+          sequences that contain one or more of a group of known motifs.
+          [<a href="http://meme.nbcr.net/meme/mast-intro.html">manual</a>]</dd>
+<dt>FIMO</dt>
+<dd>FIMO is a tool for searching biological sequence databases for 
+          sequences that contain one or more known motifs.
+          [<a href="http://meme.nbcr.net/meme/fimo-intro.html">manual</a>]</dd>
+<dt>GOMO</dt>
+<dd>GOMO is a tool for identifying possible roles (Gene Ontology 
+          terms) for DNA binding motifs.
+          [<a href="http://meme.nbcr.net/meme/gomo-intro.html">manual</a>]</dd>
+<dt>SpaMo</dt>
+<dd>SpaMo is a tool for inferring possible transcription factor
+          complexes by finding motifs with enriched spacings.
+          [<a href="http://meme.nbcr.net/meme/spamo-intro.html">manual</a>]</dd>
+</dl>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_download">
+<p>Download your motif as a position weight matrix or a custom logo.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_motif_positives">
+<p># positive sequences matching the motif / # positive sequences.</p>
+<p>Note these counts are made after erasing sites that match previously
+        found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_motif_negatives">
+<p># negative sequences matching the motif / # negative sequences.</p>
+<p>Note these counts are made after erasing sites that match previously
+        found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_motif_pvalue">
+<p>The p-value of the Fisher Exact Test for enrichment of the motif in 
+        the positive sequences.</p>
+<p>Note that the counts used in the Fisher Exact Test are made after 
+        erasing sites that match previously found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_motif_evalue">
+<p>The E-value is the motif p-value times the number of candidate motifs 
+        tested.</p>
+<p>Note that the p-value was calculated with counts made after 
+        erasing sites that match previously found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_motif_uevalue">
+<p>The E-value of the motif calculated without erasing the sites of 
+        previously found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_match_word">
+<p>All words matching the motif whose uncorrected p-value is less than
+        0.01.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_match_pos">
+<p># positive sequences with matches to the word / # positive sequences.</p>
+<p>Note these counts are made after erasing sites that match previously
+        found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_match_neg">
+<p># negative sequences with matches to the word / # negative sequences.</p>
+<p>Note these counts are made after erasing sites that match previously
+        found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_match_pval">
+<p>The p-value of the Fisher Exact Test for enrichment of the word in 
+        the positive sequences.</p>
+<p>Note that the counts used in the Fisher Exact Test are made after 
+        erasing sites that match previously found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div class="pop_content" id="pop_match_eval">
+<p>The word p-value times the number of candidates tested.</p>
+<p>Note that the p-value was calculated with counts made after 
+        erasing sites that match previously found motifs.</p>
+<div style="float:right; bottom:0px;">[<a href="javascript:help()">close</a> ]</div>
+</div>
+<div id="expanded_motif" style="display:none"><div class="box expanded_motif" style="margin-bottom:5px;">
+<div>
+<div style="float:left"><h2 class="mainh" style="margin:0; padding:0;">
+<span class="num"></span>.  
+              <span class="name"></span>
+</h2></div>
+<div style="float:right; "><div class="close" onclick="contract(this);" title="Show less information.">↥</div></div>
+<div style="clear:both"></div>
+</div>
+<div style="padding:0 5px;">
+<div style="float:left;">
+<img class="img_nc" onerror="fix_expanded_logo(this, false)"><img class="img_rc" onerror="fix_expanded_logo(this, true)">
+</div>
+<div style="float:right; height:100px;">
+<div onclick="send_to_popup2(this);" class="actionbutton" title="Submit this motif to another MEME Suite program.">
+<div style="float:left; margin-right:1em;">Submit</div>
+<div style="float:right">⇢</div>
+<div style="clear:both;"></div>
+</div>
+<div onclick="download_popup2(this);" class="actionbutton" title="Download this motif as a position weight matrix or a custom logo.">
+<div style="float:left; margin-right:1em;">Download</div>
+<div style="float:right">⟱</div>
+<div style="clear:both;"></div>
+</div>
+</div>
+<div style="clear:both;"></div>
+</div>
+<h4>Details</h4>
+<table class="details">
+<thead><tr>
+<th>Positives <div class="help2" onclick="help(this,'pop_motif_positives')">?</div>
+</th>
+<th>Negatives <div class="help2" onclick="help(this,'pop_motif_negatives')">?</div>
+</th>
+<th>P-value <div class="help2" onclick="help(this,'pop_motif_pvalue')">?</div>
+</th>
+<th>E-value <div class="help2" onclick="help(this,'pop_motif_evalue')">?</div>
+</th>
+<th>Unerased E-value <div class="help2" onclick="help(this,'pop_motif_uevalue')">?</div>
+</th>
+</tr></thead>
+<tbody><tr>
+<td>
+<span class="positives"></span>/820</td>
+<td>
+<span class="negatives"></span>/820</td>
+<td class="pvalue"></td>
+<td class="evalue"></td>
+<td class="uevalue"></td>
+</tr></tbody>
+</table>
+<h4>Enriched Matching Words</h4>
+<table>
+<thead><tr>
+<th>
+<a href="javascript:;" onclick="sort_table(this, compare_strings)"><span class="sort_dir"></span>Word</a> 
+                <div class="help2" onclick="help(this,'pop_match_word')">?</div>
+</th>
+<th>
+<a href="javascript:;" onclick="sort_table(this, compare_counts)"><span class="sort_dir"></span>Positives</a> 
+                <div class="help2" onclick="help(this,'pop_match_pos')">?</div>
+</th>
+<th>
+<a href="javascript:;" onclick="sort_table(this, compare_counts)"><span class="sort_dir"></span>Negatives</a> 
+                <div class="help2" onclick="help(this,'pop_match_neg')">?</div>
+</th>
+<th>
+<a href="javascript:;" onclick="sort_table(this, compare_numbers)"><span class="sort_dir"></span>P-value</a> 
+                <div class="help2" onclick="help(this,'pop_match_pval')">?</div>
+</th>
+<th>
+<a href="javascript:;" onclick="sort_table(this, compare_numbers)"><span class="sort_dir">▼</span>E-value</a> 
+                <div class="help2" onclick="help(this,'pop_match_eval')">?</div>
+</th>
+</tr></thead>
+<tbody><tr class="match">
+<td class="dnaseq"></td>
+<td>
+<span class="positives"></span>/820</td>
+<td>
+<span class="negatives"></span>/820</td>
+<td class="pvalue"></td>
+<td class="evalue"></td>
+</tr></tbody>
+</table>
+</div></div>
+<div id="grey_out_page" class="grey_background" style="display:none;"></div>
+<div class="popup_wrapper"><div id="send_to" class="popup" style="top:-150px; display:none">
+<div>
+<div style="float:left" id="send_to_title_1"><h2 class="mainh compact">Submit "<span id="send_to_name"></span>"</h2></div>
+<div style="float:left" id="send_to_title_2"><h2 class="mainh compact">Submit All Motifs</h2></div>
+<div style="float:right; "><div class="close" onclick="both_hide();">x</div></div>
+<div style="clear:both"></div>
+</div>
+<div style="padding:0 5px 5px 5px;">
+<div id="send_to_selector" style="height:100px;">
+<img id="send_to_img" height="90" style="max-width:170px;" onerror="fix_popup_logo(this, 'send_to_can', false)"><canvas id="send_to_can" width="10" height="100" style="display:none;"></canvas><img id="send_to_rcimg" height="90" style="max-width:170px;" onerror="fix_popup_logo(this, 'send_to_rccan', true);"><canvas id="send_to_rccan" width="10" height="100" style="display:none"></canvas><div style="float:right;">
+<a id="prev_arrow_2" href="javascript:both_change(-1)" class="navarrow">⇧</a><div id="pop_num_2" class="navnum"></div>
+<a id="next_arrow_2" href="javascript:both_change(1)" class="navarrow">⇩</a>
+</div>
+</div>
+<form>
+<div style="">
+<div style="float:left;">
+<h4 class="compact">Select what you want to do</h4>
+<div class="programs_scroll"><ul id="tasks" class="programs">
+<li id="search_motifs" onclick="click_submit_task(this)" class="selected">Search Motifs</li>
+<li id="search_sequences" onclick="click_submit_task(this)">Search Sequences</li>
+<li id="rank_sequences" onclick="click_submit_task(this)">Rank Sequences</li>
+<li id="predict_go" onclick="click_submit_task(this)">Predict Gene Ontology terms</li>
+<li id="infer_tf" onclick="click_submit_task(this)">Infer TF Complexes</li>
+</ul></div>
+</div>
+<div style="float:right;">
+<h4 class="compact">Select a program</h4>
+<div class="programs_scroll"><ul id="programs" class="programs">
+<li id="TOMTOM" onclick="click_submit_program(this)" class="selected">Tomtom</li>
+<li id="FIMO" onclick="click_submit_program(this)">FIMO</li>
+<li id="MAST" onclick="click_submit_program(this)">MAST</li>
+<li id="GOMO" onclick="click_submit_program(this)">GOMO</li>
+<li id="SPAMO" onclick="click_submit_program(this)">SpaMo</li>
+</ul></div>
+</div>
+<div style="font-weight:bold; display:inline-block; text-align:center; width:60px; height:100px; line-height:100px">Or</div>
+<div style="clear:both;"></div>
+</div>
+<h4>
+<span id="program_action">Search Motifs</span> with <span id="program_name">Tomtom</span>
+</h4>
+<p><span id="program_desc">Find similar motifs in published 
+                libraries or a library you supply.</span></p>
+<div style="margin-top:10px; height: 2em;">
+<div style="float:left;"><input type="button" value="Send" onclick="javascript:send_to_submit()"></div>
+<div style="float:right;"><input type="button" value="Cancel" onclick="javascript:both_hide()"></div>
+</div>
+</form>
+</div>
+</div></div>
+<div class="popup_wrapper"><div id="download" class="popup" style="top:-150px; display:none">
+<div>
+<div style="float:left"><h2 class="mainh" style="margin:0; padding:0;">Download "<span id="download_name"></span>"</h2></div>
+<div style="float:right; "><div class="close" onclick="both_hide();">x</div></div>
+<div style="clear:both"></div>
+</div>
+<div style="padding:0 5px 5px 5px;">
+<div style="height:100px">
+<img id="download_img" height="90" style="max-width:170px;" onerror="fix_popup_logo(this, 'download_can', false)"><canvas id="download_can" width="10" height="100" style="display:none;"></canvas><img id="download_rcimg" height="90" style="max-width:170px;" onerror="fix_popup_logo(this, 'download_rccan', true)"><canvas id="download_rccan" width="10" height="100" style="display:none;"></canvas><div style="float:right;">
+<a id="prev_arrow_1" href="javascript:both_change(-1)" class="navarrow">⇧</a><div id="pop_num_1" class="navnum"></div>
+<a id="next_arrow_1" href="javascript:both_change(1)" class="navarrow">⇩</a>
+</div>
+</div>
+<form>
+<input type="hidden" id="download_tab_num" value="1"><div style="padding:5px 0;">
+<div class="tabArea top">
+<a id="download_tab_1" href="javascript:click_download_tab(1)" class="tab activeTab">PSPM Format</a><a id="download_tab_2" href="javascript:click_download_tab(2)" class="tab">PSSM Format</a><a id="download_tab_3" href="javascript:click_download_tab(3)" class="tab">Logo</a>
+</div>
+<div class="tabMain">
+<div id="download_pnl_1"><textarea id="download_pspm" style="width:99%" rows="10" readonly></textarea></div>
+<div id="download_pnl_2"><textarea id="download_pssm" style="width:99%" rows="10" readonly></textarea></div>
+<div id="download_pnl_3"><table>
+<tr>
+<td><label for="logo_format">Format:</label></td>
+<td><select id="logo_format"><option value="png">PNG (for web)</option>
+<option value="eps">EPS (for publication)</option></select></td>
+</tr>
+<tr>
+<td><label for="logo_rc">Orientation:</label></td>
+<td><select id="logo_rc"><option value="false">Normal</option>
+<option value="true">Reverse Complement</option></select></td>
+</tr>
+<tr>
+<td><label for="logo_ssc">Small Sample Correction:</label></td>
+<td><select id="logo_ssc"><option value="false">Off</option>
+<option value="true">On</option></select></td>
+</tr>
+<tr>
+<td><label for="logo_width">Width:</label></td>
+<td>
+<input type="text" id="logo_width" size="4"> cm
+                      </td>
+</tr>
+<tr>
+<td><label for="logo_height">Height:</label></td>
+<td>
+<input type="text" id="logo_height" size="4"> cm
+                      </td>
+</tr>
+</table></div>
+<div style="margin-top:10px;">
+<div style="float:left;"><input type="button" id="download_button" value="Download" style="visibility:hidden;" onclick="javascript:download_submit()"></div>
+<div style="float:right;"><input type="button" value="Cancel" onclick="javascript:both_hide()"></div>
+<div style="clear:both;"></div>
+</div>
+</div>
+</div>
+</form>
+</div>
+</div></div>
+<a name="top"></a><div class="pad1">
+<h1><img src="http://meme.nbcr.net/meme/doc/images/dreme_logo.png" alt="Discriminative Regular Expression Motif Elicitation (DREME)"></h1>
+<p class="spaced">
+        For further information on how to interpret these results or to get a 
+        copy of the MEME software please access 
+        <a href="http://meme.nbcr.net/">http://meme.nbcr.net</a>. 
+      </p>
+<p>
+        If you use DREME in your research please cite the following paper:<br><span class="citation">
+          Timothy L. Bailey, "DREME: Motif discovery in transcription factor ChIP-seq data", <i>Bioinformatics</i>, <b>27</b>(12):1653-1659, 2011.
+        </span></p>
+</div>
+<div class="pad2">
+<a class="jump" href="#motifs">Discovered motifs</a>  |  <a class="jump" href="#program">Program information</a>
+</div>
+<a name="motifs"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Discovered Motifs</h2></td>
+<td align="right" valign="bottom">
+<a href="#program">Next</a> <a href="#top">Top</a>
+</td>
+</tr></table>
+<div class="box">
+<p><b>Click on the ↧</b> under the <b>More</b> column to show more 
+        information about the motif.<br><b>Click on the ⇢</b> under the <b>Submit</b> column to send the 
+        motif to another MEME suite program. Eg. Tomtom<br><b>Click on the ⟱</b> under the <b>Download</b> column to get 
+        the position weight matrix of a motif or to download the logo image with
+        your chosen options.
+      </p>
+<table id="dreme_motifs" class="dreme_motifs">
+<thead><tr class="motif_head">
+<td> </td>
+<th>Motif <div class="help2" onclick="help(this,'pop_motifs_name')">?</div>
+</th>
+<th>Logo <div class="help2" onclick="help(this,'pop_motifs_logo')">?</div>
+</th>
+<th>RC Logo <div class="help2" onclick="help(this,'pop_motifs_rc_logo')">?</div>
+</th>
+<th>E-value <div class="help2" onclick="help(this,'pop_motifs_evalue')">?</div>
+</th>
+<th>Unerased E-value <div class="help2" onclick="help(this,'pop_motifs_uevalue')">?</div>
+</th>
+<th>More <div class="help2" onclick="help(this,'pop_more')">?</div>
+</th>
+<th>Submit <div class="help2" onclick="help(this,'pop_submit')">?</div>
+</th>
+<th>Download <div class="help2" onclick="help(this,'pop_download')">?</div>
+</th>
+</tr></thead>
+<tbody>
+<tr class="motif_row" id="motif_row_1">
+<td>1.</td>
+<td>MCRCCCW</td>
+<td><img src="m01nc_MCRCCCW.png" id="small_logo_1" width="105" height="50" onerror="add_draw_task(this,                      new FixLogoTask(1, false))"></td>
+<td><img src="m01rc_WGGGYGK.png" id="small_rc_logo_1" width="105" height="50" onerror="add_draw_task(this,                      new FixLogoTask(1, true)); true"></td>
+<td>2.2e-063</td>
+<td>2.2e-063</td>
+<td class="symaction"><a href="javascript:expand(1)">↧</a></td>
+<td class="symaction"><a href="javascript:send_to_popup(1)">⇢</a></td>
+<td class="symaction"><a href="javascript:download_popup(1)">⟱</a></td>
+</tr>
+<tr class="motif_row" id="motif_row_2">
+<td>2.</td>
+<td>TTATCW</td>
+<td><img src="m02nc_TTATCW.png" id="small_logo_2" width="90" height="50" onerror="add_draw_task(this,                      new FixLogoTask(2, false))"></td>
+<td><img src="m02rc_WGATAA.png" id="small_rc_logo_2" width="90" height="50" onerror="add_draw_task(this,                      new FixLogoTask(2, true)); true"></td>
+<td>1.9e-037</td>
+<td>4.4e-038</td>
+<td class="symaction"><a href="javascript:expand(2)">↧</a></td>
+<td class="symaction"><a href="javascript:send_to_popup(2)">⇢</a></td>
+<td class="symaction"><a href="javascript:download_popup(2)">⟱</a></td>
+</tr>
+<tr class="motif_row" id="motif_row_3">
+<td>3.</td>
+<td>ARATA</td>
+<td><img src="m03nc_ARATA.png" id="small_logo_3" width="75" height="50" onerror="add_draw_task(this,                      new FixLogoTask(3, false))"></td>
+<td><img src="m03rc_TATYT.png" id="small_rc_logo_3" width="75" height="50" onerror="add_draw_task(this,                      new FixLogoTask(3, true)); true"></td>
+<td>5.0e-003</td>
+<td>1.3e-018</td>
+<td class="symaction"><a href="javascript:expand(3)">↧</a></td>
+<td class="symaction"><a href="javascript:send_to_popup(3)">⇢</a></td>
+<td class="symaction"><a href="javascript:download_popup(3)">⟱</a></td>
+</tr>
+<tr class="motif_row" id="motif_row_4">
+<td>4.</td>
+<td>CCMCACCC</td>
+<td><img src="m04nc_CCMCACCC.png" id="small_logo_4" width="120" height="50" onerror="add_draw_task(this,                      new FixLogoTask(4, false))"></td>
+<td><img src="m04rc_GGGTGKGG.png" id="small_rc_logo_4" width="120" height="50" onerror="add_draw_task(this,                      new FixLogoTask(4, true)); true"></td>
+<td>5.7e-003</td>
+<td>3.3e-035</td>
+<td class="symaction"><a href="javascript:expand(4)">↧</a></td>
+<td class="symaction"><a href="javascript:send_to_popup(4)">⇢</a></td>
+<td class="symaction"><a href="javascript:download_popup(4)">⟱</a></td>
+</tr>
+<tr class="motif_row" id="motif_row_5">
+<td>5.</td>
+<td>ACAGMTG</td>
+<td><img src="m05nc_ACAGMTG.png" id="small_logo_5" width="105" height="50" onerror="add_draw_task(this,                      new FixLogoTask(5, false))"></td>
+<td><img src="m05rc_CAKCTGT.png" id="small_rc_logo_5" width="105" height="50" onerror="add_draw_task(this,                      new FixLogoTask(5, true)); true"></td>
+<td>8.2e-003</td>
+<td>5.2e-003</td>
+<td class="symaction"><a href="javascript:expand(5)">↧</a></td>
+<td class="symaction"><a href="javascript:send_to_popup(5)">⇢</a></td>
+<td class="symaction"><a href="javascript:download_popup(5)">⟱</a></td>
+</tr>
+</tbody>
+<tfoot><tr class="rule">
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+</tr></tfoot>
+</table>
+<div style="float:left"><div onclick="send_to_popup(0);" class="actionbutton" title="Submit all motifs to another program.">
+<div style="float:left; margin-right:1em;">Submit All</div>
+<div style="float:right">⇢</div>
+<div style="clear:both;"></div>
+</div></div>
+<div style="clear:both;"></div>
+</div>
+<a name="program"></a><div class="bar">
+<div style="text-align:right;">
+<a href="#motifs">Previous</a> <a href="#top">Top</a>
+</div>
+<div class="subsection">
+<a name="version"></a><h5>DREME version</h5>4.9.1 (Release date: Fri Aug 23 16:49:42 2013 +1000)
+      </div>
+<div class="subsection">
+<a name="reference"></a><h5>Reference</h5>
+<span class="citation">
+          Timothy L. Bailey, "DREME: Motif discovery in transcription factor ChIP-seq data", <i>Bioinformatics</i>, <b>27</b>(12):1653-1659, 2011.
+        </span>
+</div>
+<div class="subsection">
+<a name="command"></a><h5>Command line summary</h5>
+<textarea rows="1" style="width:100%;" readonly>dreme -v 1 -oc memechip_example_output_files/dreme_out -p memechip_example_output_files/seqs-centered -n memechip_example_output_files/seqs-shuffled -png</textarea><br>Result calculation took 36.82 seconds<br>
+</div>
+<a href="javascript:show_hidden('model')" id="model_activator">show model parameters...</a><div class="subsection" id="model_data" style="display:none;">
+<h5>Model parameters</h5>
+<textarea style="width:100%;" rows="10" readonly>
+positives             = name: "seqs-centered", count: "820", file: "memechip_example_output_files/seqs-centered", last_mod_date: "Fri Aug 23 17:12:12 EST 2013"
+negatives             = name: "seqs-shuffled", count: "820", from: "file", file: "memechip_example_output_files/seqs-shuffled", last_mod_date: "Fri Aug 23 17:12:16 EST 2013"
+background            = type: "dna", A: "0.246", C: "0.253", G: "0.250", T: "0.251", from: "dataset"
+stop                  = evalue: "0.05"
+norc                  = FALSE
+ngen                  = 100
+add_pv_thresh         = 0.01
+seed                  = 1
+host                  = tlb-takumi-lt.imb.uq.edu.au
+when                  = Fri Aug 23 17:26:05 EST 2013
+</textarea>
+</div>
+<a href="javascript:hide_shown('model')" style="display:none;" id="model_deactivator">hide model parameters...</a>
+</div>
+<div id="scrollpad"></div>
+</body>
+</html>

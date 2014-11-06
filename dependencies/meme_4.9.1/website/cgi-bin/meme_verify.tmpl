@@ -1,0 +1,88 @@
+<hr/>
+<style type="text/css">
+  td.table_label {
+    width:20em;
+  }
+  h5.section_label {
+    margin-top:5px;
+    margin-bottom:5px;
+  }
+  table.info {
+    margin-bottom:20px;
+  }
+</style>
+<!-- TMPL_IF NAME=description -->
+<h5 class="section_label">Description</h5>
+<pre><!-- TMPL_VAR ESCAPE=HTML NAME=description --></pre>
+<!-- /TMPL_IF -->
+<h5 class="section_label">Settings</h5>
+<table class="info">
+  <tr><td class="table_label">Sequence file</td>
+  <td><!-- TMPL_VAR ESCAPE=HTML NAME=seqs_name --></td></tr>
+  <tr><td class="table_label">Distribution of motif occurrences</td>
+  <td><!-- TMPL_VAR NAME=motif_occur --></td></tr>
+  <tr><td class="table_label">Number of different motifs</td>
+  <td><!-- TMPL_VAR NAME=nmotifs --></td></tr>
+  <!-- TMPL_IF NAME=minsites -->
+  <tr><td class="table_label">Minimum number of sites</td>
+  <td><!-- TMPL_VAR NAME=minsites --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=maxsites -->
+  <tr><td class="table_label">Maximum number of sites</td>
+  <td><!-- TMPL_VAR NAME=maxsites --></td></tr>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Minimum motif width</td>
+  <td><!-- TMPL_VAR NAME=minw --></td></tr>
+  <tr><td class="table_label">Maximum motif width</td>
+  <td><!-- TMPL_VAR NAME=maxw --></td></tr>
+  <!-- TMPL_IF NAME=posonly -->
+  <tr><td class="table_label">Searching</td>
+  <td>given strand only</td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=pal -->
+  <tr><td class="table_label">Looking for</td><td>palindromes only</td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=shuffle -->
+  <tr><td class="table_label">Shuffling</td>
+  <td>letters in input sequences</td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=bfile_name -->
+  <tr><td class="table_label">Background model file</td>
+  <td><!-- TMPL_VAR ESCAPE=HTML NAME=bfile_name --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=negs_name -->
+  <tr><td class="table_label">Negative sequences file</td>
+  <td><!-- TMPL_VAR ESCAPE=HTML NAME=negs_name --></td></tr>
+  <!-- /TMPL_IF -->
+</table>
+<h5 class="section_label">Sequences</h5>
+<table class="info">
+  <tr><td class="table_label">Type of Sequences</td>
+  <td><!-- TMPL_VAR NAME=alpha --></td></tr>
+  <tr><td class="table_label">Count of Sequences</td>
+  <td><!-- TMPL_VAR NAME=seqs_count --></td></tr>
+  <tr><td class="table_label">Shortest Sequence (residues)</td>
+  <td><!-- TMPL_VAR NAME=seqs_min --></td></tr>
+  <tr><td class="table_label">Longest Sequence (residues)</td>
+  <td><!-- TMPL_VAR NAME=seqs_max --></td></tr>
+  <tr><td class="table_label">Average Length (residues)</td>
+  <td><!-- TMPL_VAR NAME=seqs_avg --></td></tr>
+  <tr><td class="table_label">Total Length (residues)</td>
+  <td><!-- TMPL_VAR NAME=seqs_total --></td></tr>
+</table>
+<!-- TMPL_IF NAME=negs_name -->
+<h5 class="section_label">Negative Sequences</h5>
+<table class="info">
+  <tr><td class="table_label">Count of Sequences</td>
+  <td><!-- TMPL_VAR NAME=negs_count --></td></tr>
+  <tr><td class="table_label">Shortest Sequence (residues)</td>
+  <td><!-- TMPL_VAR NAME=negs_min --></td></tr>
+  <tr><td class="table_label">Longest Sequence (residues)</td>
+  <td><!-- TMPL_VAR NAME=negs_max --></td></tr>
+  <tr><td class="table_label">Average Length (residues)</td>
+  <td><!-- TMPL_VAR NAME=negs_avg --></td></tr>
+  <tr><td class="table_label">Total Length (residues)</td>
+  <td><!-- TMPL_VAR NAME=negs_total --></td></tr>
+</table>
+<!-- /TMPL_IF -->
+

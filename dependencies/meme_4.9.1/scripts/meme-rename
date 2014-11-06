@@ -1,0 +1,82 @@
+#!/bin/csh
+# AUTHOR: Timothy L. Bailey
+# CREATE DATE: 28-Sep-2012
+
+set pgm = $0; set pgm = $pgm:t
+set args = ($*)
+set dest = "."
+if ($#argv < 1) then
+  usage:
+  more << USAGE
+  USAGE:
+        $pgm [options]
+
+	[<dir>]+	full path of MEME Suite program output directory
+	[-d <dest>]	destination directory; default: $dest 
+	[-h]		print this message
+
+	Copy HTML files from MEME Suite programs to files with
+	distinct names to make it easier to share them:
+		<dest>/<program>.<last_dir>.html
+	where <last_dir> is the last directory on the path, and
+	<program> is the name of the MEME Suite program.
+
+USAGE
+  exit 1
+endif
+
+unlimit cputime
+onintr cleanup
+
+# get input arguments
+set dirs = ()
+while ("$1" != "")
+  switch ($1)
+  case -h:
+    goto usage
+  case -d:
+    shift
+    set dest = $1
+    breaksw
+  default:
+    set dirs = ($dirs $1)
+    breaksw
+  endsw
+  shift
+end
+
+foreach dir ($dirs)
+
+  # get the program name
+  set tmp = `ls $dir/*.html`
+  if ($status) then
+    echo No MEME Suite HTML file found in directory: $dir
+    goto cleanup
+  endif
+  set pgm_file = $tmp:t
+  set pgm = $pgm_file:r
+
+  # get the final directory in the path
+  set tmp = (`echo $dir | sed 's/\// /g'`)
+  set last_dir = $tmp[$#tmp]
+
+  # remove program name from end of path if present
+  set dir_pgm = $last_dir:e
+
+  #echo dir_pgm $pgm
+  if ($dir_pgm == $pgm) then
+    set f = $last_dir:r
+  else
+    set f = $last_dir
+  endif
+
+  # copy the file to new name
+  cp $dir/$pgm.html $dest/$pgm.$f.html
+  if ($status) then
+    echo Could not copy $dir/$pgm.html to $dest/$pgm.$f.html 
+    goto cleanup
+  endif
+end
+
+cleanup:
+#rm $pgm.$$.*.tmp

@@ -1,0 +1,15 @@
+#pattern name	sequence name	start	stop	score	p-value	q-value	matched sequence
+cluster-6	recn	71	131	23.2358	nan	nan	nan	TACTGTATATAAAACCAGTTTATACTGTACACAATAACAGTAATGGTTTTTCATACAGGA
+cluster-1	cloacin-df13	97	117	20.8877	nan	nan	nan	TACTGTGTATATATACAGTA
+cluster-8	umu-operon	91	111	17.4459	nan	nan	nan	TACTGTATATAAAAACAGTA
+cluster-13	lexA	14	96	16.3256	nan	nan	nan	CTCTGGTTTATTGTGCAGTTTATGGTTCCAAAATCGCCTTTTGCTGTATATACTCACAGCATAACTGTATATACACCCAGGG
+cluster-14	muc-operon	49	69	15.8364	nan	nan	nan	TACTGTATAAATAAACAGTT
+cluster-10	uvrb	71	91	12.3671	nan	nan	nan	AACTGTTTTTTTATCCAGTA
+cluster-5	reca	71	91	12.1432	nan	nan	nan	TACTGTATGAGCATACAGTA
+cluster-7	sula	85	105	10.1184	nan	nan	nan	TACTGTACATCCATACAGTA
+cluster-11	uvrd	102	122	9.9579	nan	nan	nan	ATCTGTATATATACCCAGCT
+cluster-4	colicin-ib	99	119	9.8961	nan	nan	nan	TACTGTATATGTATCCATAT
+cluster-12	colicin-a	34	54	9.8961	nan	nan	nan	TACTGTATATAAACACATGT
+cluster-3	colicin-ia	99	119	9.8961	nan	nan	nan	TACTGTATATGTATCCATAT
+cluster-2	colicin-e1	97	117	9.46614	nan	nan	nan	TGCTGTATATAAAACCAGTG
+cluster-9	uvra	60	80	9.13848	nan	nan	nan	TACTGTATATTCATTCAGGT

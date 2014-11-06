@@ -1,0 +1,1212 @@
+#!@WHICHPERL@
+
+=head1 NAME
+
+meme-chip - Does an automated analysis of a ChIPseq DNA sequence dataset with the MEME toolchain.
+
+=head1 SYNOPSIS
+
+meme-chip [options] <sequences>
+
+ Options:
+  -o                <dir>   : output to the specified directory, failing if the directory exists
+  -oc               <dir>   : output to the specified directory, overwriting if the directory exists
+  -index-name       <name>  : name of html index file; default: index.html
+  -db               <path>  : target database for use by TOMTOM and CentriMo, if not present then 
+                              TOMTOM and CentriMo are not run
+  -bfile            <path>  : background file
+  -nmeme            <num>   : limit of sequences to pass to MEME
+  -ccut             <num>   : maximum size of a sequence before it is cut down 
+                              to a centered section; a value of 0 indicates the
+                              sequences should not be cut down; default: 100
+  -group-thresh     <gthr>  : primary threshold for clustering motifs; default: 0.05
+  -group-weak       <gwk>   : secondary threshold for clustering motifs; default: 2*gthr
+  -time          <minutes>  : maximum time that this program has to run and 
+                              create output in; default: no limit
+  -desc             <text>  : description of the job
+  -fdesc            <file>  : file containing plain text description of the job
+  -norc                     : search given strand only
+  -noecho                   : don't echo the commands run
+  -help                     : display this help message
+  -version                  : print the version and exit
+
+ MEME Specific Options:
+  -meme-mod [oops|zoops|anr]: sites used in a single sequence
+  -meme-minw        <num>   : minimum motif width
+  -meme-maxw        <num>   : maximum motif width
+  -meme-nmotifs     <num>   : maximum number of motifs to find
+  -meme-minsites    <num>   : minimum number of sites per motif
+  -meme-maxsites    <num>   : maximum number of sites per motif
+  -meme-p           <np>    : use parallel version with <np> processors
+  -meme-pal                 : look for palindromes only
+  -meme-maxsize     <num>   : change the maximum dataset size; note that the
+                              default maximum size exists to warn users that
+                              their dataset is possibly too large to process
+                              in a reasonable time so please consider carefully
+                              before increasing this value. It should not be
+                              required to change this value unless you are
+                              changing -ccut or -nmeme options.
+
+ DREME Specific Options:
+  -dreme-e          <num>   : stop searching after reaching this E-value threshold
+  -dreme-m          <num>   : stop searching after finding this many motifs
+
+ CentriMo Specific Options:
+  -centrimo-local           : compute enrichment of all regions (not only central)
+  -centrimo-score   <num>   : set the minimum allowed match score
+  -centrimo-maxreg  <num>   : set the maximum region size to be considered
+  -centrimo-ethresh <num>   : set the E-value threshold for reporting
+  -centrimo-noseq           : don't store sequence IDs in the output
+  -centrimo-flip            : reflect matches on reverse strand around center
+=cut
+
+use strict;
+use warnings;
+
+use Carp;
+$SIG{ __DIE__ } = sub { Carp::confess( @_ ) };
+
+use Cwd qw(abs_path);
+use Data::Dumper;
+use Fcntl qw(O_CREAT O_RDONLY O_WRONLY O_TRUNC SEEK_SET);
+use File::Basename qw(fileparse);
+use File::Path qw(mkpath);
+use File::Temp qw(tempfile);
+use File::Spec::Functions qw(abs2rel catfile catdir splitdir tmpdir);
+use Getopt::Long;
+use List::Util qw(min max);
+use Pod::Usage;
+use POSIX qw(floor);
+use Time::HiRes qw(gettimeofday tv_interval);
+use XML::Simple;
+
+use lib qw(@PERLLIBDIR@);
+use Globals;
+use ExecUtils qw(invoke stringify_args2);
+use MotifUtils qw(intern_to_meme read_background_file);
+use MotifInMemeXML;
+use MotifInDremeXML;
+use JsonRdr;
+use HtmlMonolithWr;
+
+# Globals
+my $t0 = [&gettimeofday()];
+my $logger = undef;
+my $bin_dir = undef;
+my $etc_dir = undef;
+my $temp_dir = undef;
+my $site_url = undef;
+my $version = undef;
+my $revision = undef;
+my $release = undef;
+my $progress_log = undef;
+my @cmd = (scalar fileparse($0), @ARGV);
+
+
+my @jobs = ();
+
+# Run MEME-ChIP
+&main();
+
+#
+# Setup some globals
+#
+sub initialise {
+  # setup logging
+  eval {
+    require Log::Log4perl;
+    Log::Log4perl->import();
+    Log::Log4perl::init('@APPCONFIGDIR@/logging.conf');
+    $logger = Log::Log4perl->get_logger('meme.service.memechip');
+    $SIG{__DIE__} = sub {
+      return if ($^S);
+      $logger->fatal(@_);
+      die @_;
+    };
+    $logger->trace("call initialise");
+  };
+
+  # setup binary directory
+  $bin_dir = '@BINDIR@';
+
+  # setup etc directory
+  $etc_dir = '@APPCONFIGDIR@';
+
+  # setup temporary directory
+  $temp_dir = '@TMP_DIR@';
+  # use the perl default if none is supplied or the replace fails
+  $temp_dir = &tmpdir() if ($temp_dir eq '' || $temp_dir =~ m/^\@TMP[_]DIR\@$/);
+
+  # setup site URL
+  $site_url = '@SITE_URL@';
+
+  # store program info
+  $version = '@ARCHIVE_VERSION@';
+  $revision = '@ARCHIVE_REVISION@';
+  $release = '@ARCHIVE_DATE@';
+}
+
+sub init_progress_log {
+  my ($out_dir) = @_;
+  my $progress_log_filename = catfile($out_dir, 'progress_log.txt');
+  sysopen($progress_log, $progress_log_filename, 
+    O_CREAT | O_TRUNC | O_WRONLY) or die("Failed to create progress log file");
+  # disable output buffering as this is meant to document when things go wrong
+  my $old_fh = select($progress_log); $| = 1; select($old_fh);
+}
+
+sub time_allocate {
+  my ($opts, $stage) = @_;
+  # no limit unless maximum time set
+  return undef unless $opts->{TIME};
+  # calculate how long we had originally
+  my $o = 60 * $opts->{TIME};
+  # calculate how many seconds we have left
+  my $r = $o - int(&tv_interval($t0, [&gettimeofday()]) + 0.5);
+ 
+  my $meme_ratio = 34;
+  my $dreme_ratio = 34;
+  my $centrimo_ratio = 17;
+  my $tomtom_ratio = 5;
+
+  my $left;
+
+  if ($stage eq 'meme') {
+    $left = $meme_ratio + $dreme_ratio + $centrimo_ratio + (3 * $tomtom_ratio);
+    return int($r * ($meme_ratio / $left));
+  } elsif ($stage eq 'dreme') {
+    $left = $dreme_ratio + $centrimo_ratio + (3 * $tomtom_ratio);
+    return int($r * ($dreme_ratio / $left));
+  } elsif ($stage eq 'centrimo') {
+    $left = $centrimo_ratio + (3 * $tomtom_ratio);
+    return int($r * ($centrimo_ratio / $left));
+  } elsif ($stage eq 'meme_tomtom') {
+    $left = 3 * $tomtom_ratio;
+    return int($r * ($tomtom_ratio / $left));
+  } elsif ($stage eq 'dreme_tomtom') {
+    $left = 2 * $tomtom_ratio;
+    return int($r * ($tomtom_ratio / $left));
+  }
+  # note all other stages are essential so will be left to run
+  # even if it looks like we will completely run out of time
+  return int($r); 
+}
+
+#
+# Parse the arguments
+#
+sub arguments {
+  $logger->trace("call arguments") if $logger;
+  # Set Option Defaults
+  my $options = {ECHO => 1, APP_VERBOSITY => 1, 
+    CLOBBER => 1, OUT_DIR => 'memechip_out', INDEX_NAME => 'index.html',
+    DESCRIPTION => undef, NMEME => $MAXMEMESEQS, CCUT => $CMAX, BFILE => undef, 
+    GROUP_WEAK_THRESH => undef, GROUP_THRESH => 0.05, NOREVCOMP => 0, 
+    TIME => undef,
+    MEME_MINW => undef, MEME_MAXW => undef, MEME_MOD => 'zoops', 
+    MEME_NMOTIFS => 3, MEME_MINSITES => undef, MEME_MAXSITES => undef, 
+    MEME_P => undef, MEME_PALINDROMES => 0, MEME_MAXSIZE => undef,
+    DREME_E => undef, DREME_M => undef, CENTRIMO_LOCAL => 0, CENTRIMO_SCORE => undef, 
+    CENTRIMO_MAXREG => undef, CENTRIMO_ETHRESH => undef, CENTRIMO_NOSEQ => 0,
+    CENTRIMO_FLIP => undef, SEQUENCES => '', DBS => []};
+  # General Options
+  my $help = 0; # FALSE
+  my $show_version = 0; # FALSE
+  my @errors = ();
+  my @dbs = ();
+
+  # get the options from the arguments
+  my $options_success = 0; # FALSE
+  my $options_err = undef;
+  # redirect stderr to a temp file so we can get the error message from GetOptions
+  my $olderr;
+  my $tmperr = tempfile('GetOptions_XXXXXXXXXX', DIR => $temp_dir, UNLINK => 1);
+  open($olderr, ">&STDERR") or die("Can't dup STDERR: $!");
+  open(STDERR, '>&', $tmperr) or die("Can't redirect STDERR to temp file: $!");
+  # parse options
+  $options_success = GetOptions(
+    'help|?'          => \$help,
+    'version'         => \$show_version,
+    'noecho'          => sub {$options->{ECHO} = 0},
+    'o=s'             => sub {$options->{CLOBBER} = 0; shift; $options->{OUT_DIR} = shift},
+    'oc=s'            => \$options->{OUT_DIR},
+    'index-name=s'    => \$options->{INDEX_NAME},
+    'desc=s'          => \$options->{DESCRIPTION},
+    'fdesc=s'         => # slurp the description into a scalar
+    sub {
+      my ($param, $file) = @_;
+      open(my $fh, '<', $file) or die("Couldn't open description file: $!\n");
+      $options->{DESCRIPTION} = do { local( $/ ); <$fh>};
+      close($fh);
+    },
+    'nmeme=i'           => \$options->{NMEME},
+    'ccut=i'            => \$options->{CCUT},
+    'time=i'            => \$options->{TIME},
+    'db=s'              => \@{$options->{DBS}},
+    'bfile=s'           => \$options->{BFILE},
+    'group-thresh=f'    => \$options->{GROUP_THRESH},
+    'group-weak=f'      => \$options->{GROUP_WEAK_THRESH},
+    'norc'              => \$options->{NOREVCOMP},
+    'meme-mod=s'        => \$options->{MEME_MOD},
+    'meme-minw=i'       => \$options->{MEME_MINW}, 
+    'meme-maxw=i'       => \$options->{MEME_MAXW}, 
+    'meme-nmotifs=i'    => \$options->{MEME_NMOTIFS}, 
+    'meme-minsites=i'   => \$options->{MEME_MINSITES},
+    'meme-maxsites=i'   => \$options->{MEME_MAXSITES},
+    'meme-p=s'          => \$options->{MEME_P},
+    'meme-pal'          => \$options->{MEME_PALINDROMES},
+    'meme-maxsize=i'    => \$options->{MEME_MAXSIZE},
+    'dreme-e=f'         => \$options->{DREME_E},
+    'dreme-m=i'         => \$options->{DREME_M},
+    'centrimo-local'    => \$options->{CENTRIMO_LOCAL},
+    'centrimo-score=f'  => \$options->{CENTRIMO_SCORE},
+    'centrimo-maxreg=i' => \$options->{CENTRIMO_MAXREG},
+    'centrimo-ethresh=f'=> \$options->{CENTRIMO_ETHRESH},
+    'centrimo-noseq'    => \$options->{CENTRIMO_NOSEQ},
+    'centrimo-flip'     => \$options->{CENTRIMO_FLIP}
+  );
+  ($options->{SEQUENCES}) = @ARGV;
+  # display version
+  if ($show_version) {
+    print STDOUT $version, "\n";
+    exit(0);
+  }
+  # display help
+  pod2usage(1) if $help;
+  # reset STDERR
+  open(STDERR, ">&", $olderr) or die("Can't reset STDERR: $!");
+  # read argument parsing errors
+  seek($tmperr, 0, SEEK_SET);
+  while (<$tmperr>) {chomp; push(@errors, $_);}
+  close($tmperr);
+  # by default make the weak threshold to 2 times the strong threshold
+  $options->{GROUP_WEAK_THRESH} = $options->{GROUP_THRESH} * 2 unless $options->{GROUP_WEAK_THRESH};
+  # check sequence
+  unless (defined($options->{SEQUENCES})) {
+    push(@errors, "No sequences provided.");
+  } elsif (not -e $options->{SEQUENCES}) {
+    push(@errors, "The sequences specified do not exist.");
+  }
+  # check background file
+  if (defined($options->{BFILE}) && (not -e $options->{BFILE})) {
+    push(@errors, "Value \"$options->{BFILE}\" invalid for option bfile (file does not exist)");
+  }
+  # check databases
+  if (@{$options->{DBS}}) {
+    foreach my $db (@{$options->{DBS}}) {
+      unless (-e $db) {
+        push(@errors, "Value \"$db\" invalid for option db (file does not exist)");
+      }
+    }
+  }
+  # check nmeme
+  if ($options->{NMEME} < 1) {
+    push(@errors, "Value $options->{NMEME} invalid for option nmeme (must be >= 1)");
+  }
+  # check ccut
+  if ($options->{CCUT} < $MINMEMESEQW && $options->{CCUT} != 0) {
+    push(@errors, "Value \"$options->{CCUT}\" invalid for option ccut (must be >= $MINMEMESEQW or 0)");
+  }
+  # check time
+  if (defined($options->{TIME}) && $options->{TIME} < 1) {
+    push(@errors, "Value \"$options->{TIME}\" invalid for option time (must be >= 1)");
+  }
+  # check meme mode
+  if ($options->{MEME_MOD} !~ m/^(oops|zoops|anr)$/) {
+    push(@errors, "Value \"$options->{MEME_MOD}\" invalid for option meme-mod (must be oops, zoops or anr)");
+  }
+  # check meme min width
+  if (defined($options->{MEME_MINW}) && ($options->{MEME_MINW} < $MINW || 
+      $options->{MEME_MINW} > $MAXW)) {
+    push(@errors, "Value $options->{MEME_MINW} invalid for option meme-minw (must be >= $MINW and <= $MAXW)");
+    $options->{MEME_MINW} = undef;
+  }
+  # check meme max width
+  my $MW = (defined($options->{MEME_MINW}) ? $options->{MEME_MINW} : $MINW);
+  if (defined($options->{MEME_MAXW}) && ($options->{MEME_MAXW} < $MW || $options->{MEME_MAXW} > $MAXW)) {
+    push(@errors, "Value $options->{MEME_MAXW} invalid for option meme-maxw (must be >= $MW and <= $MAXW)");
+  }
+  # give defaults for min width and max width
+  unless (defined($options->{MEME_MINW})) {
+    if (defined($options->{MEME_MAXW})) {
+      $options->{MEME_MINW} = min(6, $options->{MEME_MAXW});
+    } else {
+      $options->{MEME_MINW} = 6;
+    }
+  }
+  unless (defined($options->{MEME_MAXW})) {
+    $options->{MEME_MAXW} = max(30, $options->{MEME_MINW});
+  }
+  # check meme motif count
+  if ($options->{MEME_NMOTIFS} < 0) {
+    push(@errors, "Value $options->{MEME_NMOTIFS} invalid for option meme-nmotifs (must be >= 0)");
+  }
+  # check meme min sites
+  if (defined($options->{MEME_MINSITES}) && 
+    ($options->{MEME_MINSITES} < $MINSITES || 
+      $options->{MEME_MINSITES} > $MAXSITES)) {
+    push(@errors, "Value $options->{MEME_MINSITES} invalid for option meme-minsites (must be >= $MINSITES and <= $MAXSITES)");
+    $options->{MEME_MINSITES} = undef;
+  }
+  # check meme max sites
+  my $MS = (defined($options->{MEME_MINSITES}) ? $options->{MEME_MINSITES} : $MINSITES);
+  if (defined($options->{MEME_MAXSITES}) && 
+    ($options->{MEME_MAXSITES} < $MS || 
+      $options->{MEME_MAXSITES} > $MAXSITES)) {
+    push(@errors, "Value $options->{MEME_MAXSITES} invalid for option meme-maxsites (must be >= $MS and <= $MAXSITES)");
+  }
+  # check meme maxsize
+  if (defined($options->{MEME_MAXSIZE}) && $options->{MEME_MAXSIZE} <= 0) {
+    push(@errors, "Value $options->{MEME_MAXSIZE} invalid for option meme-maxsize (must be > 0)");
+  }
+  # check meme p
+  if (defined($options->{MEME_P}) && $options->{MEME_P} !~ m/^\s*[1-9]\d*(?:\s.*)?$/) {
+    push(@errors, "Value \"$options->{MEME_P}\" invalid for option meme-p (must begin with a positive integer)");
+  }
+  # check dreme e
+  if (defined($options->{DREME_E}) && $options->{DREME_E} < 0) {
+    push(@errors, "Value \"$options->{DREME_E}\" invalid for option dreme-e (must be a valid E-value)");
+  }
+  # check dreme m
+  if (defined($options->{DREME_M}) && $options->{DREME_M} < 0) {
+    push(@errors, "Value \"$options->{DREME_M}\" invalid for option dreme-m (must be >= 0)");
+  }
+  # check centrimo score (How? As long as it's a float then it's valid)
+  # check centrimo maxreg
+  if (defined($options->{CENTRIMO_MAXREG}) && $options->{CENTRIMO_MAXREG} < 1) {
+    push(@errors, "Value \"$options->{CENTRIMO_MAXREG}\" invalid for option centrimo-maxreg (must be >= 1)");
+  }
+  # check centrimo ethresh
+  if (defined($options->{CENTRIMO_ETHRESH}) && $options->{CENTRIMO_ETHRESH} < 0) {
+    push(@errors, "Value \"$options->{CENTRIMO_ETHRESH}\" invalid for option ".
+      "centrimo-ethresh (must be a valid E-value)");
+  }
+
+  # check that we're not clobbering something we're not meant to
+  if (-e $options->{OUT_DIR}) {
+    unless (-d $options->{OUT_DIR}) {
+      push(@errors, "Can't output to \"$options->{OUT_DIR}\" as it is not a directory.\n");
+    } elsif (!$options->{CLOBBER}) {
+      push(@errors, "Can't output to \"$options->{OUT_DIR}\" as the directory already exists.\n");
+    }
+  }
+  # print errors
+  foreach my $error (@errors) {
+    print STDERR $error, "\n";
+  }
+  pod2usage(2) if @errors;
+  # return options
+  return $options;
+}
+
+sub job_ok {
+  $logger->trace("call job_ok") if $logger;
+  my ($registry, $job) = @_;
+  my $entry = $registry->{$job};
+  return defined($entry) && $entry->{status} == 0;
+}
+
+sub nmotifs {
+  $logger->trace("call nmotifs") if $logger;
+  my ($registry, $job) = @_;
+  my $entry = $registry->{$job};
+  if (defined($entry) && $entry->{status} == 0) {
+    return $entry->{NMOTIFS};
+  }
+  return 0;
+}
+
+sub log_10_to_str {
+  my ($value, $prec) = @_;
+  my ($m, $e);
+  $e = floor($value);
+  $m = 10 ** ($value - $e);
+
+  # check that rounding up won't cause a 9.9999 to go to a 10
+  if ($m + (.5 * (10 ** -$prec)) >= 10) {
+    $m = 1;
+    $e += 1;
+  }
+  return sprintf("%.*fe%+04.0f", $prec, $m, $e);
+}
+
+sub str_to_log_10 {
+  my ($str) = @_;
+  my ($m, $e);
+  $m = 1;
+  $e = 0;
+  if ($str =~ m/^\+?(\d*\.?\d+)(?:[eE]([+-]?\d+))?$/) {
+    $m = $1;
+    $e = $2 if (defined($2));
+  }
+  return (log($m) / log(10)) + $e;
+}
+
+#
+# Run a job and do something with the command line and stuff...
+#
+sub run_job {
+  $logger->trace("call run_job") if $logger;
+  my ($opts, $registry, $name, $required, $job, $suppress_messages, $outputs) = @_;
+  # check that all requirements are avaliable
+  foreach my $require (@{$required}) {
+    my $reg = $registry->{$require};
+    unless (defined($reg) && $reg->{status} == 0) {
+      $logger->warn("skipped $name due to missing requirement $require") if $logger;
+      print $progress_log "Skipped $name due to missing requirement $require\n";
+      print "WARNING: skipped $name due to missing requirement $require.\n";
+      return; # missing requirement
+    }
+  }
+  # store any unstored messages
+  my %msg = ();
+  my $msg_file = catfile($opts->{OUT_DIR}, $name . "_msgs.txt");
+  if (!(defined($job->{ALL_FILE}) || defined($job->{ALL_VAR}))) {
+    if (!(defined($job->{ERR_FILE}) || defined($job->{ERR_VAR})) && 
+      !(defined($job->{OUT_FILE}) || defined($job->{OUT_VAR}))) {
+      $msg{ALL_FILE} = $msg_file;
+    } elsif (!(defined($job->{ERR_FILE}) || defined($job->{ERR_VAR}))) {
+      $msg{ERR_FILE} = $msg_file;
+    } elsif (!(defined($job->{OUT_FILE}) || defined($job->{OUT_VAR}))) {
+      $msg{OUT_FILE} = $msg_file;
+    }
+  }
+  # convert the command to a string
+  my $cmd;
+  $cmd = &ExecUtils::stringify_args2(%{$job});
+  # echo the command
+  $logger->debug("About to invoke: $cmd") if $logger;
+  print $progress_log "Invoking:\n  $cmd\n";
+  print $cmd, "\n" if ($opts->{ECHO});
+  # run the command
+  my $time;
+  my $oot; # out of time flag
+  my $status = &ExecUtils::invoke(%{$job}, %msg, TMPDIR => $temp_dir, 
+    TIME => \$time, OOT => \$oot); 
+  $logger->debug("Finished invoke of $name with status $status") if $logger;
+  print $progress_log "Finished invoke:\n".
+      "  name: $name  status: $status  time: $time" . 
+      ($oot ? "  (ran out of time!)\n" : "\n");
+  # echo messages
+  if (-s $msg_file && $opts->{ECHO} && !$suppress_messages) {
+    my $fh;
+    sysopen($fh, $msg_file, O_RDONLY);
+    while (<$fh>) { print $_ };
+    close($fh);
+  }
+  # remove messages file if it's empty
+  unlink($msg_file) unless (-s $msg_file);
+  # find which directory it used
+  my $out_dir;
+  for (my $i = 0; $i < scalar(@{$job->{ARGS}})-1; $i++) {
+    my $arg = $job->{ARGS}->[$i];
+    if ($arg eq '-oc' || $arg eq '--oc') {
+      $out_dir = $job->{ARGS}->[$i+1] if (-d $job->{ARGS}->[$i+1]);
+      last;
+    }
+  }
+  # store the result
+  my $entry = {name => $name, cmd => $cmd, dir => $out_dir, 
+    messages => $msg_file, status => $status, time => $time, 
+    oot => $oot, outputs => $outputs};
+  $registry->{$name} = $entry;
+  push(@jobs, $entry); 
+}
+
+#
+# Check if the file is the same
+#
+sub same_file {
+  $logger->trace("call same_file") if $logger;
+  my ($fn1, $fn2) = @_;
+  my ($dev1,$ino1) = stat($fn1);
+  my ($dev2,$ino2) = stat($fn2);
+  return ($dev1 == $dev2 && $ino1 == $ino2);
+}
+
+# 
+# Generate sequence inputs by trimming/shuffling etc.
+#
+sub sequences {
+  $logger->trace("call sequences") if $logger;
+  my ($opts, $registry) = @_;
+  my $bfile;
+  my $seqs = catfile($opts->{OUT_DIR}, (fileparse($opts->{SEQUENCES}))[0]);
+  my $seqs_centered = catfile($opts->{OUT_DIR}, "seqs-centered");
+  my $seqs_shuffled = catfile($opts->{OUT_DIR}, "seqs-shuffled");
+  my $seqs_centered_w_bg = catfile($opts->{OUT_DIR}, "seqs-centered_w_bg");
+  my $seqs_sampled = catfile($opts->{OUT_DIR}, "seqs-sampled");
+  my $seqs_discarded = catfile($opts->{OUT_DIR}, "seqs-discarded");
+  my ($count, $min_len, $max_len, $avg_len, $total_len, $most_len);
+  
+  # link the sequences to sequences in the output directory if they 
+  # aren't already there
+  if (-e $seqs) {
+    if (!&same_file($opts->{SEQUENCES}, $seqs)) {
+      unlink($seqs) or die("Can't write the sequence file");
+      link $opts->{SEQUENCES}, $seqs;
+    } 
+  } else {
+    link $opts->{SEQUENCES}, $seqs;
+  }
+
+  if ($opts->{BFILE}) {
+    $bfile = catfile($opts->{OUT_DIR}, (fileparse($opts->{BFILE}))[0]);
+    # link the background file to the output directory, if it's not already there
+    if (-e $bfile) {
+      if (!&same_file($opts->{BFILE}, $bfile)) {
+        unlink($bfile) or die("Can't write the background file");
+        link $opts->{BFILE}, $bfile;
+      } 
+    } else {
+      link $opts->{BFILE}, $bfile;
+    }
+    $registry->{'bg'} = {status => 0};
+  } else {
+    $bfile = catfile($opts->{OUT_DIR}, 'background');
+    # generate a background file
+    &run_job($opts, $registry, 'bg', [], {PROG => 'fasta-get-markov', 
+        BIN => $bin_dir, ARGS => ['-nostatus', '-m', 1], OUT_FILE => $bfile, IN_FILE => $seqs}, 1, 
+      [{FILE => $bfile, NAME => 'Background'}]);
+  }
+  # get the background
+  my %bg = read_background_file($bfile);
+
+  # count the number of sequences
+  my $metrics;
+  &run_job($opts, $registry, 'count_seqs', [], {PROG => 'getsize', BIN => $bin_dir, 
+      ARGS => [$seqs],OUT_VAR => \$metrics, OUT_NAME => '$metrics'});
+  die("getsize failed me...") unless ($metrics =~ m/^(\d+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(\d+)\s/);
+  $count = $1;
+  $min_len = $2;
+  $max_len = $3;
+  $avg_len = $4;
+  $total_len = $5;
+
+  # find the length which occurs most in the sequence
+  &run_job($opts, $registry, 'most_seqs', [], {PROG => 'fasta-most', BIN => $bin_dir, 
+      ARGS => ['-min', 50], IN_FILE => $seqs, OUT_VAR => \$metrics, OUT_NAME => '$metrics'});
+  die("fasta-most failed me...") unless ($metrics =~ m/^(\d+) (\d+)/);
+  # use zero if we can't find any sequences longer than 50
+  # that way centrimo will just use the default behaviour and it won't crash
+  if ($2 > 0) {
+    $most_len = $1;
+  } else {
+    $most_len = 0;
+  }
+
+  # cut out the center of the sequences
+  if ($opts->{CCUT}) {
+    &run_job($opts, $registry, 'center_seqs', [], {PROG => 'fasta-center', BIN => $bin_dir, 
+        ARGS => ['-len', $opts->{CCUT}], IN_FILE => $seqs, OUT_FILE => $seqs_centered}, 
+        0, [{FILE => $seqs_centered}]);
+  } else {
+    $seqs_centered = $seqs;
+    $registry->{'center_seqs'} = {status => 0};
+  }
+
+  # shuffle the center of the sequences
+  &run_job($opts, $registry, 'shuffle_seqs', ['center_seqs'], {
+      PROG => 'fasta-dinucleotide-shuffle', BIN => $bin_dir, 
+      ARGS => ['-f', $seqs_centered, '-t', '-dinuc'], OUT_FILE => $seqs_shuffled}, 
+      0, [{FILE => $seqs_shuffled}]) if (!defined($opts->{DREME_M}) || $opts->{DREME_M} > 0);
+
+  # MEME will take too long if we give it too many sequences
+  if ($count > $opts->{NMEME} && $opts->{MEME_NMOTIFS} > 0) {
+    # pick a random subsample of the sequences
+    &run_job($opts, $registry, 'sample_seqs', ['center_seqs'], {
+        PROG => 'fasta-subsample', BIN => $bin_dir, 
+        ARGS => [$seqs_centered, $opts->{NMEME}, "-rest", $seqs_discarded], 
+        OUT_FILE => $seqs_sampled}, 0, 
+        [{FILE => $seqs_sampled}, {FILE => $seqs_discarded}]);
+  } else {
+    $seqs_sampled = $seqs_centered;
+    $registry->{'sample_seqs'} = {status => 0};
+  }
+  # return the sequences
+  return {BFILE => $bfile, ORIGINAL => $seqs, CENTERED => $seqs_centered, 
+    SHUFFLED => $seqs_shuffled, SUBSAMPLED => $seqs_sampled, 
+    DISCARDED => $seqs_discarded, COUNT => $count,
+    MIN_LEN => $min_len, MAX_LEN => $max_len, AVG_LEN => $avg_len, 
+    TOTAL_LEN => $total_len, MOST_LEN => $most_len, BG => \%bg
+  };
+}
+
+#
+# Load motifs using the passed parser
+#
+sub parse_motifs {
+  $logger->trace("call parse_motifs") if $logger;
+  my ($prog, $db, $bg, $parser, $file) = @_;
+  my $fh;
+  unless(sysopen($fh, $file, O_RDONLY)) {
+    warn("Failed to open the output of $prog to parse motifs.\n");
+    return ();
+  }
+  local $/ = \100;
+  while (<$fh>) {
+    $parser->parse_more($_);
+  }
+  close($fh);
+  $parser->parse_done();
+  my @motifs = $parser->get_motifs();
+  my $nmotifs = scalar(@motifs);
+  @motifs = grep {$_->{evalue} <= 1;} @motifs;
+  foreach my $motif (@motifs) {
+    $motif->{bg} = $bg;
+    $motif->{db} = $db;
+    $motif->{prog} = $prog;
+    $motif->{sig} = &str_to_log_10($motif->{evalue});
+  }
+  return ($nmotifs, @motifs);
+}
+
+#
+# run MEME and load the motifs it finds into memory
+#
+sub meme {
+  $logger->trace("call meme") if $logger;
+  my ($opts, $registry, $seqs) = @_;
+  # calculate the time avaliable to run MEME
+  my $timeout = &time_allocate($opts, 'meme');
+  my $meme_dir = catdir($opts->{OUT_DIR}, "meme_out");
+  my @args = (
+    $seqs->{SUBSAMPLED}, '-oc', $meme_dir, '-dna', 
+    '-mod', $opts->{MEME_MOD}, '-nmotifs', $opts->{MEME_NMOTIFS}, 
+    '-minw', $opts->{MEME_MINW}, '-maxw', $opts->{MEME_MAXW},
+    '-bfile', $seqs->{BFILE}
+  );
+  push(@args, '-minsites', $opts->{MEME_MINSITES}) if (defined($opts->{MEME_MINSITES}));
+  push(@args, '-maxsites', $opts->{MEME_MAXSITES}) if (defined($opts->{MEME_MAXSITES}));
+  push(@args, '-maxsize', $opts->{MEME_MAXSIZE}) if (defined($opts->{MEME_MAXSIZE}));
+  # try to give MEME 60 seconds to finish before the timeout
+  push(@args, '-time', ($timeout > 60 ? $timeout - 60 : 1)) if ($timeout);
+  push(@args, '-p', $opts->{MEME_P}) if (defined($opts->{MEME_P}));
+  push(@args, '-revcomp') unless $opts->{NOREVCOMP};
+  push(@args, '-pal') if $opts->{MEME_PALINDROMES};
+  push(@args,'-nostatus') unless $opts->{APP_VERBOSITY} >= 2;
+  &run_job($opts, $registry, 'meme', ['bg', 'sample_seqs'], 
+      {PROG => 'meme', BIN => $bin_dir, ARGS => \@args, TIMEOUT => $timeout},
+      0,[{FILE => catfile($meme_dir, 'meme.html'), NAME => 'MEME HTML'}, 
+        {FILE => catfile($meme_dir, 'meme.txt'), NAME => 'MEME text'}, 
+        {FILE => catfile($meme_dir, 'meme.xml'), NAME => 'MEME XML'}
+      ]);
+
+  if (&job_ok($registry, 'meme')) {
+    my ($nmotifs, @motifs) = &parse_motifs('meme', -1, $seqs->{BG}, new MotifInMemeXML(), catfile($meme_dir, 'meme.xml'));
+    $registry->{meme}->{NMOTIFS} = $nmotifs;
+    return @motifs;
+  }  
+  return ();
+}
+
+#
+# run DREME and load the motifs it finds into memory
+#
+sub dreme {
+  $logger->trace("call dreme") if $logger;
+  my ($opts, $registry, $seqs) = @_;
+  # calculate the time avaliable to run DREME
+  my $timeout = &time_allocate($opts, 'dreme');
+  my $dreme_dir = catdir($opts->{OUT_DIR}, "dreme_out");
+  my @args = (
+    '-v', $opts->{APP_VERBOSITY}, '-oc', $dreme_dir, 
+    '-p', $seqs->{CENTERED}, '-n', $seqs->{SHUFFLED}, '-png');
+  push(@args, '-norc') if $opts->{NOREVCOMP};
+  # try to give DREME 60 seconds to finish before the timeout
+  push(@args, '-t', ($timeout > 60 ? $timeout - 60 : 1)) if ($timeout);
+  push(@args, '-e', $opts->{DREME_E}) if defined($opts->{DREME_E});
+  push(@args, '-m', $opts->{DREME_M}) if defined($opts->{DREME_M});
+  &run_job($opts, $registry, 'dreme', ['center_seqs', 'shuffle_seqs'], {
+      PROG => 'dreme', BIN => $bin_dir, ARGS => \@args, TIMEOUT => $timeout},
+      0, [{FILE => catfile($dreme_dir, 'dreme.html'), NAME => 'DREME HTML'},
+        {FILE => catfile($dreme_dir, 'dreme.txt'), NAME => 'DREME text'},
+        {FILE => catfile($dreme_dir, 'dreme.xml'), NAME => 'DREME XML'}
+      ]);
+
+  if (&job_ok($registry, 'dreme')) {
+    my ($nmotifs, @motifs) = &parse_motifs('dreme', -2, $seqs->{BG}, new MotifInDremeXML(), catfile($dreme_dir, "dreme.xml"));
+    $registry->{dreme}->{NMOTIFS} = $nmotifs;
+    return @motifs;
+  }
+  return ();
+}
+
+# 
+# Run CentriMo to find centrally enriched motifs and to create
+# distribution graphs.
+#
+sub centrimo {
+  $logger->trace("call centrimo") if $logger;
+  my ($opts, $registry, $seqs, $motifs) = @_;
+  # calculate the time avaliable to run CentriMo
+  my $timeout = &time_allocate($opts, 'centrimo');
+  my @alphabet = ('A', 'C', 'G', 'T');
+  my @motif_inputs = ();
+  my @db_map = ();
+  my @db_counts = ();
+  if (&nmotifs($registry, 'meme') > 0) {
+    push(@motif_inputs, catfile($registry->{meme}->{dir}, 'meme.xml'));
+    push(@db_map, -1);
+  }
+  if (&nmotifs($registry, 'dreme') > 0) {
+    push(@motif_inputs, catfile($registry->{dreme}->{dir}, 'dreme.xml'));
+    push(@db_map, -2);
+  }
+  push(@motif_inputs, @{$opts->{DBS}});
+  foreach (0 .. (scalar(@{$opts->{DBS}}) - 1)) {
+    push(@db_map, $_);
+    push(@db_counts, 0);
+  }
+  return @db_counts unless @motif_inputs;
+
+  my $centrimo_dir = catdir($opts->{OUT_DIR}, 'centrimo_out');
+  my @args = ('-seqlen', $seqs->{MOST_LEN}, '-verbosity', 
+    $opts->{APP_VERBOSITY}, '-oc', $centrimo_dir, '-bgfile', $seqs->{BFILE});
+  push(@args, '-local') if $opts->{CENTRIMO_LOCAL};
+  push(@args, '-score', $opts->{CENTRIMO_SCORE}) if (defined($opts->{CENTRIMO_SCORE}));
+  push(@args, '-maxreg', $opts->{CENTRIMO_MAXREG}) if (defined($opts->{CENTRIMO_MAXREG}));
+  push(@args, '-ethresh', $opts->{CENTRIMO_ETHRESH}) if (defined($opts->{CENTRIMO_ETHRESH}));
+  push(@args, '-norc') if $opts->{NOREVCOMP};
+  push(@args, '-noseq') if $opts->{CENTRIMO_NOSEQ};
+  push(@args, '-flip') if $opts->{CENTRIMO_FLIP};
+  push(@args, $seqs->{ORIGINAL}, @motif_inputs);
+  &run_job($opts, $registry, 'centrimo', ['bg'], {
+      PROG => 'centrimo', BIN => $bin_dir, ARGS => \@args, TIMEOUT => $timeout},
+      0, [{FILE => catfile($centrimo_dir, 'centrimo.html'), NAME => 'CentriMo HTML'},
+        {FILE => catfile($centrimo_dir, 'site_counts.txt'), NAME => 'Site Counts'}
+      ]);
+
+  return @db_counts unless &job_ok($registry, 'centrimo');
+
+  # create a lookup table so we can look up our motifs using the
+  # centrimo results
+  my %m_map = ();
+  for (my $i = 0; $i < scalar(@{$motifs}); $i++) {
+    my $motif = $motifs->[$i];
+    $m_map{$motif->{db}} = {} unless defined($m_map{$motif->{db}});
+    $m_map{$motif->{db}}->{$motif->{id}} = $motif;
+  }
+
+  my $parser = new JsonRdr();
+  my $info = $parser->load_file(catfile($centrimo_dir, 'centrimo.html'),
+    qr/^data>sequences$/, qr/^data>motifs>seqs$/);
+  $seqs->{CENTRIMO_SEQLEN} = $info->{data}->{seqlen};
+  # record the motif database sizes
+  my $info_dbs = $info->{data}->{motif_dbs};
+  for (my $i = 0; $i < scalar(@{$info_dbs}); $i++) {
+    next if $db_map[$i] < 0;
+    $db_counts[$db_map[$i]] = $info_dbs->[$i]->{count};
+  }
+  my $log_tested = log($info->{data}->{tested});
+  my $log_thresh = log(0.05);
+  my $info_motifs = $info->{data}->{motifs};
+  for (my $i = 0; $i < scalar(@{$info_motifs}); $i++) {
+    my $info_motif = $info_motifs->[$i];
+    my $info_peak = $info_motif->{peaks}->[0];
+    my $motif = $m_map{$db_map[$info_motif->{db}]}->{$info_motif->{id}};
+    if ($motif) {
+      $motif->{centrimo_sites} = $info_motif->{sites};
+      $motif->{centrimo_total_sites} = $info_motif->{total_sites};
+      $motif->{centrimo_log_pvalue} = $info_peak->{log_adj_pvalue};
+    } elsif (($info_peak->{log_adj_pvalue} + $log_tested) <= $log_thresh) {
+      $motif = {
+        prog => 'centrimo',
+        bg => $seqs->{BG}, strands => 2, db => $db_map[$info_motif->{db}], 
+        id => $info_motif->{id}, alt => $info_motif->{alt}, 
+        url => $info_motif->{url}, width => $info_motif->{len}, 
+        sites => $info_motif->{motif_nsites}, 
+        pseudo => 0.1, evalue => $info_motif->{motif_evalue},
+        pspm => {}, centrimo_sites => $info_motif->{sites},
+        centrimo_total_sites => $info_motif->{total_sites},
+        centrimo_log_pvalue => $info_peak->{log_adj_pvalue},
+        sig => ($info_peak->{log_adj_pvalue} + $log_tested) / log(10)
+      };
+      for (my $a = 0; $a < scalar(@alphabet); $a++) {
+        my @column = ();
+        for (my $i = 0; $i < $motif->{width}; $i++) {
+          $column[$i] = $info_motif->{pwm}->[$i]->[$a];
+        }
+        $motif->{pspm}->{$alphabet[$a]} = \@column;
+      }
+      push(@{$motifs}, $motif);
+    }
+  }
+  return @db_counts;
+}
+
+
+# 
+# Run Tomtom to find similar motifs
+#
+sub tomtom {
+  $logger->trace("call tomtom") if $logger;
+  my ($opts, $registry, $seqs, $motifs, $prog) = @_;
+  return unless @{$opts->{DBS}};
+  return unless &nmotifs($registry, $prog) > 0;
+
+  my $job_name = $prog.'_tomtom';
+  my $timeout = &time_allocate($opts, $job_name);
+  my $input_motifs = catfile($registry->{$prog}->{dir}, $prog.'.xml');
+  my $tomtom_dir = catdir($opts->{OUT_DIR}, $prog.'_tomtom_out');
+  my @args = ('-verbosity', $opts->{APP_VERBOSITY}, '-oc', $tomtom_dir, 
+    '-min-overlap', 5, '-dist', 'pearson', '-evalue', '-thresh', 1.0, '-no-ssc',
+    '-bfile', $seqs->{BFILE}, $input_motifs, @{$opts->{DBS}});
+  &run_job($opts, $registry, $job_name, ['bg', $prog], {
+      PROG => 'tomtom', BIN => $bin_dir, ARGS => \@args, TIMEOUT => $timeout},
+      0, [{FILE => catfile($tomtom_dir, 'tomtom.html'), NAME => 'TOMTOM HTML'},
+        {FILE => catfile($tomtom_dir, 'tomtom.txt'), NAME => 'TOMTOM text'},
+        {FILE => catfile($tomtom_dir, 'tomtom.xml'), NAME => 'TOMTOM XML'}
+      ]);
+
+  return unless &job_ok($registry, $job_name);
+
+  my $data = XMLin(
+    catfile($tomtom_dir, 'tomtom.xml'), 
+    ForceArray => ['target_file', 'motif', 'pos', 'query', 'match'],
+    KeyAttr => {'motif' => ''}
+  );
+
+  # record the mapping from tomtom's motif target IDs to the database and motif id
+  # note that I assume the ordering of the target files in the output is the same
+  # as they were provided as input.
+  my %tid = ();
+  my $target_dbs = $data->{targets}->{target_file};
+  return unless $target_dbs;
+  for (my $i = 0; $i < scalar(@{$target_dbs}); $i++) {
+    my $motifs = $target_dbs->[$i]->{motif};
+    next unless $motifs;
+    for (my $j = 0; $j < scalar(@{$motifs}); $j++) {
+      my $motif = $motifs->[$j];
+      $tid{$motif->{id}} = {db => $i, id => $motif->{name}, alt => $motif->{alt}};
+    }
+  }
+  # iterate over the query motifs and record  matches
+  my %motif_targets = ();
+  my $queries = $data->{queries}->{query_file}->{query};
+  for (my $i = 0; $i < scalar(@{$queries}); $i++) {
+    my $query = $queries->[$i];
+    my $matches = $query->{match};
+    next unless $matches;
+    my @target_list = ();
+    for (my $j = 0; $j < scalar(@{$matches}); $j++) {
+      push(@target_list, $matches->[$j]->{target});
+    }
+    $motif_targets{$query->{motif}->[0]->{name}} = \@target_list;
+  }
+  # iterate over the motif objects and add the non-self matches
+  for (my $i = 0; $i < scalar(@{$motifs}); $i++) {
+    my $motif = $motifs->[$i];
+    next if ($motif->{prog} ne $prog);
+    $motif->{matches} = [];
+    my $targets = $motif_targets{$motif->{id}};
+    next unless $targets;
+    for (my $j = 0; $j < scalar(@{$targets}); $j++) {
+      my $match = $tid{$targets->[$j]};
+      if ($prog eq 'centrimo') { # check for self
+        next if ($motif->{db} == $match->{db} && $motif->{id} eq $match->{id});
+      }
+      push(@{$motif->{matches}}, $match);
+    }
+  }
+}
+
+#
+# run Tomtom to align all the motifs that we've found
+#
+sub align {
+  $logger->trace("call align") if $logger;
+  my ($opts, $registry, $motifs) = @_;
+
+  return [] unless (@{$motifs});
+
+  @{$motifs} = sort {$a->{sig} <=> $b->{sig}} @{$motifs};
+  my @aligns = ();
+  my @used = ();
+
+  # write out the motifs to a combined file, use numbers
+  # to identify them
+  my $combined_motifs_file = catfile($opts->{OUT_DIR}, 'combined.meme');
+  my $fh;
+  sysopen($fh, $combined_motifs_file, O_WRONLY | O_CREAT | O_TRUNC);
+  for (my $i = 0; $i < scalar(@{$motifs}); $i++) {
+    my %motif = %{$motifs->[$i]};
+    $motif{id} = $i;
+    $motif{alt} = '';
+    $motif{url} = '';
+    print $fh intern_to_meme(\%motif, 0, 1, $i == 0);
+    $aligns[$i] = {};
+    $used[$i] = 0;
+  }
+  close($fh);
+  
+  # run tomtom in text mode
+  my $align_file = catfile($opts->{OUT_DIR}, 'motif_alignment.txt');
+  my @args = ('-verbosity', $opts->{APP_VERBOSITY}, '-text', 
+    '-thresh', $opts->{GROUP_WEAK_THRESH}, $combined_motifs_file, $combined_motifs_file);
+  &run_job($opts, $registry, 'align', [], {
+      PROG => 'tomtom', BIN => $bin_dir, ARGS => \@args, OUT_FILE => $align_file}, 1, [
+        {FILE => $align_file, NAME => 'Motif Alignment'}
+      ]);
+  return [] unless &job_ok($registry, 'align');
+
+  # read in the alignment
+  sysopen($fh, $align_file, O_RDONLY);
+  my $line;
+  while ($line = <$fh>) {
+    # remove comments
+    $line =~ s/#.*$//;
+    # skip empty lines
+    next unless $line =~ m/\S/;
+    # split into columns
+    my @cols = split(/\t/, $line);
+    # skip if wrong column count
+    next unless scalar(@cols) == 10;
+    # get the values we're interested in
+    my $query = int($cols[0]);
+    my $target = int($cols[1]);
+    my $offset = -int($cols[2]);
+    my $rc = ($cols[9] =~ '-' ? 1 : 0);
+    my $qval = $cols[5]; $qval =~ s/^\s+//; $qval =~ s/\s+$//; $qval += 0;
+    $aligns[$query]->{$target} = {offset => $offset, rc => $rc, qval => $qval};
+  }
+  close($fh);
+
+  # use a greedy algorithm to group the motifs
+  # under their best examples
+  my @groups = ();
+  my %motif_group = ();
+  for (my $i = 0; $i < scalar(@{$motifs}); $i++) {
+    next if $used[$i];
+    # mark self as used
+    $used[$i] = 1;
+    $motif_group{$i} = scalar(@groups);
+    # add self to the group
+    my @group = ({motif => $i, offset => 0, rc => 0});
+    # add all aligned motifs to the group
+    while (my ($m, $align) = each %{$aligns[$i]}) {
+      next if $used[$m];
+      # skip weak links on first pass
+      next if ($align->{qval} > $opts->{GROUP_THRESH});
+      $used[$m] = 1;
+      $motif_group{$m} = scalar(@groups);
+      push(@group, {motif => $m, offset => $align->{offset}, 
+          rc => $align->{rc}});
+    }
+    push(@groups, \@group);
+  }
+
+  # now look at each of the groups from best to worst
+  # and look at the weak connections 
+  for (my $g = 0; $g < scalar(@groups)-1; $g++) {
+    my $dest = $groups[$g];
+    next unless $dest;
+    my $i = $dest->[0]->{motif};
+    my %mergable = ();
+    while (my ($m, $align) = each %{$aligns[$i]}) {
+      my $candidate = $motif_group{$m};
+      # skip links to our or more significant groups
+      next if ($candidate <= $g);
+      # skip if we've already decided the group is mergeable
+      next if ($mergable{$candidate});
+      # skip when motifs in the group that would reject merging
+      next if (scalar(grep {!defined($aligns[$i]->{$_->{motif}})} @{$groups[$candidate]}));
+      # record that the group is mergable
+      $mergable{$candidate} = $groups[$candidate];
+      $groups[$candidate] = undef;
+    }
+    # merge all the mergable groups
+    foreach my $src (values %mergable) {
+      foreach my $m (map {$_->{motif}} @{$src}) {
+        my $align = $aligns[$i]->{$m};
+        $motif_group{$m} = $g;
+        push(@{$dest}, {motif => $m, offset => $align->{offset}, 
+            rc => $align->{rc}});
+      }
+    }
+  }
+  # remove merged groups
+  @groups = grep {defined($_)} @groups;
+  %motif_group = ();
+
+  # finally sort and re-align
+  for (my $g = 0; $g < scalar(@groups); $g++) {
+    my $group = $groups[$g];
+
+    # sort the group
+    @{$group} = sort {$a->{motif} <=> $b->{motif}} @{$group};
+
+    #calculate leftmost extreme
+    my $left_extreme = 0;
+    foreach my $align (@{$group}) {
+      $left_extreme = $align->{offset} if ($align->{offset} < $left_extreme);
+    }
+    # realign and calculate total width
+    my $total_width = 0;
+    foreach my $align (@{$group}) {
+      $align->{offset} -= $left_extreme;
+      my $len = $align->{offset} + $motifs->[$align->{motif}]->{width};
+      $total_width = $len if ($len > $total_width);
+    }
+  }
+
+  return \@groups;
+}
+
+sub output {
+  $logger->trace("call output") if $logger;
+  print $progress_log "Writing output\n";
+  my ($opts, $registry, $seqs, $db_counts, $motifs, $align) = @_;
+  my @alph = qw(A C G T);
+  my $htmlwr = new HtmlMonolithWr($etc_dir, 'meme-chip_template.html', 
+      catfile($opts->{OUT_DIR}, $opts->{INDEX_NAME}), 'meme-chip_data.js' => 'data');
+  $htmlwr->set_logger($logger) if $logger;
+  my $jsonwr = $htmlwr->output();
+  my $out_dir = abs_path($opts->{OUT_DIR});
+  $jsonwr->str_prop('version', $version);
+  $jsonwr->str_prop('revision', $revision);
+  $jsonwr->str_prop('release', $release);
+  $jsonwr->str_prop('description', $opts->{DESCRIPTION}) if $opts->{DESCRIPTION};
+  $jsonwr->str_array_prop('cmd', @cmd);
+  $jsonwr->property('programs');
+  $jsonwr->start_array_value();
+  for (my $i = 0; $i < scalar(@jobs); $i++){
+    my $job = $jobs[$i];
+    $jsonwr->start_object_value();
+    $jsonwr->str_prop('name', $job->{name});
+    $jsonwr->str_prop('cmd', $job->{cmd});
+    $jsonwr->num_prop('status', $job->{status});
+    $jsonwr->bool_prop('oot', $job->{oot});
+    $jsonwr->num_prop('time', $job->{time});
+    if (-e $job->{messages}) {
+      $jsonwr->str_prop('messages_file', abs2rel(abs_path($job->{messages}), $out_dir))
+    }
+    $jsonwr->property('outputs');
+    $jsonwr->start_array_value();
+    if ($job->{outputs}) {
+      for (my $j = 0; $j < scalar(@{$job->{outputs}}); $j++) {
+        my $output = $job->{outputs}->[$j];
+        if (-s $output->{FILE}) {
+          $jsonwr->start_object_value();
+          if ($output->{NAME}) {
+            $jsonwr->str_prop('name', $output->{NAME});
+          } else {
+            my ($name) = fileparse($output->{FILE});
+            $jsonwr->str_prop('name', $name);
+          }
+          $jsonwr->str_prop('file', abs2rel(abs_path($output->{FILE}), $out_dir));
+          $jsonwr->end_object_value();
+        }
+      }
+    }
+    $jsonwr->end_array_value();
+    $jsonwr->end_object_value();
+  }
+  $jsonwr->end_array_value();
+  $jsonwr->property('sequence_db');
+  $jsonwr->start_object_value();
+  $jsonwr->str_prop('source', $opts->{SEQUENCES});
+  $jsonwr->num_prop('count', $seqs->{COUNT});
+  $jsonwr->str_prop('file', abs2rel(abs_path($seqs->{ORIGINAL}), $out_dir));
+  if (defined($seqs->{CENTRIMO_SEQLEN})) {
+    $jsonwr->num_prop('centrimo_seqlen', $seqs->{CENTRIMO_SEQLEN});
+  }
+  $jsonwr->end_object_value();
+  $jsonwr->property("motif_dbs");
+  $jsonwr->start_array_value();
+  for (my $i = 0; $i < scalar(@{$opts->{DBS}}); $i++) {
+    $jsonwr->start_object_value();
+    $jsonwr->str_prop('source', $opts->{DBS}->[$i]);
+    $jsonwr->num_prop('count', $db_counts->[$i]);
+    $jsonwr->end_object_value();
+  }
+  $jsonwr->end_array_value();
+  $jsonwr->property('motif_count');
+  $jsonwr->start_object_value();
+  $jsonwr->num_prop('meme', &nmotifs($registry, 'meme'));
+  $jsonwr->num_prop('dreme', &nmotifs($registry, 'dreme'));
+  $jsonwr->end_object_value();
+  $jsonwr->property('motifs');
+  $jsonwr->start_array_value();
+  for (my $i = 0; $i < scalar(@{$motifs}); $i++) {
+    my $motif = $motifs->[$i];
+    $jsonwr->start_object_value();
+    $jsonwr->str_prop('prog', $motif->{prog});
+    $jsonwr->num_prop('db', $motif->{db});
+    $jsonwr->str_prop('id', $motif->{id});
+    $jsonwr->str_prop('alt', $motif->{alt}) if ($motif->{alt});
+    $jsonwr->num_prop('len', $motif->{width});
+    $jsonwr->str_prop('evalue', $motif->{evalue});
+    $jsonwr->num_prop('sites', $motif->{sites});
+    $jsonwr->str_prop('url', $motif->{url}) if ($motif->{url});
+    $jsonwr->str_prop('sig', &log_10_to_str($motif->{sig}, 1));
+    $jsonwr->property('pwm');
+    $jsonwr->start_array_value();
+    for (my $j = 0; $j < $motif->{width}; $j++) {
+      $jsonwr->start_array_value();
+      for (my $k = 0; $k < scalar(@alph); $k++) {
+        $jsonwr->num_value($motif->{pspm}->{$alph[$k]}->[$j]);
+      }
+      $jsonwr->end_array_value();
+    }
+    $jsonwr->end_array_value();
+    $jsonwr->property('tomtom_matches');
+    $jsonwr->start_array_value();
+    if ($motif->{matches}) {
+      for (my $j = 0; $j < scalar(@{$motif->{matches}}); $j++) {
+        my $match = $motif->{matches}->[$j];
+        $jsonwr->start_object_value();
+        $jsonwr->num_prop('db', $match->{db});
+        $jsonwr->str_prop('id', $match->{id});
+        $jsonwr->str_prop('alt', $match->{alt}) if ($match->{alt});
+        $jsonwr->end_object_value();
+      }
+    }
+    $jsonwr->end_array_value();
+    if ($motif->{centrimo_total_sites}) {
+      $jsonwr->num_prop('centrimo_total_sites', $motif->{centrimo_total_sites});
+      $jsonwr->num_array_prop('centrimo_sites', @{$motif->{centrimo_sites}});
+    }
+    $jsonwr->end_object_value();
+  }
+  $jsonwr->end_array_value();
+  $jsonwr->property("groups");
+  $jsonwr->start_array_value();
+  for (my $i = 0; $i < scalar(@{$align}); $i++) {
+    my $group = $align->[$i];
+    $jsonwr->start_array_value();
+    for (my $j = 0; $j < scalar(@{$group}); $j++) {
+      my $motif_align = $group->[$j];
+      $jsonwr->start_object_value();
+      $jsonwr->num_prop('motif', $motif_align->{motif});
+      $jsonwr->bool_prop('rc', $motif_align->{rc});
+      $jsonwr->num_prop('offset', $motif_align->{offset});
+      $jsonwr->end_object_value();
+    }
+    $jsonwr->end_array_value();
+  }
+  $jsonwr->end_array_value();
+
+  $htmlwr->output();
+}
+
+sub main {
+  &initialise();
+  my $opts = &arguments();
+  mkpath($opts->{OUT_DIR}) unless (-e $opts->{OUT_DIR});
+  &init_progress_log($opts->{OUT_DIR});
+  my $registry = {};
+  my $seqs = &sequences($opts, $registry);
+  my @motifs = ();
+  push(@motifs, &meme($opts, $registry, $seqs)) if ($opts->{MEME_NMOTIFS} > 0);
+  push(@motifs, &dreme($opts, $registry, $seqs)) if (!defined($opts->{DREME_M}) || $opts->{DREME_M} > 0);
+  my @db_counts = &centrimo($opts, $registry, $seqs, \@motifs);
+  &tomtom($opts, $registry, $seqs, \@motifs, 'meme');
+  &tomtom($opts, $registry, $seqs, \@motifs, 'dreme');
+  my $align = &align($opts, $registry, \@motifs);
+  &output($opts, $registry, $seqs, \@db_counts, \@motifs, $align);
+  print $progress_log "Done\n";
+  close($progress_log);
+  $logger->trace("done") if $logger;
+}
+

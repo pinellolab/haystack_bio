@@ -1,0 +1,60 @@
+<!--
+FILE: beeml2meme.html
+AUTHOR: Timothy L. Bailey
+CREATE DATE: Oct-23-2011
+PROJECT: MEME Suite
+-->
+<head>
+<title>beeml2meme</title>
+<link href="./meme-suite.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+</head>
+<body>
+<div id="main">
+<script src="./meme-suite-logo.js" type="text/javascript">></script>
+<h1>beeml2meme</h1>
+<p><b>Usage:</b> <code>beeml2meme [options] &lt;matrix file&gt;</code></p>
+<p><b>Description:</b></p>
+<p>
+Convert an BEEML matrix file into a MEME version 4 formatted file
+suitable for use with MAST and other MEME Suite programs.
+</p>
+<p><b>Input:</b></p>
+<p>An BEEML matrix file describes one ore more motifs in terms of letter
+energy values.</p>
+<p>A probability matrix and optionally a log-odds matrix are output for each
+motif in the file. The probability matrix is computed using
+pseudo-counts consisting of the background frequency (see -bg, below)
+multiplied by the total pseudocounts (see -pseudo, below). The log-odds
+matrix uses the background frequencies in the denominator and is log
+base 2.</p>
+<p><b>Options:</b></p>
+<dl>
+  <dt>-bg &lt;background file&gt;</dt><dd>file with background frequencies of letters; default: uniform background</dd>
+  <dt>-pseudo &lt;total pseudocounts&gt;</dt><dd>add &lt;total pseudocounts&gt; times letter background to each frequency; default: 0</dd>
+  <dt>-logodds</dt><dd>print log-odds matrix, too; default: print frequency matrix only</dd>
+  <dt>-url &lt;website&gt;</dt><dd>website for the motif; The BEEML ID is substituted for MOTIF_NAME; default: no url</dd>
+</dl>
+<p><b>Output:</b></p>
+<p>
+Writes MEME format to standard output.
+</p>
+<p><b>Sample Input:</b></p>
+<p>
+<pre>
+# cell08_Alx3_3418, probe_r_sqr = 0.676, 8mer_r_sqr = 0.868
+A       0.12    1.48    0       0       2.18    1.15    0       0.09    0.14    0.13
+C       0.02    1.69    1.57    2.2     1.7     0.99    0.82    0.36    0       0.27
+G       0.42    2.31    1.9     2.8     2.3     1.12    0.16    0       0.25    0.27
+T       0       0       1.67    1.62    0       0       0.59    0.52    0.04    0
+# cell08_Alx4_1744, probe_r_sqr = 0.756, 8mer_r_sqr = 0.895
+A       0       0.73    0.97    0       0       3.35    2.65    0       0       0.25
+C       0.36    0       0       1.58    2.82    3.82    2.23    3.44    0.67    0
+G       0.16    0.5     1.32    1.86    2.94    6.2     2.42    3.01    0.21    0.11
+T       0.25    0.15    0.05    1.59    3.23    0       0       1.98    0.31    0.28
+</pre>
+</p>
+
+</div>
+</body>
+</html>

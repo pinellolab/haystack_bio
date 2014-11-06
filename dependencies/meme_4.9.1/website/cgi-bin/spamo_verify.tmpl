@@ -1,0 +1,45 @@
+<hr/>
+<style type="text/css">
+  td.table_label {
+    width:20em;
+  }
+  h5.section_label {
+    margin-top:5px;
+    margin-bottom:5px;
+  }
+  table.info {
+    margin-bottom:20px;
+  }
+</style>
+<h5 class="section_label">Sequences</h5>
+<table class="info">
+  <tr><td class="table_label">File Name</td><td><!-- TMPL_VAR ESCAPE=HTML NAME=seq_file --></td></tr>
+  <tr><td class="table_label">Count of Sequences</td><td><!-- TMPL_VAR NAME=seq_count --></td></tr>
+  <tr><td class="table_label">Shortest Sequence (residues)</td><td><!-- TMPL_VAR NAME=seq_min --></td></tr>
+  <tr><td class="table_label">Longest Sequence (residues)</td><td><!-- TMPL_VAR NAME=seq_max --></td></tr>
+  <tr><td class="table_label">Average Length (residues)</td><td><!-- TMPL_VAR NAME=seq_avg --></td></tr>
+  <tr><td class="table_label">Total Length (residues)</td><td><!-- TMPL_VAR NAME=seq_total --></td></tr>
+</table>
+<h5 class="section_label">Primary Motif</h5>
+<table class="info">
+  <tr><td class="table_label">File Name</td><td><!-- TMPL_VAR ESCAPE=HTML NAME=pri_file --></td></tr>
+</table>
+<!-- TMPL_IF NAME=sec_file -->
+<h5 class="section_label">Uploaded Secondary Motifs</h5>
+<table class="info">
+  <tr><td class="table_label">File Name</td><td><!-- TMPL_VAR ESCAPE=HTML NAME=sec_file --></td></tr>
+  <tr><td class="table_label">Count of Motifs</td><td><!-- TMPL_VAR NAME=sec_count --></td></tr>
+  <tr><td class="table_label">End to End Length</td><td><!-- TMPL_VAR NAME=sec_columns --></td></tr>
+</table>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME=sec_db -->
+<h5 class="section_label">Secondary Motif Database</h5>
+<table class="info">
+  <tr><td class="table_label">Database Name</td><td><!-- TMPL_VAR NAME=sec_db --></td></tr>
+</table>
+<!-- /TMPL_IF -->
+<h5 class="section_label">Options</h5>
+<table class="info">
+  <tr><td class="table_label">Write out sequence matches?</td><td>
+<!-- TMPL_IF NAME=dumpseqs -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td></tr>
+</table>

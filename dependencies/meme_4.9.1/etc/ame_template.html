@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>AME results</title>
+    <script src="ame_data.js"></script>
+    <script src="constants.js"></script>
+    <script src="motif_logo.js"></script>
+    <script src="ame_template.js"></script>
+    <link rel="stylesheet" type="text/css" href="ame_template.css">
+    <link rel="stylesheet" type="text/css" href="meme.css">
+  </head>
+  <body onload="page_loaded()" onpageshow="page_shown(event)" onresize="update_scrollpad()">
+    <!-- Help popups -->
+    <div class="pop_content" id="pop_db">
+      <p>The name of the database (file name) that contains the motif.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_id">
+      <p>A name for the motif that is unique in the motif database file.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_name">
+      <p>An alternate name of the motif that may be provided in the motif database file.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_split">
+      <p>For statistical test methods, splitting the sorted input sequences into two partitions at this rank gives the optimal <i>p</i>-value.
+      Sequences at and above this rank were treated as "positives", and sequences with larger rank
+      were treated as "negatives" when applying the statistical test that gives the optimal <i>p</i>-value.
+      For regression methods (spearman and linreg), the optimal split is the one that yields
+      the maximum value of Spearman's rho (spearman) or the minimum mean squared error (linreg).
+      </p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_pvalue">
+      <p>The (optimal) enrichment <i>p</i>-value of the motif according to the statistical test.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_cpvalue">
+      <p>The corrected (optimal) enrichment <i>p</i>-value of the motif according to the statistical test.
+      This is the (optimal) enrichment <i>p</i>-value adjusted for multiple tests using a Bonferroni
+	correction.  The number of multiple tests is given at the start of this section.  If the 
+	<i>p</i>-value is <i>p</i> and the number of multiple tests is <i>n</i>, then the corrected
+	<i>p</i>-value is 1 - (1-<i>p</i>)**<i>n</i>.
+	
+      </p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_rho">
+      <p>The value of Spearman's correlation coefficient.  It varies between +1 and -1.
+      These values occur when the two ranks are perfectly correlated (+1) or anti-correlated (-1).
+      </p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_mse">
+      <p>The value of the mean squared error of the linear regression of X vs Y.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_m">
+      <p>The slope of the regression line: Y = mX + b.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_b">
+      <p>The Y-intercept of the regression line: Y = mX + b.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <!-- Page start -->
+    <h1>AME (Analysis of Motif Enrichment)</h1>
+      <p>
+        For further information on how to interpret these results or to get a 
+        copy of the MEME software please access 
+        <a href="http://meme.nbcr.net/">http://meme.nbcr.net</a>. 
+      </p>
+      <p>If you use AME in your research, please cite the following paper:<br />
+        <span class="citation">
+          Robert McLeay and Timothy L. Bailey, 
+          &quot;Motif Enrichment Analysis: A unified framework and method evaluation&quot;, 
+          <i>BMC Bioinformatics</i>, <b>11</b>:165, 2010, doi:10.1186/1471-2105-11-165.
+        </span>
+      </p>
+    <!-- navigation -->
+    <div class="pad2">
+      <a class="jump" href="#data_sec">Enriched Motifs</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a class="jump" href="#input_sec">Input Files</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a class="jump" href="#info_sec">Program information</a>
+    </div>
+    <!-- alert the user when their browser is not up to the task -->
+    <noscript><h1 style="color:red">Javascript is required to view these results!</h1></noscript>
+    <script>
+      if (!window.HTMLCanvasElement)
+        document.write("<h1 style=\"color:red\">Your browser does not support canvas!</h1>\n");
+    </script>
+    <!-- write out the job description -->
+    <script>
+      if (data['job_description']) {
+        document.write('<h2 id="description">Description</h2>\n');
+        document.write('<div class="box">\n');
+        var paragraphs = data['job_description'].split("\n\n");
+        for (var i = 0; i < paragraphs.length; i++) {
+          document.write('<p>');
+          document.write(paragraphs[i].split("\n").join('<br>'));
+          document.write('</p>\n');
+        }
+        document.write('</div>\n');
+      }
+    </script>
+    <h2 class="mainh pad2" id="data_sec">Enriched Motifs</h2>
+    <div class="box">
+      <!-- messages -->
+      <p>
+      <script>
+        if (!data['options']['fix_partition']) {
+          document.write('In partition maximisation mode.<br>');
+        } else {
+          document.write('Fixed partition size: ' + data['options']['partition'] + '<br>');
+        }
+
+        document.write('Sequence motif score: ' + data['options']['scoring'] + '<br>');
+
+        // method-specific defaults
+        if (data['options']['pvalue_method'] != 'linreg' && data['options']['pvalue_method'] != 'spearman') {
+          document.write('Statistical test: ' + data['options']['pvalue_method'] + '<br>');
+          document.write('poslist: ' + data['options']['positive_list'] + '<br>');
+        } else {
+          document.write('Optimization function: ' + data['options']['pvalue_method'] + '<br>');
+        }
+        if (data['options']['pvalue_method'] == 'fisher' && (
+	    data['options']['scoring'] == 'avg_odds' ||
+	    data['options']['scoring'] == 'max_odds'
+          )
+        ) {
+          if (data['options']['positive_list'] == 'fluorescence') {
+            document.write('fl-threshold: ' + data['options']['fisher_fl_threshold'] + '<br>');
+          } else {
+	    document.write('pwm-threshold: ' + data['options']['fisher_pwm_threshold'] + '<br>');
+          }
+        }
+        if (data['options']['scoring'] == 'total_hits' && (
+	    data['options']['pvalue_method'] == 'fisher' ||
+	    data['options']['pvalue_method'] == 'mhg' ||
+	    data['options']['pvalue_method'] == '4dmhg' ||
+	    data['options']['pvalue_method'] == 'ranksum'
+            )
+          ) {
+          document.write('Motif hit threshold: ' + data['options']['pvalue_threshold'] + '<br>');
+          document.write('Correct for sequence length bias by subracting expected number of hits: ' + 
+            data['options']['length_correction'] + '<br>');
+        }
+        if (data['options']['pvalue_method'] == 'ranksum') {
+          document.write('rsmethod: ' + data['options']['rs_method'] + '<br>');
+        }
+        if (data['options']['pvalue_method'] == 'linreg' || data['options']['pvalue_method'] == 'spearman') {
+          document.write('Normalize motif scores to be comparable: ' + data['options']['linreg_normalise'] + '<br>');
+          var f = data['options']['log_fscores'] ? 'log(FASTA ID value)' : 'FASTA ID value';
+          var m = data['options']['log_pwmscores'] ? 'log(sequence motif score)' : 'sequence motif score';
+          if (data['options']['linreg_switchxy']) {
+            document.write('X: ' + m + '<br>');
+            document.write('Y: ' + f + '<br>');
+          } else {
+            document.write('X: ' + f + '<br>');
+            document.write('Y: ' + m + '<br>');
+          }
+        }
+        if (data['options']['pvalue_method'] != 'linreg' && 
+          data['options']['pvalue_method'] != 'spearman') {
+	  document.write('Threshold <i>p</i>-value for reporting results: ' + 
+	    data['options']['pvalue_report_threshold'] + '<br>');
+          var t = (data['options']['fix_partition'] ? 1 : data['sequence_db']['count']);
+          document.write('Number of multiple tests for Bonferroni correction: #Motifs &times;' + 
+            ' #PartitionsTested = ' + data['motif_dbs']['count'] + 
+            ' &times; ' + t + ' = ' + (t * data['motif_dbs']['count']));
+        } else if (data['pvalue_method'] == 'linreg') {
+          document.write('Except for very specific cases, RAMEN is highly recommended instead for linear regression.');
+        }
+      </script>
+      </p>
+      <table class="results" id="results">
+        <thead>
+          <tr>
+            <th class="col_logo">Logo</th>
+            <th class="col_db">Database&nbsp;<div class="help" 
+                onclick="help_popup(this, 'pop_db')"></div></th>
+            <th>ID&nbsp;<div class="help" 
+                onclick="help_popup(this, 'pop_id')"></div></th>
+            <th class="col_name">Name&nbsp;<div class="help" 
+                onclick="help_popup(this, 'pop_name')"></div></th>
+            <!-- Used by partition maximization mode -->
+            <th class="col_split">Split&nbsp;<div class="help" 
+                onclick="help_popup(this, 'pop_split')"></div></th>
+            <!-- Used by: RANKSUM_METHOD, FISHER_METHOD, MULTIHG_METHOD, LONG_MULTIHG_METHOD -->
+            <th class="col_pvalue"><i>p</i>-value&nbsp;<div class="help" 
+                onclick="help_popup(this, 'pop_pvalue')"></div></th>
+            <th class="col_corrected_pvalue">Corrected <i>p</i>-value&nbsp;<div 
+                class="help" onclick="help_popup(this, 'pop_cpvalue')"></div></th>
+            <!-- Used by: SPEARMAN_METHOD -->
+            <th class="col_spearmans_rho">Spearman's Rho&nbsp;<div class="help" 
+                onclick="help_popup(this, 'pop_rho')"></div></th>
+            <!-- Used by: LINREG_METHOD -->
+            <th class="col_mean_square_error">Mean-squared-error&nbsp;<div 
+                class="help" onclick="help_popup(this, 'pop_mse')"></div></th>
+            <th class="col_m">m&nbsp;<div class="help" 
+                onclick="help_popup(this, 'pop_m')"></div></th>
+            <th class="col_b">b&nbsp;<div class="help" 
+                onclick="help_popup(this, 'pop_b')"></div></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <script>make_results_table();</script>
+    </div>
+    <h2 id="input_sec" class="mainh pad2">Input Files</h2>
+    <div class="box">
+      <h4>Sequences</h4>
+      <table class="inputs">
+        <tr><th>Database</th><th>Source</th><th>Sequence Count</th></tr>
+        <tr>
+          <script>
+          {
+            var db = data['sequence_db'];
+            document.write("<td>"  + db['name'] + "</td>");
+            document.write("<td>" + db['source'] + "</td>");
+            document.write("<td>" + db['count'] + "</td>");
+          }
+          </script>
+        </tr>
+      </table>
+      <h4>Motifs</h4>
+      <table class="inputs">
+        <tr><th>Database</th><th>Source</th><th>Motif Count</th></tr>
+        <script>
+        {
+          var motif_dbs = data['motif_dbs'];
+          for (var i = 0; i < motif_dbs.length; i++) {
+            var db = motif_dbs[i];
+            document.write("<tr>");
+            document.write("<td>"  + db['name'] + "</td>");
+            document.write("<td>" + db['source'] + "</td>");
+            document.write("<td>" + db['count'] + "</td>");
+            document.write("</tr>");
+          }
+        }
+        </script>
+      </table>
+    </div>
+    <div id="info_sec" class="bar">
+      <div class="subsection">
+        <h5 id="version">AME version</h5>
+        <script>document.write(data["version"]);</script> 
+        (Release date: <script>document.write(data["release"]);</script>)<br>
+        Copyright &copy; Robert McLeay 
+        <a href="mailto:r.mcleay@imb.uq.edu.au">r.mcleay@imb.uq.edu.au</a> &amp; 
+        Timothy Bailey 
+        <a href="mailto:t.bailey@imb.uq.edu.au">t.bailey@imb.uq.edu.au</a>, 2009.
+      </div>
+      <div class="subsection">
+        <h5 id="reference">Reference</h5>
+        <span class="citation">
+          Robert McLeay and Timothy L. Bailey, 
+          &quot;Motif Enrichment Analysis: A unified framework and method evaluation&quot;, 
+          <i>BMC Bioinformatics</i>, <b>11</b>:165, 2010, doi:10.1186/1471-2105-11-165.
+        </span>
+        <div class="subsection">
+          <h5 id="command">Command line summary</h5>
+          <textarea id="cmd" rows="1" style="width:100%;" readonly="readonly">
+          </textarea>
+          <script>$("cmd").value = data["cmd"].join(" ");</script>
+        </div>
+      </div>
+    </div>
+    <div id="scrollpad"></div>
+  </body>
+</html>
+

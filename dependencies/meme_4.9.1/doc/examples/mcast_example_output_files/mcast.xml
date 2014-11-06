@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Begin document body -->
+<mcast version="4.9.1" release="Fri Aug 23 16:49:42 2013 +1000">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation=  xmlns:mhmmscan="http://noble.gs.washington.edu/schema/fimo"
+>
+<command-line>mcast -oc mcast_example_output_files crp0.meme.html crp0.s</command-line>
+<sequence-data num-sequences="18" num-residues="1890" />
+<alphabet>nucleotide</alphabet>
+<motif name="1" width="18" best-possible-match="AATTGTGACGTTGTTCAC" best-possible-rc-match="GTGATCTACGTCACAATT"/>
+<motif name="2" width="8" best-possible-match="CGGTGGGG" best-possible-rc-match="CCCCGCCG"/>
+<motif name="3" width="11" best-possible-match="CCTGGTGTGCC" best-possible-rc-match="GGGACCCCAGG"/>
+<background source="non-redundant database">
+<value letter="A">0.282</value>
+<value letter="C">0.222</value>
+<value letter="G">0.229</value>
+<value letter="T">0.267</value>
+</background>
+<cisml-file>cisml.xml</cisml-file>
+</mcast>

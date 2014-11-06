@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MEME-ChIP - Submission form</title>
+    <script src="../meme-suite-menu.js" type="text/javascript"></script>
+    <link href="../site.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../images/memesuite_icon.ico">
+    <script src="../site.js" type="text/javascript"></script>
+    <script src="../meme-chip.js" type="text/javascript"></script>
+    <style>
+      div.more_opts > span.spacer {
+        display: inline-block;
+        min-width: 10em;
+      }
+    </style>
+  </head>
+  <body onload="on_page_show();" onpageshow="if (event.persisted) on_page_show();">
+    <!-- Help Popups -->
+    <div class="pop_content" id="pop_sequences">
+      <p>Select a file of <a href="../doc/fasta-format.html">FASTA formatted</a>
+      DNA sequences or paste in actual <a href="../doc/fasta-format.html"
+      >FASTA formatted</a> DNA sequences to find motifs.</p>
+      <p>See the <a href="../examples/sample-dna-Klf1.fa">sample sequences</a>
+      to get an idea of input that works well for MEME-ChIP.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_motifs">
+      <p>MEME-ChIP will compare any found motifs to this set and also check if 
+      any are centrally enriched.</p>
+      <p>MEME-ChIP can use databases installed on the server or search a user 
+      uploaded database in <a href="../doc/meme-format.html">MEME</a> DNA motif 
+      format by selecting the "Upload Your Own Database" option. For more 
+      information browse the 
+      <a href="get_db_list.cgi?db_names=motif_db.csv&mode=doc&is_motif_db=1"
+      >supported databases</a>.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_motifs_file">
+      <p>An uploaded database is a normal <a href="../doc/meme-format.html"
+      >MEME</a> DNA motif file with lots of motifs. The uploaded database must 
+      be smaller than 5MB.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_email">
+      <p>The email is used to notify you of your results.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_job_description">
+      <p>The job description will be included in the notification email you 
+      receive and in the MEME-ChIP output.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_norc">
+      <p>When using the RNA sequences you should select this option to ensure 
+      that only the given strand is scanned for motifs.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_bfile">
+      <p>By default MEME-ChIP will determine the background Markov model from 
+      the provided sequences. Alternately a file containing a <a 
+      href="../doc/bfile-format.html">background model</a> may be input here.</p>
+      <p>The downloadable version of the MEME Suite contains a script named
+      "fasta-get-markov" that you can use to create background model files in
+      the correct format from FASTA sequence files.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="width:500px" id="pop_meme_dist">
+      <p>This is where you tell MEME how you believe occurrences of the motifs
+      are distributed among the sequences. Selecting the correct type of
+      distribution improves the sensitivity and quality of the motif search.</p>
+      <dl>
+        <dt>Zero or one occurrence per sequence</dt>
+        <dd>MEME assumes that each sequence may contain <b>at most</b> one
+        occurrence of each motif. This option is useful when you suspect that
+        some motifs may be missing from some of the sequences. In that case, the
+        motifs found will be more accurate than using the one occurrence per
+        sequence option. This option takes more computer time than the one 
+        occurrence per sequence option (about twice as much) and is slightly less
+        sensitive to weak motifs present in all of the sequences.</dd>
+        <dt>One occurrence per sequence</dt>
+        <dd>MEME assumes that each sequence in the dataset contains
+        <b>exactly</b> one occurrence of each motif. This option is the fastest
+        and most sensitive but the motifs returned by MEME may be "blurry" if
+        any of the sequences is missing them.</dd>
+        <dt>Any number of repetitions</dt>
+        <dd>MEME assumes each sequence may contain <b>any number</b> of
+        non-overlapping occurrences of each motif. This option is useful when
+        you suspect that motifs repeat multiple times within a single sequence.
+        In that case, the motifs found will be much more accurate than using one
+        of the other options. This option can also be used to discover repeats
+        within a single sequence. This option takes much more computer time than
+        the one occurrence per sequence option (about ten times as much) and is
+        somewhat less sensitive to weak motifs which do not repeat within a
+        single sequence than the other two options.</dd>
+      </dl>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_meme_nmotifs">
+      <p>MEME will keep searching until it finds this many motifs or it hits
+      some other threshold like the maximum run time. Note that MEME does not
+      use an E-value threhold like DREME so you should always check the E-value
+      of any found motifs.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_meme_width">
+      <p>This is the width (number of characters in the sequence pattern) of a
+      single motif. MEME chooses the optimal width of each motif individually
+      using a statistical heuristic function. You can choose different limits
+      for the minimum and maximum motif widths that MEME will consider. The
+      width of each motif that MEME reports will lie within the limits you
+      choose.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="width:500px" id="pop_meme_sites">
+      <p>This is the total number of sites in the training set where a single
+      motif occurs. You can choose different limits for the minimum and maximum
+      number of occurrences that MEME will consider. If you have prior knowledge
+      about the number of occurrences that motifs have in your training set,
+      limiting MEME's search in this way can can increase the likelihood of
+      MEME finding true motifs.</p>
+      <p>MEME chooses the number of occurrences to report for each motif by
+      optimizing a statistical heuristic function, restricting the number of
+      occurrences to the range you give here, or using defaults described below
+      if you leave these fields deselected.</p>
+      <table>
+      <tr><th>Distribution</th><th>Minimum</th><th>Maximum</th></tr>
+      <tr><td>Zero or one occurrence per sequence</td><td>sqrt(n)</td><td>n</td></tr>
+      <tr><td>One occurrence per sequence</td><td>n</td><td>n</td></tr>
+      <tr><td>Any number of repetitions</td><td>sqrt(n)</td><td>min(5*n, 600)</td></tr>
+      </table>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_meme_pal">
+      <p>Checking this box causes MEME to search only for DNA palindromes. This
+      causes MEME to average the letter frequencies in corresponding motif
+      columns together. For instance, if the width of the motif is 10, columns
+      1 and 10, 2 and 9, 3 and 8, etc., are averaged together. The averaging
+      combines the frequency of A in one column with T in the other, and the
+      frequency of C in one column with G in the other. If this box is not
+      checked, the columns are not averaged together.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_dreme_limits">
+      <p>DREME will keep finding motifs until it hits one of the limits.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_centrimo_score">
+      <p>Specify a minimum score for a match to be considered. If a sequence does
+      not have any matches which meet this minimum score for a given motif, then
+      that sequence will not be considered for that motif.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_centrimo_maxreg">
+      <p>This option limits the maximum region size that CentriMo will test.
+      This option is useful if you have sequences longer than the normal 500bp
+      and can help cut-down the multiple testing correction. When this option is
+      not supplied CentriMo will test region sizes up to one less than the maximum
+      number of places that a given motif can align to the sequence.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_centrimo_ethresh">
+      <p>This is the E-value threshold CentriMo uses for reporting enriched
+      central regions for motifs. If multiple enriched regions overlap then the region
+      with the best <i>p</i>-value and smallest size will be output.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_centrimo_local">
+      <p>This option causes all regions up to the maximum region size to be
+      considered even if they are not in the center. This can be useful with
+      non-symetric data.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_centrimo_store_ids">
+      <p>This option enables you to store the sequence identifies which have
+      their best match in the best region for each motif. This option can
+      potentially make the CentriMo output file size much larger.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <!-- Page starts -->
+    <table>
+      <tr>
+        <td class="menu_col">
+          <div id="menu">
+            <script type="text/javascript">make_menu('../');</script>
+          </div>
+        </td>
+        <td class="content_col">
+          <noscript>
+            <h1>MEME Suite</h1>
+            <p>The MEME Suite web application requires the use of JavaScript<br />
+            Javascript doesn't seem to be available on your browser.</p>
+          </noscript>
+          <div class="header">
+            <div class="header_img">
+              <img src="../doc/images/memechip_logo.png" alt="MEME-ChIP logo">
+              <div class="header_ver">Version <!-- TMPL_VAR NAME=version --></div>
+            </div>
+            <p class="header_blurb">
+            Use this form to submit DNA sequences to MEME-ChIP. MEME-ChIP is 
+            designed especially for discovering motifs in <b>LARGE</b> (50MB 
+            maximum) sets of short (around 500bp) DNA sequences centered on 
+            locations of interest such as those produced by ChIP-seq experiments.
+            </p>
+          </div>
+          <div class="meme">
+          <form enctype="multipart/form-data" accept-charset="utf-8" 
+          method="POST" action="meme-chip.cgi" novalidate 
+          onsubmit="return on_form_submit()" onreset="return on_form_reset()">
+            <fieldset>
+              <legend>Data Submission Form</legend>
+              <p class="meme">Perform motif discovery and enrichment on large DNA datasets.</p> 
+              <!-- sequences -->
+              <h2 class="meme">Input the sequences</h2>
+              <div class="subcontent">
+                <h4 class="meme">Enter DNA sequences in which you want to find motifs
+                <div class="help" onclick="help_popup(this, 'pop_sequences')"></div></h4>
+                <input type="file" class="meme" name="sequences" id="sequences"/>
+                or
+                <input type="checkbox" class="meme" name="use_pasted" id="use_pasted" value="1"
+                onclick="pasted_sequences_enable(this.checked)"/>
+                <label for="use_pasted">paste the sequences</label>
+                <textarea class="meme" rows="5" cols="60" style="padding-top:5px;" 
+                    name="pasted_sequences" id="pasted_sequences"></textarea>
+              </div>
+              <!-- /sequences -->
+              <!-- motifs -->
+              <h2 class="meme">Input the motif database</h2>
+              <div class="subcontent">
+                <select name="motif_db" id="motif_db" onchange="on_ch_db()">
+                  <option value="upload" style="font-style:italic;">Upload Your Own Database</option>
+                  <!-- TMPL_LOOP NAME=dbs -->
+                  <!-- TMPL_INCLUDE NAME="db.tmpl" -->
+                  <!-- /TMPL_LOOP -->
+                </select> 
+                <div class="help" onclick="help_popup(this, 'pop_motifs')"></div><br>
+              </div>
+              <div id="db_upload_div" style="display:none">
+                <h2 class="meme">Input motifs to upload</h2>
+                <div class="subcontent">
+                  <h4 class="meme">Select a <a href="../doc/meme-format.html">MEME</a> motif database file.
+                     <div class="help" onclick="help_popup(this, 'pop_motifs_file')"></div></h4>
+                  <input type="file" name="motif_db_upload" id="db_upload" class="meme"><br>
+                </div>
+              </div>
+              <!-- /motifs -->
+              <!-- job queue -->
+              <h2 class="meme">Input job queue details</h2>
+              <div class="subcontent">
+                <!-- email -->
+                <h4 class="meme">Enter your <a href="../help_email.html">email address</a>.
+                  <div class="help" onclick="help_popup(this, 'pop_email')"></div></h4>
+                <input type="email" name="email" id="email" size="40"
+                    class="meme"/>
+                <h4 class="meme">Re-enter your email address.</h4>
+                <input type="email" name="email_confirm" id="email_confirm" 
+                    size="40" class="meme"/><br>
+                <!-- /email -->
+                <!-- description -->
+                <h4 class="meme" style="padding-top:10px;">Optionally enter a job description.
+                  <div class="help" onclick="help_popup(this, 'pop_job_description')"></div></h4>
+                <textarea name="description" cols="60" rows="2" class="meme"></textarea>
+                <!-- /description -->
+              </div>
+              <!-- /job queue -->
+              <!-- Advanced Options -->
+              <div style="margin-top:5px; margin-bottom: 5px; width:80%;">
+              <!-- Universal Options -->
+              <div id="adv_opts" class="more_opts" tabindex="0" 
+                onclick="more_opts(this, adv_changed)"
+                onkeypress="more_opts_key(event, this, adv_changed)">
+                <span class="collapsed">&#x25B6;</span>
+                <span class="expanded">&#x25BC;</span>
+                <span class="spacer">
+                  Universal options
+                </span>
+                <span class="modified">hidden modifications!</span>
+                <span class="reset" onclick="adv_reset(event)">[Reset]</span>
+              </div>
+              <div>
+                <h3 class="meme top">Scan both DNA strands?</h3>
+                <input class="meme" type="checkbox" onclick="on_ch_norc()"
+                id="norc" name="norc" value="1">
+                <label for="norc">scan given strand only</label>
+                <div class="help" onclick="help_popup(this, 'pop_norc')"></div>
+                <h3 class="meme">Use a custom background?</h3>
+                <label for="bfile">Custom background:</label>
+                <input class="meme" type="file" name="bfile" id="bfile" 
+                onchange="on_ch_bfile()">
+                <input type="button" value="clear" onclick="$('bfile').value = '';">
+                <div class="help" onclick="help_popup(this, 'pop_bfile')"></div>
+              </div>
+              <!-- /Universal Options -->
+              <!-- MEME Options -->
+              <div id="meme_opts" class="more_opts" tabindex="0" 
+                onclick="more_opts(this, meme_changed)"
+                onkeypress="more_opts_key(event, this, meme_changed)">
+                <span class="collapsed">&#x25B6;</span>
+                <span class="expanded">&#x25BC;</span>
+                <span class="spacer">
+                  MEME options
+                </span>
+                <span class="modified">hidden modifications!</span>
+                <span class="reset" onclick="meme_reset(event)">[Reset]</span>
+              </div>
+              <div>
+                <h3 class="meme top">What is the expected motif site distribution?</h3>
+                <select class="meme" name="meme_dist" id="meme_dist" onchange="on_ch_dist()">
+                  <option value="zoops" selected><b>Zero or one</b> occurrence per sequence</option>
+                  <option value="oops" ><b>One</b> occurrence per sequence</option>
+                  <option value="anr" ><b>Any number</b> of repetitions</option>
+                </select> 
+                <div class="help" onclick="help_popup(this, 'pop_meme_dist')"></div>
+
+                <h3 class="meme">How many motifs should MEME find?</h3>
+                <label for="meme_nmotifs">Count of motifs:</label>
+                <input class="meme" type="number" name="meme_nmotifs" value="3"
+                step="1" min="1" size="2" id="meme_nmotifs"
+                onkeypress="num_key(event)">
+                <div class="help" onclick="help_popup(this, 'pop_meme_nmotifs')"></div>
+
+                <h3 class="meme">What width motifs should MEME find?</h3>
+                <span style="display:inline-block; min-width:12em;">
+                <label for="meme_minw">Minimum width:</label>
+                <input class="meme" type="number" name="meme_minw" value="6"
+                step="1" min="2" max="300" size="2" id="meme_minw"
+                onkeypress="num_key(event)">
+                </span>
+
+                <label for="meme_maxw">Maximum width:</label>
+                <input class="meme" type="number" name="meme_maxw" value="30"
+                step="1" min="2" max="300"  size="2" id="meme_maxw"
+                onkeypress="num_key(event)">
+                <div class="help" onclick="help_popup(this, 'pop_meme_width')"></div>
+
+                <div id="meme_sites">
+                  <h3 class="meme">How many sites per motif is acceptable?</h3>
+                  <span style="display:inline-block; min-width:12em;">
+                  <input type="checkbox" value="1"
+                  name="meme_minsites_enable" id="meme_minsites_enable"
+                  onclick="$('meme_minsites').disabled = !this.checked">
+                  <label for="meme_minsites" 
+                  onclick="$('meme_minsites_enable').click()">Minimum sites:</label>
+                  <input class="meme" type="number" name="meme_minsites"
+                  value="2" step="1" min="2" max="600" size="2"
+                  id="meme_minsites" onkeypress="num_key(event)">
+                  </span>
+                  <input type="checkbox" value="1"
+                  name="meme_maxsites_enable" id="meme_maxsites_enable" 
+                  onclick="$('meme_maxsites').disabled = !this.checked">
+                  <label for="meme_maxsites" 
+                  onclick="$('meme_maxsites_enable').click()">Maximum sites:</label>
+                  <input class="meme" type="number" name="meme_maxsites"
+                  value="600" step="1" min="2" max="600" size="3"
+                  id="meme_maxsites" onkeypress="num_key(event)">
+                  <div class="help" onclick="help_popup(this, 'pop_meme_sites')"></div>
+                </div>
+                
+                <h3 class="meme">Should MEME restrict the search to palindromes?</h3>
+                <input class="meme" type="checkbox" name="meme_pal" value="1" id="meme_pal">
+                <label for="meme_pal">look for palindromes only</label>
+                <div class="help" onclick="help_popup(this, 'pop_meme_pal')"></div>
+              </div>
+              <!-- /MEME Options -->
+              <!-- DREME Options -->
+              <div id="dreme_opts" class="more_opts" tabindex="0" 
+                onclick="more_opts(this, dreme_changed)"
+                onkeypress="more_opts_key(event, this, dreme_changed)">
+                <span class="collapsed">&#x25B6;</span>
+                <span class="expanded">&#x25BC;</span>
+                <span class="spacer">
+                  DREME options
+                </span>
+                <span class="modified">hidden modifications!</span>
+                <span class="reset" onclick="dreme_reset(event)">[Reset]</span>
+              </div>
+              <div>
+                <h3 class="meme top">How should DREME limit its search?</h3>
+                <span style="display:inline-block; min-width:12em;">
+                <label for="dreme_ethresh"><i>E</i>-value &le;</label>
+                <input class="meme" type="number" name="dreme_ethresh" 
+                value="0.05" step="any" min="0" size="3"
+                id="dreme_ethresh">
+                </span>
+                <input class="meme" type="checkbox" name="dreme_nmotifs_enable" 
+                value="1" id="dreme_nmotifs_enable" 
+                onclick="$('dreme_nmotifs').disabled = !this.checked">
+                <label for="dreme_nmotifs" 
+                onclick="$('dreme_nmotifs_enable').click()">Count &le;</label>
+                <input class="meme" type="number" name="dreme_nmotifs"
+                value="10" step="1" min="1" size="2"
+                id="dreme_nmotifs" onkeypress="num_key(event)">
+                <div class="help" onclick="help_popup(this, 'pop_dreme_limits')"></div>
+              </div>
+              <!-- /DREME Options -->
+              <!-- CentriMo Options -->
+              <div id="centrimo_opts" class="more_opts" tabindex="0" 
+                onclick="more_opts(this, centrimo_changed)"
+                onkeypress="more_opts_key(event, this, centrimo_changed)">
+                <span class="collapsed">&#x25B6;</span>
+                <span class="expanded">&#x25BC;</span>
+                <span class="spacer">
+                  CentriMo options
+                </span>
+                <span class="modified">hidden modifications!</span>
+                <span class="reset" onclick="centrimo_reset(event)">[Reset]</span>
+              </div>
+              <div>
+                <h3 class="meme">Set a minimum acceptable match score (bits)</h3>
+                <label for="centrimo_score">score &ge;</label>
+                <input class="meme" type="number" name="centrimo_score" 
+                size="3" value="5" step="any" id="centrimo_score">
+                <div class="help" onclick="help_popup(this, 'pop_centrimo_score')"></div>
+
+                <h3 class="meme">Set the maximum allowed width of central region</h3>
+                <input class="meme" type="checkbox" name="centrimo_maxreg_enable" 
+                value="1" id="centrimo_maxreg_enable"
+                onclick="$('centrimo_maxreg').disabled = !this.checked">
+                <label for="centrimo_maxreg"
+                onclick="$('centrimo_maxreg_enable').click()"
+                >region width &le;</label>
+                <input class="meme" type="number" name="centrimo_maxreg" 
+                size="5" value="200" step="0.5" min="1" 
+                id="centrimo_maxreg" onkeypress="num_key(event)">
+                <div class="help" onclick="help_popup(this, 'pop_centrimo_maxreg')"></div>
+
+                <h3 class="meme">Set <i>E</i>-value threshold for reporting centrally enriched regions</h3>
+                <label for="centrimo_ethresh"><i>E</i>-value &le;</label>
+                <input class="meme" type="number" name="centrimo_ethresh" 
+                size="5" value="10" step="any" min="0.00000001" 
+                id="centrimo_ethresh">
+                <div class="help" onclick="help_popup(this, 'pop_centrimo_ethresh')"></div>
+                  
+                <h3 class="meme">Find uncentered regions</h3>
+                <input class="meme" type="checkbox" name="centrimo_local"
+                  id="centrimo_local" value="1">
+                <label for="centrimo_local">Run CentriMo in local mode to find uncentered regions</label>
+                <div class="help" onclick="help_popup(this, 'pop_centrimo_local')"></div>
+
+                <h3 class="meme">Include sequence IDs</h3>
+                <input class="meme" type="checkbox" name="centrimo_store_ids" 
+                    id="centrimo_store_ids" value="1" checked>
+                <label for="centrimo_store_ids">Include a list of matching sequence ids</label>
+                <div class="help" onclick="help_popup(this, 'pop_centrimo_store_ids')"></div>
+              </div>
+              <!-- /CentriMo Options -->
+              </div>
+              <!-- /Advanced Options -->
+              <!-- Search and clear buttons -->
+              <div style="margin-left:auto; margin-right:auto; width:15em; clear:both;">
+                <input type="submit" name="search" value="Start search">
+                &nbsp;&nbsp;&nbsp;
+                <input type="reset" value="Clear Input" ><br>
+              </div>
+            </fieldset>
+          </form>
+          <!-- TMPL_INCLUDE NAME="footer.tmpl" -->
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

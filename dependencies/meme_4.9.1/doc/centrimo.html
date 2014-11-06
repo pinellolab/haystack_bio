@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CentriMo - localized motif enrichment analysis</title>
+    <link href="meme-suite-docs.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2><img src="images/centrimo_logo.png" alt="CentriMo" title="CentriMo"></h2>
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>centrimo [options] &lt;sequence file&gt; &lt;motif file&gt;+</code>
+    </div>
+    <h3>Description</h3>
+    <div class="indent">
+      <p>
+      <p>CentriMo takes a set of motifs and a set of equal-length DNA or RNA 
+      sequences and plots the positional distribution of the best match of each motif. 
+      </p>
+      <p>
+      The motifs are typically compendia of DNA- or RNA-binding motifs, and
+      the sequences might be: 500 bp sequences aligned on ChIP-seq peaks or summits; 
+      300 bp sequences centered on sets of transcription start sites or
+      translation start sites; sequences aligned on splice-junctions; etc.
+      </p>
+      <p>
+      CentriMo also computes the "local enrichment" of each motif by counting the
+      number of times its best match in each sequence occurs in a local region
+      and applying a statistical test to see if the local enrichment is signficant.
+      By default, CentriMo examines only regions <b>centered</b>, in the input sequences,
+      but CentriMo will compute the enrichment of <b>all</b> regions if you specify
+      the <span class="popt">--local</span> option.
+      CentriMo uses the binomial test to compute the
+      significance of the number of sequences where the best match occurs in
+      a given region, assuming a uniform prior over best match positions.
+      CentriMo reports the location and significance of the best region for each motif.
+      </p>
+      <p>
+      CentriMo can also perform comparative enrichment, reporting the relative
+      enrichment of the best region in a second, control set of sequences if
+      you specify the <span class="popt">--neg</span>.  CentriMo choses regions
+      based on their significance in the primary set of sequences, and then
+      it uses the Fisher exact test to evaluate the significance of the number 
+      of best matches in the region in the primary set compared with the number 
+      of best matches in the same region in the control set of sequences.
+      </p>
+    </div>
+
+    <h3>Inputs</h3>
+    <div class="indent">
+      <h4>Motif File</h4>
+      <div class="indent">
+        <p>A file containing motifs. Outputs from MEME and DREME are supported,
+        as well as <a href=meme-format.html#min_format><b>minimal MEME format</b></a>. 
+        You can convert many other motif formats to minimal MEME format
+        using <a href="overview.html#conversion_utilities">conversion scripts</a>
+        available with the MEME Suite.
+        </p>
+      </div>
+
+      <h4>Sequence File</h4>
+      <div class="indent">
+        <p>A file containing FASTA formatted sequences, ideally all of the
+        same length.  The sequences in this file are referred to as the 
+        "positive sequences" when a second set of sequences is provided using the 
+        <span class="popt">--neg</span> option (see below).</p>
+      </div>
+    </div>
+
+    <h3>Outputs</h3>
+    <div class="indent">
+      <p>CentriMo outputs an HTML file that allows interactive selection of
+      which motifs to plot the positional distribution for and control over
+      smoothing and other plotting parameters.  CentriMo also
+      outputs two text files: centrimo.txt, a tab delimited
+      version of the results, and site_counts.txt, which lists, for each motif
+      and each offset, the number of sequences where the best match of the motif
+      occurs at the given offset.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+    <table class="options">
+      <thead>
+        <tr>
+          <th>Option</th>
+          <th>Parameter</th>
+          <th>Description</th>
+          <th>Default Behaviour</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th colspan="4">Input/Output</th>
+        </tr>
+        <tr>
+          <td class="popt">--o</td><td><span class="pdat">name</span></td>
+          <td>Create a folder called <span class="pdat">name</span> and write
+          output files in it. This option is not compatible with --oc as only one
+          output folder is allowed.</td>
+          <td>The program behaves as if <code>--oc&nbsp;centrimo_out</code> had been specified.</td>
+        </tr>
+        <tr>
+          <td class="popt">--oc</td><td><span class="pdat">name</span></td>
+          <td>Create a folder called <span class="pdat">name</span> but if it
+          already exists allow overwriting the contents. This option is not
+          compatible with --o as only one output folder is allowed.</td>
+          <td>The program behaves as if <code>--oc&nbsp;centrimo_out</code> had been specified.</td>
+        </tr>
+        <tr>
+          <td class="popt">--neg</td><td><span class="pdat">fasta file</span></td>
+          <td>Plot the motif distributions in this set (negative sequences) as well.
+          For each enriched region reported, based on enrichment in the the 
+          <Sequence File> (positive sequences), the signficance of the 
+          relative enrichment of that region in the positive sequences 
+          versus these negative sequences is evaluated using the Fisher exact test.</td>
+        </tr>
+        <tr>
+          <td class="popt">--bgfile</td>
+          <td><span class="pdat">bg file</span></td>
+          <td>Read a zero order background from the specified file. If motif-file 
+          is specified then read the background from the motif file.</td>
+          <td>The program uses the base frequencies in the input sequences.</td>
+        </tr>
+        <tr>
+          <td class="popt">--motif</td>
+          <td><span class="pdat">ID</span></td>
+          <td>Select the motif with the <span class="pdat">ID</span> for scanning.
+            This option may be repeated to select multiple motifs.</td>
+          <td>The program scans with all the motifs.</td>
+        </tr>
+        <tr>
+          <td class="popt">--motif-pseudo</td>
+          <td><span class="pdat">pseudocount</span></td>
+          <td>Apply this pseudocount to the PWMs before scanning.</td>
+          <td>The program applies a pseudocount of 0.1.</td>
+        </tr>
+        <tr>
+          <td class="popt">--seqlen</td><td><span class="pdat">length</span></td>
+          <td>Use sequences with the length <span class="pdat">length</span>.</td>
+          <td>Use sequences with the same length as the first sequence,
+          ignoring all other sequences in the input file(s).</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <th colspan="4">Scanning</th>
+        </tr>
+        <tr>
+          <td class="popt">--score</td> 
+          <td><span class="pdat">S</span></td>   
+          <td>The score threshold for PWMs, in bits. Sequences without a match 
+          with score &ge; <span class="pdat">S</span> are ignored.</td> 
+          <td>A score of 5 is used.</td>
+        </tr>
+        <tr>
+          <td class="popt">--optimize_score</td><td>&nbsp;</td>
+          <td>Search for the optimal score above the minimum threshold given by
+          the <span class="popt">--score</span> option.</td>
+          <td>The minimum score threshold is used.</td>
+        </tr>
+        <tr>
+          <td class="popt">--maxreg</td> 
+          <td><span class="pdat">maxreg</span></td>   
+          <td>The maximum region size to consider.</td> 
+          <td>Try all region sizes up to the sequence width.</td>
+        </tr>
+        <tr>
+          <td class="popt">--minreg</td> 
+          <td><span class="pdat">minreg</span></td>   
+          <td>The minimum region size to consider.  Must be less than <span class="pdat">maxreg</span>.</td> 
+          <td>Try regions 1 bp and larger.</td>
+        </tr>
+        <tr>
+          <td class="popt">--norc</td> 
+          <td>&nbsp;</td>   
+          <td>Do not scan with the reverse complement motif.</td> 
+          <td>Scans with the reverse complement motif.</td>
+        </tr>
+        <tr>
+          <td class="popt">--flip</td> 
+          <td>&nbsp;</td>   
+          <td>Reverse complement matches appear 'reflected' around sequence centers./td>
+          <td>Do not 'flip' the sequence; use rc of motif instead.</td>
+        </tr>
+        <tr>
+          <td class="popt">--local</td>
+          <td>&nbsp;</td>
+          <td>Compute enrichment of all regions.</td>
+          <td>Compute enrichment of central regions.</td>
+        </tr>
+        <tr>
+          <td class="popt">--disc</td>
+          <td>&nbsp;</td>
+          <td>Use the Fisher exact test to compute enrichment discriminatively.
+          Requires the comparative sequences to be supplied with the 
+          <span class="popt">--neg</span> option.
+          <td>Use the binomial test to compute enrichment.</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <th colspan="4">Output filtering</th>
+        </tr>
+        <tr>
+          <td class="popt">--ethresh</td>
+          <td><span class="pdat">thresh</span></td>
+          <td>Limit the results to motifs with an enriched region whose
+          <i>E</i>-value is less than <span class="pdat">thresh</span>.
+          Enrichment <i>E</i>-values are computed by first adjusting the binomial
+          <i>p</i>-value of a region for the number of regions tested using the
+          Bonferroni correction, and then multiplying the adjusted <i>p</i>-value
+          by the number of motifs in the input to CentriMo.</td>  
+          <td>Include motifs with <i>E</i>-values up to 10.</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <th colspan="4">Miscellaneous</th>
+        </tr>
+        <tr>
+          <td class="popt">--desc</td><td><span class="pdat">description</span></td>
+          <td>Include the text <span class="pdat">description</span> in the HTML
+          output.</td>
+          <td>No description in the HTML output.</td>
+        </tr>
+        <tr>
+          <td class="popt">--dfile</td><td><span class="pdat">desc file</span></td>
+          <td>Include the first 500 characters of text from the file
+          <span class="pdat">desc file</span> in the HTML output.</td>
+          <td>No description in the HTML output.</td>
+        </tr>
+        <tr>
+          <td class="popt">--noseq</td>
+          <td>&nbsp;</td>
+          <td>Do not store sequence IDs in the output of CentriMo.</td>
+          <td>CentriMo stores a list of the sequence IDs with matches in the
+          best region for each motif. This can potentially make the file
+          size much larger.</td>
+        </tr>
+        <tr>
+          <td class="popt">-verbosity</td><td>1|2|3|4|5</td>
+          <td>A number that regulates the verbosity level of the output 
+            information messages. If set to 1 (quiet) then it will only 
+            output error messages whereas the other extreme 5 (dump) 
+            outputs lots of mostly useless information.</td>
+          <td>The verbosity level is set to 2 (normal).</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </body>
+</html>

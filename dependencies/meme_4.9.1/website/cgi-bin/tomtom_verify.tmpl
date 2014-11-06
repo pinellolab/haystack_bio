@@ -1,0 +1,84 @@
+<hr/>
+<style type="text/css">
+  td.table_label {
+    width:20em;
+  }
+  h5.section_label {
+    margin-top:5px;
+    margin-bottom:5px;
+  }
+  table.info {
+    margin-bottom:20px;
+  }
+</style>
+<!-- TMPL_IF NAME=description -->
+<h5 class="section_label">Description</h5>
+<pre><!-- TMPL_VAR ESCAPE=HTML NAME=description --></pre>
+<!-- /TMPL_IF -->
+
+<h5 class="section_label">Settings</h5>
+<table class="info">
+  <tr><td class="table_label">Motifs File</td>
+  <td><!-- TMPL_VAR ESCAPE=HTML NAME=queries_orig_name --></td></tr>
+  <!-- TMPL_IF NAME=uptargets_name -->
+  <tr><td class="table_label">Uploaded Motif Database File</td>
+  <td><!-- TMPL_VAR ESCAPE=HTML NAME=uptargets_orig_name --></td></tr>
+  <!-- TMPL_ELSE -->
+  <tr><td class="table_label">Motif Database</td>
+  <td><!-- TMPL_VAR NAME=dbtargets_name --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=ev -->
+  <tr><td class="table_label">Comparison E-value threshold</td>
+  <td><!-- TMPL_VAR NAME=ev --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=qv -->
+  <tr><td class="table_label">Comparison q-value threshold</td>
+  <td><!-- TMPL_VAR NAME=qv --></td></tr>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Comparison method</td>
+  <td><!-- TMPL_VAR NAME=cmp_fn_name --></td></tr>
+  <tr><td class="table_label">Complete Scoring</td>
+  <td><!-- TMPL_IF NAME=complete_scoring -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td></tr>
+</table>
+
+<h5 class="section_label">Query Motifs Details</h5>
+<table class="info">
+  <!-- TMPL_IF NAME=queries_safe_name -->
+  <tr><td class="table_label">Command-line Safe Name</td>
+  <td><!-- TMPL_VAR NAME=queries_name --></td></tr>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Count of Motifs</td>
+  <td><!-- TMPL_VAR NAME=queries_count --></td></tr>
+  <tr><td class="table_label">Summed Motifs Lengths</td>
+  <td><!-- TMPL_VAR NAME=queries_cols --></td></tr>
+  <!-- TMPL_IF NAME=filter_positions -->
+  <tr><td class="table_label">Use Motifs at Positions</td>
+  <td>
+  <!-- TMPL_LOOP NAME=filter_positions -->
+  <!-- TMPL_VAR NAME=position -->
+  <!-- /TMPL_LOOP -->
+  </td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=filter_names -->
+  <tr><td class="table_label">Use Motifs with Names</td>
+  <td>
+  <!-- TMPL_LOOP NAME=filter_names -->
+  <!-- TMPL_VAR NAME=name -->
+  <!-- /TMPL_LOOP -->
+  </td></tr>
+  <!-- /TMPL_IF -->
+</table>
+
+<!-- TMPL_IF NAME=uptargets_name -->
+<h5 class="section_label">Uploaded Motif Database Details</h5>
+<table class="info">
+  <!-- TMPL_IF NAME=uptargets_safe_name -->
+  <tr><td class="table_label">Command-line Safe Name</td>
+  <td><!-- TMPL_VAR NAME=uptargets_name --></td></tr>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Count of Motifs</td>
+  <td><!-- TMPL_VAR NAME=uptargets_count --></td></tr>
+  <tr><td class="table_label">Summed Motifs Lengths</td>
+  <td><!-- TMPL_VAR NAME=uptargets_cols --></td></tr>
+</table>
+<!-- /TMPL_IF -->

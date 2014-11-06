@@ -1,3 +1,0 @@
-
-Warning: Target database size too small (23). Provide at least 50 motifs for accurate p-value computation
-

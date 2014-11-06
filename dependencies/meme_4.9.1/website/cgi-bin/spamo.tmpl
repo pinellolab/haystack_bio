@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spamo - Submission form</title>
+    <script src="../meme-suite-menu.js" type="text/javascript"></script>
+    <script src="../site.js" type="text/javascript"></script>
+    <link href="../site.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../images/memesuite_icon.ico">
+    <script src="../spamo.js" type="text/javascript"></script>
+  </head>
+  <body onload="on_page_show();" onpageshow="if (event.persisted) on_page_show();">
+    <!-- Help Popups -->
+    <div class="pop_content" style="display:none" id="pop_sequences" >
+      <p>Select a file of <a href="../doc/fasta-format.html">FASTA formatted</a>
+      DNA sequences or paste in actual <a href="../doc/fasta-format.html"
+      >FASTA formatted</a> DNA sequences to analyse motif spacings.</p>
+      <p>See the <a href="../examples/sample-dna-Klf1.fa">sample sequences</a> 
+      to get an idea of input that works well for SpaMo.</p>
+      <p>It is highly recommended that you mask repeats in your DNA sequences
+      by converting them to the letter 'N'.  This can be done using the 
+      <a href='http://www.repeatmasker.org'>repeat-masker program</a> and can
+      also be requested when genomic sequences are downloaded using the
+      <a href="http://genome.ucsc.edu">UCSC Genome Table Browser</a> or 
+      <a href="https://main.g2.bx.psu.edu">Galaxy</a>.
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_primary">
+      <p>Spamo expects a DNA <a href="../doc/meme-format.html">motif</a> file. 
+      Only the first motif will be used. See the <a 
+      href="../doc/examples/memechip_example_output_files/dreme_out/dreme.txt"
+      >sample motif file</a>.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_secondaries">
+      <p>SpaMo can use databases installed on the server or search a user 
+      uploaded database in <a href="../doc/meme-format.html">MEME</a> DNA motif 
+      format by selecting the "Upload Your Own Database" option. For more 
+      information browse the 
+      <a href="get_db_list.cgi?db_names=motif_db.csv&mode=doc&is_motif_db=1"
+      >supported databases</a>.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_secondaries_file">
+      <p>An uploaded database is a normal <a 
+      href="../doc/meme-format.html">MEME</a> DNA motif file with lots of 
+      motifs. The uploaded database must be smaller than 5MB.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_email">
+      <p>The email is used to notify you of your results.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_job_description">
+      <p>The job description will be included in the notification email you 
+      receive and in the SpaMo output.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_dumpseqs">
+      <p>This writes out a text file for every primary and secondary motif which
+      has a significant spacing. The text file contains fields which from left 
+      to right are:</p>
+      <ol>
+        <li>A portion of the sequence in lower case with the motif 
+        matches in upper case.</li>
+        <li>The position of the secondary match within the sequence 
+        portion.</li>
+        <li>The fragment of the sequence which matched the primary 
+        motif.</li>
+        <li>The strand which matched the primary motif.</li>
+        <li>The fragment of the sequence which matched the secondary
+        motif.</li>
+        <li>The strand which matched the secondary motif.</li>
+        <li>Secondary site is on the same (s) or opposite (o) strand
+        to the primary site.</li>
+        <li>Secondary site is upstream (u) or downstream (d) of the 
+        primary site.</li>
+        <li>The gap between the primary and secondary site.</li>
+        <li>The name of the sequence.</li>
+      <ol>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <!-- Page Starts -->
+    <table>
+      <tr>
+        <td class="menu_col">
+          <div id="menu">
+            <script type="text/javascript">make_menu('../');</script>
+          </div>
+        </td>
+        <td class="content_col">
+          <noscript>
+            <h1>MEME Suite</h1>
+            <p>The MEME Suite web application requires the use of JavaScript<br />
+            Javascript doesn't seem to be available on your browser.</p>
+          </noscript>
+          <div class="header">
+            <div class="header_img">
+              <img src="../doc/images/spamo_logo.png" alt="SpaMo logo">
+              <div class="header_ver">Version <!-- TMPL_VAR NAME=version --></div>
+            </div>
+            <p class="header_blurb">
+            Use this form to find enriched spacings between a <b>primary motif</b> 
+            and each motif in database of <b>secondary motifs</b> for a set of
+            sequences. Typically, the sequences will be centered on ChIP-seq peaks.
+            </p>
+          </div>
+          <div class="meme">
+          <form enctype="multipart/form-data" method="POST" action="spamo.cgi" 
+          onsubmit="return on_form_submit()" onreset="return on_form_reset()">
+            <fieldset>
+              <legend>Data Submission Form</legend>
+              <p class="meme">Discover enriched spacings between motifs.</p> 
+              <!-- sequences -->
+              <h2 class="meme">Input the sequences</h2>
+              <div class="subcontent">
+                <h4 class="meme">Enter repeat-masked DNA sequences in which you want to analyse motif spacings
+                <div class="help" onclick="help_popup(this, 'pop_sequences')"></div></h4>
+                <input type="file" class="meme" name="sequences" id="sequences"/>
+                or
+                <input type="checkbox" class="meme" name="use_pasted" id="use_pasted" value="1"
+                onclick="pasted_sequences_enable(this.checked)"/>
+                <label for="use_pasted">paste the sequences</label>
+                <textarea class="meme" rows="5" cols="60" style="padding-top:5px;" 
+                    name="pasted_sequences" id="pasted_sequences"></textarea>
+              </div>
+              <!-- /sequences -->
+              <!-- primary motif -->
+              <h2 class="meme">Input the primary motif</h2>
+              <div class="subcontent">
+                <h4 class="meme">Enter a motif to use as the primary
+                <div class="help" onclick="help_popup(this, 'pop_primary')"></div></h4>
+                <input type="file" class="meme" name="primary_motif" id="primary_motif">
+                <span id="inline_span" style="<!-- TMPL_UNLESS NAME=inline_motifs -->display:none<!-- /TMPL_UNLESS -->">
+                  or
+                  <input type="checkbox" class="meme" name="use_inline" 
+                  id="use_inline" value="1"
+                  onclick="submitted_motif_enable(this.checked)"
+                  <!-- TMPL_IF NAME=inline_motifs -->checked="checked"<!-- /TMPL_IF -->>
+                  <label for="use_inline">use submitted motif</label>
+                  <!-- Note that this should be the pspm from the minimal meme format -->
+                </span>
+                <br>
+                <input type="hidden" name="inline_name" 
+                value="<!-- TMPL_VAR NAME=inline_name -->">
+                <input type="hidden" name="inline_motifs" 
+                value="<!-- TMPL_VAR NAME=inline_motifs -->">
+                <input type="hidden" id="inline_count" 
+                value="<!-- TMPL_VAR NAME=inline_count -->">
+              </div>
+              <!-- /primary motif -->
+              <!-- secondary motifs -->
+              <h2 class="meme">Input the secondary motifs</h2>
+              <div class="subcontent">
+                <select name="motif_db" id="secondary_db" onchange="on_ch_db()">
+                  <option value="upload" style="font-style:italic;">Upload Your Own Database</option>
+                  <!-- TMPL_LOOP NAME=dbs -->
+                  <!-- TMPL_INCLUDE NAME="db.tmpl" -->
+                  <!-- /TMPL_LOOP -->
+                </select> 
+                <div class="help" onclick="help_popup(this, 'pop_secondaries')"></div><br>
+              </div>
+              <div id="db_upload_div" style="display:none">
+                <h2 class="meme">Input secondary motifs to upload</h2>
+                <div class="subcontent">
+                  <h4 class="meme">Select a <a href="../doc/meme-format.html">MEME</a> motif database file.
+                     <div class="help" onclick="help_popup(this, 'pop_secondaries_file')"></div></h4>
+                  <input type="file" name="motif_db_upload" id="db_upload" class="meme"><br>
+                </div>
+              </div>
+              <!-- /secondary motifs -->
+              <!-- job queue -->
+              <h2 class="meme">Input job queue details</h2>
+              <div class="subcontent">
+                <!-- email -->
+                <h4 class="meme">Enter your <a href="../help_email.html">email address</a>.
+                  <div class="help" onclick="help_popup(this, 'pop_email')"></div></h4>
+                <input type="email" name="email" id="email" size="40"
+                    class="meme"/>
+                <h4 class="meme">Re-enter your email address.</h4>
+                <input type="email" name="email_confirm" id="email_confirm" 
+                    size="40" class="meme"/><br>
+                <!-- /email -->
+                <!-- description -->
+                <!--
+                <h4 class="meme" style="padding-top:10px;">Optionally enter a job description.
+                  <div class="help" onclick="help_popup(this, 'pop_job_description')"></div></h4>
+                <textarea name="description" cols="60" rows="2" class="meme"></textarea>
+                -->
+                <!-- /description -->
+              </div>
+              <!-- /job queue -->
+              <div id="page_adv_ctrl" style="display:block;">
+                <h3 class="meme">
+                  <a href="javascript:show_hide('page_advanced', 
+                    'page_adv_ctrl')"><img 
+                    src="../images/plus.png"/>Advanced Options</a>
+                </h3>
+              </div>
+              <div id="page_advanced" style="display:none">
+                <h3 class="meme">
+                  <a href="javascript:show_hide('page_adv_ctrl', 
+                    'page_advanced')"><img 
+                    src="../images/minus.png"/>Advanced Options</a>
+                </h3>
+                <input type="checkbox" class="meme" name="dumpseqs" 
+                id="dumpseqs" value="1">
+                <label for="dumpseqs">Dump matches to file</label>
+                <div class="help" onclick="help_popup(this, 'pop_dumpseqs')"></div>
+              </div>
+              <!-- Search and clear buttons -->
+              <div style="margin-left:auto; margin-right:auto; width:15em; clear:both;">
+                <input type="submit" name="search" value="Start search">
+                &nbsp;&nbsp;&nbsp;
+                <input type="reset" value="Clear Input" ><br>
+              </div>
+            </fieldset>
+          </form>
+          <!-- TMPL_INCLUDE NAME="footer.tmpl" -->
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

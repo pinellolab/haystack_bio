@@ -1,0 +1,1979 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:cis="http://zlab.bu.edu/schema/cisml" xmlns:mem="http://noble.gs.washington.edu/meme">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="description" content="Motif Cluster Alignment and Search Tool (MCAST) output.">
+<title>MCAST</title>
+<script type="text/javascript">
+        var motifs = new Array();
+        motifs["1"] = new Motif("1", "nucleotide", "AATTGTGACGTTGTTCAC", "GTGATCTACGTCACAATT");
+        motifs["2"] = new Motif("2", "nucleotide", "CGGTGGGG", "CCCCGCCG");
+        motifs["3"] = new Motif("3", "nucleotide", "CCTGGTGTGCC", "GGGACCCCAGG");
+
+
+        var wrap = undefined;//size to display on one line
+        var wrap_timer;
+
+        var seqmax = 67;
+
+        var loadedSequences = new Array();
+        //draging details
+        var moving_seq;
+        var moving_annobox;
+        var moving_left;
+        var moving_width;
+        var moving_both;
+
+        //drag needles
+        var dnl = null;
+        var dnr = null;
+        var drag_is_rc = undefined;
+        //container
+        var cont = null;
+        
+        function mouseCoords(ev) {
+          ev = ev || window.event;
+          if(ev.pageX || ev.pageY){ 
+	          return {x:ev.pageX, y:ev.pageY}; 
+	        } 
+	        return { 
+	          x:ev.clientX + document.body.scrollLeft - document.body.clientLeft, 
+	          y:ev.clientY + document.body.scrollTop  - document.body.clientTop 
+	        };
+        }
+
+        function setup() {
+          rewrap();
+          window.onresize = delayed_rewrap;
+        }
+
+        function calculate_wrap() {
+          var est_wrap = 0;
+          var page_width;
+          if (window.innerWidth) {
+            page_width = window.innerWidth;
+          } else if (document.body) {
+            page_width = document.body.clientWidth;
+          } else {
+            page_width = null;
+          }
+          if (page_width) {
+            var ruler_width = document.getElementById("ruler").offsetWidth;
+            est_wrap = Math.floor(page_width / ruler_width) * 5;
+          }
+          if (est_wrap > 20) {
+            wrap = est_wrap - 20; 
+          } else {
+            wrap = 100;
+          }
+        }
+
+        function rewrap() {
+          var previous_wrap = wrap;
+          calculate_wrap();
+          if (previous_wrap != wrap) {
+            for (var seqid in loadedSequences) {
+              //exclude inherited properties and undefined properties
+              if (!loadedSequences.hasOwnProperty(seqid) || loadedSequences[seqid] === undefined) continue;
+            
+              var sequence = loadedSequences[seqid];
+              var annobox = document.getElementById(seqid + "_annotation");
+              var leftPos = parseInt(document.getElementById(seqid + "_dnl").firstChild.firstChild.nodeValue);
+              var rightPos = parseInt(document.getElementById(seqid + "_dnr").firstChild.firstChild.nodeValue);
+              var is_rc = undefined;
+
+              set_data(leftPos, rightPos - leftPos + 1, is_rc, sequence, annobox);
+            }
+          }
+          if (wrap_timer) {
+            clearTimeout(wrap_timer);
+          }
+          wrap_timer = setTimeout("rewrap()", 5000);
+        }
+
+        function delayed_rewrap() {
+          if (wrap_timer) {
+            clearTimeout(wrap_timer);
+          }
+          wrap_timer = setTimeout("rewrap()", 1000);
+        }
+
+        function showHidden(prefix) {
+          document.getElementById(prefix + '_activator').style.display = 'none';
+          document.getElementById(prefix + '_deactivator').style.display = 'block';
+          document.getElementById(prefix + '_data').style.display = 'block';
+        }
+        function hideShown(prefix) {
+          document.getElementById(prefix + '_activator').style.display = 'block';
+          document.getElementById(prefix + '_deactivator').style.display = 'none';
+          document.getElementById(prefix + '_data').style.display = 'none';
+        }
+
+
+        function show_more(seqid) {
+          if (wrap == undefined) rewrap();
+          
+          var seq_row = document.getElementById(seqid + "_blocks");
+          var info_row = document.getElementById(seqid + "_info");
+          var tbl = document.getElementById("tbl_sequences");
+          if (info_row) {
+            tbl.deleteRow(info_row.rowIndex);
+            destroy_seq_handle(seqid, true);
+            destroy_seq_handle(seqid, false);
+            delete loadedSequences[seqid];
+          } else {
+            var sequence = new Sequence(seqid);
+            var offset = sequence.segs[0].start;
+            loadedSequences[seqid] = sequence;
+            info_row = tbl.insertRow(seq_row.rowIndex + 1);
+            info_row.id = seqid + "_info";
+            var cell = info_row.insertCell(0);
+            cell.colSpan = 8;
+            cell.style.verticalAlign = "top";
+            var width = Math.min(sequence.length, wrap); 
+            var start = 1;
+            var is_neg_strand = false;
+            //center on the first hit
+            if (sequence.hits.length > 0) {
+              var hit = sequence.hits[0];
+              is_neg_strand = hit.is_rc;
+              start = hit.pos - offset;
+            }
+            if (start + width >= sequence.length) start = sequence.length - width;
+            create_info_section(cell, sequence, seqid, start+offset, width, is_neg_strand);
+            var blockCont = document.getElementById(seqid + "_block_container");
+            //create sequence view handles
+            var dnl = create_seq_handle(blockCont, seqid, true);
+            var dnr = create_seq_handle(blockCont, seqid, false);
+            set_needles(offset, seqmax, dnl, start, dnr, start + width - 1);
+          }
+        }
+
+        function create_info_section(cell, sequence, seqid, start, width, is_neg_strand) {
+          var box = document.createElement('div');
+          box.className = "box infobox";
+          //generic info
+          box.appendChild(document.createTextNode("Change the portion of annotated sequence by "));
+          var bold_box = document.createElement('b');
+          bold_box.appendChild(document.createTextNode("dragging the buttons"));
+          box.appendChild(bold_box);
+          box.appendChild(document.createTextNode("; hold shift to drag them individually."));
+          box.appendChild(document.createElement('br'));
+          box.appendChild(document.createElement('br'));
+          //sequence display
+          var seqDispTitle = document.createElement('h5');
+          seqDispTitle.appendChild(document.createTextNode("Annotated Sequence"));
+          box.appendChild(seqDispTitle);
+          var show_rc_only = undefined;
+          var annobox = document.createElement('div');
+          annobox.id = seqid + "_annotation";
+          set_data(start, width, show_rc_only, sequence, annobox);
+          box.appendChild(annobox);
+          cell.appendChild(box);
+        }
+
+        function annobox_labels() {
+          var seqDispLabel = document.createElement('div');
+          seqDispLabel.className = "sequence sequence_labels";
+          seqDispLabel.style.height = "2.5em";
+          return seqDispLabel;
+        }
+
+        function annobox_hits() {
+          var seqDispHit = document.createElement('div');
+          seqDispHit.className = "sequence";
+          seqDispHit.style.height = "1.5em";
+          return seqDispHit;
+        }
+
+        function annobox_matches() {
+          var seqDispMatch = document.createElement('div');
+          seqDispMatch.className = "sequence";
+          seqDispMatch.style.height = "1.5em";
+          return seqDispMatch;
+        }
+
+        function annobox_translations() {
+          var seqDispXlate = document.createElement('div');
+          seqDispXlate.className = "sequence";
+          seqDispXlate.style.height = "1.5em";
+          return seqDispXlate;
+        }
+
+        function annobox_sequence() {
+          var seqDispSeq = document.createElement('div');
+          seqDispSeq.className = "sequence";
+          seqDispSeq.style.height = "1.5em";
+          return seqDispSeq; 
+        }
+        function annobox_boundary() {
+          var seqDispSeq = document.createElement('div');
+          seqDispSeq.className = "sequence";
+          seqDispSeq.style.height = "1.5em";
+          return seqDispSeq; 
+        }
+
+        function create_seq_handle(container, seqid, isleft) {
+          var vbar = document.createElement('div');
+          vbar.id = seqid + "_dn" + (isleft ? "l" : "r");
+          vbar.className = "block_needle" + (isleft ? "" : " right");
+          var label = document.createElement('div');
+          label.className = "block_handle" + (isleft ? "" : " right");
+          label.appendChild(document.createTextNode("1"));
+          label.style.cursor = 'pointer';
+          label.title = "Drag to move the displayed range. Hold shift and drag to change " + (isleft ? "lower" : "upper") + " bound of the range.";
+          vbar.appendChild(label);
+          container.appendChild(vbar);
+          label.onmousedown = function(evt) {
+            evt = evt || window.event;
+            start_drag(seqid, isleft, !(evt.shiftKey));
+          };
+          return vbar;
+        }
+
+        function destroy_seq_handle(seqid, isleft) {
+          var vbar = document.getElementById(seqid + "_dn" + (isleft ? "l" : "r"));
+          var label = vbar.firstChild;
+          label.onmousedown = null;
+          vbar.parentNode.removeChild(vbar);
+        }
+
+        function start_drag(seqid, mouse_on_left, move_both) {
+          //first record what we are moving
+          moving_left = mouse_on_left;
+          moving_both = move_both;
+          moving_seq = loadedSequences[seqid];
+          if (!moving_seq) {
+            alert("Sequence not loaded?!");
+          }
+          //get the container for movements to be judged against
+          cont = document.getElementById(seqid + "_block_container");
+          //get the div's that will be moved
+          dnl = document.getElementById(seqid + "_dnl");
+          dnr = document.getElementById(seqid + "_dnr");
+          //get the div which has all the text containers that will be updated
+          moving_annobox = document.getElementById(seqid + "_annotation");
+          //calculate the space between handles
+          moving_width = dnr.firstChild.firstChild.nodeValue - 
+              dnl.firstChild.firstChild.nodeValue;
+          drag_is_rc = undefined;
+          //setup the events for draging
+          document.onmousemove = handle_drag;
+          document.onmouseup = finish_drag;
+        }
+
+
+        function calculate_width(obj) {
+          return obj.clientWidth - (obj.style.paddingLeft ? obj.style.paddingLeft : 0) 
+              - (obj.style.paddingRight ? obj.style.paddingRight : 0);
+        }
+
+        function calculate_drag_pos(ev) {
+          var mouse = mouseCoords(ev);
+          var dragable_length = calculate_width(cont);
+          //I believe that the offset parent is the body
+          //otherwise I would need to make this recursive
+          //maybe clientLeft would work, but the explanation of
+          //it is hard to understand and it apparently doesn't work
+          //in firefox 2.
+          var diff = mouse.x - cont.offsetLeft;
+          if (diff < 0) diff = 0;
+          if (diff > dragable_length) diff = dragable_length;
+          var pos = Math.round(diff / dragable_length * (seqmax));
+          return pos;
+        }
+
+        function handle_drag(ev) {
+          var pos = calculate_drag_pos(ev);
+          update_needles(pos, moving_seq.length, false);
+        }
+
+        function finish_drag(ev) {
+          document.onmousemove = null;
+          document.onmouseup = null;
+          var pos = calculate_drag_pos(ev);
+          update_needles(pos, moving_seq.length, true);
+        }
+
+        function update_needles(pos, seqlen, updateTxt) {
+          var offset = moving_seq.segs[0].start;
+          var leftPos = parseInt(dnl.firstChild.firstChild.nodeValue) - offset;
+          var rightPos = parseInt(dnr.firstChild.firstChild.nodeValue) - offset;
+          if (moving_both) {
+            if (moving_left) {
+              if ((pos + moving_width) >= seqlen) {
+                pos = seqlen - moving_width - 1;
+              }
+              leftPos = pos;
+              rightPos = pos + moving_width;
+            } else {
+              if (pos >= seqlen) {
+                pos = seqlen - 1;
+              } else if ((pos - moving_width) < 0) {
+                pos = moving_width;
+              }
+              leftPos = pos - moving_width;
+              rightPos = pos;
+            }
+          } else {
+            if (moving_left) {
+              if (pos > rightPos) {
+                pos = rightPos;
+              }
+              leftPos = pos;
+            } else {
+              if (pos < leftPos) {
+                pos = leftPos;
+              } else if (pos >= seqlen) {
+                pos = seqlen - 1;
+              }
+              rightPos = pos;
+            }
+          }
+          set_needles(offset, seqmax, dnl, leftPos, dnr, rightPos);
+          if (updateTxt) set_data(leftPos + offset, rightPos - leftPos + 1, drag_is_rc, moving_seq, moving_annobox);
+        }
+
+        function set_needles(offset, max, left, leftPos, right, rightPos) {
+          //the needles are between the sequence positions
+          //the left needle is before and the right needle after
+          //think of it as an inclusive range...
+          left.style.left = "" + (leftPos / max * 100)+ "%";
+          left.firstChild.firstChild.nodeValue="" + (leftPos + offset);
+          right.style.left = "" + ((rightPos+1) / max * 100)+ "%";
+          right.firstChild.firstChild.nodeValue="" + (rightPos + offset);
+        }
+
+        function set_data(start, width, show_rc_only, data, annobox) {
+          var child = annobox.firstChild;
+          var line_width = Math.min(wrap, width);
+          var num_per_wrap = 5
+          var end = start + width;
+          for (var i = start; i < end; i += line_width, line_width = Math.min(wrap, end - i)) {
+            for (var j = 0; j < num_per_wrap; ++j) {
+              if (child) {
+                while (child.firstChild) child.removeChild(child.firstChild);
+              } else {
+                switch (j) {
+                case 0:
+                  child = annobox_labels();
+                  break;
+                case 1:
+                  child = annobox_hits();
+                  break;
+                case 2:
+                  child = annobox_matches();
+                  break;
+                case 3:
+                  child = annobox_sequence();
+                  break;
+                case 4:
+                  child = annobox_boundary();
+                  break;
+                }
+                annobox.appendChild(child);
+              }
+              switch (j) {
+              case 0:
+                data.append_labels(child, i, line_width, show_rc_only);
+                break;
+              case 1:
+                data.append_hits(child, i, line_width, show_rc_only);
+                break;
+              case 2:
+                data.append_matches(child, i, line_width, show_rc_only);
+                break;
+              case 3:
+                data.append_seq(child, i, line_width, show_rc_only);
+                break;
+              case 4:
+                data.append_boundary(child, i, line_width, show_rc_only);
+                break;
+              }
+              child = child.nextSibling;
+            }
+          }
+          //clean up excess
+          
+          while (child) {
+            var next = child.nextSibling;
+            annobox.removeChild(child);
+            child = next;
+          }
+        }
+
+        function append_coloured_nucleotide_sequence(container, sequence) {
+          var len = sequence.length;
+          for (var i = 0; i < len; i++) {
+            var colour = "black";
+            switch (sequence.charAt(i)) {
+            case 'A':
+              colour = "red";
+              break;
+            case 'C':
+              colour = "blue";
+              break;
+            case 'G':
+              colour = "orange";
+              break;
+            case 'T':
+              colour = "green";
+              break;
+            }
+            var letter = document.createElement('span');
+            letter.style.color = colour;
+            letter.appendChild(document.createTextNode(sequence.charAt(i)));
+            container.appendChild(letter);
+          }
+        }
+
+        function append_coloured_peptide_sequence(container, sequence) {
+          var len = sequence.length;
+          for (var i = 0; i < len; i++) {
+            var colour = "black";
+            switch (sequence.charAt(i)) {
+            case 'A':
+            case 'C':
+            case 'F':
+            case 'I':
+            case 'L':
+            case 'V':
+            case 'W':
+            case 'M':
+              colour = "blue";
+              break;
+            case 'N':
+            case 'Q':
+            case 'S':
+            case 'T':
+              colour = "green";
+              break;
+            case 'D':
+            case 'E':
+              colour = "magenta";
+              break;
+            case 'K':
+            case 'R':
+              colour = "red";
+              break;
+            case 'H':
+              colour = "pink";
+              break;
+            case 'G':
+              colour = "orange";
+              break;
+            case 'P':
+              colour = "yellow";
+              break;
+            case 'Y':
+              colour = "turquoise";
+              break;
+            }
+            var letter = document.createElement('span');
+            letter.style.color = colour;
+            letter.appendChild(document.createTextNode(sequence.charAt(i)));
+            container.appendChild(letter);
+          }
+        }
+
+        /*
+         * Finds the index of an item in a sorted array (a) that equals a key (k)
+         * when compared using a comparator (c). If an exact match can not be found
+         * then returns -(index+1), where index is the location that the item would be inserted.
+         */
+        function bsearch(a, c, k) {
+          var low = 0;
+          var high = a.length;
+          while (low < high) {
+            var mid = low + Math.floor((high - low) /2);
+            if (c(a[mid], k) < 0) {
+              low = mid + 1;
+            } else {
+              high = mid;
+            }
+          }
+          if ((low < a.length) && (c(a[low], k) == 0)) {
+            return low;
+          } else {
+            return -(low+1);
+          }
+        }
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Start Motif Object
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        function Motif(name, type, best_f, best_rc) {
+          this.name = name;
+          this.is_nucleotide = (type === "nucleotide");
+          this.best_f = best_f;
+          this.best_rc = best_rc;
+          this.length = best_f.length;
+        }
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // End Motif Object
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Start Seg Object
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        function Seg(start, segment) {
+          this.start = parseInt(start);
+          this.segment = segment;
+        }
+
+        function compare_seg_to_pos(seg, pos) {
+          return seg.start - pos;
+        }
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // End Seg Object
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Start Hit Object
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        function Hit(sequence_is_nucleotide, motif, pos, strand, pvalue, match) {
+          //properties
+          this.motif = motif;
+          this.pos = parseInt(pos);
+          this.width = 0;
+          this.is_rc = (strand != "+");
+          this.pvalue = pvalue;
+          this.best = "";
+          this.match = "";
+          //functions
+          this.find_overlap = Hit_find_overlap;
+          //setup
+          var seq;
+          var m = match.replace(/ /g, " ");
+          if (this.is_rc) {
+            seq = this.motif.best_rc;
+          }
+          else {
+            seq = this.motif.best_f;
+          }
+          if (sequence_is_nucleotide == this.motif.is_nucleotide) {
+            this.best = seq;
+            this.match = m;
+            this.width = motif.length;
+          } else if (sequence_is_nucleotide) {
+            this.width = motif.length * 3;
+            for (var i = 0; i < motif.length; i++) {
+              this.best += seq.charAt(i);
+              this.best += "..";
+              this.match += m.charAt(i);
+              this.match += "  ";
+            }
+          } else {
+            throw "UNSUPPORTED_CONVERSION";
+          }
+        }
+
+        function Hit_find_overlap(sequence_is_nucleotide, start, width) {
+          if (this.pos < start) {
+            if ((this.pos + this.width) > start) {
+              return {hit: this, start: start, length: Math.min(width, (this.pos + this.width - start))};
+            } else {
+              return null;
+            }
+          } else if (this.pos < (start + width)) {
+            return {hit: this, start: this.pos, length: Math.min(this.width, (start + width - this.pos))};
+          }
+          return null;
+        }
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // End Hit Object
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Start Overlapping Hit Iterator
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        function OLHIterator(sequence, start, width, is_rc) {
+          //properties
+          this.sequence = sequence;
+          this.start = start;
+          this.width = width;
+          this.is_rc = is_rc;
+          this.both = (is_rc === undefined);
+          this.index = 0;
+          this.nextO = null;
+          //methods
+          this.next = OLHIterator_next;
+          this.has_next = OLHIterator_has_next;
+          //setup
+          // find the first hit which overlaps the range
+          for (; this.index < this.sequence.hits.length; this.index++) {
+            var hit = this.sequence.hits[this.index];
+            if (!this.both && this.is_rc != hit.is_rc) continue;
+            if ((this.nextO = hit.find_overlap(this.sequence.is_nucleotide, this.start, this.width)) != null) break;
+          }
+        }
+        
+        function OLHIterator_next() {
+          if (this.nextO == null) throw "NO_NEXT_ELEMENT";
+          var current = this.nextO;
+          this.nextO = null;
+          for (this.index = this.index + 1; this.index < this.sequence.hits.length; this.index++) {
+            var hit = this.sequence.hits[this.index];
+            if (!this.both && this.is_rc != hit.is_rc) continue;
+            this.nextO = hit.find_overlap(this.sequence.is_nucleotide, this.start, this.width);
+            break;
+          }
+          return current;
+        }
+        
+        function OLHIterator_has_next() {
+          return (this.nextO != null);
+        }
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // End Overlapping Hit Iterator
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Start Sequence Object
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        function Sequence(seqid) {
+          //properties
+          this.length = parseInt(document.getElementById(seqid + "_len").value);
+          this.cpvalue = document.getElementById(seqid + "_combined_pvalue").value;
+          this.is_nucleotide = (document.getElementById(seqid + "_type").value === "nucleotide");
+          this.segs = new Array(); //sorted list of segs
+          this.hits = new Array(); //sorted list of hits
+          //functions
+          this.get_overlapping_hits = Sequence_get_overlapping_hits;
+          this.append_seq = Sequence_append_seq;
+          this.append_translation = Sequence_append_translation;
+          this.append_hits = Sequence_append_hits;
+          this.append_matches = Sequence_append_matches;
+          this.append_labels = Sequence_append_labels;
+          this.append_boundary = Sequence_append_boundary;
+          //init
+          //made this parser much more permissive as a new
+          //version of libxml2 broke the translate call I was
+          //using to remove whitespace characters
+          var mysegs = document.getElementById(seqid + "_segs");
+          var tokens = mysegs.value.split(/\s+/);
+          var offsetnum = "";
+          var seqchunk = "";
+          for (var i = 0; i < tokens.length; i++) {
+            var token = tokens[i];
+            if (token == "") continue;
+            if (token.match(/\d+/)) {
+              if (offsetnum != "" && seqchunk != "") {
+                this.segs.push(new Seg(offsetnum, seqchunk));
+              }
+              offsetnum = parseInt(token, 10);
+              seqchunk = "";
+              continue;
+            }
+            seqchunk += token;
+          }
+          if (offsetnum != "" && seqchunk != "") {
+            this.segs.push(new Seg(offsetnum, seqchunk));
+          }
+          var myhits = document.getElementById(seqid + "_hits");
+          lines = myhits.value.split(/\n/);
+          for (var i in lines) {
+            //exclude inherited properties and undefined properties
+            if (!lines.hasOwnProperty(i) || lines[i] === undefined) continue;
+            
+            var line = lines[i];
+            var chunks = line.split(/\t/);
+            if (chunks.length != 5) continue;
+            var pos = chunks[0];
+            var motif = motifs[chunks[1]];
+            var strand = chunks[2];
+            var pvalue = chunks[3];
+            var match = chunks[4];
+            this.hits.push(new Hit(this.is_nucleotide, motif, pos, strand, pvalue, match));
+          }
+        }
+
+        function Sequence_get_overlapping_hits(start, width, is_rc) {
+          return new OLHIterator(this, start, width, is_rc);
+        }
+
+        function Sequence_append_seq(container, start, width, is_rc) {
+          //make a sub container to put the sequence in
+          var mycontainer = document.createElement('span');
+          // find where a seg starting at start would be
+          var i = bsearch(this.segs, compare_seg_to_pos, start);
+          var seg;
+          var sequence = "";
+          if (i < -1) {
+            //possible partial segment, need to handle first
+            i = -(i + 1);
+            seg = this.segs[i-1];
+            if ((seg.start + seg.segment.length) > start) {
+              var seg_offset = start - seg.start;
+              var seg_width = Math.min(width, seg.segment.length - seg_offset);
+              sequence += seg.segment.substring(seg_offset, seg_offset + seg_width);
+            }
+          } else if (i == -1) {
+            //gap, with following segment, normal state at start of iteration
+            i = 0;
+          } 
+          for (;i < this.segs.length; i++) {
+            seg = this.segs[i];
+            var gap_width = Math.min(width - sequence.length, seg.start - (start + sequence.length));
+            for (; gap_width > 0; gap_width--) sequence += '-';
+            var seg_width = Math.min(width - sequence.length, seg.segment.length);
+            if (seg_width == 0) break;
+            sequence += seg.segment.substring(0, seg_width);
+          }
+          while (sequence.length < width) sequence += '-';
+          // calculate which parts are aligned with hits and output them in colour
+          var pos = start;
+          var iter = this.get_overlapping_hits(start, width, is_rc);
+          while (iter.has_next()) {
+            var o = iter.next();
+            var from, to;
+            if (o.start > pos) {
+              from = pos - start;
+              to = o.start - start;
+              var subseq = sequence.substring(from, to);
+              var greytxt = document.createElement('span');
+              greytxt.style.color = 'grey';
+              greytxt.appendChild(document.createTextNode(subseq));
+              mycontainer.appendChild(greytxt);
+              pos = o.start;
+            }
+            from = pos - start;
+            to = from + o.length;
+            var motifseq = sequence.substring(from, to);
+            if (this.is_nucleotide) {
+              append_coloured_nucleotide_sequence(mycontainer, motifseq);
+            } else {
+              append_coloured_peptide_sequence(mycontainer, motifseq);
+            }
+            pos += o.length;
+          }
+          if (pos < (start + width)) {
+            var greytxt = document.createElement('span');
+            greytxt.style.color = 'grey';
+            greytxt.appendChild(document.createTextNode(sequence.substring(pos - start)));
+            mycontainer.appendChild(greytxt);
+          }
+          container.appendChild(mycontainer);
+        }
+
+        function Sequence_append_translation(container, start, width, is_rc) {
+          if (start > this.length) {
+            alert("start: " + start + " length: " + this.length);
+            throw "INDEX_OUT_OF_BOUNDS";
+          }
+          if ((start + width - 1) > this.length) {
+            alert("start: " + start + " width: " + width + " length: " + this.length);
+            throw "RANGE_OUT_OF_BOUNDS";
+          }
+          //make a sub container to put the sequence in
+          var mycontainer = document.createElement('span');
+          // calculate which parts are aligned with hits and output them in colour
+          var pos = start;
+          var iter = this.get_overlapping_hits(start, width, is_rc);
+          while (iter.has_next()) {
+            var o = iter.next();
+            var space = "";
+            var from, to;
+            while (o.start > pos) {
+              space += " ";
+              ++pos;
+            }
+            if (space.length > 0) {
+              var spacer = document.createElement('span');
+              spacer.appendChild(document.createTextNode(space));
+              mycontainer.appendChild(spacer);
+            }
+            from = o.start - o.hit.pos;
+            to = from + o.length;
+            if (o.hit.motif.is_nucleotide) {
+              append_coloured_nucleotide_sequence(mycontainer, motifseq);
+            } else {
+              append_coloured_peptide_sequence(mycontainer, motifseq);
+            }
+            pos += o.length;
+          }
+
+          container.appendChild(mycontainer);
+        }
+
+        function Sequence_append_matches(container, start, width, is_rc) {
+          //make a sub container to put the sequence in
+          var mycontainer = document.createElement('span');
+          var pos = start;
+          var text = "";
+          var iter = this.get_overlapping_hits(start, width, is_rc);
+          while (iter.has_next()) {
+            var o = iter.next();
+            var space = "";
+            var from, to;
+            while (o.start > pos) {
+              text += " ";
+              ++pos;
+            }
+            from = o.start - o.hit.pos;
+            to = from + o.length;
+            var motifseq = o.hit.match.substring(from, to);
+            text += motifseq
+            pos += o.length;
+          }
+          mycontainer.appendChild(document.createTextNode(text));
+          container.appendChild(mycontainer);
+        }
+
+        function Sequence_append_hits(container, start, width, is_rc) {
+          //make a sub container to put the sequence in
+          var mycontainer = document.createElement('span');
+          // calculate which parts are aligned with hits and output them in colour
+          var pos = start;
+          var iter = this.get_overlapping_hits(start, width, is_rc);
+          while (iter.has_next()) {
+            var o = iter.next();
+            var space = "";
+            var from, to;
+            while (o.start > pos) {
+              space += " ";
+              ++pos;
+            }
+            if (space.length > 0) {
+              var spacer = document.createElement('span');
+              spacer.appendChild(document.createTextNode(space));
+              mycontainer.appendChild(spacer);
+            }
+            from = o.start - o.hit.pos;
+            to = from + o.length;
+            var motifseq = o.hit.best.substring(from, to);
+            if (o.hit.motif.is_nucleotide) {
+              append_coloured_nucleotide_sequence(mycontainer, motifseq);
+            } else {
+              append_coloured_peptide_sequence(mycontainer, motifseq);
+            }
+            pos += o.length;
+          }
+
+          container.appendChild(mycontainer);
+        }
+
+        function Sequence_append_labels(container, start, width, is_rc) {
+          //create a table (ye gods...)
+          var oTable = document.createElement("table");
+          var oRow = oTable.insertRow(oTable.rows.length);
+
+          // calculate where to put the labels
+          var pos = start;
+          var cellindex = 0;
+          var iter = this.get_overlapping_hits(start, width, is_rc);
+          while (iter.has_next()) {
+            var o = iter.next();
+            var motif_center = Math.floor(o.start + o.length / 2);
+            var spacer = "";
+            while (pos < motif_center) {
+              spacer += " ";
+              pos++;
+            }
+            var cell1 = oRow.insertCell(cellindex++);
+            cell1.appendChild(document.createTextNode(spacer));
+            //add one for the div
+            pos++;
+            var cell2 = oRow.insertCell(cellindex++);
+            //create the div that holds the label divs
+            var div_container = document.createElement('div');
+            div_container.className = "label_container";
+            cell2.appendChild(div_container);
+            //create the top label
+            var top_label = "";
+            
+              top_label += "(";
+              if (o.hit.is_rc) {
+                top_label += "-";
+              } else {
+                top_label += "+";
+              }
+              top_label += ") ";
+            
+            if (o.hit.motif.name.match(/^\d+$/)) {
+              top_label += "Motif " + o.hit.motif.name;
+            } else {
+              top_label += o.hit.motif.name;
+            }
+            var div_top_label = document.createElement('div');
+            div_top_label.className = "sequence_label sequence_label_top";
+            div_top_label.style.width = "" + top_label.length + "em";
+            div_top_label.style.left = "-" + (top_label.length / 2) + "em";
+            div_top_label.appendChild(document.createTextNode(top_label));
+            //create the bottom label
+            var bottom_label = o.hit.pvalue;
+            var div_bottom_label = document.createElement('div');
+            div_bottom_label.className = "sequence_label sequence_label_bottom";
+            div_bottom_label.style.width = "" + bottom_label.length + "em";
+            div_bottom_label.style.left = "-" + (bottom_label.length / 2) + "em";
+            div_bottom_label.appendChild(document.createTextNode(bottom_label));
+            //add the label divs to the positioned container
+            div_container.appendChild(div_top_label);
+            div_container.appendChild(div_bottom_label);
+          }
+          container.appendChild(oTable);
+
+        }
+
+        function Sequence_append_boundary(container, start, width, is_rc) {
+          //make a sub container to put the sequence in
+          var mycontainer = document.createElement('span');
+          var pos = start;
+          var text = "";
+          var iter = this.get_overlapping_hits(start, width, is_rc);
+          while (iter.has_next()) {
+            var o = iter.next();
+            var end;
+            while (o.start > pos) {
+              text += " ";
+              ++pos;
+            }
+            if (o.start == o.hit.pos) {
+              text += "\\";
+              ++pos;
+            }
+            end = o.start + o.length - 1;
+            while (end > pos) {
+              text += "_";
+              ++pos;
+            }
+            if (end == (o.hit.pos + o.hit.width -1)) {
+              text += "/"
+            } else {
+              text += "_"
+            }
+            ++pos;
+          }
+          mycontainer.appendChild(document.createTextNode(text));
+          container.appendChild(mycontainer);
+        }
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // End Sequence Object
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      </script><style type="text/css">
+    
+    /* START INCLUDED FILE "meme.css" */
+        /* The following is the content of meme.css */
+        body { background-color:white; font-size: 12px; font-family: Verdana, Arial, Helvetica, sans-serif;}
+
+        div.help {
+          display: inline-block;
+          margin: 0px;
+          padding: 0px;
+          width: 12px;
+          height: 13px;
+          cursor: pointer;
+          background-image: url("help.gif");
+          background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAANAQMAAACn5x0BAAAAAXNSR0IArs4c6QAAAAZQTFRFAAAAnp6eqp814gAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH2gMJBQgGYqhNZQAAACZJREFUCNdj+P+BoUGAoV+AYeYEEGoWYGgTYGgRAAm2gRGQ8f8DAOnhC2lYnqs6AAAAAElFTkSuQmCC");
+        }
+
+        div.help2 {
+          color: #999;
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          border: 1px solid #999;
+          font-size: 13px;
+          line-height:12px;
+          font-family: Helvetica, sans-serif;
+          font-weight: bold;
+          font-style: normal;
+          cursor: pointer;
+        }
+        div.help2:hover {
+          color: #000;
+          border-color: #000;
+        }
+        
+        p.spaced { line-height: 1.8em;}
+        
+        span.citation { font-family: "Book Antiqua", "Palatino Linotype", serif; color: #004a4d;}
+
+        p.pad { padding-left: 30px; padding-top: 5px; padding-bottom: 10px;}
+
+        td.jump { font-size: 13px; color: #ffffff; background-color: #00666a;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        a.jump { margin: 15px 0 0; font-style: normal; font-variant: small-caps;
+          font-weight: bolder; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h2.mainh {font-size: 1.5em; font-style: normal; margin: 15px 0 0;
+          font-variant: small-caps; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h2.line {border-bottom: 1px solid #CCCCCC; font-size: 1.5em; font-style: normal;
+          margin: 15px 0 0; padding-bottom: 3px; font-variant: small-caps;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h4 {border-bottom: 1px solid #CCCCCC; font-size: 1.2em; font-style: normal;
+          margin: 10px 0 0; padding-bottom: 3px; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h5 {margin: 0px}
+
+        a.help { font-size: 9px; font-style: normal; text-transform: uppercase;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        div.pad { padding-left: 30px; padding-top: 5px; padding-bottom: 10px;}
+        
+        div.pad1 { margin: 10px 5px;}
+
+        div.pad2 { margin: 25px 5px 5px;}
+        h2.pad2 { padding: 25px 5px 5px;}
+
+        div.pad3 { padding: 5px 0px 10px 30px;}
+
+        div.box { border: 2px solid #CCCCCC; padding:10px;}
+
+        div.bar { border-left: 7px solid #00666a; padding:5px; margin-top:25px; }
+
+        div.subsection {margin:25px 0px;}
+
+        img {border:0px none;}
+
+        th.majorth {text-align:left;}
+        th.minorth {font-weight:normal; text-align:left; width:8em; padding: 3px 0px;}
+        th.actionth {font-weight:normal; text-align:left;}
+
+        .strand_name {text-align:left;}
+        .strand_side {padding:0px 10px;}
+        .strand_start {padding:0px 10px;}
+        .strand_pvalue {text-align:center; padding:0px 10px;}
+        .strand_lflank {text-align:right; padding-right:5px; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace; color:gray;}
+        .strand_seq {text-align:center; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace;}
+        .strand_rflank {text-align:left; padding-left:5px; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace; color:gray;}
+
+        .block_td {height:25px;}
+        .block_container {position:relative; width:98%; height:25px; padding:0px; margin: 0px 0px 0px 1em;}
+        .block_motif {position:absolute; z-index:3; height:12px; top:0px; text-align:center; vertical-align:middle; background-color:cyan;}
+        .block_rule {position:absolute; z-index:2; width:100%; height:1px; top:12px; left:0px; background-color:gray;}
+        .block_plus_sym {position:absolute; z-index:4; line-height:12px; top:0px; left:-1em;}
+        .block_minus_sym {position:absolute; z-index:4; line-height:12px; top:13px; left:-1em;}
+
+        .tic_major {position:absolute; border-left:2px solid blue; height:0.5em; top:0em;}
+        .tic_minor {position:absolute; border-left:1px solid blue; height:0.2em; top:0em;}
+        .tic_label {position:absolute; top:0.5em;  height: 1em; text-align:center; vertical-align:middle}
+
+        .explain h5 {font-size:1em; margin-left: 1em;}
+
+        div.doc {margin-left: 2em; margin-bottom: 3em;}
+        
+        div.tabArea {
+          font-size: 80%;
+          font-weight: bold;
+        }
+
+        a.tab {
+          background-color: #ddddff;
+          border: 1px solid #000000;
+          padding: 2px 1em 2px 1em;
+          text-decoration: none;
+        }
+        div.tabArea.base a.tab {
+          border-top-width: 0px;
+        }
+        div.tabArea.top a.tab {
+          border-bottom-width: 0px;
+        }
+
+        a.tab, a.tab:visited {
+          color: #808080;
+        }
+
+        a.tab:hover {
+          background-color: #d0d0d0;
+          color: #606060;
+        }
+        a.tab.activeTab, a.tab.activeTab:hover, a.tab.activeTab:visited {
+          background-color: #f0f0f0;
+          color: #000000;
+        }
+        div.tabMain {
+          border: 1px solid #000000;
+          background-color: #ffffff;
+          padding: 5px;
+          margin-right: 5px;
+        }
+        th.trainingset {
+          border-bottom: thin dashed black; 
+          font-weight:normal; 
+          padding:0px 10px;
+        }
+        .dnaseq {
+          font-weight: bold; 
+          font-size: large; 
+          font-family: 'Courier New', Courier, monospace;
+        }
+        .dna_A {
+          color: rgb(204,0,0);
+        }
+        .dna_C {
+          color: rgb(0,0,204);
+        }
+        .dna_G {
+          color: rgb(255,179,0);
+        }
+        .dna_T {
+          color: rgb(0,128,0);
+        }
+    /* END INCLUDED FILE "meme.css" */
+    
+  
+        .more_arrow {
+          font-family:Arial,Serif;
+          font-size: larger;
+          font-weight: bold;
+          text-decoration:none; 
+        }
+        div.infobox {
+          background-color:#ddddff;
+          margin-top: 50px;
+          margin-bottom: 1em;
+        }
+        .sequence {font-family:Monospace;}
+        .sequence_labels {position:relative; width:100%; height:2.5em; 
+            padding:0px; margin:0px;}
+        .sequence_label {font-family:Serif; position:absolute; z-index:2; 
+            height:1em; text-align:center; vertical-align:middle;}
+        .sequence_label_top {top:0px;}
+        .sequence_label_bottom {top:1.25em;}
+        .inlineTitle {display:inline;}
+        .block_needle {position:absolute; z-index:4; height:30px; width:1px; 
+            top:-2px; background-color:gray;}
+        .block_handle {position:absolute; z-index:5; height:1.1em; width:7em; 
+            top:30px; left:-4em; text-align:center; vertical-align:middle;
+            background-color: LightGrey; border:3px outset grey; 
+            -moz-user-select: none; -khtml-user-select: none; user-select: none;}
+        .block_needle.right {height: 50px;}
+        .block_handle.right {top:50px;}
+        .label_container {position:relative; width:100%; height:25px; padding:0px; margin: 0px;}
+
+        table.padded-table td { padding:0px 10px; }
+        table.padded-table th { padding:0px 5px; }
+        td.tnum {text-align:right;}
+        tr.highlight {background:#aaffaa;}
+        td.dim {color: gray;}
+        span.dim {color: gray;}
+        .col_seq { text-align: left; width: 6.4em}
+        .col_start, .col_stop, .col_score, .col_pv, .col_ev, .col_qv { text-align:right; }
+        .col_start {width: 8em}
+        .col_stop {width: 8em}
+        .col_score {width: 5em}
+        .col_pv {width: 5em}
+        .col_ev {width: 5em}
+        .col_qv {width: 5em}
+        .col_more {width: 1em}
+        .col_extra {width: *}
+        .col_bd {width: 100%}
+      </style>
+</head>
+<body onload="javascript:setup()">
+<a name="top"></a><div class="pad1">
+<h1><img src="http://meme.nbcr.net/meme/doc/images/mcast-logo.png" alt="Motif ClusterAlignment and Search Tool (MCAST)"></h1>
+<p class="spaced">
+        For further information on how to interpret these results or to get a 
+        copy of the MEME software please access 
+        <a href="http://meme.nbcr.net/">http://meme.nbcr.net</a>. 
+      </p>
+</div>
+<a name="navigation"></a><div class="pad2">
+<a class="jump" href="#inputs">Inputs</a>
+        |  
+      <a class="jump" href="#results">Search Results</a>
+        |  
+      <a class="jump" href="#program">Program information</a>
+        |  
+      <a class="jump" href="#doc">Documentation</a>
+</div>
+<a name="inputs"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Inputs</h2></td>
+<td align="right" valign="bottom"><a href="#top">Top</a></td>
+</tr></table>
+<div class="box">
+<a name="databases"></a><h4>Sequence Database <a href="#databases_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>The sequence database
+          "crp0.s"
+          was supplied to MCAST.</p>
+<table class="padded-table" border="0">
+<col>
+<col>
+<thead><tr>
+<th>Sequence Count</th>
+<th>Residue Count</th>
+</tr></thead>
+<tbody><tr>
+<td class="tnum">18</td>
+<td class="tnum">1890</td>
+</tr></tbody>
+<tfoot></tfoot>
+</table>
+</div>
+<a name="motifs"></a><h4>Motifs <a href="#motifs_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>The following motifs were supplied to MCAST from
+        "crp0.meme.html"
+        </p>
+<table class="padded-table" border="0">
+<thead>
+<tr>
+<th> </th>
+<th> </th>
+<th> </th>
+<th> </th>
+</tr>
+<tr>
+<th>Motif</th>
+<th>Width</th>
+<th>Best possible match</th>
+<th>Best possible RC match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>18</td>
+<td class="sequence">
+<span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="sequence">
+<span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span>
+</td>
+</tr>
+<tr>
+<td>2</td>
+<td>8</td>
+<td class="sequence">
+<span style="color:blue">C</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span>
+</td>
+<td class="sequence">
+<span style="color:blue">C</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:orange">G</span>
+</td>
+</tr>
+<tr>
+<td>3</td>
+<td>11</td>
+<td class="sequence">
+<span style="color:blue">C</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:blue">C</span>
+</td>
+<td class="sequence">
+<span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:orange">G</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<a name="results"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Search Results</h2></td>
+<td align="right" valign="bottom"><a href="#top">Top</a></td>
+</tr></table>
+<div class="box">
+<h4>Top Scoring Matches <a href="#sequences_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>
+          Each of the following
+          17 matches 
+          has a <i>q</i>-value less than 
+          1.
+          <br>
+          The motif matches shown have a position p-value less than 
+          0.0005.<br><b>Click on the arrow</b> (↧) next to the block diagram to view more information about a sequence.
+        </p>
+<div style="text-align:left">
+<table style="display:inline-block; padding:5px;"><tr>
+<td><div style="width: 20px; height: 20px; background-color:aqua; border: 1px solid black"></div></td>
+<td>Motif 1</td>
+</tr></table>
+<table style="display:inline-block; padding:5px;"><tr>
+<td><div style="width: 20px; height: 20px; background-color:blue; border: 1px solid black"></div></td>
+<td>Motif 2</td>
+</tr></table>
+<table style="display:inline-block; padding:5px;"><tr>
+<td><div style="width: 20px; height: 20px; background-color:red; border: 1px solid black"></div></td>
+<td>Motif 3</td>
+</tr></table>
+</div>
+<table id="tbl_sequences" style="width:100%; table-layout:fixed;" border="0">
+<thead><tr>
+<th class="col_more"> </th>
+<th class="col_seq">Sequence</th>
+<th class="col_start">Start</th>
+<th class="col_stop">Stop</th>
+<th class="col_score">Score</th>
+<th class="col_pv">
+<i>p</i>-value</th>
+<th class="col_ev">
+<i>E</i>-value</th>
+<th class="col_qv">
+<i>q</i>-value</th>
+<th class="col_extra"> </th>
+<th class="col_more"> </th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">lac</td>
+<td class="col_start">9</td>
+<td class="col_stop">44</td>
+<td class="col_score">18.8955</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-8_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-8')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-8_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:53.7313432835821%"></div>
+<div class="block_motif" style="left:1.493%; top:3.4px; width:26.866%; height:7.6px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 4.57e-07    starts: 10    ends: 27    "></div>
+<div class="block_motif" style="left:37.313%; top:12px; width:16.418%; height:8.300000000000001px; background-color:red; border: 1px solid black;" title="Motif 3    p-value: 1.18e-07    starts: 34    ends: 44    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">trn9cat</td>
+<td class="col_start">36</td>
+<td class="col_stop">102</td>
+<td class="col_score">11.5776</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-16_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-16')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-16_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:1.493%; top:3.2px; width:16.418%; height:7.8px; background-color:red; border: 1px solid black;" title="Motif 3    p-value: 3.38e-07    starts: 37    ends: 47    "></div>
+<div class="block_motif" style="left:73.134%; top:4.8px; width:26.866%; height:6.2px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 7.25e-06    starts: 85    ends: 102    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">ilv</td>
+<td class="col_start">5</td>
+<td class="col_stop">61</td>
+<td class="col_score">9.7855</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-7_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-7')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-7_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:85.0746268656716%"></div>
+<div class="block_motif" style="left:1.493%; top:4.8px; width:11.94%; height:6.2px; background-color:blue; border: 1px solid black;" title="Motif 2    p-value: 7.09e-06    starts: 6    ends: 13    "></div>
+<div class="block_motif" style="left:58.209%; top:12px; width:26.866%; height:7px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.59e-06    starts: 44    ends: 61    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">ara</td>
+<td class="col_start">59</td>
+<td class="col_stop">77</td>
+<td class="col_score">7.19173</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-2_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-2')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-2_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:12px; width:26.866%; height:7.6px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 4.56e-07    starts: 60    ends: 77    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">male</td>
+<td class="col_start">14</td>
+<td class="col_stop">49</td>
+<td class="col_score">6.95215</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-9_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-9')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-9_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:53.7313432835821%"></div>
+<div class="block_motif" style="left:1.493%; top:5.1px; width:26.866%; height:5.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.2e-05    starts: 15    ends: 32    "></div>
+<div class="block_motif" style="left:41.791%; top:5.2px; width:11.94%; height:5.8px; background-color:blue; border: 1px solid black;" title="Motif 2    p-value: 1.56e-05    starts: 42    ends: 49    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">malt</td>
+<td class="col_start">41</td>
+<td class="col_stop">59</td>
+<td class="col_score">6.60034</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-11_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-11')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-11_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:3.6px; width:26.866%; height:7.4px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 6.87e-07    starts: 42    ends: 59    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">deop2</td>
+<td class="col_start">60</td>
+<td class="col_stop">78</td>
+<td class="col_score">5.32909</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-5_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-5')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-5_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:4.1px; width:26.866%; height:6.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.66e-06    starts: 61    ends: 78    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">pbr322</td>
+<td class="col_start">57</td>
+<td class="col_stop">75</td>
+<td class="col_score">4.30747</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-15_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-15')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-15_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:12px; width:26.866%; height:6.6px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 3.37e-06    starts: 58    ends: 75    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">uxu1</td>
+<td class="col_start">17</td>
+<td class="col_stop">35</td>
+<td class="col_score">4.19386</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-14_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-14')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-14_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:4.5px; width:26.866%; height:6.5px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 3.64e-06    starts: 18    ends: 35    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">ce1cg</td>
+<td class="col_start">17</td>
+<td class="col_stop">83</td>
+<td class="col_score">3.94007</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-1_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-1')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-1_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:1.493%; top:6.4px; width:26.866%; height:4.6px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 0.000149    starts: 18    ends: 35    "></div>
+<div class="block_motif" style="left:73.134%; top:12px; width:26.866%; height:6.4px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 4.35e-06    starts: 66    ends: 83    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">gale</td>
+<td class="col_start">46</td>
+<td class="col_stop">64</td>
+<td class="col_score">3.17246</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-6_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-6')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-6_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:12px; width:26.866%; height:6.2px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 7.39e-06    starts: 47    ends: 64    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">tnaa</td>
+<td class="col_start">75</td>
+<td class="col_stop">93</td>
+<td class="col_score">2.9616</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-13_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-13')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-13_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:12px; width:26.866%; height:6.1px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 8.56e-06    starts: 76    ends: 93    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">crp</td>
+<td class="col_start">67</td>
+<td class="col_stop">85</td>
+<td class="col_score">2.60145</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-3_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-3')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-3_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:12px; width:26.866%; height:6px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.1e-05    starts: 68    ends: 85    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">cya</td>
+<td class="col_start">50</td>
+<td class="col_stop">68</td>
+<td class="col_score">2.37508</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-4_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-4')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-4_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:5.1px; width:26.866%; height:5.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.28e-05    starts: 51    ends: 68    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">ompa</td>
+<td class="col_start">48</td>
+<td class="col_stop">66</td>
+<td class="col_score">2.12883</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-12_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-12')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-12_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:5.2px; width:26.866%; height:5.8px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.52e-05    starts: 49    ends: 66    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">malk</td>
+<td class="col_start">61</td>
+<td class="col_stop">79</td>
+<td class="col_score">2.0797</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-10_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-10')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-10_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:5.2px; width:26.866%; height:5.8px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.58e-05    starts: 62    ends: 79    "></div>
+</div></td>
+</tr>
+<tr>
+<td class="col_more"> </td>
+<td class="col_seq">tdc</td>
+<td class="col_start">82</td>
+<td class="col_stop">100</td>
+<td class="col_score">1.69784</td>
+<td class="col_pv">--</td>
+<td class="col_ev">--</td>
+<td class="col_qv">--</td>
+</tr>
+<tr class="col_bd" id="cluster-17_blocks">
+<td class="col_more"><a href="javascript:show_more('cluster-17')" class="more_arrow" title="Toggle additional information">↧</a></td>
+<td class="block_td" colspan="8"><div class="block_container" id="cluster-17_block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:28.3582089552239%"></div>
+<div class="block_motif" style="left:1.493%; top:12px; width:26.866%; height:5.6px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 2.05e-05    starts: 83    ends: 100    "></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<a name="program"></a><div class="bar">
+<div style="text-align:right;"><a href="#top">Top</a></div>
+<div class="subsection">
+<a name="version"></a><h5>MCAST version</h5>4.9.1 (Release date: Fri Aug 23 16:49:42 2013 +1000)
+      </div>
+<div class="subsection">
+<a name="reference"></a><h5>Reference</h5>
+        Timothy Bailey and William Stafford Noble,<br> 
+        "Searching for statistically significant regulatory modules", 
+        <i>Bioinformatics (Proceedings of the European Conference on Computational Biology)</i>,
+        19(Suppl. 2):ii16-ii25, 2003.<br>
+</div>
+<div class="subsection">
+<a name="command"></a><h5>Command line summary</h5>
+<textarea rows="1" style="width:100%;" readonly>mcast -oc mcast_example_output_files crp0.meme.html crp0.s</textarea><br>Background letter frequencies (from non-redundant database):<br><div style="margin-left:25px;">A: 0.282   C: 0.222   G: 0.229   T: 0.267</div>
+<br>
+</div>
+<a href="javascript:showHidden('model')" id="model_activator">show model parameters...</a><div class="subsection" id="model_data" style="display:none;"></div>
+<a href="javascript:hideShown('model')" style="display:none;" id="model_deactivator">hide model parameters...</a>
+</div>
+<span class="explain"><a name="doc"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Explanation of MCAST Results</h2></td>
+<td align="right" valign="bottom"><a href="#top">Top</a></td>
+</tr></table>
+<div class="box">
+<h4>The MCAST results consist of</h4>
+<ul>
+<li>The <a href="#input_motifs_doc"><b>inputs</b></a> to MCAST including:
+            <ol>
+<li>The <a href="#databases_doc"><b>sequence database</b></a> showing the sequence 
+                and residue counts. [<a href="#databases">View</a>]</li>
+<li>The <a href="#motifs_doc"><b>motifs</b></a> showing the name, width,
+              and best scoring match [<a href="#motifs">View</a>]</li>
+</ol>
+</li>
+<li>The <a href="#sequences_doc"><b>search results</b></a> showing top scoring sequences with 
+            tiling of all of the motifs matches shown for each of the sequences. [<a href="#results">View</a>]
+          </li>
+<li>The <b>program</b> details including:
+            <ol>
+<li>The <b>version</b> of MCAST and the date it was released. [<a href="#version">View</a>]</li>
+<li>The <b>reference</b> to cite if you use MCAST in your research. [<a href="#reference">View</a>]</li>
+<li>The <b>command line summary</b> detailing the parameters with which you ran MCAST. [<a href="#command">View</a>]</li>
+</ol>
+</li>
+<li>This <b>explanation</b> of how to interpret MCAST results.</li>
+</ul>
+<a name="input_motifs_doc"></a><h4>Inputs</h4>
+<p>MCAST received the following inputs.</p>
+<a name="databases_doc"></a><h5>Sequence Databases</h5>
+<div class="doc">
+<p>This table summarises the sequence databases specified to MAST.</p>
+<dl>
+<dt>Database</dt>
+<dd>The name of the database file.</dd>
+<dt>Sequence Count</dt>
+<dd>The number of sequences in the database.</dd>
+<dt>Residue Count</dt>
+<dd>The number of residues in the database.</dd>
+</dl>
+</div>
+<a name="motifs_doc"></a><h5>Motifs</h5>
+<div class="doc">
+<p>Summary of the motifs specified to MAST.</p>
+<dl>
+<dt>Name</dt>
+<dd>The name of the motif. If the motif has been removed or removal is recommended to avoid highly similar motifs 
+              then it will be displayed in red text.</dd>
+<dt>Width</dt>
+<dd>The width of the motif. No gaps are allowed in motifs supplied to MAST as it only works for motifs of a fixed width.</dd>
+<dt>Best possible match</dt>
+<dd>The sequence that would achieve the best possible match score and its reverse complement for nucleotide motifs.</dd>
+</dl>
+</div>
+<a name="sequences_doc"></a><h4>Search Results</h4>
+<p>MCAST provides the following motif search results.</p>
+<h5>Top Scoring Sequences</h5>
+<div class="doc">
+<p>
+            This table summarises the top scoring sequences.
+            The sequences are sorted by the <a href="#evalue_doc">Sequence 
+            <i>q</i>-value</a> from most to least significant.
+          </p>
+<dl>
+<dt>Sequence</dt>
+<dd>The name of the sequence. This maybe be linked to search a sequence database for the sequence name.</dd>
+<dt>Start</dt>
+<dd>
+              The position of the start of the match in 1-based coordinates, starting at the
+              first position in the sequence.
+            </dd>
+<dt>Stop</dt>
+<dd>
+              The position of the end of the match in 1-based coordinates, starting at the
+              first position in the sequence.
+            </dd>
+<dt>Score</dt>
+<dd>
+              The MCAST score for the match.
+            </dd>
+<dt>
+<i>p</i>-value</dt>
+<dd>
+              The <a href="#pvalue_doc"><i>p</i>-value</a> of the match score.
+            </dd>
+<dt>
+<i>E</i>-value</dt>
+<dd>
+              The <a href="#evalue_doc"><i>E</i>-value</a> of the match score.
+            </dd>
+<dt>
+<i>q</i>-value</dt>
+<dd>
+              The <a href="#qvalue_doc"><i>q</i>-value</a> of the match score.
+            </dd>
+<dt>↧</dt>
+<dd>
+              Click on this to show <a href="#additional_seq_doc">additional information</a> about the sequence such as a 
+              description, combined p-value and the annotated sequence.
+            </dd>
+<dt>Block Diagram</dt>
+<dd>
+              The block diagram shows the best non-overlapping tiling of motif matches on the sequence.
+              <ul style="padding-left: 1em; margin-top:5px;">
+<li>The length of the line shows the length of a sequence relative to all the other sequences.</li>
+<li>A block is shown where the <a href="#pos_pvalue_doc">positional <i>p</i>-value</a>
+                  of a motif is less (more significant) than the significance threshold which is 0.0001 by default.</li>
+<li>If a significant motif match (as specified above) overlaps other significant motif matches then 
+                  it is only displayed as a block if its <a href="#pos_pvalue_doc">positional <i>p</i>-value</a> 
+                  is less (more significant) then the product of the <a href="#pos_pvalue_doc">positional 
+                  <i>p</i>-values</a> of the significant matches that it overlaps.</li>
+<li>The position of a block shows where a motif has matched the sequence.</li>
+<li>The width of a block shows the width of the motif relative to the length of the sequence.</li>
+<li>The colour and border of a block identifies the matching motif as in the legend.</li>
+<li>The height of a block gives an indication of the significance of the match as 
+                  taller blocks are more significant. The height is calculated to be proportional 
+                  to the negative logarithm of the <a href="#pos_pvalue_doc">positional <i>p</i>-value</a>, 
+                  truncated at the height for a <i>p</i>-value of 1e-10.</li>
+<li>Hovering the mouse cursor over the block causes the display of the motif name 
+                    and other details in the hovering text.</li>
+<li>DNA only; blocks displayed above the line are a match on the given DNA, whereas blocks 
+                  displayed below the line are matches to the reverse-complement of the given DNA.</li>
+<li>DNA only; when strands are scored separately then blocks may overlap on opposing strands.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<a name="additional_seq_doc"></a>
+</div></span>
+<!--This data is used by the javascript to create the detailed views-->
+<form>
+<input type="hidden" id="cluster-8_len" value="36">
+<input type="hidden" id="cluster-8_combined_pvalue" value="">
+<input type="hidden" id="cluster-8_type" value="nucleotide">
+<input type="hidden" id="cluster-8_segs" value="
+9
+TTAATGTGAGTTAGCTCACTCATTAGGCACCCCAGG
+">
+<input type="hidden" id="cluster-8_hits" value="
+10	1	+	4.57e-07	TAATGTGAGTTAGCTCAC
+34	3	-	1.18e-07	GGCACCCCAGG
+">
+<input type="hidden" id="cluster-16_len" value="67">
+<input type="hidden" id="cluster-16_combined_pvalue" value="">
+<input type="hidden" id="cluster-16_type" value="nucleotide">
+<input type="hidden" id="cluster-16_segs" value="
+36
+TCCTGGTGTCCCTGTTGATACCGGGAAGCCCTGGGCCAACTTTTGGCGAAAATGAGACGTTGATCGG
+">
+<input type="hidden" id="cluster-16_hits" value="
+37	3	+	3.38e-07	CCTGGTGTCCC
+85	1	+	7.25e-06	AAATGAGACGTTGATCGG
+">
+<input type="hidden" id="cluster-7_len" value="57">
+<input type="hidden" id="cluster-7_combined_pvalue" value="">
+<input type="hidden" id="cluster-7_type" value="nucleotide">
+<input type="hidden" id="cluster-7_segs" value="
+5
+CCGGCGGGGTTTTTTGTTATCTGCAATTCAGTACAAAACGTGATCAACCCCTCAATT
+">
+<input type="hidden" id="cluster-7_hits" value="
+6	2	+	7.09e-06	CGGCGGGG
+44	1	-	1.59e-06	GTGATCAACCCCTCAATT
+">
+<input type="hidden" id="cluster-2_len" value="19">
+<input type="hidden" id="cluster-2_combined_pvalue" value="">
+<input type="hidden" id="cluster-2_type" value="nucleotide">
+<input type="hidden" id="cluster-2_segs" value="
+59
+TTTGCACGGCGTCACACTT
+">
+<input type="hidden" id="cluster-2_hits" value="
+60	1	-	4.56e-07	TTGCACGGCGTCACACTT
+">
+<input type="hidden" id="cluster-9_len" value="36">
+<input type="hidden" id="cluster-9_combined_pvalue" value="">
+<input type="hidden" id="cluster-9_type" value="nucleotide">
+<input type="hidden" id="cluster-9_segs" value="
+14
+ATTCTGTAACAGAGATCACACAAAGCGACGGTGGGG
+">
+<input type="hidden" id="cluster-9_hits" value="
+15	1	+	1.2e-05	TTCTGTAACAGAGATCAC
+42	2	+	1.56e-05	CGGTGGGG
+">
+<input type="hidden" id="cluster-11_len" value="19">
+<input type="hidden" id="cluster-11_combined_pvalue" value="">
+<input type="hidden" id="cluster-11_type" value="nucleotide">
+<input type="hidden" id="cluster-11_segs" value="
+41
+GAATTGTGACACAGTGCAA
+">
+<input type="hidden" id="cluster-11_hits" value="
+42	1	+	6.87e-07	AATTGTGACACAGTGCAA
+">
+<input type="hidden" id="cluster-5_len" value="19">
+<input type="hidden" id="cluster-5_combined_pvalue" value="">
+<input type="hidden" id="cluster-5_type" value="nucleotide">
+<input type="hidden" id="cluster-5_segs" value="
+60
+TAATTGTGATGTGTATCGA
+">
+<input type="hidden" id="cluster-5_hits" value="
+61	1	+	1.66e-06	AATTGTGATGTGTATCGA
+">
+<input type="hidden" id="cluster-15_len" value="19">
+<input type="hidden" id="cluster-15_combined_pvalue" value="">
+<input type="hidden" id="cluster-15_type" value="nucleotide">
+<input type="hidden" id="cluster-15_segs" value="
+57
+TGTGAAATACCGCACAGAT
+">
+<input type="hidden" id="cluster-15_hits" value="
+58	1	-	3.37e-06	GTGAAATACCGCACAGAT
+">
+<input type="hidden" id="cluster-14_len" value="19">
+<input type="hidden" id="cluster-14_combined_pvalue" value="">
+<input type="hidden" id="cluster-14_type" value="nucleotide">
+<input type="hidden" id="cluster-14_segs" value="
+17
+TTGTTGTGATGTGGTTAAC
+">
+<input type="hidden" id="cluster-14_hits" value="
+18	1	+	3.64e-06	TGTTGTGATGTGGTTAAC
+">
+<input type="hidden" id="cluster-1_len" value="67">
+<input type="hidden" id="cluster-1_combined_pvalue" value="">
+<input type="hidden" id="cluster-1_type" value="nucleotide">
+<input type="hidden" id="cluster-1_segs" value="
+17
+TTTTTGTGGCATCGGGCGAGAATAGCGCGTGGTGTGAAAGACTGTTTTTTTGATCGTTTTCACAAAA
+">
+<input type="hidden" id="cluster-1_hits" value="
+18	1	+	0.000149	TTTTGTGGCATCGGGCGA
+66	1	-	4.35e-06	TTGATCGTTTTCACAAAA
+">
+<input type="hidden" id="cluster-6_len" value="19">
+<input type="hidden" id="cluster-6_combined_pvalue" value="">
+<input type="hidden" id="cluster-6_type" value="nucleotide">
+<input type="hidden" id="cluster-6_segs" value="
+46
+TTTATTCCATGTCACACTT
+">
+<input type="hidden" id="cluster-6_hits" value="
+47	1	-	7.39e-06	TTATTCCATGTCACACTT
+">
+<input type="hidden" id="cluster-13_len" value="19">
+<input type="hidden" id="cluster-13_combined_pvalue" value="">
+<input type="hidden" id="cluster-13_type" value="nucleotide">
+<input type="hidden" id="cluster-13_segs" value="
+75
+TGTGATTCGATTCACATTT
+">
+<input type="hidden" id="cluster-13_hits" value="
+76	1	-	8.56e-06	GTGATTCGATTCACATTT
+">
+<input type="hidden" id="cluster-3_len" value="19">
+<input type="hidden" id="cluster-3_combined_pvalue" value="">
+<input type="hidden" id="cluster-3_type" value="nucleotide">
+<input type="hidden" id="cluster-3_segs" value="
+67
+TGCAAAGGACGTCACATTA
+">
+<input type="hidden" id="cluster-3_hits" value="
+68	1	-	1.1e-05	GCAAAGGACGTCACATTA
+">
+<input type="hidden" id="cluster-4_len" value="19">
+<input type="hidden" id="cluster-4_combined_pvalue" value="">
+<input type="hidden" id="cluster-4_type" value="nucleotide">
+<input type="hidden" id="cluster-4_segs" value="
+50
+AAGGTGTTAAATTGATCAC
+">
+<input type="hidden" id="cluster-4_hits" value="
+51	1	+	1.28e-05	AGGTGTTAAATTGATCAC
+">
+<input type="hidden" id="cluster-12_len" value="19">
+<input type="hidden" id="cluster-12_combined_pvalue" value="">
+<input type="hidden" id="cluster-12_type" value="nucleotide">
+<input type="hidden" id="cluster-12_segs" value="
+48
+TATGCCTGACGGAGTTCAC
+">
+<input type="hidden" id="cluster-12_hits" value="
+49	1	+	1.52e-05	ATGCCTGACGGAGTTCAC
+">
+<input type="hidden" id="cluster-10_len" value="19">
+<input type="hidden" id="cluster-10_combined_pvalue" value="">
+<input type="hidden" id="cluster-10_type" value="nucleotide">
+<input type="hidden" id="cluster-10_segs" value="
+61
+ATTTCGTGATGTTGCTTGC
+">
+<input type="hidden" id="cluster-10_hits" value="
+62	1	+	1.58e-05	TTTCGTGATGTTGCTTGC
+">
+<input type="hidden" id="cluster-17_len" value="19">
+<input type="hidden" id="cluster-17_combined_pvalue" value="">
+<input type="hidden" id="cluster-17_type" value="nucleotide">
+<input type="hidden" id="cluster-17_segs" value="
+82
+TGTGAGTGGTCGCACATAT
+">
+<input type="hidden" id="cluster-17_hits" value="
+83	1	-	2.05e-05	GTGAGTGGTCGCACATAT
+">
+</form>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><span class="sequence" id="ruler" style="visibility:hidden; white-space:nowrap;">ACGTN</span>
+</body>
+</html>

@@ -1,1 +1,0 @@
-#pattern name	sequence name	start	stop	strand	score	p-value	q-value	matched sequence

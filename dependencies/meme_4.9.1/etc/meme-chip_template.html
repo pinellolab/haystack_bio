@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>MEME ChIP</title>
+    <script src="meme-chip_data.js"></script>
+    <script src="constants.js"></script>
+    <script src="motif_logo.js"></script>
+    <script src="centrimo_graph.js"></script>
+    <script src="delay_draw.js"></script>
+    <script src="meme-chip_template.js"></script>
+    <link rel="stylesheet" type="text/css" href="meme-chip_template.css">
+    <link rel="stylesheet" type="text/css" href="meme.css">
+  </head>
+  <body onload="page_loaded()" onpageshow="page_shown(event)" 
+    onresize="page_resize()" onscroll="delayed_process_draw_tasks()">
+    <!-- Help popups -->
+    <div class="pop_content" id="pop_source">
+      <p>This is a link to the motif in the output of the particular motif 
+      discovery (e.g., MEME) or motif enrichment (e.g., CentriMo) program that 
+      reported it.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_ev">
+      <p>This is the significance of the motif according to the particular motif
+      discovery (e.g., MEME) or motif enrichment (e.g., CentriMo) program that 
+      reported it.</p>
+      <p>Follow the link under the "Discovery/Enrichment Program" column for 
+      more information on how the significance value was derived.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_tomtom">
+      <p>Motifs reported by a motif discovery program (e.g., MEME) are compared 
+      with known motifs in a motif database specified by the user. This column 
+      lists the (up to) three most similar motifs. Only known motifs with 
+      TOMTOM similarity E-values of less than 1.0 to the discovered motif will 
+      be shown here. Clicking any of these links will show the TOMTOM results 
+      where all alignments can be viewed.</p>
+      <p>Motifs reported by a motif enrichment program (e.g., CentriMo) list the
+      motif's name and a link to the motif's entry on the database website if it
+      is available.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_centrimo">
+      <p>This graph shows the distribution of the best matches to the motif in 
+      the sequences as found by a CentriMo analysis.</p>
+      <p>The vertical line in the center of the graph corresponds to the center
+      of the sequences.</p>
+      <p>Clicking on a motif's graph will take you to the CentriMo output with 
+      that motif selected for graphing.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_show_clustered">
+      <p>Clicking here will show you all the motifs found by motif discovery or 
+      motif enrichment analysis that are significantly similar to the reported 
+      motif.</p>  
+      <p>The additional motifs are shown aligned with the reported motif, 
+      sorted in order of significance of the motif according to the 
+      particular motif discovery (e.g., MEME) or motif enrichment 
+      (e.g., CentriMo) program that reported it.</p>
+      <p>To cluster the motifs MEME ChIP does the following:</p>
+      <ol>
+        <li>Start with no groups and all significant reported motifs.</li>
+        <li>Run TOMTOM with all significant reported motifs to determine 
+        pairwise similarity.</li>
+        <li>Group Highly Similar Motifs---
+        <div style="padding-left: 10px;">
+          While ungrouped motifs:
+          <div style="padding-left: 10px;">
+            Select most significant ungrouped motif.
+            <div style="border: 1px solid gray; color: gray">
+              This is called the "seed" motif for the group and we will call the
+              E-value of its seed motif the group's "significance".
+            </div>
+            Form a new group from the seed motif and all other motifs that 
+            are not yet in a group and who are strongly similar to the seed 
+            motif (default: TOMTOM E-value &le; 0.05).
+          </div>
+        </div>
+        </li>
+        <li>Merge Groups---
+        <div style="padding-left: 10px">
+          For each group (most significant to least significant), merge it with 
+          any less significant group if all of its motifs are weakly similar to
+          the first group's seed motif (default: TOMTOM E-value &le; 0.1).
+        </div>
+        </li>
+      </ol>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_centrimo_group">
+      <p>Clicking here takes you to the CentriMo motif enrichment analysis with 
+      the results for this motif and any similar motifs selected.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    
+
+    <!-- End help popups -->
+    <h1><img src="http://meme.nbcr.net/meme/doc/images/memechip_logo.png" alt="MEME ChIP"></h1>
+    <p>
+      If you use MEME-ChIP in your research, please cite the following paper:<br />
+      <span class="citation">
+        Philip Machanick and Timothy L. Bailey, "MEME-ChIP: motif analysis of large DNA datasets",
+        <i>Bioinformatics</i>, <b>27</b>12, 1696-1697, 2011.
+      </span>
+    </p>
+    <!-- navigation -->
+    <div class="pad2">
+      <a class="jump" href="#data_sec">Motifs</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a class="jump" href="#programs_sec">Programs</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a class="jump" href="#input_sec">Input Files</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a class="jump" href="#info_sec">Program information</a>
+    </div>
+    <!-- alert the user when their browser is not up to the task -->
+    <noscript><h1 style="color:red">Javascript is required to view these results!</h1></noscript>
+    <h1 id="html5_warning" style="color:red; display:none;">Your browser does not support canvas!</h1>
+    <script>if (!window.HTMLCanvasElement) $("html5_warning").style.display = "block";</script>
+    <!-- -->
+    <span id="ins_tar"></span>
+    <script>make_tar_link($("ins_tar"));</script>
+    <!-- write out the job description -->
+    <span id="ins_desc"></span>
+    <script>make_description($("ins_desc"), data["description"]);</script>
+    <!-- write out clustered motifs -->
+    <h2 class="mainh pad2" id="data_sec">Motifs</h2>
+    <div class="box">
+      <p>The motifs found by the programs MEME, DREME and CentriMo; 
+      clustered by similarity and ordered by E-value.</p>
+      <div id="logos"></div>
+      <script>make_clustered_motifs($("logos"));</script>
+    </div>
+    <!-- write out a list of all programs run -->
+    <h2 class="mainh pad2" id="programs_sec">Programs</h2>
+    <div class="box" id="program_listing"></div>
+    <script>make_program_listing($("program_listing"));</script>
+    <!-- write out input files -->
+    <h2 id="input_sec" class="mainh pad2">Input Files</h2>
+    <div class="box">
+      <h4>Sequences</h4>
+      <div id="sequence_db"></div>
+      <script>make_sequence_db_listing($("sequence_db"));</script>
+      <h4 id="motif_dbs_header">Motifs</h4>
+      <div id="motif_dbs"></div>
+      <script>make_motif_db_listing($("motif_dbs"));</script>
+    </div>
+    <!-- list information on this program -->
+    <div id="info_sec" class="bar">
+      <div class="subsection">
+        <h5 id="version">MEME-ChIP version</h5>
+        <span id="ins_version"></span> 
+        (Release date: <span id="ins_release"></span>)<br>
+      </div>
+      <script>
+        $("ins_version").innerHTML = data["version"];
+        $("ins_release").innerHTML = data["release"];
+      </script>
+      <div class="subsection">
+        <h5 id="reference">Reference</h5>
+        <span class="citation">
+        Philip Machanick and Timothy L. Bailey, "MEME-ChIP: motif analysis of large DNA datasets",
+        <i>Bioinformatics</i>, <b>27</b>12, 1696-1697, 2011.
+        </span>
+        <div class="subsection">
+          <h5 id="command">Command line summary</h5>
+          <textarea id="cmd" rows="1" style="width:100%;" readonly="readonly">
+          </textarea>
+          <script>$("cmd").value = data["cmd"].join(" ");</script>
+        </div>
+      </div>
+    </div>
+    <div id="scrollpad"></div>
+  </body>
+</html>

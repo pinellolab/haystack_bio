@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CentriMo - Submission form</title>
+    <script src="../meme-suite-menu.js" type="text/javascript"></script>
+    <script src="../site.js" type="text/javascript"></script>
+    <link href="../site.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../images/memesuite_icon.ico">
+    <script src="../centrimo.js" type="text/javascript"></script>
+  </head>
+  <body onload="on_page_show();" onpageshow="if (event.persisted) on_page_show();">
+    <!-- Help Popups -->
+    <div class="pop_content" id="pop_local">
+      <p>Central mode tests regions centered on the sequence for enrichment. This
+      is useful for ChIP-seq data as you expect your ChIPed TFBS to appear in
+      areas of maximum tag density. If you prepare sequences centered on these
+      positions of maximum confidence then CentriMo can help confirm that your
+      expected motif does correspond to the ChIPed TF.</p>
+      <p>Local mode tests all possible regions for enrichment.
+      The downside is this mode must do many more tests than central mode which
+      makes it slower and also less sensitive in the central regions due to the
+      larger multiple test correction.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_compar">
+      <p>The binomial test compares the number of sequences that had their best
+      matches in the region to the expected number of sequences under the assumption
+      that matches would be randomly distributed.</p>
+      <p>Adding a second comparative dataset allows use of the Fisher exact test
+      (FET) to sort the regions found by the binomial test. The FET compares the
+      number of sequences that have their best matches in the region to the
+      number found in the comparative set.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_sequences" >
+      <p>Select a file of <a href="../doc/fasta-format.html">FASTA formatted</a>
+      DNA sequences or paste in actual <a href="../doc/fasta-format.html"
+      >FASTA formatted</a> DNA sequences to search for enriched regions.</p>
+      <p>See the <a href="../examples/sample-dna-Klf1.fa">sample sequences</a> 
+      to get an idea of input that works well for CentriMo.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_compar_sequences" >
+      <p>Select a file of <a href="../doc/fasta-format.html">FASTA formatted</a>
+      DNA sequences or paste in actual <a href="../doc/fasta-format.html"
+      >FASTA formatted</a> DNA sequences to compare to the other sequence set.</p>
+      <p>See the <a href="../examples/sample-dna-Klf1.fa">sample sequences</a> 
+      to get an idea of input that works well for CentriMo.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_motifs">
+      <p>CentriMo can use databases installed on the server or search a user 
+      uploaded database in <a href="../doc/meme-format.html">MEME</a> DNA motif 
+      format by selecting the "Upload Your Own Database" option. For more 
+      information browse the 
+      <a href="get_db_list.cgi?db_names=motif_db.csv&mode=doc&is_motif_db=1"
+      >supported databases</a>.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_motifs_file">
+      <p>An uploaded database is a normal <a href="../doc/meme-format.html"
+      >MEME</a> DNA motif file with lots of motifs. The uploaded database must 
+      be smaller than 5MB.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_email">
+      <p>The email is used to notify you of your results.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_job_description">
+      <p>The job description will be included in the notification email you 
+      receive and in the CentriMo output.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_bfile">
+      <p>By default CentriMo will determine the background Markov model from 
+      the provided sequences. Alternately a file containing a <a 
+      href="../doc/bfile-format.html">background model</a> may be input here.</p>
+      <p>The downloadable version of the MEME Suite contains a script named
+      "fasta-get-markov" that you can use to create background model files in
+      the correct format from FASTA sequence files.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_strands">
+      <p>Choose between single and double strand scanning. The flip RC position
+      option causes any matches on the reverse strand to have their position
+      mirrored around the center of the sequence. This option was enabled by
+      default in the original released version of CentriMo.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_score">
+      <p>Specify a minimum score for a match to be considered. If a sequence does
+      not have any matches which meet this minimum score for a given motif, then
+      that sequence will not be considered for that motif.</p>
+      <p>If the "optimize score" option is selected then all distinct scores for
+      matches that did better than the minimum score will be tested as alternative
+      minimum score thresholds. Enabling this option will slow down the program
+      and increase the multiple testing correction.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_max_region">
+      <p>This option limits the maximum region size that CentriMo will test.
+      This option is useful if you have sequences longer than the normal 500bp
+      and can help cut-down the multiple testing correction. When this option is
+      not supplied CentriMo will test region sizes up to one less than the maximum
+      number of places that a given motif can align to the sequence.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_evalue_threshold">
+      <p>This is the E-value threshold for reporting enriched regions for motifs.
+      If multiple enriched regions overlap then the region with the best p-value
+      and smallest size will be output.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_store_ids">
+      <p>This option enables you to store the sequence identifies which have
+      their best match in the best region for each motif. This option can
+      potentially make the CentriMo output file size much larger.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <!-- Content Start -->
+    <table>
+      <tr>
+        <td class="menu_col">
+          <div id="menu">
+            <script type="text/javascript">make_menu('../');</script>
+          </div>
+        </td>
+        <td class="content_col">
+          <noscript>
+            <h1>MEME Suite</h1>
+            <p>The MEME Suite web application requires the use of JavaScript<br />
+            Javascript doesn't seem to be available on your browser.</p>
+          </noscript>
+          <div class="header">
+            <div class="header_img">
+              <img src="../doc/images/centrimo_logo.png" alt="CentriMo logo">
+              <div class="header_ver">Version <!-- TMPL_VAR NAME=version --></div>
+            </div>
+            <p class="header_blurb">
+            Use this form to determine centrally/locally enriched motifs in a
+            set of sequences of the same length. To use central enrichment
+            mode, ideally the sequences should each be 500-bp long, and
+            centered on the position of "maximum confidence" (e.g., maximum tag
+            density) in a ChIP-seq peak.
+            </p>
+          </div>
+          <div class="meme">
+          <form enctype="multipart/form-data" method="POST" novalidate action="centrimo.cgi" 
+          onsubmit="return on_form_submit()" onreset="return on_form_reset()">
+            <fieldset>
+              <legend>Data Submission Form</legend>
+              <p class="meme">Determine central or localized enrichment of motifs.</p> 
+
+              <!-- enrichment location -->
+              <h2 class="meme">Select where to search for enrichment</h2>
+              <div class="subcontent">
+                <input type="radio" class="meme" name="local" id="local_off" value="0" checked>
+                <label for="local_off">Centrally</label>
+                <input type="radio" class="meme" name="local" id="local_on" value="1">
+                <label for="local_on">Any Localization</label>
+                <div class="help" onclick="help_popup(this, 'pop_local')"></div>
+              </div>
+              <!-- /enrichment location -->
+
+              <!-- enrichment method-->
+              <h2 class="meme">Select how enrichment is determined</h2>
+              <div class="subcontent">
+                <input type="radio" class="meme" name="compar" id="compar_off"
+                  value="0" onclick="update_compar()" checked>
+                <label for="compar_off">Binomial Test</label>
+                <input type="radio" class="meme" name="compar" id="compar_on"
+                  value="1" onclick="update_compar()">
+                <label for="compar_on">Binomial Test + Fisher Exact Test (comparative)</label>
+                <div class="help" onclick="help_popup(this, 'pop_compar')"></div>
+              </div>
+              <!-- /enrichment method -->
+
+              <!-- sequences -->
+              <h2 class="meme">Input the sequences</h2>
+              <div class="subcontent">
+                <h4 class="meme">Enter DNA sequences in which you want to analyse motif locality
+                <div class="help" onclick="help_popup(this, 'pop_sequences')"></div></h4>
+                <input type="file" class="meme" name="sequences" id="sequences"/>
+                or
+                <input type="checkbox" class="meme" name="use_pasted" id="use_pasted" value="1"
+                onclick="pasted_sequences_enable(this.checked)"/>
+                <label for="use_pasted">paste the sequences</label>
+                <textarea class="meme" rows="5" cols="60" style="padding-top:5px; display: none;" 
+                    name="pasted_sequences" id="pasted_sequences"></textarea>
+              </div>
+              <!-- /sequences -->
+
+              <!-- comparative sequences -->
+              <div id="compar_sequences_area" style="display:none">
+              <h2 class="meme">Input the comparative sequences</h2>
+              <div class="subcontent">
+                <h4 class="meme">Enter DNA sequences for comparing motif locality
+                <div class="help" onclick="help_popup(this, 'pop_compar_sequences')"></div></h4>
+                <input type="file" class="meme" name="compar_sequences" id="compar_sequences"/>
+                or
+                <input type="checkbox" class="meme" name="use_compar_pasted" id="use_compar_pasted" value="1"
+                onclick="compar_pasted_sequences_enable(this.checked)"/>
+                <label for="use_compar_pasted">paste the sequences</label>
+                <textarea class="meme" rows="5" cols="60" style="padding-top:5px; display: none;" 
+                    name="compar_pasted_sequences" id="compar_pasted_sequences"></textarea>
+              </div>
+              </div>
+              <!-- /comparative sequences -->
+
+              <!-- motifs -->
+              <h2 class="meme">Input the motifs</h2>
+              <div class="subcontent">
+                <select name="motif_db" id="motif_db" onchange="on_ch_db()">
+                  <!-- TMPL_IF NAME=inline_motifs -->
+                  <option value="inline" style="font-style:italic;" selected>Use Submitted Motifs</option>
+                  <!-- /TMPL_IF -->
+                  <option value="upload" style="font-style:italic;">Upload Your Own Database</option>
+                  <!-- TMPL_LOOP NAME=dbs -->
+                  <!-- TMPL_INCLUDE NAME="db.tmpl" -->
+                  <!-- /TMPL_LOOP -->
+                </select> 
+                <div class="help" onclick="help_popup(this, 'pop_motifs')"></div><br>
+              </div>
+              <div id="db_upload_div" style="display:none">
+                <h2 class="meme">Input motifs to upload</h2>
+                <div class="subcontent">
+                  <h4 class="meme">Select a <a href="../doc/meme-format.html">MEME</a> motif database file.
+                     <div class="help" onclick="help_popup(this, 'pop_motifs_file')"></div></h4>
+                  <input type="file" name="motif_db_upload" id="db_upload" class="meme"><br>
+                </div>
+              </div>
+              <!-- /motifs -->
+
+              <!-- job queue -->
+              <h2 class="meme">Input job queue details</h2>
+              <div class="subcontent">
+                <!-- email -->
+                <h4 class="meme">Enter your <a href="../help_email.html">email address</a>.
+                  <div class="help" onclick="help_popup(this, 'pop_email')"></div></h4>
+                <input type="email" name="email" id="email" size="40"
+                    class="meme"/>
+                <h4 class="meme">Re-enter your email address.</h4>
+                <input type="email" name="email_confirm" id="email_confirm" 
+                    size="40" class="meme"/><br>
+                <!-- /email -->
+                <!-- description -->
+                <h4 class="meme" style="padding-top:10px;">Optionally enter a job description.
+                  <div class="help" onclick="help_popup(this, 'pop_job_description')"></div></h4>
+                <textarea name="description" cols="60" rows="2" class="meme"></textarea>
+                <!-- /description -->
+              </div>
+              <!-- /job queue -->
+
+              <!-- Advanced Options -->
+              <div style="margin-top:5px; margin-bottom: 5px; width:80%;">
+                <div  id="adv_opts" class="more_opts" tabindex="0" 
+                onclick="more_opts(this, adv_changed)"
+                onkeypress="more_opts_key(event, this, adv_changed)">
+                <span class="collapsed">&#x25B6;</span>
+                <span class="expanded">&#x25BC;</span>
+                <span class="spacer">
+                  Advanced options
+                </span>
+                <span class="modified">hidden modifications!</span>
+                <span class="reset" onclick="adv_reset(event)">[Reset]</span>
+                </div>
+                <div>
+                  
+                  <h3 class="meme">Scan both DNA strands?</h3>
+                  <input class="meme" type="radio" name="strands"
+                      id="strands_both" value="both" checked>
+                  <label for="strands_both">scan both</label>
+                  <input class="meme" type="radio" name="strands"
+                      id="strands_both_flip" value="both_flip">
+                  <label for="strands_both_flip">scan both + flip RC position</label>
+                  <input class="meme" type="radio" name="strands"
+                      id="strands_given" value="given">
+                  <label for="strands_given">scan given only</label>
+                  <div class="help" onclick="help_popup(this, 'pop_strands')"></div>
+                  
+                  <h3 class="meme">Set a minimum acceptable match score (bits)</h3>
+                  <label for="min_score">score &ge;</label>
+                  <input class="meme" type="number" id="min_score"
+                      name="min_score" size="3" value="5" step="any">
+                  <input class="meme" type="checkbox" id="opt_score"
+                      name="opt_score" value="1" style="margin-left:20px;">
+                  <label for="opt_score">optimize score?</label>
+                  <div class="help" onclick="help_popup(this, 'pop_score')"></div>
+
+                  <h3 class="meme">Set the maximum allowed width of region</h3>
+                  <input class="meme" type="checkbox" id="use_max_region"
+                      name="use_max_region" value="1"
+                      onclick="$('max_region').disabled = !this.checked">
+                  <label for="max_region" 
+                      onclick="$('use_max_region').click()">region width &le;</label>
+                  <input class="meme" type="number" id="max_region"
+                      name="max_region" size="5" value="200" step="0.5"
+                      onkeypress="num_key(event)">
+                  <div class="help" onclick="help_popup(this, 'pop_max_region')"></div>
+                  
+                  <h3 class="meme">Set <i>E</i>-value threshold for reporting enriched regions</h3>
+                  <label for="ethresh"><i>E</i>-value &le;</label>
+                  <input class="meme" type="number" id="ethresh"
+                      name="ethresh" size="5" value="10" min="0" step="any">
+                  <div class="help" onclick="help_popup(this, 'pop_evalue_threshold')"></div>
+                  
+                  <h3 class="meme">Include sequence IDs</h3>
+                  <input class="meme" type="checkbox" name="store_ids" id="store_ids" value="1" checked>
+                  <label for="store_ids">Include a list of matching sequence ids</label>
+                  <div class="help" onclick="help_popup(this, 'pop_store_ids')"></div>
+
+                  <h3 class="meme">Use a custom background?</h3>
+                  <label for="bfile">Custom background:</label>
+                  <input class="meme" type="file" name="bfile" id="bfile" 
+                  onchange="on_ch_bfile()">
+                  <input type="button" value="clear" onclick="$('bfile').value = '';">
+                  <div class="help" onclick="help_popup(this, 'pop_bfile')"></div>
+
+                </div>
+              </div>
+              <!-- Search and clear buttons -->
+              <div style="margin-left:auto; margin-right:auto; width:15em; clear:both;">
+                <input type="submit" name="search" value="Start search">
+                &nbsp;&nbsp;&nbsp;
+                <input type="reset" value="Clear Input" ><br>
+              </div>
+            </fieldset>
+          </form>
+          <!-- TMPL_INCLUDE NAME="footer.tmpl" -->
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

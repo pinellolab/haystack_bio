@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DREME - Submission form</title>
+    <!-- provide relative path to html directory (parent of cgi-bin) -->
+    <script src="../meme-suite-menu.js" type="text/javascript"></script>
+    <script src="../site.js" type="text/javascript"></script>
+    <link href="../site.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../images/memesuite_icon.ico">
+    <script src="../dreme.js" type="text/javascript"></script>
+  </head>
+  <body onload="on_page_show();" onpageshow="if (event.persisted) on_page_show();">
+    <!-- Help Popups -->
+    <div class="pop_content" style="display:none" id="pop_positives" >
+      <p>Select a file of <a href="../doc/fasta-format.html">FASTA formatted</a>
+      DNA sequences or paste in actual <a href="../doc/fasta-format.html"
+      >FASTA formatted</a> DNA sequences to search for small regular expression 
+      motifs.</p>
+      <p>DREME works best with sequences which are less than 500 nucleotides 
+      long so if you have very long sequences DREME might work better if you 
+      subdivide them. For ChIP-seq we recommend using sequences of length 100 
+      centered around the peak. The more sequences that you can give DREME the 
+      more subtle the motifs it can find.</p>
+      <p>See the <a href="../examples/sample-dna-Klf1.fa">sample sequences</a> 
+      to get an idea of input that works well for DREME.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_email">
+      <p>The email is used to notify you of your results.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_job_description">
+      <p>The job description will be included in the notification email you 
+      receive and in the DREME output.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_shuffle_or" >
+      <p>By default DREME will perform a dinucleotide shuffle on 
+      the input sequences and use them as the comparison but with
+      this option custom comparative sequences can be specified.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_negatives" >
+      <p>Input comparative sequences which have approximately the same length 
+      distribution and background frequencies but which are unlikely to contain 
+      the motifs that you are attempting to find.</p> 
+      <p>Note that using comparative sequences that are much longer or shorter 
+      than your input sequences has the potential to create incorrect 
+      p-values.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" style="display:none" id="pop_limit_evalue">
+      <p>The expected number of false positives. This may be any positive 
+      number.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_limit_count">
+      <p>The maximum number of motifs to find.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <!-- Content Starts -->
+    <table>
+      <tr>
+        <td class="menu_col">
+          <div id="menu">
+            <script type="text/javascript">make_menu('../');</script>
+          </div>
+        </td>
+        <td class="content_col">
+          <noscript>
+            <h1>MEME Suite</h1>
+            <p>The MEME Suite web application requires the use of JavaScript<br />
+            Javascript doesn't seem to be available on your browser.</p>
+          </noscript>
+          <div class="header">
+            <div class="header_img" style="width:440px;">
+              <img src="../doc/images/dreme_logo.png" alt="DREME logo">
+              <!-- TODO logo is too big! --> 
+              <div class="header_ver">Version <!-- TMPL_VAR NAME=version --></div>
+            </div>
+            <p class="header_blurb">
+            Use this form to submit DNA sequences to DREME. DREME will analyze 
+            your sequences for repeated patterns that are enriched when compared
+            to a discriminative set and produce a description (motif) for each 
+            pattern it discovers. For more information about DREME, 
+            <span style="color:red; font-weight:bold;">see this
+            <a href="../doc/dreme-tutorial.html">Tutorial</a></span> .
+            </p>
+          </div>
+          <div class="meme">
+          <form enctype="multipart/form-data" method="POST" action="dreme.cgi" novalidate onsubmit="return check()">
+            <fieldset>
+              <legend>Data Submission Form</legend>
+              <p class="meme">Discover short regular expression motifs.</p> 
+              <!-- sequences -->
+              <h2 class="meme">Input the sequences</h2>
+              <div class="subcontent">
+                <h4 class="meme">Upload DNA sequences in which you want to find motifs
+                <div class="help" onclick="help_popup(this, 'pop_positives')"></div></h4>
+                <input type="file" class="meme" name="pos_file" 
+                    id="positive_sequences"/>
+                or
+                <input type="checkbox" class="meme" name="pos_use_pasted" 
+                    id="pos_paste" value="1"
+                    onclick="paste_pos_enable(this.checked)"/>
+                <label for="pos_paste">paste the sequences</label>
+                <textarea class="meme" rows="5" cols="60" style="padding-top:5px;" 
+                    name="pos_pasted" id="positive_pasted"></textarea>
+              </div>
+              <!-- job queue -->
+              <h2 class="meme">Input job queue details</h2>
+              <div class="subcontent">
+                <!-- email -->
+                <h4 class="meme">Enter your <a href="../help_email.html">email address</a>.
+                  <div class="help" onclick="help_popup(this, 'pop_email')"></div></h4>
+                <input type="email" name="email" id="email" size="40"
+                    class="meme"/>
+                <h4 class="meme">Re-enter your email address.</h4>
+                <input type="email" name="email_confirm" id="email_confirm" 
+                    size="40" class="meme"/><br>
+                <!-- /email -->
+                <!-- description -->
+                <h4 class="meme" style="padding-top:10px;">Optionally enter a job description.
+                  <div class="help" onclick="help_popup(this, 'pop_job_description')"></div></h4>
+                <textarea name="description" cols="60" rows="2" class="meme"></textarea>
+                <!-- /description -->
+              </div>
+              <!-- /job queue -->
+              <div id="page_adv_ctrl" style="display:block;">
+                <h3 class="meme">
+                  <a href="javascript:show_hide('page_advanced', 
+                    'page_adv_ctrl')"><img 
+                    src="../images/plus.png"/>Advanced Options</a>
+                </h3>
+              </div>
+              <div id="page_advanced" style="display:none">
+                <h3 class="meme">
+                  <a href="javascript:show_hide('page_adv_ctrl', 
+                    'page_advanced')"><img 
+                    src="../images/minus.png"/>Advanced Options</a>
+                </h3>
+                <!-- comparative --> 
+                <h2 class="meme">Select comparison source</h2>
+                <input type="radio" name="has_negs" id="shuffle_positives" 
+                    class="meme" value="0" checked="checked"
+                    onclick="enable_negs(!this.checked)"/>
+                <label for="shuffle_positives">Shuffled sequences</label>
+                <input type="radio" name="has_negs" id="provided_negatives"
+                    class="meme" value="1" onclick="enable_negs(this.checked)"/>
+                <label for="provided_negatives">Custom</label>
+                <div class="help" onclick="help_popup(this, 'pop_shuffle_or')"></div><br>
+                <!-- /comparative -->
+                <!-- negatives -->
+                <div id="negatives">
+                  <h2 class="meme">Input the comparative sequences</h2>
+                  <div class="subcontent">
+                    <input type="file" class="meme" name="neg_file" 
+                        id="negative_sequences"/>
+                    or
+                    <input type="checkbox" class="meme" name="neg_use_pasted" 
+                        id="neg_paste" value="1" 
+                        onclick="paste_neg_enable(this.checked)"/>
+                    <label for="neg_paste">paste the sequences</label>
+                    <div class="help" onclick="help_popup(this, 'pop_negatives')"></div><br>
+                    <textarea class="meme" rows="5" cols="60" style="padding-top:5px;" 
+                        name="neg_pasted" id="negative_pasted"></textarea>
+                  </div>
+                </div>
+                <!-- /negatives -->
+                <!-- norc -->
+                <!-- limits -->
+                <h2 class="meme">Treatment of reverse complement strands</h2>
+                <div class="subcontent">
+                  <input type="checkbox" name="norc" 
+                    id="norc" class="meme" value="1">
+                  <label for="norc">Use given strand only</label>
+                </div>
+                <!-- limits -->
+                <h2 class="meme">Set the limits</h2>
+                <div class="subcontent">
+                  <!-- maximum evalue -->
+                  <span style="display:inline-block; min-width: 20px; text-align:center;">
+                    &bull;
+                  </span>
+                  <span style="display:inline-block; min-width: 7ex;">
+                    <label for="limit_evalue"><i>E</i>-value</label>
+                  </span>
+                  &le;
+                  <!-- without html 5 support this is just a text field -->
+                  <input type="number" name="limit_evalue" id="limit_evalue" 
+                    class="meme" step="any" value="0.05" min="0" size="4"> 
+                  <div class="help" onclick="help_popup(this, 'pop_limit_evalue')"></div><br/>
+                  <!-- /maximum evalue -->
+                  <!-- maximum count -->
+                  <span style="display:inline-block; min-width: 20px;">
+                    <input type="checkbox" name="limit_count_enabled" 
+                      id="limit_count_enabled" class="meme" value="1"
+                      onclick="count_enable(this.checked)">
+                  </span>
+                  <span style="display:inline-block; min-width: 7ex;">
+                    <label for="limit_count" onclick="click_lce()">Count</label>
+                  </span> &le; 
+                  <!-- without html 5 support this is just a text field -->
+                  <input type="number" name="limit_count" id="limit_count" 
+                    class="meme" disabled="disabled" step="1" min="1" value="10" size="4">
+                  <div class="help" onclick="help_popup(this, 'pop_limit_count')"></div><br/>
+                  <!-- /maximum count -->
+                  <p>Note that the DREME webservice also enforces a time limit 
+                  for finding motifs so these limits may not be met before 
+                  DREME exits.</p>
+                </div>
+                <!-- /limits -->
+              </div>
+              
+              <!-- Search and clear buttons -->
+              <div style="margin-left:auto; margin-right:auto; width:15em; clear:both;">
+                <input type="submit" name="search" value="Start search">
+                &nbsp;&nbsp;&nbsp;
+                <input type="reset" value="Clear Input" onclick="reset_form()"><br>
+              </div>
+            </fieldset>
+          </form>
+          <!-- TMPL_INCLUDE NAME="footer.tmpl" -->
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

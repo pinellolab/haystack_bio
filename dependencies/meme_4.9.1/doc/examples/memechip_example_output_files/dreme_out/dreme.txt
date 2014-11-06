@@ -1,0 +1,110 @@
+# DREME 4.9.1
+# command:   dreme -v 1 -oc memechip_example_output_files/dreme_out -p memechip_example_output_files/seqs-centered -n memechip_example_output_files/seqs-shuffled -png
+# host:      tlb-takumi-lt.imb.uq.edu.au
+# when:      Fri Aug 23 17:26:05 EST 2013
+# positives: 820
+#      from: memechip_example_output_files/seqs-centered (Fri Aug 23 17:12:12 EST 2013)
+# negatives: 820
+#      from: memechip_example_output_files/seqs-shuffled (Fri Aug 23 17:12:16 EST 2013)
+
+
+MEME version 4.9.1
+
+ALPHABET= ACGT
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.246 C 0.253 G 0.250 T 0.251
+
+MOTIF MCRCCCW
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST     MCRCCCW    WGGGYGK        384         77   6.7e-068   2.2e-063
+#          ACACCCA    TGGGTGT         99         12   1.5e-019   4.9e-015
+#          ACACCCT    AGGGTGT         93         18   1.8e-014   6.0e-010
+#          ACGCCCT    AGGGCGT         45          3   3.8e-011   1.3e-006
+#          ACGCCCA    TGGGCGT         39          2   2.6e-010   8.5e-006
+#          CCACCCA    TGGGTGG         69         19   1.8e-008   5.8e-004
+#          CCGCCCT    AGGGCGG         31          5   5.3e-006   1.7e-001
+#          CCACCCT    AGGGTGG         49         16   1.8e-005   5.9e-001
+#          CCGCCCA    TGGGCGG         21          5   1.2e-003   3.8e+001
+
+letter-probability matrix: alength= 4 w= 7 nsites= 474 E= 2.2e-063
+0.632911 0.367089 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.710970 0.000000 0.289030 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.508439 0.000000 0.000000 0.491561
+
+
+MOTIF TTATCW
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST      TTATCW     WGATAA        255         49   6.0e-042   1.9e-037
+#           TTATCT     AGATAA        157         20   1.2e-030   4.0e-026
+#           TTATCA     TGATAA        114         29   1.9e-014   6.0e-010
+
+letter-probability matrix: alength= 4 w= 6 nsites= 285 E= 1.9e-037
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+0.000000 1.000000 0.000000 0.000000
+0.424561 0.000000 0.000000 0.575439
+
+
+MOTIF ARATA
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST       ARATA      TATYT        227        140   1.6e-007   5.0e-003
+#            AGATA      TATCT        135         73   2.6e-006   8.3e-002
+#            AAATA      TATTT        108         76   7.6e-003   2.4e+002
+
+letter-probability matrix: alength= 4 w= 5 nsites= 259 E= 5.0e-003
+1.000000 0.000000 0.000000 0.000000
+0.436293 0.000000 0.563707 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+
+
+MOTIF CCMCACCC
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST    CCMCACCC   GGGTGKGG         29          2   1.9e-007   5.7e-003
+#         CCCCACCC   GGGTGGGG         14          0   5.8e-005   1.8e+000
+#         CCACACCC   GGGTGTGG         15          2   1.1e-003   3.4e+001
+
+letter-probability matrix: alength= 4 w= 8 nsites= 29 E= 5.7e-003
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.517241 0.482759 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+
+
+MOTIF ACAGMTG
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST     ACAGMTG    CAKCTGT         65         20   2.7e-007   8.2e-003
+#          ACAGATG    CATCTGT         27          6   1.4e-004   4.3e+000
+#          ACAGCTG    CAGCTGT         38         14   5.0e-004   1.5e+001
+
+letter-probability matrix: alength= 4 w= 7 nsites= 66 E= 8.2e-003
+1.000000 0.000000 0.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 1.000000 0.000000
+0.409091 0.590909 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000 0.000000
+
+
+
+Time 36.82 secs.
