@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>nmica2meme - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>nmica2meme</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>nmica2meme [options]</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Convert a nestedMICA (BioTiffin/XMS) matrix file into a MEME motif
+      file suitable for use with MEME Suite programs. </p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <p>Reads a nestedMICA (BioTiffin/XMS) matrix file from standard input.</p>
+
+      <p>See the Sample
+      <a href="http://www.benoslab.pitt.edu/stamp/examples/Abd-B.xms"
+        >XMS file</a> from Benos lab, University of Pittsburgh</p>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <script>wrdoc("2meme-output");</script>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <script>wropt("2meme-skip");</script>
+          <tr>
+            <td class="popt">-numseqs</td><td><span class="pdat">n</span></td>
+            <td>Assume frequences are based on <span class="pdat">n</span> sites.</td>
+            <td>Assume frequences are based on 20 sites.</td>
+          </tr>
+          <tr>
+            <td class="popt">-truncate_names</td><td></td>
+            <td>Truncate the motif names (IDs) at the first underscore.</td>
+            <td>Use the full motif names.</td>
+          </tr>
+          <script>
+            wropt("2meme-numbers", {"id_source": "motif name"});
+            wropt("2meme-bg");
+            wropt("2meme-pseudo");
+            wropt("2meme-logodds");
+            wropt("2meme-url", {"type": "motif name", "example": "Abd-B"});
+          </script>
+
+          <tr>
+            <td class="popt">-h</td><td></td>
+            <td>Outputs a brief usage message.</td>
+            <td>Runs as normal.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TRANSFAC Motif Format - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <style>
+      div.tf_line {
+        font-family: monospace;
+        border: 1px solid black;
+        padding: 3px;
+      }
+      span.tf_var {
+        display: inline-block;
+        margin: 2px 0;
+        padding: 2px;
+        border: 1px solid green;
+        background-color: #EEF3E2;
+      }
+      span.tf_note {
+        display: inline-block;
+        margin: 2px 0;
+        padding: 2px;
+        border: 1px solid green;
+        background-color: #CAE1FF;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>TRANSFAC Motif Format</h2>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>The <a href="http://en.wikipedia.org/wiki/TRANSFAC">TRANScription FACtor</a>
+      database is a manually curated set of motifs managed by the company
+      BIOBASE. The most up-to-date version of the TRANSFAC database has to be
+      licenced but older versions are avalable free for non-commercial users.</p>
+      <p>Most MEME Suite programs <b>do not</b> support the TRANSFAC 'matrix.dat'
+      motif file directly but there is a <a href="transfac2meme.html">script
+      for converting</a> it into <a href="meme-format.html">MEME format</a> motifs.</p>
+    </div>
+
+    <h3>Format Specification</h3>
+    <div class="indent">
+      <p>For MEME SUITE purposes, the essential portions of the TRANSFAC
+      motif format are:</p>
+      <div class="tf_line">
+      ID <span class="tf_var">motif name</span><br>
+      BF <span class="tf_var">species name</span><br>
+      P0 <span class="tf_var">letter<sub>1</sub></span>
+      <span class="tf_note">...</span> 
+      <span class="tf_var">letter<sub>n</sub></span><br>
+      01 <span class="tf_var">count<sub>1,1</sub></span> 
+      <span class="tf_note">...</span> <span class="tf_var">count<sub>1,n</sub></span>
+      <span class="tf_var">consensus letter</span><br>
+      02 <span class="tf_var">count<sub>2,1</sub></span> 
+      <span class="tf_note">...</span> <span class="tf_var">count<sub>2,n</sub></span>
+      <span class="tf_var">consensus letter</span><br>
+      <span class="tf_note">... more rows here ...</span><br>
+      <span class="tf_var">nn</span> <span class="tf_var">count<sub>nn,1</sub></span>
+      <span class="tf_note">...</span> <span class="tf_var">count<sub>nn,n</sub></span>
+      <span class="tf_var">consensus letter</span><br>
+      XX<br>
+      //
+      </div>
+      <p>The <b>P0</b> row labels the columns with the letters of the
+      sequence alphabet. The numbered rows (<b>01</b>...<b>nn</b>)
+      contain counts for each letter in the sequence alphabet for that
+      position in the motif. These counts should give the number of times
+      each letter appears in known examples of the motif at the given
+      position. The counts in each numbered row should add up to the same
+      total count. The last column in each count row gives the consensus
+      letter for that position in the motif, and is ignored by
+      MEME SUITE programs.</p>
+      <p>Here is an example of a TRANSFAC format motif file containing
+      two motifs suitable for MEME SUITE programs:</p>
+      <pre class="indent">
+ID any_old_name_for_motif_1
+BF species_name_for_motif_1
+P0      A      C      G      T
+01      1      2      2      0      S
+02      2      1      2      0      R
+03      3      0      1      1      A
+04      0      5      0      0      C
+05      5      0      0      0      A
+06      0      0      4      1      G
+07      0      1      4      0      G
+08      0      0      0      5      T
+09      0      0      5      0      G
+10      0      1      2      2      K
+11      0      2      0      3      Y
+12      1      0      3      1      G
+XX
+//
+ID any_old_name_for_motif_2
+BF species_name_for_motif_2
+P0      A      C      G      T
+01      2      1      2      0      R
+02      1      2      2      0      S
+03      0      5      0      0      C
+04      3      0      1      1      A
+05      0      0      4      1      G
+06      5      0      0      0      A
+07      0      1      4      0      G
+08      0      0      5      0      G
+09      0      0      0      5      T
+10      0      2      0      3      Y
+11      0      1      2      2      K
+12      1      0      3      1      G
+XX
+//
+      </pre>
+    </div>
+
+    <h3>See Also</h3>
+    <div class="indent">
+      <p>The TRANSFAC motif format can be converted to
+      <a href="meme-format.html">MEME format</a> with the 
+      <a href="transfac2meme.html">transfac2meme</a> script.</p>
+    </div>
+  </body>
+</html>
+

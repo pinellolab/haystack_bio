@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>draw-mhmm - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>draw-mhmm (not currently supported)</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>draw-mhmm [options] &lt;HMM file&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>The program draw-mhmm converts a given hidden Markov model as produced
+      by <a href="mhmm.html">mhmm</a> into a format suitable for input to the
+      <a href="http://www.research.att.com/sw/tools/graphviz">graphviz</a>
+      program from AT&amp;T Research.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>HMM file</h4>
+      <p>An HMM as produced by <a href="mhmm.html">mhmm</a> must be provided.
+      If the filename is given as '-', then 'mhmms' will attempt to read the
+      HMM from standard input.</p>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>The program writes to standard output a description of the HMM in
+      graphviz format.</p>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--mintrans</td><td><span class="pdat">value</span></td>
+            <td>Only include in the graph edges whose transition probabilities
+            exceed the given value.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--consensus</td><td>&nbsp;</td>
+            <td>Print consensus along with motif id.</td>
+            <td></td>
+          </tr>
+          <script>wropt("all-verbosity", {"ddash": true});</script>
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>
+

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>GLAM2 verification</title>
+<link href="../css/status.css" rel="stylesheet" type="text/css" />
+<script src="../doc/js/utilities.js"></script>
+<script src="../js/status.js"></script>
+<script>
+var verify = 
+<!--{message}-->
+{
+  "items": [
+    {
+      "type": "sequences",
+      "name": "Sequences",
+      "key": "seq"
+    },
+    {
+      "type": "count",
+      "name": "Minimum Aligned Sequences",
+      "key": "minAlignedSeqs",
+      "any": "At least !!VALUE!! sequences will be included in each alignment."
+    },
+    {
+      "type": "count",
+      "name": "Seed Columns",
+      "key": "initialAlignedCols",
+      "any": "The search is started with !!VALUE!! columns aligned."
+    },
+    {
+      "type": "range",
+      "name": "Motif Coumns",
+      "keyLow": "minAlignedCols",
+      "keyHigh": "maxAlignedCols",
+      "same": "The motif found will have exactly !!LOW!! aligned columns.",
+      "low": "The motif found will have at least !!LOW!! aligned columns.",
+      "high": "The motif found will have at most !!HIGH!! aligned columns.",
+      "both": "The motif found will have between !!LOW!! and !!HIGH!! (inclusive) aligned columns."
+    },
+    {
+      "type": "number",
+      "name": "Deletion Pseudocount",
+      "key": "deletePseudo",
+      "any": "!!VALUE!!"
+    },
+    {
+      "type": "number",
+      "name": "Insertion Pseudocount",
+      "key": "insertPseudo",
+      "any": "!!VALUE!!"
+    },
+    {
+      "type": "number",
+      "name": "No-Delete Pseudocount",
+      "key": "noDeletePseudo",
+      "any": "!!VALUE!!"
+    },
+    {
+      "type": "number",
+      "name": "No-Insert Pseudocount",
+      "key": "noInsertPseudo",
+      "any": "!!VALUE!!"
+    },
+    {
+      "type": "count",
+      "name": "Replicates",
+      "key": "replicates",
+      "any": "!!VALUE!!"
+    },
+    {
+      "type": "count",
+      "name": "Iterations",
+      "key": "iterations",
+      "any": "!!VALUE!!"
+    },
+    {
+      "type": "flag",
+      "name": "No RC",
+      "key": "norc",
+      "on": "Motif sites will only be considered if they are on the given strand."
+    },
+    {
+      "type": "flag",
+      "name": "Shuffle",
+      "key": "shuffle",
+      "on": "The letters in the input sequences will be shuffled."
+    },
+    {
+      "type": "flag",
+      "name": "Embed Sequences",
+      "key": "embed",
+      "on": "The sequences will be embeded in the output."
+    }
+    
+  ]
+}<!--{/message}-->;
+
+var data = {
+  "when":1381207216291,
+  "expiry": 1381812016291,
+  "description": "This is a test of GLAM2",
+  "inputs": {
+    "seq": {
+      "source": "file",
+      "safe-file": "a_file.fa",
+      "orig-file": "a file.fa",
+      "alphabet": "DNA",
+      "count": 18,
+      "min": 105,
+      "max": 105,
+      "avg": 105.0,
+      "total": 1890
+    },
+    "minAlignedSeqs": 2,
+    "initialAlignedCols": 20,
+    "minAlignedCols": 2,
+    "maxAlignedCols": 50,
+    "deletePseudo": 0.1,
+    "noDeletePseudo": 2,
+    "insertPseudo": 0.02,
+    "noInsertPseudo": 1,
+    "replicates": 10,
+    "iterations": 2000,
+    "norc": false,
+    "shuffle": false,
+    "embed": true
+  }
+};
+</script>
+</head>
+<body>
+<!--{title}-->GLAM2<!--{/title}--> - <!--{subtitle}-->Gapped Local Alignment of Motifs<!--{/subtitle}--><br>
+<!--{logo}-->doc/images/glam2_icon.png<!--{/logo}-->: <!--{alt}-->GLAM2 Logo<!--{/alt}--><br>
+<div id="info"></div>
+<script>display_job_information($("info"), verify["items"], data);</script>
+</body>
+</html>
+
+

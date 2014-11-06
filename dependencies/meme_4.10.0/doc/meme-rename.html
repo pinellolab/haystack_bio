@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>meme-rename - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>meme-rename</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>meme-rename [options] &lt;dir&gt;+</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Copy HTML files from MEME Suite programs to files with distinct names
+      to make it easier to share them:
+      <code><span class="pdat">destination directory</span>/<span
+      class="pdat">program</span>.<span class="pdat">last directory</span>.html</code>
+      where <span class="pdat">last directory</span> is the last directory on
+      the path, and <span class="pdat">program</span> is the name of the MEME
+      Suite program.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <p>The program takes the names of one or more output directories
+      created by MEME Suite programs such as MEME, CENTRIMO etc.</p>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>The program copies the main HTML file to the destination directory,
+      giving it a name based on the name of the output directory. The
+      <span class="popt">-d</span> option can be used to change the
+      destination directory.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">-d</td><td><span class="pdat">destination directory</span></td>
+            <td>Copies the renamed HTMl files to the <span class="pdat">destination directory</span>.</td>
+            <td>Copies the renamed HTML files to the current directory.</td>
+          </tr>
+          <tr>
+            <td class="popt">-h</td><td></td>
+            <td>Print a help message and exit.</td>
+            <td>Run as normal.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>
+

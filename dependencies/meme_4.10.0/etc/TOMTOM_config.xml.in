@@ -1,0 +1,135 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="TOMTOM @SERVICE_VERSION@">
+    <usage>TOMTOM: Search for similar motifs in motif databases</usage>
+    <info>
+    <![CDATA[
+    tomtom_webservice [options] <query motifs> <motif databases>
+
+      Options:
+        -dist (pearson|ed|sandelin)   distance function to use; default pearson
+        -ev <evalue>                  evalue threshold; default 10; not usable with -qv
+        -qv <qvalue>                  qvalue threshold; not usable with -ev
+        -m <name>                     filter query motifs by name (id); repeatable
+        -mi <index>                   filter query motifs by file order; repeatable
+        -uptargets <file>             uploaded target motifs
+        -incomplete_scores            don't included unaligned parts of the motif in scoring
+        -niced                        run tomtom niced
+        -help                         brief help message
+
+      Distance Functions
+        pearson - Pearson correlation coefficient
+        ed - Euclidean distance
+        sandelin - Sandelin-Wasserman similarity function
+
+      Motif Databases
+        The motif databases may be specified as a pattern using * as a wildcard.
+    ]]>
+    </info>
+
+    <!-- information about command-line arguments -->
+    <types>
+      <flags>
+        <flag>
+          <id>incomplete_scores</id>
+          <tag>-incomplete_scores</tag>
+          <default>false</default>
+          <textDesc>Score only aligned portions</textDesc>
+        </flag>
+      </flags>
+      <taggedParams>
+        <separator> </separator>
+        <param>
+          <id>dist</id>
+          <tag>-dist</tag>
+          <paramType>STRING</paramType>
+          <required>true</required>
+          <value>pearson</value>
+          <value>ed</value>
+          <value>sandelin</value>
+          <default>pearson</default>
+          <textDesc>Column Comparison Function</textDesc>
+        </param>
+        <param>
+          <id>ev</id>
+          <tag>-ev</tag>
+          <paramType>FLOAT</paramType>
+          <default>10</default>
+          <textDesc>E-value</textDesc>
+        </param>
+        <param>
+          <id>qv</id>
+          <tag>-qv</tag>
+          <paramType>FLOAT</paramType>
+          <default>0.1</default>
+          <textDesc>q-value</textDesc>
+        </param>
+        <!-- these 2 parameters are repeatable but I'm not sure how to indicate that -->
+        <param>
+          <id>mi</id>
+          <tag>-mi</tag>
+          <paramType>INT</paramType>
+          <textDesc>Select by position</textDesc>
+        </param>
+        <param>
+          <id>m</id>
+          <tag>-m</tag>
+          <paramType>STRING</paramType>
+          <textDesc>Select by name</textDesc>
+        </param>
+        <param>
+          <id>uptargets</id>
+          <tag>-uptargets</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Upload Motif Database</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>queries</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>true</required>
+          <textDesc>Query Motifs</textDesc>
+        </param>
+        <param>
+          <id>dbtargets</id>
+          <paramType>STRING</paramType>
+          <textDesc>Filename of Motif Database</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>queries_in</name>
+          <elements>queries</elements>
+          <textDesc>Query Motifs</textDesc>
+        </group>
+        <group>
+          <name>filter</name>
+          <elements>m mi</elements>
+          <exclusive>true</exclusive>
+          <textDesc>Optionally select the query motif (exclusive)</textDesc>
+        </group>
+        <group>
+          <name>targets_in</name>
+          <elements>dbtargets uptargets</elements>
+          <textDesc>Target Motifs</textDesc>
+        </group>
+        <group>
+          <name>comparison</name>
+          <elements>dist incomplete_scores</elements>
+          <textDesc>Motif Comparison Options</textDesc>
+        </group>
+        <group>
+          <name>threshold</name>
+          <elements>ev qv</elements>
+          <required>true</required>
+          <exclusive>true</exclusive>
+          <textDesc>Output Threshold (exclusive)</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/tomtom_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

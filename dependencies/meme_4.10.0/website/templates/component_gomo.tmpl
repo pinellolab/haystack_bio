@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>GOMo Input Template</title>
+    <link href="../doc/css/style.css" rel="stylesheet" type="text/css">
+    <script src="../doc/js/utilities.js"></script>
+    <script src="../js/site.js"></script>
+    <script src="../js/component_gomo.js"></script>
+    <script>
+      function XXXXregister_componentXXXX(uid, component) {
+
+      }
+    </script>
+  </head>
+  <body>
+    <div class="pop_content" id="pop_${prefix}">
+      <p>Information about the sequences field would be displayed here.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <!--{help}-->
+    <!--{/help}-->
+    <!--{component}-->
+          <h2 class="meme"><!--{title}-->Select the species<!--{/title}--></h2>
+          <div class="subcontent">
+            <h4 class="meme"><!--{subtitle}-->Choose a species to find GO terms for your motifs<!--{/subtitle}-->
+            <div class="help" data-topic="pop_${prefix}"></div></h4>
+            <div class="gomo_input" id="${prefix}">
+              <select class="gomo_source meme" name="${prefix}_source">
+                <!--{category}-->
+                <optgroup label="${name}">
+                  <!--{listing}--><option value="${id}" XXXXselectedXXXX><!--{name}-->Listing Name<!--{/name}--></option>
+                  <!--{/listing}-->
+                </optgroup>
+                <!--{/category}-->
+              </select>
+            </div>
+          </div>
+    <!--{/component}-->
+  </body>
+</html>

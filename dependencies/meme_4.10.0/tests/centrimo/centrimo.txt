@@ -1,0 +1,4 @@
+# WARNING: this file is not sorted!
+# db	id                         alt	 E-value	adj_p-value	log_adj_p-value	bin_location	bin_width	total_width	sites_in_bin	total_sites	p_success	 p-value	mult_tests
+   1	ACRCCC                2.9e-008	4.4e-053	   2.2e-053	        -121.25	         0.0	      129	        495	         290	        483	  0.26061	8.9e-056	       247
+   1	TTATCW                6.8e-007	2.4e-042	   1.2e-042	         -96.51	         0.0	      175	        495	         330	        496	  0.35354	4.9e-045	       247

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>FIMO - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+
+    <div class="prog_logo">
+      <img src="images/fimo_icon.png" alt="FIMO Logo">
+      <h1>FIMO</h1>
+      <h2>Find Individual Motif Occurrences</h2>
+    </div>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>fimo [options] &lt;motifs&gt; &lt;database&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>The name FIMO stands for "Find Individual Motif Occurences."  The
+      program searches a database of DNA or protein sequences for
+      occurrences of known motifs, treating each motif independently.</p>
+      
+      <p>The program uses a dynamic programming algorithm to convert log-odds
+      scores (in bits) into p-values, assuming a zero-order background model.
+      By default the program reports all motif occurrences with a p-value less
+      than <code>1e-4</code>. The threshold can be set using the
+      <span class="popt">--thresh</span> option.</p>
+      
+      <p>The <i>p</i>-values for each motif occurence are converted to
+      <i>q</i>-values following the method of Benjamini and Hochberg
+      ("<i>q</i>-value" is defined as the minimal false discovery rate at
+      which a given motif occurrence is deemed significant). The
+      <span class="popt">--qv-thresh</span> option directs the program to use
+      <i>q</i>-values rather than <i>p</i>-values for the threshold.</p>
+
+      <p>If a motif has the <code>strand</code> feature set  to
+      <code>+/-</code> (rather than <code>+</code>), then fimo will search
+      both strands for occurrences.</p>
+
+      <p>The parameter <span class="popt">--max-stored-scores</span> sets the
+      maximum number of motif occurrences that will be retained in memory. It
+      defaults to 100,000. If the number of matches found reaches the maximum
+      value allowed, FIMO will discard 50% of the least significant matches,
+      and new matches falling below the significance level of the retained
+      matches will also be discarded.</p>
+
+      
+      <p>FIMO can make use of position specific priors (PSP) to improve its
+      identification of true motif occurrences. To take advantage of PSP in
+      FIMO you use must provide two command line options. The
+      <span class="popt">--psp</span> option is  used to set the name of a
+      <a href="meme.html#MEME-PSP">MEME PSP file</a>, and the
+      <span class="popt">--prior-dist</span> option is used to set the name of
+      a file containing the binned distribution of priors.</p>
+
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      
+      <h4>Motifs</h4>
+      <p>A file containing a list of motifs in
+      <a href="meme-format.html">MEME format</a>.</p>
+
+      <h4>Database</h4>
+      <p>A file containing a collection of sequences in
+      <a href="fasta-format.html">FASTA format</a>.</p>
+      
+      <p>If only one motif is supplied to FIMO then a dash ('<code>-</code>')
+      can be used to indicate that the sequence data should be read from
+      standard input.</p>
+      
+      <p>The FASTA header lines are used as the source of sequence names. The
+      sequence name is the string following the initial '&gt;' up to the first
+      white space character. If the sequence name is of the form:
+      <code>text:number-number</code>, the text portion will be used as the
+      sequence name. The numbers will be used as genomic coordinates, and the
+      first number will be used as the coordinate of the first position of
+      the sequence. In all other cases the coordinate of the first postion of
+      the sequence is taken as 1.</p>
+
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+
+      <p>FIMO will create a directory, named <code>fimo_out</code> by default.
+      Any existing output files in the directory will be overwritten. The
+      directory will contain:</p>
+      <ul>
+        <li>An XML file named <code>fimo.xml</code> using the 
+        <a href="http://zlab.bu.edu/~phaverty/SupplementalData/CisML">CisML</a>
+        schema.</li>
+
+        <li>An HTML file named <code>fimo.html</code></li>
+
+        <li>A plain text file named <code>fimo.text</code></li>
+
+        <li>A plain text file in
+        <a href="http://www.sanger.ac.uk/resources/software/gff/">GFF format</a>
+        named <code>fimo.gff</code></li>
+      </ul>
+
+      <p>The default output directory can be overridden using the
+      <span class="popt">--o</span> or <span class="popt">--oc</span> options
+      which are described below.</p>
+
+      <p>The <span class="popt">--text</span> option will limit output to
+      plain text sent to the standard output. This will disable the
+      calculation of <i>q</i>-values.</p>
+
+      <p>The score reported in the GFF output is 
+      <code>min(1000, -10*(log10(pvalue)))</code>.</p>
+
+      <p>The HTML and plain text output contain the following columns:</p>
+      <ul>
+        <li>The motif identifier</li>
+
+        <li>The sequence identifier</li>
+
+        <li>The strand '<code>+</code>' indicates the motif matched the forward
+        strand, '<code>-</code>' the reverse strand, and '<code>.</code>'
+        indicates strand is not applicable (as for amino acid sequences).</li>
+
+        <li>The start position of the motif occurence (closed, 1-based
+        coordinates, unless genomic coordinates are provided)</li>
+
+        <li>The end position of the motif occurence (closed, 1-based
+        coordinates, unless genomic coordinates are provided).</li>
+
+        <li>The score for the motif occurence. The score is computed by by
+        summing the appropriate entries from each column of the
+        position-dependent scoring matrix that represents the motif.</li>
+
+        <li>The <i>p</i>-value of the motif occurence. The <i>p</i>-value is
+        the probability of a random sequence of the same length as the motif
+        matching that position of the sequence with a score at least as
+        good.</li>
+
+        <li>The <i>q</i>-value of the motif occurence. The <i>q</i>-value is
+        the estimated false discovery rate if the occurrence is accepted as
+        significant. See Storey JD, Tibshirani R. Statistical significance for
+        genome-wide studies. <i>Proc. Natl Acad. Sci. USA (2003) 100:9440&ndash;9445</i></li>
+
+        <li>The sequence matched to the motif.</li>
+
+      </ul>
+
+      <p>The HTML and plain text output is sorted by increasing p-value.</p>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--alpha</td><td><span class="popt">num</span></td>
+            <td>The alpha parameter for calculating position specific priors.
+            Alpha represents the fraction of all transcription factor binding 
+            sites that are binding sites for the TF of interest.
+            Alpha must be between 0 and 1.</td>
+            <td>An alpha value of 1 is used.</td>
+          </tr>
+          <tr>
+            <td class="popt">--bgfile</td><td><span class="popt">background file</span></td>
+            <td>Read background frequencies from
+            <span class="popt">background file</span>. The file should be in 
+            <a href="bfile-format.html">MEME background file format</a>.
+            The default is to use frequencies embedded in the application from
+            the non-redundant database. If the argument is the keyword
+            <code>motif-file</code>, then the frequencies will be taken from
+            the motif file.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--max-seq-length</td><td><span class="popt">max</span></td>
+            <td>Set the maximum length allowed for input sequences to
+            <span class="popt">max</span>.</td>
+            <td>A maximum sequence length of 250,000,000 is used.</td>
+          </tr>
+          <tr>
+            <td class="popt">--max-strand</td><td>&nbsp;</td>
+            <td>If matches on both strands at a given position satisfy the
+            output threshold, only report the match for the strand with the
+            higher score.</td>
+            <td>Both matches are reported.</td>
+          </tr>
+          <tr>
+            <td class="popt">--max-stored-scores</td><td><span class="popt">max</span></td>
+            <td>Set the maximum number of scores that will be stored.
+            Keeping a complete list of scores may exceed available memory.
+            Once the number of stored scores reaches the maximum allowed,
+            the least significant 50% of scores will be dropped.
+            In this case, the list of reported motifs may be incomplete and 
+            the q-value calculation will be approximate.
+            </td>
+            <td>The maximum number of stored matches is 100,000.</td>
+          </tr>
+          <tr>
+            <td class="popt">--motif</td><td><span class="popt">id</span></td>
+            <td>Use only the motif identified by <span class="popt">id</span>. 
+            This option may be repeated.</td>
+            <td>Use all motifs.</td>
+          </tr>
+          <tr>
+            <td class="popt">--motif-pseudo</td><td><span class="popt">count</span></td>
+            <td>A pseudocount to be added to each count in the motif matrix,
+            after first multiplying by the corresponding background frequency</td>
+            <td>A pseudocount of 0.1 is used.</td>
+          </tr>
+          <tr>
+            <td class="popt">--no-qvalue</td><td></td>
+            <td>Do not compute a q-value for each p-value. The q-value
+            calculation is that of Benjamini and Hochberg (1995).</td>
+            <td>The <i>q</i>-values are calculated.</td>
+          </tr>
+          <tr>
+            <td class="popt">--norc</td><td>&nbsp;</td>
+            <td>Do not score the reverse complement DNA strand.</td>
+            <td>Both strands are scored.</td>
+          </tr>
+          <script>
+            wropt("all-o", {"ddash": true, "dir": "fimo_out"});
+            wropt("all-oc", {"ddash": true, "dir": "fimo_out"});
+          </script>
+          <tr>
+            <td class="popt">--parse-genomic-coord</td><td>&nbsp;</td>
+            <td>When this options is specified each sequence header will be
+            checked for UCSC style genomic coordinates. These are of the form:
+            <div style="margin: 5px 0">
+              &gt;<span class="pdat">sequence name</span>:<span class="pdat"
+              >starting position</span>-<span class="pdat">ending position</span>
+            </div>
+            Where
+            <ul style="margin-top: 0; margin-bottom: 5px">
+              <li><span class="pdat">sequence name</span> is the name of the sequence,</li>
+              <li><span class="pdat">starting position</span> is the index of the first base and</li>
+              <li><span class="pdat">ending position</span> is the index of the final base.</li>
+            </ul>
+            The <span class="pdat">sequence name</span> may not contain any white space.
+            If genomic coordinates are found they will be used as the
+            coordinates in the output. When no coordinates are found the default
+            behaviour is used.</td>
+            <td>The first position in the sequence will be assumed to be 1.</td>
+          </tr>
+          <tr>
+            <td class="popt">--psp</td><td><span class="popt">file</span></td>
+            <td>File containing position specific priors (PSP) in
+            <a href="meme.html#MEME-PSP">MEME PSP format</a>.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--prior-dist</td><td><span class="popt">file</span></td>
+            <td>File containing binned distribution of priors. This file can
+            be generated from a <a href="meme.html#MEME-PSP">MEME PSP format file</a>.
+            using the <a href="compute-prior-dist.html">compute-prior-dist</a> utility.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--qv-thresh</td><td>&nbsp;</td>
+            <td>Directs the program to use <i>q</i>-values for the output threshold.</td>
+            <td>The program thresholds on <i>p</i>-values.</td>
+          </tr>
+          <tr>
+            <td class="popt">--text</td><td><span class="popt"></span></td>
+            <td>Limits output to plain text sent to standard out. For FIMO,
+            the text output is unsorted, and q-values are not reported. This
+            mode allows the program to search an arbitrarily large database,
+            because results are not stored in memory.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--thresh</td><td><span class="popt">num</span></td>
+            <td>The output threshold for displaying search results. Only
+            search results with a p-value less than the threshold will be
+            output. The threshold can be set to use q-values rather than
+            p-values via the <span class="popt">--qv-thresh</span> option.</td>
+            <td>The threshold is a p-value of 1e-4.</td>
+          </tr>
+          <script>wropt("all-verbosity");</script>
+        </tbody>
+      </table>
+    </div>
+    <h3>Citing</h3>
+    <div class="indent">
+      <p>If you use FIMO in your research, please cite the following paper:<br />
+        Charles E. Grant, Timothy L. Bailey, and William Stafford Noble,
+        &quot;FIMO: Scanning for occurrences of a given motif&quot;,
+        <i>Bioinformatics</i>, <b>27</b>(7):1017&#45;1018, 2011.
+        <a href="http://bioinformatics.oxfordjournals.org/content/early/2011/02/16/bioinformatics.btr064.full">[full text]</a>
+    </p>
+    </div>
+
+  </body>
+</html>
+

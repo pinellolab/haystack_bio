@@ -1,0 +1,75 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="GLAM2SCAN @SERVICE_VERSION@">
+    <usage>GLAM2SCAN: Find GLAM2 motifs in sequences</usage>
+    <info xsd:type="xsd:string">
+    <![CDATA[
+    glam2scan_webservice [options] <glam2 alignment> <db sequences>
+
+      Options:
+        -alpha [DNA|PROTEIN]  alphabet
+        -aligns <n>           number of alignments to report
+        -up_seqs <file>       uploaded sequences
+        -revcomp              examine both strands
+        -help                 brief help message
+    ]]>
+    </info>
+    <types>
+      <flags>
+        <flag>
+          <id>revcomp</id>
+          <tag>-revcomp</tag>
+          <default>true</default>
+          <textDesc>Examine both strands (dna)</textDesc>
+        </flag>
+      </flags>
+      <taggedParams>
+        <param>
+          <id>alpha</id>
+          <tag>-alpha</tag>
+          <paramType>STRING</paramType>
+          <value>DNA</value>
+          <value>PROTEIN</value>
+          <default>DNA</default>
+          <textDesc>Motif alphabet</textDesc>
+        </param>
+        <param>
+          <id>aligns</id>
+          <paramType>INT</paramType>
+          <textDesc>Number of alignments to report</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>glam2_alignment</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Upload GLAM2 motif</textDesc>
+        </param>
+        <param>
+          <id>sequences</id>
+          <paramType>STRING</paramType>
+          <textDesc>Sequence database name</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>g1</name>
+          <elements>glam2_alignment alpha</elements>
+          <textDesc>GLAM2 Motif</textDesc>
+        </group>
+        <group>
+          <name>g2</name>
+          <elements>sequences revcomp</elements>
+          <textDesc>Sequences</textDesc>
+        </group>
+        <group>
+          <name>g3</name>
+          <elements>aligns</elements>
+          <textDesc>Alignments</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/glam2scan_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

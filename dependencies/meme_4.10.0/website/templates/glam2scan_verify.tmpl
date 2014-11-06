@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>GLAM2Scan verification</title>
+<link href="../css/status.css" rel="stylesheet" type="text/css" />
+<script src="../doc/js/utilities.js"></script>
+<script src="../js/status.js"></script>
+<script>
+var verify = 
+<!--{message}-->
+{
+  "items": [
+    {
+      "type": "motifs",
+      "name": "Motifs",
+      "key": "motifs"
+    }, 
+    {
+      "type": "sequences",
+      "name": "Sequences",
+      "key": "sequences"
+    },
+    {
+      "type": "count",
+      "name": "# Alignments",
+      "key": "alignments",
+      "any": "!!VALUE!!"
+    }, 
+    {
+      "type": "flag",
+      "name": "No RC",
+      "key": "norc",
+      "on": "Only the given strand is scanned."
+    }
+  ]
+}<!--{/message}-->;
+
+var data = {
+  "when":1381207216291,
+  "expiry": 1381812016291,
+  "description": "This is a test of GLAM2Scan",
+  "inputs": {
+    "motifs": {
+      "source": "db",
+      "db_name": "Human and Mouse (Jolma2013)",
+      "db_description": "Human and Mouse high-throughput SELEX motifs from <a href=\"http://dx.doi.org/10.1016/j.cell.2012.12.009\"> Cell 2013. 152(1-2):327-339</a>.",
+      "alphabet": "DNA",
+      "count": 738,
+      "min": 7,
+      "max": 23,
+      "avg": 12.423,
+      "total": 9168
+    },
+    "sequences": {
+      "source": "file",
+      "safe-file": "a_file.fa",
+      "orig-file": "a file.fa",
+      "alphabet": "DNA",
+      "count": 18,
+      "min": 105,
+      "max": 105,
+      "avg": 105.0,
+      "total": 1890
+    },
+    "alignments": 25,
+    "norc": true
+  }
+};
+</script>
+</head>
+<body>
+<!--{title}-->GLAM2Scan<!--{/title}--> - <!--{subtitle}-->Scanning with Gapped Motifs<!--{/subtitle}--><br>
+<!--{logo}-->doc/images/glam2scan_icon.png<!--{/logo}-->: <!--{alt}-->GLAM2Scan Logo<!--{/alt}--><br>
+<div id="info"></div>
+<script>display_job_information($("info"), verify["items"], data);</script>
+</body>
+</html>
+
+

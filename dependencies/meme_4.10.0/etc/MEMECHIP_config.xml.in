@@ -1,0 +1,191 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="MEMECHIP @SERVICE_VERSION@">
+    <usage>MEMECHIP: Run MEME, DREME, TOMTOM and some other MEME Suite programs on ChIP-seq data</usage>
+    <info xsd:type="xsd:string">
+    <![CDATA[
+    meme-chip_webservice [options] <sequences file> <motif databases>
+
+      Options:
+        -upmotif <file>             uploaded motifs
+        -bfile <bg file>            specifiy a background file
+        -norc                       search the given strand only.
+        -help                       brief help message
+
+      MEME Specific Options:
+        -meme-mod [oops|zoops|anr]  sites used in a single sequence
+        -meme-minw <num>            minimum motif width
+        -meme-maxw <num>            maximum motif width
+        -meme-nmotifs <num>         maximum number of motifs to find
+        -meme-minsites <num>        minimum number of sites per motif
+        -meme-maxsites <num>        maximum number of sites per motif
+        -meme-pal                   look for palindromes only
+
+      DREME Specific Options:
+        -dreme-e <num>              maximum motif E-value
+        -dreme-m <num>              maximum number of motifs to find
+
+      CentriMo Specific Options:
+        -centrimo-local             compute enrichment of all regions (not only central)
+        -centrimo-score <num>       minimum match score
+        -centrimo-maxreg <num>      maximum central enrichment region
+        -centrimo-ethresh <num>     threshold for reporting enrichment
+        -centrimo-noseq             don't store sequence ids in output
+
+      Motif Databases
+        The motif databases may be specified as a pattern using * as a wildcard.
+
+     Outputs to the directory that it is run in.
+    ]]>
+    </info>
+    <types>
+      <flags>
+        <flag>
+          <id>norc</id>
+          <tag>-norc</tag>
+          <default>false</default>
+          <textDesc>Runs MEME, DREME and CentriMo on given strand only</textDesc>
+        </flag>
+        <flag>
+          <id>meme-pal</id>
+          <tag>-meme-pal</tag>
+          <default>false</default>
+          <textDesc>MEME only looks for palindromes</textDesc>
+        </flag>
+        <flag>
+          <id>centrimo-local</id>
+          <tag>-centrimo-local</tag>
+          <default>false</default>
+          <textDesc>CentriMo tests all regions</textDesc>
+        </flag>
+        <flag>
+          <id>centrimo-noseq</id>
+          <tag>-centrimo-noseq</tag>
+          <default>false</default>
+          <textDesc>CentriMo does not include sequence list</textDesc>
+        </flag>
+      </flags>
+      <taggedParams>
+        <separator> </separator>
+        <param>
+          <id>bfile</id>
+          <tag>-bfile</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>false</required>
+          <textDesc>Background File</textDesc>
+        </param>
+        <param>
+          <id>upmotif</id>
+          <tag>-upmotif</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>false</required>
+          <textDesc>Uploaded Motif Database File</textDesc>
+        </param>
+        <param>
+          <id>meme-mod</id>
+          <tag>-meme-mod</tag>
+          <paramType>STRING</paramType>
+          <value>oops</value>
+          <value>zoops</value>
+          <value>anr</value>
+          <default>zoops</default>
+          <required>true</required>
+          <textDesc>MEME Site Selection Mode</textDesc>
+        </param>
+        <param>
+          <id>meme-minw</id>
+          <tag>-meme-minw</tag>
+          <paramType>INT</paramType>
+          <default>6</default>
+          <required>true</required>
+          <textDesc>MEME minimum motif width</textDesc>
+        </param>
+        <param>
+          <id>meme-maxw</id>
+          <tag>-meme-maxw</tag>
+          <paramType>INT</paramType>
+          <default>30</default>
+          <required>true</required>
+          <textDesc>MEME maximum motif width</textDesc>
+        </param>
+        <param>
+          <id>meme-nmotifs</id>
+          <tag>-meme-nmotifs</tag>
+          <paramType>INT</paramType>
+          <default>3</default>
+          <required>true</required>
+          <textDesc>MEME number of motifs</textDesc>
+        </param>
+        <param>
+          <id>meme-minsites</id>
+          <tag>-meme-minsites</tag>
+          <paramType>INT</paramType>
+          <required>false</required>
+          <textDesc>MEME minimum sites per motif</textDesc>
+        </param>
+        <param>
+          <id>meme-maxsites</id>
+          <tag>-meme-maxsites</tag>
+          <paramType>INT</paramType>
+          <required>false</required>
+          <textDesc>MEME maximum sites per motif</textDesc>
+        </param>
+        <param>
+          <id>dreme-e</id>
+          <tag>-dreme-e</tag>
+          <paramType>FLOAT</paramType>
+          <required>false</required>
+          <textDesc>DREME E-value threshold</textDesc>
+        </param>
+        <param>
+          <id>dreme-m</id>
+          <tag>-dreme-m</tag>
+          <paramType>INT</paramType>
+          <default>10</default>
+          <required>false</required>
+          <textDesc>DREME maximum number of motifs</textDesc>
+        </param>
+        <param>
+          <id>centrimo-score</id>
+          <tag>-centrimo-score</tag>
+          <paramType>FLOAT</paramType>
+          <required>false</required>
+          <textDesc>CentriMo minimum site score</textDesc>
+        </param>
+        <param>
+          <id>centrimo-maxreg</id>
+          <tag>-centrimo-maxreg</tag>
+          <paramType>INT</paramType>
+          <default>200</default>
+          <required>false</required>
+          <textDesc>Maximum enrichment region size</textDesc>
+        </param>
+        <param>
+          <id>centrimo-ethresh</id>
+          <tag>-centrimo-ethresh</tag>
+          <paramType>FLOAT</paramType>
+          <required>false</required>
+          <textDesc>CentriMo E-value threshold</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>sequences</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>true</required>
+          <textDesc>ChIP-seq Site Sequences</textDesc>
+        </param>
+        <param>
+          <id>dbs</id>
+          <paramType>STRING</paramType>
+          <required>true</required>
+          <textDesc>Motif Databases Pattern</textDesc>
+        </param>
+      </untaggedParams>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/meme-chip_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>fasta-get-markov - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>fasta-get-markov</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>fasta-get-markov [options] [sequence file] [background file]</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>The program fasta-get-markov estimates a Markov model from a FASTA
+      file of sequences. It ignores (removes) ambiguous characters before
+      computing the model. The model is based on both DNA strands unless
+      you specify <span class="popt">-norc</span>.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <p>Sequences in <a href="fasta-format.html">FASTA format</a> from
+      standard input or optionally specified as a file.</p>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Writes a <a href="bfile-format.html">Markov background model</a> to
+      standard output or optionally to a file.</p>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">-m</td><td><span class="pdat">n</span></td>
+            <td>Use a Markov model of <span class="pdat">n</span>-order.</td>
+            <td>A 0-order Markov model is used.</td>
+          </tr>
+          <tr>
+            <td class="popt">-norc</td><td>&nbsp;</td>
+            <td>Do not combine forward and reverse complement frequencies.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-p</td><td>&nbsp;</td>
+            <td>Use protein alphabet.</td>
+            <td>Use DNA alphabet.</td>
+          </tr>
+          <tr>
+            <td class="popt">-pseudo</td><td><span class="pdat">count</span></td>
+            <td>Pseudocount added to avoid probabilities of zero.</td>
+            <td>Adds a pseudocount of 0.1.</td>
+          </tr>
+          <tr>
+            <td class="popt">-nostatus</td><td>&nbsp;</td>
+            <td>Do not display progress messages to standard error.</td>
+            <td>Displays a progress message every half a second.</td>
+          </tr>
+          <tr>
+            <td class="popt">-help</td><td>&nbsp;</td>
+            <td>Print a help message and exit.</td>
+            <td>Runs as normal.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

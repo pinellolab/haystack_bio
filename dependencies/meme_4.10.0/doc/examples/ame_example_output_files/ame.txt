@@ -1,0 +1,13 @@
+AME (Analysis of Motif Enrichment): Compiled on May 12 2014 at 15:03:38
+------------------------------
+Copyright (c) Robert McLeay <r.mcleay@imb.uq.edu.au> & Timothy Bailey <t.bailey@imb.uq.edu.au>, 2009.
+
+Command line
+ame -oc ame_example_output_files -control lex0.s -bgformat 0 -scoring avg -method ranksum crp0.s dpinteract.meme
+
+Not in partition maximization mode. Fixing partition at the number of primary sequences (18).
+
+Threshold p-value for reporting results: 0.05
+Motif p-values are corrected by #Motifs * #ThresholdsTested - (68 * 1 = 68)
+
+1. Ranksum p-values of motif crp top 15 seqs (left,right,twotailed): 1 3.833e-06 7.667e-06 U-value: 13 (Corrected p-values: 1 0.0002606 0.0005212)

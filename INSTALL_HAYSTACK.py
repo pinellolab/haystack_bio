@@ -68,7 +68,7 @@ def check_fimo():
         print '\nHAYSTACK requires a recent version FIMO from the MEME suite(>=4.9.1): http://ebi.edu.au/ftp/software/MEME/index.html'
         if query_yes_no('Should I install FIMO for you?'):
             print('Ok be patient!')
-            os.chdir('dependencies/meme_4.9.1/')
+            os.chdir('dependencies/meme_4.10.0/')
 
             cmd_cfg='./configure --prefix=%s --enable-build-libxml2 --enable-build-libxslt ' % INSTALLATION_PATH
             if CURRENT_PLATFORM=='CYGWIN':

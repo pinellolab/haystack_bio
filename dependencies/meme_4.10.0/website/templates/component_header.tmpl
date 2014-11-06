@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Header Template</title>
+    <link href="../doc/css/style.css" rel="stylesheet" type="text/css">
+    <style>
+      div.test_box {
+        margin-left: 50px;
+        width: 654px;
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <!--{help}-->
+    <!--{/help}-->
+    <div class="test_box">
+    <!--{component}-->
+      <noscript>
+        <div class="no_script">
+          <div class="no_script_warning">
+          <h1>Javascript is disabled! &#9785;</h1>
+          <p>The MEME Suite web application requires the use of JavaScript but
+          Javascript doesn't seem to be available on your browser.</p>
+          <p>Please re-enable Javascript to use the MEME Suite.</p>
+          </div>
+        </div>
+      </noscript>
+      <div class="header pad">
+        <div class="header_logo">
+          <div class="prog_logo">
+            <img src="${logo}" alt="${alt}">
+            <h1><!--{title}-->MAST<!--{/title}--></h1>
+            <h2><!--{subtitle}-->Motif Alignment &amp; Search Tool<!--{/subtitle}--></h2>
+          </div>
+          <div class="header_ver">Version <!--{version}-->4.10.0<!--{/version}--></div>
+        </div>
+        <p class="header_blurb"><!--{blurb}-->
+        Use this form to submit motifs to <b>MAST</b> to be used in searching a
+        sequence database.
+        <!--{/blurb}--></p>
+        <div class="header_end"></div>
+      </div>
+    <!--{/component}-->
+    <p>This text is after.</p>
+    </div>
+    <script>
+      (function() {
+        "use strict";
+        var logo;
+        logo = document.querySelector("div.prog_logo img");
+        logo.src = "../doc/images/mast_icon.png";
+        logo.alt = "MAST Logo";
+      })();
+    </script>
+  </body>
+</html>
+

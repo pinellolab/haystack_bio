@@ -1,0 +1,70 @@
+# DREME 4.10.0
+# command:   dreme -v 1 -oc memechip_example_output_files/dreme_out -p memechip_example_output_files/seqs-centered -n memechip_example_output_files/seqs-shuffled -png
+# host:      d-108-179-169-207.dhcp4.washington.edu
+# when:      Mon May 12 15:33:56 PDT 2014
+# positives: 812
+#      from: memechip_example_output_files/seqs-centered (Mon May 12 15:33:53 PDT 2014)
+# negatives: 812
+#      from: memechip_example_output_files/seqs-shuffled (Mon May 12 15:33:56 PDT 2014)
+
+
+MEME version 4.10.0
+
+ALPHABET= ACGT
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.246 C 0.254 G 0.250 T 0.251
+
+MOTIF GGGYGK DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST      GGGYGK     MCRCCC        430        119   2.3e-062   7.4e-058
+#           GGGTGT     ACACCC        200         49   1.0e-026   3.3e-022
+#           GGGCGT     ACGCCC         96          9   6.9e-021   2.3e-016
+#           GGGCGG     CCGCCC         69         11   3.5e-012   1.1e-007
+#           GGGTGG     CCACCC        144         59   8.6e-011   2.8e-006
+
+letter-probability matrix: alength= 4 w= 6 nsites= 549 E= 7.4e-058
+0.000000 0.000000 1.000000 0.000000
+0.000000 0.000000 1.000000 0.000000
+0.000000 0.000000 1.000000 0.000000
+0.000000 0.306011 0.000000 0.693989
+0.000000 0.000000 1.000000 0.000000
+0.000000 0.000000 0.411658 0.588342
+
+
+MOTIF TTATCW DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST      TTATCW     WGATAA        257         57   2.1e-038   6.5e-034
+#           TTATCT     AGATAA        156         30   2.0e-024   6.3e-020
+#           TTATCA     TGATAA        116         28   2.3e-015   7.4e-011
+
+letter-probability matrix: alength= 4 w= 6 nsites= 287 E= 6.5e-034
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+0.000000 1.000000 0.000000 0.000000
+0.432056 0.000000 0.000000 0.567944
+
+
+MOTIF AGAWA DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST       AGAWA      TWTCT        306        211   2.6e-007   8.1e-003
+#            AGATA      TATCT        129         66   9.3e-007   2.9e-002
+#            AGAAA      TTTCT        213        156   4.5e-004   1.4e+001
+
+letter-probability matrix: alength= 4 w= 5 nsites= 390 E= 8.1e-003
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 1.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.635897 0.000000 0.000000 0.364103
+1.000000 0.000000 0.000000 0.000000
+
+
+
+Time 18.94 secs.

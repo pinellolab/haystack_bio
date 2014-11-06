@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>mhmms - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>mhmms (unsupported)</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>mhmms [options] &lt;MHMM file&gt; &lt;sequence file&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>mhmms searches a sequence database using a
+      <a href="mhmm-format.html">motif-based hidden Markov model</a>
+      (HMM) of the kind produced by <a href="mhmm.html">mhmm</a>. Each
+      sequence in the database is assigned an E-value, and the IDs and scores of
+      sequences scoring below a given threshold are printed in sorted
+      order.</p>
+
+      <p>The E-value of a given sequence is the expected number of
+      sequences which match the given model as well or better than this
+      sequence that you would expect to see by chance in a random
+      database of the same size as the given database. Scores are
+      assigned using a local search algorithm; in other words, the
+      algorithm finds the subsequence that matches a subset of model
+      states with highest log-odds.</p>
+
+      <p>The emission probabilities in the model are converted to
+      log-odds scores before performing the local search. This is done by
+      combining pseudocount probabilities derived from a score matrix
+      (see the <span class="popt">--pam</span> and
+      <span class="popt">--score-file</span> options below) with the
+      emission frequencies. You can control the relative weight placed on
+      the emission probabilities versus the pseudocount probabilities
+      (see <span class="popt">--pseudo-weight</span> below). The adjusted
+      emission probabilities are then converted to odds by dividing by
+      background probabilities (see <span class="popt">--bg-file</span> below).
+      Finally, they are converted to log-odds scores by taking their
+      logarithm.</p>
+
+      <p>Transition probabilities are converted to log-odds scores by
+      taking their logarithms before searching. This can be overridden
+      and the gap scores can be set explicitly using the
+      <span class="popt">--gap-open</span> and
+      <span class="popt">--gap-extend</span> switches, below. This allows you
+      to specify a single affine gap cost function for all spacers in the
+      model.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Motif-based HMM file</h4>
+      <div class="indent">
+        <p>The filename of a <a href="mhmm-format.html">motif-based hidden
+        Markov model</a>. If the filename is given as '-' then mhmms will
+        attempt to read the HMM from standard input.</p>
+      </div>
+
+      <h4>Sequence File</h4>
+      <div class="indent">
+        <p>A file containing <a href="fasta-format.html">FASTA formatted
+        sequences</a>. If the filename is given as '-' then mhmms will attempt
+        to read the sequence database from standard input.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>The <a href="mhmmscan-format.html">MHMM scan results</a> are written
+      to standard output.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--paths</td><td><span
+                class="popt">single</span>|&#8203;<span
+                class="popt">all</span></td>
+            <td>This option determines how mhmms computes raw scores. With the
+              <span class="popt">single</span> option, mhmms computes the
+              Viterbi score, which is the log-odds score associated with the
+              single most likely match between the sequence and the model. The
+              <span class="popt">all</span> option yields the total log-odds
+              score, which is the sum of the log-odds of all sequence-to-model
+              matches. </td>
+            <td>Viterbi scoring is used as if <span class="popt">--paths
+                single</span> had been specified.</td>
+          </tr>
+          <tr>
+            <td class="popt">--global</td><td></td>
+            <td>Uses global scoring in the viterbi or forward algorithm.</td>
+            <td>Uses local scoring.</td>
+          </tr>
+          <tr>
+            <td class="popt">--maxseqs</td><td><span class="pdat">max seqs</span></td>
+            <td>The maximum number of sequences to print.</td>
+            <td>There is no limit on the number of printed sequences.</td>
+          </tr>
+          <tr>
+            <td class="popt">--p-thresh</td><td><span class="pdat"><i>p</i>-value threshold</span></td>
+            <td>The <span class="popt">--p-thresh</span> option activates
+              <i>p</i>-value score mode, motif match scores are converted to
+              their <i>p</i>-values. They are then converted to bit scores as follows:
+              <div class="indent" style="font-family:monospace">
+                S = -log<sub>2</sub>(p/T)
+              </div>
+              where <code>S</code> is the bit score of the hit, <code>p</code>
+              is the <i>p</i>-value of the log-odds score, and T is the
+              <i>p</i>-value threshold. In this way, only hits more significant
+              than the <i>p</i>-value threshold get positive scores. The
+              <i>p</i>-value threshold, <i>T</i>, must be in the range
+              <i>0 &lt; T &le; 1</i>. This mode of scoring automatically activates
+              the <span class="popt">-motif-scoring</span> feature (described
+              below under "Advanced Options:") so that partial motif hits are
+              disallowed.
+              <h4>Note</h4>
+              <ul>
+                <li>If <i>p</i>-value threshold is too small, there may be few
+                (or no) "hits", and, consequently, few (or no) matches. This
+                may cause mhmms to be unable to compute match
+                <i>E</i>-values, or to report no matches. Small values of the
+                <i>p</i>-value threshold may also cause the reported
+                <i>E</i>-values to be inaccurate. In this case, the
+                <i>E</i>-values will always be too large (conservative). The
+                proper value for the <i>p</i>-value threshold can only be
+                determined by experimentation since it depends on the number
+                of motifs, the information content of the motifs and the
+                value of maxgap.</li>
+                <li>If <i>p</i>-value threshold is too large, the expected
+                length of a match may be longer than most of the sequences in
+                the database you are searching. This will prevent mhmmscan
+                from being able to compute <i>E</i>-values. Very low values
+                of <i>p</i>-value threshold, when search genomic DNA, tend to
+                give high scores to low-complexity sequence and repeated
+                elements.</li>
+              </ul></td>
+              
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--both-strands</td><td></td>
+            <td>This allows matches to occur on either DNA strand. The
+              <span class="popt">-both-strand</span> option implies the
+              <span class="popt">--motif-scoring</span> option.</td>
+            <td>Motif matches are only found on the given strand.</td>
+          </tr>
+          <tr>
+            <td class="popt">--e-thresh</td><td><span class="pdat">threshold</span></td>
+            <td>mhmms lists the sequences that have <i>E</i>-values below the
+              given threshold.</td>
+            <td>The default threshold is 10.</td>
+          </tr>
+          <tr>
+            <td class="popt">--fancy</td><td></td>
+            <td>The <span class="popt">--fancy</span> option turns on a more
+              detailed output format that shows, in addition to the score for
+              each sequence, the complete model-to-sequence match. Here is an
+              example of the fancy output format, showing a two-motif model
+              matching a sequence of length 179:
+              <pre class="indent">
+                 *.................................................
+                                                                   
+170K_TRVPS     1  GAHLVPTKSGDADTYNANSDRTLCALLSELPLEKAVMVTYGGDDSLIAF    49
+
+                 .........................FDWqKFAGtWH..............
+                                           D+  F G+                
+170K_TRVPS    50 PRGTQFVDPCPKLATKWNFECKIFKYDVPMFCGKFLLKTSSCYEFVPDPV    99
+
+                 ..................................................
+                                                                   
+170K_TRVPS   100 KVLTKLGKKSIKDVQHLAEIYISLNDSNRALGNYMVVSKLSESVSDRYLY   149
+
+                 ......GYCPEVKPI...............*
+                         C+  K I                
+170K_TRVPS   150 KGDSVHALCALWKHIKSFTALCTLLPRRKG    179
+            </pre></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--width</td><td><span class="pdat">w</span></td>
+            <td>Specify the width (in characters) of each line in the output.
+              The description of each sequence, which is taken from the input
+              FASTA file, will be truncated as necessary.</td>
+            <td>The output width is 132 characters.</td>
+          </tr>
+          <tr>
+            <td class="popt">--nosort</td><td></td>
+            <td>Do not sort the output.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--bg-file</td><td><span class="pdat">background file</span></td>
+            <td>Read background frequencies from
+            <span class="pdat">background file</span>. The file should be in 
+            <a href="bfile-format.html">MEME background file format</a>.</td>
+            <td>The background letter distribution of the appropriate (DNA or
+              protein) NCBI non-redundant database is used.</td>
+          </tr>
+          <tr>
+            <td class="popt">--allow-weak-motifs</td><td></td>
+            <td>In <i>p-</i>value score mode, weak motifs are defined as ones
+              where the best possible hit has a <i>p-</i>value less than the
+              <i>p-</i>value threshold. Such motifs cannot contribute to a
+              match in <i>p-</i>value score mode. When the
+              <span class="popt">--allow-weak-motifs</span> option is supplied
+              the search will proceed, but the weak motifs will never appear
+              in any matches.
+              <h4>Note</h4>
+              This option only applies to <i>p-</i>value score mode.</td>
+            <td>Any search containing weak motifs is rejected.</td>
+          </tr>
+          <tr>
+            <td class="popt">--progress</td><td><span class="pdat">n</span></td>
+            <td>Print to standard error a progress message after every
+              <span class="pdat">n</span> sequences.</td>
+            <td></td>
+          </tr>
+          <script>wropt("all-verbosity", {"ddash": true});</script>
+          <tr>
+            <td class="popt">--noheader</td><td></td>
+            <td>Do not include a header in the output.</td>
+            <td>Include a header in the output.</td>
+          </tr>
+          <tr>
+            <td class="popt">--noparams</td><td></td>
+            <td>Do not list the parameters at the end of the output.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-notime</td><td></td>
+            <td>Do not include a running time or host name at the end of the
+              output.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--quiet</td><td></td>
+            <td>Combine the previous 3 flags and set the verbosity to 1.</td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <th colspan="4">Advanced Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--zselo</td><td></td>
+            <td>Specifying the <span class="popt">--zselo</span> option causes
+              the spacer emission log-odds scores to be set to zero. This
+              prevents regions of unusual base/residue composition matching
+              spacers well when the spacer emission probabilities are
+              different than the background probabilities. It is particularly
+              useful with DNA models.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--gap-open </td><td><span class="pdat">cost</span></td>
+            <td>The <span class="popt">--gap-open</span> option causes all
+              transitions into a spacer state to be assigned a log-odds score
+              equal to <span class="pdat">cost</span>. Together with the
+              <span class="popt">-gap-extend</span> option, this allows you to
+              specify an affine gap penalty function, overriding the gap
+              penalty implicit in the model (transition probabilities into and
+              out of gap states).</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--gap-extend</td><td><span class="pdat">cost</span></td>
+            <td>The <span class="popt">--gap-extend</span> option causes all
+              spacer self-loop log-odds scores to be set to
+              <span class="pdat">cost</span>. In addition, it causes all other
+              transitions out of a spacer to be set to zero. Together with the
+              <span class="popt">--gap-open</span> option, this allows you to
+              specify an affine gap penalty function, overriding the gap
+              penalty implicit in the model (self-loop transition
+              probabilities of gap states).</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--motif-scoring</td><td></td>
+            <td>Specifying the <span class="popt">--motif-scoring</span> 
+              option forces all matches to motifs to be complete. This
+              prevents matches to motifs from
+              overhanging the sequence ends. It also prevents matches from
+              beginning (ending) anywhere but at the start (end) of a
+              motif. This option is enabled by the
+              <span class="popt">--p-thresh</span> option.</td>
+            <td>Matches can begin or end anywhere within a motif.</td>
+          </tr>
+          <tr>
+            <td class="popt">--pseudo-weight</td><td><span class="pdat">beta</span></td>
+            <td>The weight on the pseudocount probabilities can be adjusted to
+              any value &ge; 0 using the
+              <span class="popt">-pseudo-weight</span> option. The smaller the
+              weight, the less effect the pseudocount probabilities have, and
+              the closer the adjusted probabilities will be to the emission
+              probabilities in the model.</td>
+            <td>The pseudocount probabilities are weighted by <i>beta = 10</i>,
+              and emission probabilities in the model by <i>alpha = 20</i>.
+              (See the formula above for converting letter frequencies to
+              letter scores.)</td>
+          </tr>
+          <tr>
+            <td class="popt">--pam</td><td><span class="pdat">distance</span></td>
+            <td>
+              With the <span class="popt">--pam</span> option, you can specify
+              a different <b>integer</b> distance from 1 to 500. This can be
+              overridden with the <span class="popt">--score-file</span>
+              option, below. The <em>distance-1</em> transition/transversion
+              joint probability matrix for DNA is given below:
+              <pre class="indent">
+   A    C    G    T   
+A  .990 .002 .006 .002
+C  .002 .990 .002 .006
+G  .006 .002 .990 .002
+T  .002 .006 .002 .990
+              </pre>
+            </td>
+            <td>The target probabilities are derived from the
+              <em>distance-250</em> PAM matrix for proteins, and from a
+              <em>distance-1</em> transition/transversion matrix for
+              DNA.
+            </td>
+          </tr>
+          <tr>
+            <td class="popt">--score-file</td><td><span class="pdat">score file</span></td>
+            <td>The <span class="popt">--score-file</span> option causes a
+              score file (in BLAST format) to be read and used instead of the
+              built-in PAM (for proteins) or transition/transversion (for DNA)
+              score file. The target probabilities for letters are then
+              derived from the score file. Several score files are provided
+              (including BLOSUM62) in directory mhmm/data. Other,
+              user-provided score files may be specified as well, as long as
+              they are in the same format.</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

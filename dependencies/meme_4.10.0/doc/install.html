@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Installation - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <style>
+      dl.bold_terms dt {
+        font-weight: bold;
+      }
+      table.mpi_software_table {
+        border: 2px solid black;
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      table.mpi_software_table td, table.mpi_software_table th {
+        border: 2px solid black;
+        text-align: center;
+        padding: 5px;
+      }
+      table.config_options_table {
+        border: 2px solid black;
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      table.config_options_table td, table.config_options_table th {
+        border: 2px solid black;
+        padding: 5px;
+      }
+      .popt.long {
+        white-space: normal;
+      }
+      p.nogap {
+        margin-bottom: 0;
+      }
+    </style>
+    <script>
+    var avoid_copy_list = [];
+    function add_copy_handler() {
+      var all_divs, i, child;
+      all_divs = document.getElementsByTagName("div");
+      for (i = 0; i < all_divs.length; i++) {
+        if (/\bcommand_list\b/.test(all_divs[i].className)) {
+          child = all_divs[i].firstChild;
+          while (child) {
+            if (child.nodeType == 1 && /\bpdat\b/.test(child.className)) {
+              avoid_copy_list.push(child);
+            }
+            child = child.nextSibling;
+          }
+        }
+      }
+    }
+    function reveal_later(elem) {
+      setTimeout(function() {elem.style.visibility = "visible";}, 10);
+    }
+    function copy_hide_pdat() {
+      var selection, i;
+      selection = window.getSelection();
+      for (i = 0; i < avoid_copy_list.length; i++) {
+        if (selection.containsNode(avoid_copy_list[i], true)) {
+          avoid_copy_list[i].style.visibility = "hidden";
+          reveal_later(avoid_copy_list[i]);
+        }
+      }
+    }
+
+    window.addEventListener("load", add_copy_handler, false);
+    window.addEventListener("copy", copy_hide_pdat, false);
+    </script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h1 id="top">Installation of the MEME Suite</h1>
+    <p>
+    The MEME Suite consists of several command line programs and an optional
+    web server.  Building and installing the command line programs is very straight-forward.
+    See the 'Quick Install' link below to get started.
+    </p>
+    <p>
+    Installing the web server requires more detailed configuration information.
+    The MEME Suite web server is implemented using static HTML pages,
+    Java servlets, and <a href="http://www.w3.org/TR/soap/">SOAP</a> services.
+    The SOAP services are provided through
+    <a href="http://tomcat.apache.org/">Tomcat</a>
+    and <a href="http://nbcr.ucsd.edu/data/docs/opal/">Opal</a>, and you should
+    consult the Tomcat and Opal documentation if you wish to install a MEME Suite webserver.
+    In addition, the web server requires that a batch scheduler be installed, 
+    and SGE and PBS are known to work.
+    </p>
+
+    <h3>Table of Contents:</h3>
+    <ul>
+      <li><a href="#quick">Quick Install</a></li>
+      <li><a href="#prerequisite">Prerequisite software</a></li>
+      <li><a href="#getting">Getting the source</a></li>
+      <li><a href="#patch">Getting and installing the patches</a></li>
+      <!--<li><a href="#sysrequirements">System requirements</a></li>-->
+      <li><a href="#directories">MEME Suite directories</a></li>
+      <li><a href="#installingtar">Installing from a tarball</a></li>
+      <li><a href="#installinghg">Installing from a Mercurial repository</a></li>
+      <li><a href="#parallel">Parallel MEME</a></li>
+      <li><a href="#customconfig">Customizing configuration</a></li>
+      <li><a href="#installexample">Installation Examples</a></li>
+      <li><a href="#webapp">Setting up MEME Web Application Under Tomcat</a></li>
+      <li><a href="#uninstalling">Uninstalling</a></li>
+      <li><a href="#regresstest">Running regression tests</a></li>
+      <li><a href="#fasta_db.csv">Installing sequence databases</a></li>
+      <li><a href="#motif_db.csv">Installing motif databases</a></li>
+      <li><a href="#gomo_db.csv">Installing GOMO databases</a></li>
+      <li><a href="#report">Reporting problems</a></li>
+    </ul>
+
+    <hr />
+
+    <h2 id="quick">Quick Install (for Linux, OS X and Cygwin systems)</h2>
+
+    <ol>
+    <li>Type the following commands
+        <div class="command_list"
+         >tar zxf meme_<script>version_string("VERSION");</script>.tar.gz
+          cd meme_<script>version_string("VERSION");</script>
+          ./configure --prefix=$HOME/meme --with-url=http://meme.nbcr.net/meme --enable-build-libxml2 --enable-build-libxslt
+          make
+          make test
+          make install
+        </div>
+    </li>
+    <li>Edit your shell configuration file to add <code>$HOME/meme/bin</code>
+    to your shell's path. This can often be done by editing the file named
+    <code>.profile</code> to add the following line:
+    <div class="command_list"
+     >export PATH=$HOME/meme/bin:$PATH      
+    </div>
+    </li>
+    </ol>
+
+    <h4>Notes:</h4>
+    <ul>
+    <li>
+    This installs only the command-line versions of programs. Refer
+    to <a href="#installingtar">Installing from a tarball</a> 
+    if you wish to install your own MEME Suite Web Application as well.
+    </li>
+    <li>
+    This will overwrite any previously existing 
+    <span class="cmd">$HOME/meme</span> directory
+    you already may have installed.  You can set the directory to something different in
+    the <span class="cmd">configure</span> command using the 
+    <span class="cmd">--prefix</span> option.
+    </li>
+    <li>
+    The HTML output of programs will contain buttons that send your
+    data to 
+    <span class="cmd">http://meme.nbcr.net</span>
+    for additional processing when
+    clicked.  Refer to the <a href="#installingtar">Installing from a tarball</a>
+    if you do not want this feature.
+    </li>
+    <li>
+    The <code>--enable-build-libxml2 --enable-build-libxslt</code> flags use the
+    bundled versions of libxml2, libxslt and libexslt. You can omit these flags
+    and use the system installed copies but ensure that they are compatible as
+    otherwise linker errors will occur.
+    </li>
+    <li>
+    <b>TROUBLESHOOTING:</b> If you get errors during this install it is probably due to your computer
+    not having the <a href="#prerequisite">Prerequisite software</a> installed.
+    You will want to read that section of this manual and run the <code>dependencies.pl</code>
+    script as described there to see what you may be missing.
+    </li>
+    </ul>
+    <div>[ <a href="#">Top</a> ]</div>
+    <hr />
+
+    <h2 id="prerequisite">Prerequisite software</h2>
+    <div class="indent">
+      <p>Most of the software mentioned here is standard on many UNIX-like
+      systems. To build MEME Suite with just the command-line tools you will
+      need:</p>
+      <ul>
+        <li><a href="#prereq_perl">Perl</a></li>
+        <li><a href="#prereq_python">Python</a></li>
+        <li><a href="#prereq_zlib">zlib</a></li>
+        <li><a href="#prereq_commonutils">Assorted common utilities</a></li>
+      </ul>
+      <p>Optional software includes:</p>
+      <ul>
+        <li><a href="#prereq_mpi">MacPorts</a> - (Apple computers only) for easily installing prerequisite software.</li>
+        <li><a href="#prereq_mpi">MPI</a> - for creating the high-speed, parallel version of MEME.</li>
+        <li><a href="#prereq_gs">Ghostscript</a> - for creating PNG files.</li>
+        <li><a href="#prereq_libxml">libxml2, libxslt &amp; libexslt</a></li>
+      </ul>
+      <p>Additionally if you want to install MEME Suite <b>web server</b> you will also need:</p>
+      <ul>
+        <li><a href="#prereq_java">Java Development Kit</a></li>
+        <li><a href="#prereq_ant">Apache Ant</a></li>
+        <li><a href="#prereq_tomcat">Apache Tomcat</a></li>
+        <li><a href="#prereq_opal">Opal</a></li>
+        <li><a href="#prereq_bs">Batch Scheduler</a></li>
+      </ul>
+
+
+      <h3 id="prereq_perl">Perl (version 5.10.1 or higher)</h3>
+      <div class="indent">
+        <p>The MEME Suite makes heavy use of Perl, using it for stand-alone
+        tools and webservice wrappers.</p>
+        <p>Most UNIX-like systems will already have a modern version of Perl but
+        if that is not the case you can get Perl from
+        <a href="http://www.perl.org">www.perl.org</a>. If you
+        are working on a system where you don't have administrative rights to
+        install Perl the normal way, or you need to manage multiple versions
+        of Perl then you could also use
+        <a href="http://perlbrew.pl/">perlbrew</a>.</p>
+        <p>Once Perl is installed run the script
+        <span class="cmd">dependencies.pl</span> in the <code>scripts</code>
+        directory of the MEME Suite installation files.</p>
+        <div class="command_list"
+         >cd scripts
+          perl dependencies.pl
+        </div>
+        <p>This will check for the existence of the required and optional Perl
+        modules directly used by the MEME Suite. If it can't find a module
+        it will display a warning giving the module name and a description of
+        the tasks that require it. For example the output might look like this:</p>
+        <div class="command_list"
+         >Checking Required Perl Modules:
+          Math::CDF missing. Only required for fasta-enriched-center script (which is not called by the web scripts).
+
+          Checking Optional Modules:
+
+        </div>
+        <p>In this case all the modules required for running the MEME Suite
+        command line tools have already been installed with the minor
+        exception of Math::CDF which is only needed for a script which
+        probably won't be used anyway.</p>
+        <p>To install any missing modules simply run Perl's cpan program with
+        the name of the module following. If this is a system installation of
+        Perl you will also need to use sudo.</p>
+        <div class="command_list">sudo cpan Math::CDF</div>
+
+        <p><b>TROUBLESHOOTING:</b> On Linux the Perl modules related to XML
+        parsing may also require a system library installed. The Debian package
+        required is called <code>libexpat1-dev</code> so on Ubuntu and related
+        distributions the install command is:</p>
+        <div class="command_list">sudo apt-get install libexpat1-dev</div>
+      </div>
+
+
+      <h3 id="prereq_python" style="margin-top:10px">Python or Pypy (version 2.6 up to 2.7.x)</h3>
+      <div class="indent">
+        <p>The MEME Suite uses Python for a few tools and scripts like DREME
+        and fasta-dinucleotide-shuffle.</p>
+
+        <p>Most UNIX-like system will already have Python installed though it
+        possibly won't be the correct version. If you need to install Python
+        the official source is
+        <a href="http://www.python.org">www.python.org</a> however Pypy
+        available from <a href="http://pypy.org">pypy.org</a> is also
+        compatible with the MEME Suite and may offer a speed boost to long
+        running programs like DREME.</p>
+
+        <p><b>TROUBLESHOOTING:</b> The MEME Suite will not work with Python version 3.</p>
+      </div>
+
+      <h3 id="prereq_zlib" style="margin-top:10px">zlib</h3>
+      <div class="indent">
+        <p>The zlib library (<a href="http://www.zlib.net/">http://www.zlib.net/</a>)
+        is used to handle compressed files. It should already be installed on
+        OS X but may be required to be installed on some Linux distributions.</p>
+        <p>On Ubuntu and related distributions it can be installed with the command:</p>
+        <div class="command_list"
+         >sudo apt-get install zlib1g-dev</div>
+      </div>
+      
+      <h3 id="prereq_commonutils" style="margin-top:10px">Assorted Common Utilities</h3>
+      <div class="indent">
+        <p>The MEME suite makes use of a number of common utilities. In the case
+        of linux these should already be installed but OS X users should
+        follow <a href="#prereq_applecmdline">these instructions</a>.</p>
+        <p>The tools that most users need are:</p>
+        <ul>
+          <li>Bourne compatible shell</li>
+          <li>C-shell compatible shell</li>
+          <li>GNU compatible make</li>
+          <li>a C compiler (GCC and Clang are known to work)</li>
+        </ul>
+        <p>Additionally, installers of the web server will need:</p>
+        <ul>
+          <li>tar</li>
+          <li>gzip/gunzip</li>
+        </ul>
+        <p>and developers will also need:</p>
+        <ul>
+          <li>autoconf</li>
+          <li>automake</li>
+          <li>libtool</li>
+          <li>wget</li>
+          <li><a href="#prereq_ant">ant</a></li>
+        </ul>
+        <p>On Apple computers if <a href="#prereq_macports">MacPorts</a> is
+        installed then the developer required tools can be installed
+        with these commands:</p>
+        <div class="command_list"
+         >sudo port install autoconf
+          sudo port install automake
+          sudo port install libtool</div>
+        <p>Ubuntu and related distributions can use the install commands:</p>
+        <div class="command_list"
+         >sudo apt-get install autoconf
+          sudo apt-get install automake
+          sudo apt-get install libtool</div>
+      </div>
+
+      <h3 id="prereq_applecmdline" style="margin-top:10px">Installing command-line tools on OS X</h3>
+      <div class="indent">
+        <ol>
+          <li>Install the Apple software development environment, XCode. XCode
+          is a free download from the Apple App store. If you don't have an App
+          store account it can also be downladed from the
+          <a href="https://developer.apple.com/">Apple developer's web site</a>.</li>
+          <li>Download the command line development tools from within XCode. 
+          Under the "XCode" menu choose the "Preference ..." item. You'll be
+          presented with a dialog box with several tabs. Select the "Downloads"
+          tab, and click on the button to download the command line tools.</li>
+        </ol>
+      </div>
+
+      <h3 id="prereq_macports">MacPorts on OS X [optional]</h3>
+      <div class="indent">
+        <p>If you are installing the MEME Suite on an Apple computer, you may want to install the 
+        MacPorts software.  MacPorts will make it much easier to install many other software 
+        packages such as Ghostscript, OpenMPI and Tomcat. You can get MacPorts from 
+        <a href="https://www.macports.org">https://www.macports.org/install.php</a>.
+        To see if MacPorts can install a package for you, just enter a command like 
+        <div class="command_list"> port list 'tomcat*'</div>
+        and MacPorts will tell you if it can install the package.
+        </p>
+      </div>
+
+      <h3 id="prereq_gs">Ghostscript [optional]</h3>
+      <div class="indent">
+        <p>Ghostscript is used to create PNG (portable network graphic) images from EPS
+        (encapsulated postscript) images. Most of the more recent programs in the MEME
+        Suite have the capability to show images in their HTML output even when no PNG
+        images are avaliable.</p>
+        If you are installing the MEME Suite on an Apple computer and have installed MacPorts (see above),
+        to install Ghostscript you would simply use the following command and MacPorts
+        would do all the work:
+        <div class="command_list"> sudo port install ghostscript</div>
+        <p>Alternatively the MEME Suite can make use of the convert program from the
+        <a href="http://www.imagemagick.org">ImageMagick</a> package to convert
+        from EPS to PNG format.</p>
+      </div>
+
+      <h3 id="prereq_mpi">MPI [optional]</h3>
+      <div class="indent">
+        <p>If you want to run the high-speed, parallel version of MEME you will need an MPI
+          implementation.</p>
+          <p>For MPI, one of the following:</p>
+          <ul>
+          <li>OpenMPI from <a href="http://www.open-mpi.org/">http://www.open-mpi.org</a></li>
+          <li>LAM from <a href="http://www.lam-mpi.org">http://www.lam-mpi.org</a></li>
+          <li>MPICH from <a href="http://www-unix.mcs.anl.gov/mpi/mpich">http://www-unix.mcs.anl.gov/mpi/mpich</a></li>
+          </ul>
+        <p>
+        If you are installing the MEME Suite on an Apple computer and have installed MacPorts (see above),
+        to install OpenMPI you would simply use the following command and MacPorts
+        would do all the work:
+        <div class="command_list"> sudo port install openmpi </div>
+        </p>
+      </div>
+
+      <h3 id="prereq_libxml">libxml2 (version 2.6.0 or later), libxslt (version 1.1 or later) &amp; 
+        libexslt [optional]</h3>
+      <div class="indent">
+        <p>The MEME Suite includes the code for <a href="http://xmlsoft.org/">libxml2</a>,
+        <a href="http://xmlsoft.org/XSLT.html">libxslt</a> and the extensions in
+        <a href="http://xmlsoft.org/XSLT/EXSLT/index.html">libexslt</a> however it can detect and
+        use these libaries if they are already installed on your computer and this will speed up
+        the build process.</p>
+        <p>Be warned that the libxslt library is dependent on features in the libxml2
+        library, so linking errors will occur if you try to use two incompatible versions.
+        If this occurs simply use the configure flags "--enable-build-libxml2" and
+         "--enable-build-libxslt".</p>
+      </div>
+
+      <h3 id="prereq_java">Java Development Kit Standard Edition (version 6 or higher) [for web server or developer only]</h3>
+      <div class="indent">
+        <p>Java is used to compile and run the MEME Suite website and the
+        sequence database updater.</p>
+        <p>The JDK can be retrieved from the 
+        <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html"
+          >Java downloads</a> website. Linux users can alternatively use the 
+        <a href="http://openjdk.java.net/">OpenJDK</a>.</p>
+        <p>Ubuntu and related distributions can use the install command:</p>
+        <div class="command_list">sudo apt-get install default-jdk</div>
+      </div>
+
+      <h3 id="prereq_ant">Apache Ant [for web server or developer only]</h3>
+      <div class="indent">
+        <p>Ant is Java's equivalent of a Make and is used to build the Java
+        code used by the website. Additionally Ant is used to create a list
+        of the website files when the developer only <code>bootstrap</code> 
+        script is run.</p>
+        <p>Ubuntu and related distributions can use the install command:</p>
+        <div class="command_list">sudo apt-get install ant</div>
+      </div>
+
+      <h3 id="prereq_tomcat">Apache Tomcat (version 7 or higher) [for web server only]</h3>
+      <div class="indent">
+        <p><a href="http://tomcat.apache.org/index.html">Apache Tomcat</a>
+        is used because it supports Java servlets and can also act as a normal web server.</p>
+      </div>
+
+      <h3 id="prereq_opal">Opal (version 2.5) [for web server only]</h3>
+      <div class="indent">
+        <p>The Opal toolkit is used to provide web services for the MEME Suite.  
+        You should download and install the latest version
+        of <a href="http://sourceforge.net/projects/opaltoolkit/files/">Opal</a>.</p>
+        <p><b>TROUBLESHOOTING:</b> At the time of writing Opal 2.5 was newly
+        released and the most visible link was still to the previous version.
+        <b>Do not get Opal 2.4</b> as it is incompatible.</p>
+      </div>
+
+      <h3 id="prereq_bs">Batch Scheduler [for web server on a compute cluster]</h3>
+      <div class="indent">
+          <p>A MEME Suite web server will work without a Batch Scheduler but
+          if too many jobs are submitted performance will be very poor.
+          To avoid this problem, you can install a MEME Suite web server on a <b>compute
+          cluster</b>, which requires one of following batch schedulers:</p>
+          <ul>
+           <li>PBS from <a href="http://www.openpbs.org">http://www.openpbs.org</a></li>
+           <li>SGE from <a href="http://gridengine.sunsource.net">http://gridengine.sunsource.net</a></li>
+          </ul>
+      </div>
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+    <h2 id="getting">Getting the source</h2>
+    <div class="indent">
+      <p>Releases of the MEME Suite are available from 
+      <a href="download.html">http://ebi.edu.au/ftp/software/MEME/</a> 
+      (the link opens in a inline frame to provide navigation).</p>
+      <p>The releases are listed with the most recent at the top. For each
+      release we make avaliable:</p>
+      <ul>
+        <li>a README file describing the release and patches,</li>
+        <li>a pre-patched distribution so you don't have to apply the patches,</li>
+        <li>the original distribution, and</li>
+        <li>all of the released patches.</li>
+      </ul>
+      <p>We recommend downloading the pre-patched distribution as it makes the
+      installation process easier but if for some reason you want to use the
+      original distribution and apply patches to it please refer to the 
+      distribution specific readme.</p>
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+    <h2 id="patch">Getting and installing the patches</h2>
+    <div class="indent">
+      <p>
+      The distribution may have one or more patches associated with it.
+      Where possible we recommend you use the pre-patched version as it is often
+      easier, however if you wish to install the patches they are available from
+      <a href="download.html">http://ebi.edu.au/ftp/software/MEME/</a> 
+      (the link opens in a inline frame to provide navigation).
+      </p>
+    
+      <p>
+      With each release there will be a readme and this file will link to any
+      patches and give instructions on the correct installation process. 
+      Patches must be installed in release order because a later patch may rely
+      on changes made by an earlier patch.
+      </p>
+
+      <p>The most common series of commands needed to install a patch are as follows:</p>
+      <div class="command_list"
+      >cd meme_<script>version_string("VERSION");</script>
+      patch -p1 -i ../PATH_TO_PATCH/patch_<script>version_string("VERSION");</script>_1
+      make
+      make test
+      make install 
+      </div>
+
+      <p>If you have more than one patch to install simply group all the patch
+      commands together and only run the make commands once.</p>
+
+      <p>Some patches will require "-p0" to be passed as an argument instead of
+      "-p1" but the readme will specify which to use.</p>
+
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <!--
+    <hr />
+    <h2 id="sysrequirements">System Requirements</h2>
+    <div class="indent">
+      <p>MEME has been used successfully on the following platforms</p>
+      <ul>
+        <li><span class="head">v 4.0.0</span>
+          <ul>
+          <li>Redhat Enterprise Linux, release 5</li>
+          <li>Fedora Linux 7</li>
+          <li>MacOS X 10.5  (Leopard)</li>
+          <li>Cygwin (DLL 1.5.19-4.) running under Windows </li>
+          </ul>
+        <li><span class="head">v 3.5.7</span>
+          <ul>
+          <li>Redhat Enterprise Linux, release 4</li>
+          <li>MacOS X 10.4.4 (Tiger)</li>
+          <li>Cygwin (DLL 1.5.19-4.) running under Windows </li>
+          </ul>
+        <li><span class="head">v 3.5.1</span>
+          <ul>
+          <li>Redhat Enterprise Linux, release 4</li>
+          <li>MacOS X 10.4.4 (Tiger)</li>
+          <li>Cygwin (DLL 1.5.19-4.) running under Windows </li>
+          <li>SunOS 5.9</li>
+          </ul>
+        </li>
+        <li><span class="head">v 3.5.0</span>
+          <ul>
+          <li>SunOS 5.9</li>
+          <li>Redhat Enterprise Linux, release 4</li>
+          </ul>
+        </li>
+      </ul>
+
+      <p>Disk use:</p>
+      <ul>
+      <li>Minimal installation including only command line tools: 2.7 MB</li>
+      <li>Full web site (not including sequence databases) 23 MB</li>
+      </ul>
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+    -->
+    <hr />
+
+    <h2 id="directories">MEME Suite Directories</a></h2>
+    <div class="indent">
+      <p>Installation of MEME Suite will create the following directories:</p>
+      <pre>
+          bin/    db/    doc/    etc/    lib/    LOGS/
+      </pre>
+      <p>The directories contain:</p>
+      <dl class="bold_terms">
+      <dt>bin/</dt>  
+      <dd>MEME Suite executables and scripts</dd>
+
+      <dt>db/</dt>
+      <dd>this directory or DIR specified by --with-db=DIR option is created.
+      This directory should contain a folder <code>motif_databases</code>
+      which contains the motif databases, a folder <code>gomo_databases</code>
+      which contains the gomo databases and a folder <code>fasta_databases</code>
+      which contains the sequence databases.</dd>
+
+      <dt>doc/</dt>
+      <dd>Documentation for the MEME Suite tools. This directory is included in
+      the web archive when the web site is installed.</dd>
+
+      <dt>etc/</dt>
+      <dd>contains the following files
+        <ul>
+          <li>prior1.plib, prior30.plib - these files are used by MEME</li>
+          <li>*.xsl - XML style sheets for creating HTML output from XML for some MEME Suite tools.</li>
+          <li>*.html, *.js, *.css - templates used for creating HTML output for some MEME Suite tools.</li>
+          <li>*.eps - templates used for creating images for some MEME Suite tools.</li>
+        </ul>
+      </dd>
+
+      <dt>lib/</dt>
+      <dd>contains Perl modules and Python libraries that are included with the MEME Suite.</dd>
+
+      <dt>LOGS/</dt>
+      <dd>directory for temporary files created by webservice scripts when jobs
+      are submitted via the website.</dd>
+
+      </dl>
+      <p>When installing the website the MEME Suite will put
+      the web archive <code>meme_<script>version_string("VERSION");</script>.war</code>
+      in the directory <code>$CATALINA_HOME/webapps</code> and the SQLite library
+      <code>sqlite-jdbc-x.x.x.jar</code> in the directory <code>$CATALINA_HOME/lib</code>.</p>
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+
+    <h2 id="installingtar">Installing from a tarball</h2>
+    <div class="indent">
+      <p>If you're setting up a web accessable install it is recommended to create a <b>meme</b>
+      user prior to installation.</p>
+
+      <p>Put the tarball you obtained from the web site in a directory where you
+      want to build the software. If the software distribution was obtained
+      via Mercurial access please see section 
+      <a href="#installinghg">Installing from an Mecurial repository</a>.</p>
+      
+      <p>Four steps are required to install the MEME Suite from a distribution tarball:</p>
+      <ol>
+        <li>Unzip and untar the distribution</li>
+        <li>Configure the installation using the <code>configure</code> command.</li>
+        <li>Build MEME Suite using the <code>make</code> command</li>
+        <li>Test the MEME Suite build by using the <code>make test</code> command.</li>
+        <li>Install MEME Suite using the <code>make install</code> command.</li>
+      </ol>
+
+      <h3>1. Unzip and untar the distribution:</h3>
+      <div class="indent">
+        <p>For example for release <script>version_string("VERSION");</script> you should use the
+        commands:</p>
+        <div class="command_list"
+        >tar zxf meme_<script>version_string("VERSION");</script>.tar.gz
+        cd meme_<script>version_string("VERSION");</script>
+        </div>
+        <p>to expand the tarball and move to the root directory of the distribution.</p>
+
+        <p>If there are patches associated with the distribution please see section 
+        <a href="#patch">Getting and installing the patches</a> that explains how to
+        download and install the patches.</p>
+      </div>
+
+      <h3>2. Configuring the installation</h3>
+      <div class="indent">
+        <p>The <span class="cmd">configure</span> script is found in the root directory of the
+        distribution and used to set installation parameters. For a list of all available
+        configuration parameters see section <a href="#customconfig">Customizing configuration</a>
+        below. Here we will discuss the most common configuration settings. The general form of the
+        <span class="cmd">configure</span> command is:</p>
+        <div class="command_list">./configure <span class="pdat">parameters here</span></div>
+
+        <h4>Basic configuration parameters</h4>
+        <p>When invoked without any parameters, only the command-line versions of the MEME Suite tools
+        will be installed and none of the web components. The <a href="#directories">MEME Suite
+        directories</a> will be created  under <span class="cmd">$HOME</span>. The buttons and
+        hyperlinks in the HTML output of the tools will not work. This is safe because you won't be
+        able to send your data over the internet accidentally but it's not very useful. However, if
+        this is what you want the simplest command is:</p>
+        <div class="command_list">./configure</div>
+
+        <p>MEME Suite tool output files contain buttons that will send your results over the Internet
+        when clicked. This is a very useful and powerful feature of the MEME Suite tools. 
+        If you want the buttons and hyperlinks in the HTML output of the tools
+        to access the MEME Suite web server at <a href="http://meme.nbcr.net/meme">NBCR</a>,
+        the simplest configuration command is:</p>
+        <div class="command_list">./configure --with-url="http://meme.nbcr.net/meme"</div>
+
+        <p>The installation root directory can be specified using
+        the parameter <span class="cmd">prefix</span>.
+        For example,
+        <div class="command_list">./configure --prefix=<span class="flat">$HOME/meme</span><span class="pdat">your install path</span> --with-url="http://meme.nbcr.net/meme"</div>
+
+        <p>This will install only the command-line versions of the MEME Suite tools and none of the
+        web components. The <a href="#directories">MEME Suite directories</a> will be created under
+        the directory specified by the <span class="cmd">prefix</span> option. The buttons and
+        hyperlinks in the HTML output of the tools will link to the MEME Suite web server at 
+        <a href="http://meme.nbcr.net/meme">NBCR</a>.
+        <b>This is probably the most common use of <span class="cmd">configure</span>.</b>
+        </p>
+
+        <p>The MEME Suite depends on the libraries <a href="http://xmlsoft.org">libxml2</a> and 
+        <a href="http://xmlsoft.org/XSLT/">libxslt</a>. If these libraries are already installed,
+        MEME will use try to use the installed versions. Otherwise, MEME will build its own copies
+        of these libraries. If for some reason you want to force MEME Suite to build its own copies
+        of <a href="http://xmlsoft.org">libxml2</a> and <a href="http://xmlsoft.org/XSLT/">libxslt</a>,
+        you can do so by using the <span class="cmd">enable-build-libxml2</span> and 
+        <span class="cmd">enable-build-libxslt</span> parameters. For example,<p>
+        <div class="command_list"
+        >./configure --prefix=<span class="flat">$HOME/meme</span><span class="pdat">your install path</span> --enable-build-libxml2 --enable-build-libxslt
+        </div>
+
+        <p>This will cause the MEME Suite to build its own copies of
+        <a href="http://xmlsoft.org">libxml2</a> and <a href="http://xmlsoft.org/XSLT/">xslt</a>.</p>
+
+        <h4>Configuring installation of the MEME Suite Web Application</h4>
+        <p>Three parameters are needed to completely configure the MEME Suite web application:</p>
+        <ul>
+          <li>the URL for the web site hosting the static HTML pages and CGI scripts</li>
+          <li>the URL for the web site hosting the MEME Suite SOAP services</li>
+          <li>the directory where service configuration files should be put for Opal</li>
+        </ul>
+
+        <p>In many cases you will be able to take advantage of the default values for these
+        parameters.</p>
+
+        <p>The parameter <span class="cmd">with-url</span> was introduced in the previous section.
+        It sets the URL for the web site hosting the static HTML pages and CGI scripts.
+        If you are installing your own MEME Suite web application you will need to set this
+        parameter.</p>
+
+        <p>The parameter <span class='cmd'>enable-web</span> turns on installation of the MEME Suite
+        web site. It can also be used to specify the URL for the MEME Suite SOAP services. The
+        default URL for the MEME Suite SOAP services is
+        <a href="http://nbcr-222.ucsd.edu/opal2/services">http://nbcr-222.ucsd.edu/opal2/services</a>. 
+        For example,</p>
+        <div class="command_list"
+        >./configure --prefix=<span class="flat">$HOME/meme</span><span class="pdat" >your install path</span> --with-url=<span class="flat">"http://"</span><span class="pdat">URL for MEME Suite on your web server</span> --enable-web</div>
+
+        <p>would install the MEME Suite command line tools and the web application under 
+        <span class="pdat">your install path</span>. The web application would use
+        the MEME Suite SOAP services at
+        <a href="http://nbcr-222.ucsd.edu/opal2/services">http://nbcr-222.ucsd.edu/opal2/services</a>
+        to process requests.</p>
+
+        <p>An explicit value can also be passed for the <span class="cmd">enable-web</span> parameter.
+        For example, to explicitly specify the value for the MEME Suite SOAP services on the NBCR
+        server:</p>
+        <div class="command_list">./configure --prefix=<span class="flat">$HOME/meme</span><span class="pdat" >your install path</span> --with-url=<span class="flat">"http://"</span><span class="pdat">URL for MEME Suite on your web server</span> --enable-web="http://nbcr-222.ucsd.edu/opal2/services"</div>
+
+        <p>
+        If you wish to build and install your own MEME Suite SOAP services you must
+        have successfully installed and configured <a href="http://nbcr.ucsd.edu/data/docs/opal/">Opal</a>.
+        </p>
+        <p>You must set the environment variable CATALINA_HOME to the path to the root directory of
+        <a href="http://tomcat.apache.org/">Tomcat</a>. This can often be done by editing the file
+        named <code>.profile</code> to add the following line:</p>
+        <div class="command_list">export CATALINA_HOME=<span class="flat">/opt/apache-tomcat</span><span class="pdat">TOMCAT path</span></div>
+
+        <p>The parameter <span class="cmd">enable-webservice</span> is used to specify the location
+        of the webservice deploy folder for <a href="http://nbcr.ucsd.edu/data/docs/opal/">Opal</a>.
+        The value may be relative to CATALINA_HOME or absolute. If no value is
+        provided then it will point to a folder called <code>deploy</code> in CATALINA_HOME.</p>
+
+        <p>For example, to install the web server and build and provide using your own MEME Suite SOAP
+        services:</p>
+        <div class="command_list">./configure --prefix=<span class="flat">$HOME/meme</span><span class="pdat">your install path</span> --enable-web=<span class="pdat">Opal installation base URL</span> --enable-webservice=<span class="pdat">path to Opal's deploy folder</span></div>
+      </div>
+
+      <h3>3. Building</h3>
+      <div class="indent">
+        <p>To build simply type while at the top directory:</p>
+        <div class="command_list">make</div>
+
+        <p>You can run tests to make sure the MEME Suite programs are working correctly. 
+        The test will check MEME Suite output against known valid output:</p>
+        <div class="command_list">make test</div>
+
+        <p>If there are errors, the output files from each test will be kept in
+        <code>tests/results/</code> and can be compared to files in <code>tests/</code>.  
+        When a test passes without errors the output files are removed automatically.</p>
+      </div>
+
+      <h3>4. Installing</h3>
+      <div class="indent">
+        <p>To install the software in the directory tree specified by <code>prefix</code> 
+        run the command:
+        </p>
+        <div class="command_list">make install</div>
+      </div>
+
+      <h3>5. Setting PATH</h3>
+      <div class="indent">
+        <p>To use the MEME Suite on the command-line you should set the environment variable PATH
+        so your shell can find the newly installed tools. The steps will depend on the shell
+        you use.</p>
+        <p>For the common Bourne-again shell (aka bash) you should edit the file called
+        <code>.profile</code> in your home directory to add the following line:</p>
+        <div class="command_list">export PATH=<span class="pdat">your install path</span>/bin:$PATH</div>
+
+        <p>For C shell (aka csh and the similar tcsh) you should edit the file called
+        <code>.cshrc</code> in your home directory to add the following line:</p>
+        <div class="command_list">setenv PATH <span class="pdat">your install path</span>/bin:${PATH}</div>
+
+      </div>
+
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+
+    <h2 id="installinghg">Installing from a Mercurial repository</h2>
+    <div class="indent">
+      <p>The process of configuring, building, and installing MEME Suite from a Mercurial
+      repository is the same as 
+      <a href="#installingtar">installing from a tarball</a>, but with
+      two extra, initial steps: you must check out the repository, and 
+      you must run the <code>bootstrap</code> script.</p>
+      <p>Access to the Mercurial repository is granted at this point only to the
+      MEME developers. We provide the tarball distribution of the latest version 
+      on the ftp site.</p>
+      <p>If you have Mercurial access and have added your public key to your bitbucket profile, you
+      can check out the source code with the command:</p>
+      <div class="command_list">hg clone ssh://hg@bitbucket.org/tlbailey/meme</div>
+      <p>Once you've checked out the source code you need to run the <code>bootstrap</code> script:</p>
+      <div class="command_list">cd meme
+      ./bootstrap</div>
+      <p>The bootstrap script does a number of tasks like:</p>
+      <ul>
+        <li>Checks the version of autoconf</li>
+        <li>Downloads the output example files and generates a file list for automake.</li>
+        <li>Uses ant to generate a file list of the website for automake.</li>
+        <li>Builds configure script.</li>
+        <li>Builds Makefile.in files from Makefile.am files.</li>
+        <li>Creates ARCHIVE_DATE and ARCHIVE_RELEASE files.</li>
+      </ul>
+
+      <p>You can now follow the configuration, building and install steps
+      from <a href="#installingtar">installing from a tarball</a>.
+      </p>
+
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+
+    <hr />
+    <h2 id="parallel">Parallel MEME</h2>
+    <div class="indent">
+      <p>By default, <code>configure</code> will establish if your system has the right software to
+      produce parallel version of MEME. Parallel compilation is disabled if MPI is not found or if
+      you specify the <code>--enable-serial</code> option.
+      </p>
+      <p>To compile the parallel version of MEME, 'configure' looks for <code>mpicc</code>, 
+      <code>openmpicc</code> or <code>mpcc</code>.  For running the parallel version of MEME,
+      configure' looks on your PATH for MPI programs <code>mpirun</code> or <code>openmpirun</code>.
+      </p>
+      <p>
+      If your MPI is installed in non-standard place, use 
+      <code>--with-mpidir=<span class="pdat">MPI directory</span></code> option when
+      running 'configure' to specify the MPI installation directory.
+      </p>
+      <p>
+      The parallel version of MEME is compiled and installed automatically via
+      commands <code>make</code> and <code>make install</code>.
+      </p>
+
+      Please see section <a href="#prerequisite">Prerequisite software </a> for information where to get 
+      the MPI software.  Currently, the parallel version of MEME is known to work with:</p>
+      <table class="mpi_software_table">
+        <tr>
+          <th>MPI distributions</th>
+        </tr>
+        <tr>
+          <td>LAM MPI</td>
+        </tr>
+        <tr>
+          <td>MPICH</td>
+        </tr>
+        <tr>
+          <td>OpenMPI</td>
+        </tr>
+      </table>
+
+
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+
+    <h2 id="customconfig">Customizing configuration</h2>
+    <div class="indent">
+      <p>Customization is done via the command line arguments to configure.</p>
+
+      <p>The general syntax for all the options is one of the following:</p>
+      <ul>
+
+        <li>Include a <b>feature</b>:<br>
+        <span class="popt">--enable-feature</span><br>
+        or<br>
+        <span class="popt">--enable-feature=yes</span></li>
+
+        <li>Do not include a <b>feature</b>:<br>
+        <span class="popt">--disable-feature</span><br>
+        or<br>
+        <span class="popt">--enable-feature=no</span></li>
+
+        <li>Set a specific <b>feature</b> to a <b>value</b>:<br>
+        <span class="popt">--with-feature=</span><span class="pdat">value</span></li><br>
+        or<br>
+        <span class="popt">--enable-feature</span><span class="poptional"><span class="popt">=</span><span class="pdat">optional value</span></span></li>
+      
+        <li>Text in a dashed rectangle is <b>optional</b>:<br>
+        <span class="poptional popt">optional text</span>
+
+      </ul>
+
+      <p>The following table provides a list of parameters
+      available for <code>configure</code>:</p>
+
+      <table class="config_options_table">
+      <tr>
+        <th style="min-width:20em">Option</th>
+        <th>Needed for</th>
+        <th>Default value</th>
+      </tr>
+      <tr>
+        <td><span class="popt">--prefix=</span>&#8203;<span class="pdat">install path</span></td>
+        <td>Provide the installation location path.</td>
+        <td class="popt">$HOME</td>
+      </tr>
+      <tr>
+        <td class="popt">--enable-build-libxml2</td>
+        <td>Forces MEME Suite to build and use libxml2 code included
+        in MEME Suite distribution.</td> 
+        <td>disabled</td>
+      </tr>
+      <tr>
+        <td class="popt">--enable-build-libxslt</td>
+        <td>Forces MEME Suite to build and use libxslt code included
+        in MEME Suite distribution.</td> 
+        <td>disabled</td>
+      </tr>
+      <tr>
+        <td class="popt">--enable-debug</td>     
+        <td>Produce an executable with debugging symbols.</td>
+        <td>no debug</td>
+      </tr>
+      <tr>
+        <td class="popt">--enable-opt</td>
+        <td>Produce an executable with optimization.</td>
+        <td>compiler and OS dependent.</td>
+      </tr>
+      <tr>
+        <td class="popt">--enable-serial</td>
+        <td>Produce only serial version of MEME, do not build parallel version.</td>
+        <td>disabled</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--enable-web</span><span class="poptional"><span class="popt">=</span>&#8203;<span class="pdat">opal services url</span></span></td>
+        <td>Build web site applications.  
+        Must point it to MEME Suite web services exposed via Opal.
+          Defaults to <span class="popt">http://nbcr-222.ucsd.edu/opal2/services</span> when the URL is not
+          provided.</td> 
+        <td>disabled</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--enable-webservice</span><span class="poptional">=&#8203;<span class="pdat">opal deploy folder</span></span></td>
+        <td>Deploy MEME Suite web services utilizing an existing Opal installation.
+          The path to the deploy folder can be relative to CATALINA_HOME or 
+          absolute. If it is not specified than it is set to the folder <code>deploy</code>
+          in CATALINA_HOME.</td>
+        <td>disabled</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-contact=</span>&#8203;<span class="pdat">site administrator email</span></td>
+        <td>Set email of web site administrator.</td>
+        <td>No site contact.</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-dev-contact=</span>&#8203;<span class="pdat">developers email</span></td>
+        <td>Set email of developers.</td>
+        <td class="popt">meme@sdsc.edu</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-convert=</span>&#8203;<span class="pdat">path to convert binary</span></td>
+        <td>Set location of ImageMagick convert application. This is only used if Ghostscript can
+        not be used. See also "--with-gs".</td>
+        <td>As found in PATH</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-db=</span>&#8203;<span class="pdat">database directory</span></td>
+        <td>Set path to databases.</td>
+        <td><span class="pdat">install path</span><span class="popt">/db/</span></td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-gs=</span>&#8203;<span class="pdat">path to gs binary</span></td>
+        <td>Set location of Ghostscript application.</td>
+        <td>As found in PATH</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-logs=</span>&#8203;<span class="pdat">logs directory</span></td>
+        <td>Set path to logs.</td>
+        <td><span class="pdat">install path</span><span class="popt">/LOGS/</span></td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-maxtime=</span>&#8203;<span class="pdat">max job time</span></td>
+        <td>Set wall time limit (sec) a web-submitted job started by the web server may use.</td>
+        <td class="popt">18000 (5 hours)</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-mpidir=</span>&#8203;<span class="pdat">mpi directory</span></td>
+        <td>Set MPI installation path. See <a href="#parallel"> Parallel MEME</a> section.</td>
+        <td>Path of found mpicc</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-perl=</span>&#8203;<span class="pdat">path to perl binary</span></td>
+        <td>Set location of Perl interpreter.</td>
+        <td>As found in PATH</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-python=</span>&#8203;<span class="pdat">path to python binary</span></td>
+        <td>Set location of Python interpreter.</td>
+        <td>As found in PATH</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-procs=</span>&#8203;<span class="pdat">processor count</span></td>
+        <td>Set number of processors to use for parallel jobs.</td>
+        <td class="popt">2</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-url=</span>&#8203;<span class="pdat">url</span></td>
+        <td>Set URL for the MEME Suite web site used by buttons on the output of MEME Suite tools.</td>
+        <td>No URL is used.</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-goserver-url=</span>&#8203;<span class="pdat">url</span></td>
+        <td>Set URL for the GO term details page. The identifier will be substituted for GO_TERM_ID.</td>
+        <td class="popt long">http://amigo.geneontology.org/&#8203;cgi-bin/&#8203;amigo/&#8203;term_details?term=GO_TERM_ID</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-prev-url=</span>&#8203;<span class="pdat">url</span></td>
+        <td>Set URL pointing to a install of the previous release. This will
+          create a link in the menu allowing users to easily navigate to the
+          previous release. The option <span class="popt">--with-prev-ver</span>
+          must also be provided.</td>
+        <td>No link is created.</td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-prev-ver=</span>&#8203;<span class="pdat">version number</span></td>
+        <td>Set the version number of the previous release. This will
+          create a link in the menu allowing users to easily navigate to the
+          previous release. The option <span class="popt">--with-prev-url</span>
+          must also be provided.</td>
+        <td>No link is created.</td>
+      </tr>
+
+      <tr>
+        <td><span class="popt">--with-notices=</span>&#8203;<span class="pdat">notice file url</span></td>
+        <td>Sets the URL of the notice file relative to the top directory of the
+          webapp.
+          <div class="command_list"
+            >http://host/meme_<script>version_string("VERSION");</script>/<span class="pdat">notice file url</span>
+          </div>
+          The notice file is intended to contain important information and is
+          displayed to users when they visit the MEME Suite
+          site. The user can click a button to hide the notice until the next
+          session or until the notice is updated.
+          The notice file is written in the dialect of
+          <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> known as
+          <a href="http://code.google.com/p/pagedown/wiki/PageDown">PageDown</a>.</td>
+        <td>The notice file is expected to be called <code>notices.txt</code>
+          and is in the top directory of the webapp.
+          <div class="command_list"
+            >http://host/meme_<script>version_string("VERSION");</script>/notices.txt
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="popt">--with-news=</span>&#8203;<span class="pdat">news file url</span></td>
+        <td>Sets the URL of the news file relative to the top directory of the
+          webapp.
+          <div class="command_list"
+            >http://host/meme_<script>version_string("VERSION");</script>/<span class="pdat">news file url</span>
+          </div>
+          The news file is intended to contain non-essential news and is
+          displayed to users when they visit the MEME Suite
+          site and there are no notices to display. The user can click a button
+          to hide the news until it is updated.
+          The news file is written in the dialect of
+          <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> known as
+          <a href="http://code.google.com/p/pagedown/wiki/PageDown">PageDown</a>.</td>
+        <td>The news file is expected to be called <code>news.txt</code>
+          and is in the top directory of the webapp.
+          <div class="command_list"
+            >http://host/meme_<script>version_string("VERSION");</script>/news.txt
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="popt">--with-expiry=</span>&#8203;<span class="pdat">days output retained</span></td>
+        <td>This value should be set to the number of days that Opal retains
+        a job after it has been submitted. Check the Opal configuration value 
+        <code>opal.datalifetime</code> in the file 
+        <code>$OPAL_HOME/etc/opal.properties</code> to determine how long Opal
+        is set to retain data.</td>
+        <td>The job expiry is set to 4 days.</td>
+      </tr>
+
+      </table>
+
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+    <h2 id="installexample">Installation Examples</h2>
+    <div class="indent">
+      
+      <h3>Example 1</h3>
+      <div class="indent">
+        <p>Installing MEME command line programs without any web components in
+        <span class="popt">/opt/meme</span>. Buttons in the tool outputs will not work.</p>
+        <div class="command_list"
+         >tar zxf meme_<script>version_string("VERSION");</script>.tar.gz
+          cd meme_<script>version_string("VERSION");</script>
+          ./configure --prefix=/opt/meme_<script>version_string("VERSION");</script>
+          make
+          make test
+          sudo make install
+        </div>
+      </div>
+      
+      <h3>Example 2</h3>
+      <div class="indent">
+        <p>Installing MEME command line programs without any web components in /opt/meme. Buttons in
+        the tool outputs will submit to the URL: <code>http://meme.ebi.edu.au/meme/</code>.</p>
+        <div class="command_list"
+         >tar zxf meme_<script>version_string("VERSION");</script>.tar.gz
+          cd meme_<script>version_string("VERSION");</script>
+          ./configure --prefix=/opt/meme_<script>version_string("VERSION");</script> --with-url=http://meme.ebi.edu.au/meme_<script>version_string("VERSION");</script>/
+          make
+          make test
+          sudo make install
+        </div>
+      </div>
+
+      <h3>Example 3</h3>
+      <div class="indent">
+        <p>Installing MEME command line programs and the website, but not the SOAP
+        services.</p>
+        <p>Note that while the compiled tools will be installed to /opt/meme
+        the website will be installed to <code>$CATALINA_HOME/webapps</code> in
+        the form of a Java web archive 
+        (<code>meme_<script>version_string("VERSION");</script>.war</code>).</p>
+        <p>The URL for the MEME web site will be <code>http://host/meme</code>
+        and buttons in the program outputs will submit to that URL. This
+        installation will use the MEME SOAP services on
+        <a href="http://nbcr-222.ucsd.edu/opal2/services"
+          >http://nbcr-222.ucsd.edu/opal2/services</a>.</p>
+        <div class="command_list"
+         >tar zxf meme_<script>version_string("VERSION");</script>.tar.gz
+          cd meme_<script>version_string("VERSION");</script>
+          ./configure \
+          &nbsp;&nbsp;--prefix=/opt/meme_<script>version_string("VERSION");</script> \
+          &nbsp;&nbsp;--enable-web \
+          &nbsp;&nbsp;--with-url=http://host/meme_<script>version_string("VERSION");</script>
+          make
+          make test
+          make install
+        </div>
+      </div>
+
+      <h3>Example 4</h3>
+      <div class="indent">
+        <p>Installing the full MEME Suite including all the command line
+        programs, the website, and the SOAP services. The website, and SOAP
+        services will all be served by an installation of <a
+          href="http://tomcat.apache.org/">Tomcat</a> with
+        <a href="http://nbcr.ucsd.edu/data/docs/opal/">Opal</a>. This assumes that Opal is
+        configured to deploy services with configuration files in the default
+        location (check <code>opal.deploy.path</code> in 
+        <code><span class="pdat">opal distribtion</span>/etc/opal.properties</code> ).</p>
+        <div class="command_list"
+         >tar zxf meme_<script>version_string("VERSION");</script>.tar.gz
+          cd meme_<script>version_string("VERSION");</script>
+          ./configure \
+          &nbsp;&nbsp;--prefix=/opt/meme_<script>version_string("VERSION");</script> \
+          &nbsp;&nbsp;--enable-web=http://host/opal2/services \
+          &nbsp;&nbsp;--enable-webservice \
+          &nbsp;&nbsp;--with-url=http://host/meme_<script>version_string("VERSION");</script>
+          make
+          make test
+          make install
+        </div>
+      </div>
+
+      <h3>Example 5</h3>
+      <div class="indent">
+        <p>Installing the full MEME Suite as in example 4 but setting the
+        database source to a folder where it can be shared among multiple
+        MEME Suite installs. Additionally the URL to the previous version
+        is set and the notices and news URLs are set to a location in the
+        website root where they can be share by multiple installs.</p>
+        <div class="command_list"
+         >tar zxf meme_<script>version_string("VERSION");</script>.tar.gz
+          cd meme_<script>version_string("VERSION");</script>
+          ./configure \
+          &nbsp;&nbsp;--prefix=/opt/meme_<script>version_string("VERSION");</script> \
+          &nbsp;&nbsp;--enable-web=http://host/opal2/services \
+          &nbsp;&nbsp;--enable-webservice \
+          &nbsp;&nbsp;--with-url=http://host/meme_<script>version_string("VERSION");</script> \
+          &nbsp;&nbsp;--with-prev-url=http://host/meme_4.9.1 \
+          &nbsp;&nbsp;--with-prev-ver=4.9.1 \
+          &nbsp;&nbsp;--with-db=/opt/meme_db \
+          &nbsp;&nbsp;--with-notices=../notices.txt \
+          &nbsp;&nbsp;--with-news=../news.txt
+          make
+          make test
+          make install
+        </div>
+      </div>
+
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+
+    <h2 id="uninstalling">Uninstalling</h2>
+    <div class="indent">
+      <p>You can unistall MEME Suite by giving the command:</p>
+      <div class="command_list">make uninstall</div>
+      <p>in the root of the build directory. This will remove all the files installed for the MEME
+      Suite, but won't remove any directories that may have been created.</p>
+
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+
+    <hr />
+    <h2 id="regresstest">Running regression tests</h2>
+    <div class="indent">
+      <p>There is a suit of tests that can be run to test MEME Suite output
+      against known output. These tests can be run during the installation
+      process. A quick "smoke test" can be run using the command:</p>
+      <div class="command_list">make test</div>
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+
+    <h2 id="fasta_db.csv">Installing sequence databases</h2>
+    <div class="indent">
+      <p>If you have installed MEME Suite web site and services then you can
+      make it more useful by also installing sequence databases downloaded
+      from FTP sites.
+      The MEME Suite provides a tool <a href="update-sequence-db.html"><code>update&#8209;sequence&#8209;db</code></a> for
+      automatically downloading these databases and keeping them updated to the
+      latest version.</p>
+
+      <p class="nogap">The most basic way of running the command simply specifies the location
+      to store the databases.</p>
+      <div class="command_list"
+        >update-sequence-db <span class="pdat">your install path</span>/db/fasta_databases
+      </div>
+      <p>The above command will cause databases to be downloaded from all the default sources.</p>
+
+      <p>If you are installing multiple versions of the MEME Suite then you will
+      probably want to use a single set of sequence databases. By using the
+      configure option <code>&#8209;&#8209;with&#8209;db=<span class="pdat">path to databases</span></code>
+      you can point multiple MEME installs at the same folder.</p>
+      
+      <p><b>Note:</b> there is a known bug with some older versions of the
+      MEME Suite where the <code>--with-db</code> configure option does not work, in these cases we
+      suggest removing the <span class="pdat">your install path</span>/db
+      folder and replacing it with a symlink to your preferred location after
+      installation.</p>
+
+      <p class="nogap">Additionally to be backwards compatible with <b>releases older than 4.10.0</b>
+      you will need to generate a CSV index listing the downloaded databases. This
+      can be achieved with the <code>--csv</code> option.</p>
+      <div class="command_list"
+        >update-sequence-db --csv <span class="pdat">path to databases</span>/fasta_databases
+        cp <span class="pdat">path to databases</span>/fasta_databases/fasta_db.csv <span class="pdat">path to old distribution</span>/etc/
+        cp <span class="pdat">path to databases</span>/fasta_databases/fasta_db.index <span class="pdat">path to old install</span>/etc/
+      </div>
+      <p>After the csv and index files are generated you need to move the index
+      files to the <code>etc</code> folders of all your &lt; 4.10.0 MEME Suite
+      installs. Copying the csv is not strictly required but putting it in the 
+      <code>etc</code> folder of the distribution ensures that you don't
+      accidently overwrite the index file when doing a <code>make install</code>
+      at a later date.</p>
+
+      <p class="nogap">If there are any database sources you don't want downloaded you can
+      disable a source with the <code>--no_<span class="pdat">source</span></code>
+      option.</p>
+      <div class="command_list"
+        >update-sequence-db --no_rsat <span class="pdat">path to databases</span>/fasta_databases
+      </div>
+      <p>This command will download from all the available sources except the
+      upstream sequences from Regulatory Sequences Analysis Tools.</p>
+
+      <p>It can take a long time to completely download all the sequences but
+      you can stop the process at any point by pressing enter to switch the
+      program to command mode and then typing the command "exit" and pressing
+      enter again.</p>
+     
+      <p>In order to keep the sequence databases current, you can place one of
+      the above commands in a <code>chron</code> job that runs at regular
+      intervals.</p>
+
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+    <hr />
+
+    <h2 id="motif_db.csv">Installing motif databases</h2>
+    <p>Tomtom, MEME-ChIP, SpaMo, CentriMo and AME can make use of motif
+    databases.</p>
+    <div class="indent">
+      <ol>
+        <li>Download the motif databases from <a href="download.html">here</a>.</li>
+
+        <li>Extract the databases from the gziped tar:<br /> 
+        <div class="command_list">tar xzf motif_databases.X.tgz</div>
+        where "X" is the version number of the motif databases file</li>
+
+        <li>Move the extracted databases folder:
+        <div class="command_list"
+          >mv motif_databases <span class="pdat">path to databases</span>/motif_databases
+        </div>
+        Where the <span class="pdat">path to databases</span> may just be the
+        <code>db</code> folder in the installation or another location if the
+        <code>&#8209;&#8209;with&#8209;db=<span class="pdat">path to databases</span></code>
+        configure option was specified.
+        </li>
+      </ol>
+      <p>On a split install you should install the motif databases on both
+      servers.</p>
+
+      <p><b>Note:</b> releases prior to 4.10.0 also require the
+      <code>motif_db.csv</code> file to be copied into the distribution's
+      <code>etc</code> directory and the rerunning of <code>make install</code>
+      to generate and install the <code>motif_db.index</code> file.</p>
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+
+    <h2 id="gomo_db.csv">Installing GOMO databases</h2>
+    <div class="indent">
+      <p>GOMO uses additional databases which need to be downloaded and installed.</p>
+      <ol>
+        <li>Download databases for GOMO from <a href="download.html">here</a>.</li>
+
+        <li>Extract the databases from the gziped tar:
+        <div class="command_list">tar xzf motif_databases.X.tgz</div>
+        where "X" is the version number of the GOMO databases file</li>
+
+        <li>Move the extracted databases folder:
+        <div class="command_list"
+          >mv gomo_databases <span class="pdat">path to databases</span>/gomo_databases
+        </div>
+        Where the <span class="pdat">path to databases</span> may just be the
+        <code>db</code> folder in the installation or another location if the
+        <code>&#8209;&#8209;with&#8209;db=<span class="pdat">path to databases</span></code>
+        configure option was specified. <b>On a split install this only needs to
+          be done on the services install.</b>
+        </li>
+
+        <li>In a split install copy the file <code>gomo_databases/gomo_db.csv</code> 
+        to the etc folder of the website install.</li>
+
+      </ol>
+      <p><b>Note:</b> releases prior to 4.10.0 require copying the <code>gomo_db.csv</code>
+      file into the distribution's <code>etc</code> directory and rerunning
+      <code>make install</code> to generate and install the <code>gomo_db.index</code> file.</p>
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+    <hr />
+
+    <h2 id="report">Reporting problems</h2>
+    <div class="indent">
+      <p>Make sure first that you really have a problem.</p>
+      <h3>Check your environment</h3>
+      <div class="indent">
+        <p>Did you change it recently? Did you upgrade to a new version? 
+        Is your operating system supported?  Are you using latest
+        versions of tools required?</p>
+      </div>
+
+      <h3>Look for the answers.</h3>
+      <div class="indent">
+        <p>Check the <a href="general-faq.html">frequently asked questions</a>. Check the
+        <a href="https://groups.google.com/forum/#!forum/meme-suite">MEME Suite Q&amp;A
+        forum</a> to see if your problem has been reported and there was a solution.
+        Check the <a href="release-notes.html">release notes</a> for possible
+        bug fixes and other version-dependent changes.</p>
+      </div>
+
+      <h3>Are you asking in the right place?</h3>
+      <div class="indent">
+        <p>If your problems are related to the prerequisite software installation, your OS, or
+        compiler, check relevant mailing lists, do a Google search or talk to your system
+        administrator.</p>
+      </div>
+
+      <h3>Verify what you did.</h3>
+      <div class="indent">
+        <p>Often, the problem is a result of the wrong execution of the commands or typos in the commands.
+        Check if you executed the commands in the right order and if they were typed properly.
+        Sometimes the command-line tools will require details you don't need for a web submission like
+        the sequence alphabet so check that you have included them.</p>
+      </div>
+
+      <h3>Report the problem.</h3>
+      <div class="indent">
+        <p>If all fails and you still have the problem, go ahead and send an email to
+        <a href="mailto:meme@sdsc.edu">meme@sdsc.edu</a>. That email address is monitored by about 4
+        of us, and we're based in both Australia and the USA so we can generally answer your
+        queries more quickly than if you emailed us individually.</p>
+
+        <p>Here is a guiding list of what to put in your email:</p>
+        <ul>
+          <li>Use a meaningful and specific subject.</li>
+          <li>Write clearly and be precise about your problem.</li> 
+          <li>Attach any files required to recreate the problem if they are small enough
+          to email (&le; 5MB in total).</li>
+        </ul>
+        <p>If you are reporting a problem with the web server you should also tell us:</p>
+        <ul>
+          <li>The Web browser you are using (eg. Firefox, Chrome, Safari, Opera or Internet Explorer)
+            including the version.</li>
+          <li>A link to the page with the problem. This is especially useful for failed
+            web-service jobs as we can then lookup related logs.</li>
+        </ul>
+        <p>If you are reporting a problem with a copy of the MEME Suite you have installed (or are
+        installing) you should also tell us:</p>
+        <ul>
+          <li>the MEME Suite version,</li>
+          <li>the OS version,</li>
+          <li>the autoconf version,</li>
+          <li>the compiler version,</li>
+          <li>the Perl version, and</li>
+          <li>the Python version, as well as,</li>
+          <li>attach the file <code>config.log</code> which is created by the configure script</li>
+          <li>if there are any errors or warnings output during the <code>make</code> stage, attach
+          <code>make.log</code> created by the following commands (assuming bash shell):
+          <div class="command_list"
+           >make clean
+            make &amp;&gt; make.log
+          </div></li>
+          <li>if any tests fail in the <code>make test</code> stage, attach <code>test.log</code>
+          created by the following command (assuming bash shell):
+          <div class="command_list">make test &amp;&gt; test.log</div></li>
+          <li>if there are any errors or warnings output during the <code>make install</code>
+          stage, attach <code>install.log</code> created by the following command (assuming
+          bash shell):
+          <div class="command_list">make install &amp;&gt; install.log</div></li>
+        </ul>
+      </div>
+
+      <p>[<a href="#top"> Top </a>]</p>
+    </div>
+
+  </body>
+</html>
+

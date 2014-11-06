@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spamo - Submission form</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../doc/images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="../doc/images/memesuite_icon.png">
+    <link href="../doc/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/component_motifs.css" rel="stylesheet" type="text/css">
+    <link href="../css/component_sequences.css" rel="stylesheet" type="text/css">
+    <script src="../doc/js/menu-path.js"></script>
+    <script src="../doc/js/menu.js"></script>
+    <script src="../doc/js/motif_logo.js"></script>
+    <script src="../doc/js/utilities.js"></script>
+    <script src="../js/site.js"></script>
+    <script src="../js/fasta-debug.js"></script>
+    <!-- wicked-good-xpath library: http://code.google.com/p/wicked-good-xpath/ -->
+    <script src="../js/wgxpath.install.js"></script>
+    <script src="../js/motif_parser.js"></script>
+    <script src="../js/component_motifs.js"></script>
+    <script src="../js/component_sequences.js"></script>
+    <script src="../js/spamo.js"></script>
+  </head>
+  <body>
+
+    <div class="pop_content" id="pop_sequences" >
+      <p>Select a file of <a href="../doc/fasta-format.html">FASTA formatted</a>
+      DNA sequences or paste in actual <a href="../doc/fasta-format.html"
+      >FASTA formatted</a> DNA sequences to analyse motif spacings.</p>
+      <p>See the <a href="../doc/examples/sample-dna-Klf1.fa">sample sequences</a> 
+      to get an idea of input that works well for SpaMo.</p>
+      <p>It is highly recommended that you mask repeats in your DNA sequences
+      by converting them to the letter 'N'.  This can be done using the 
+      <a href='http://www.repeatmasker.org'>repeat-masker program</a> and can
+      also be requested when genomic sequences are downloaded using the
+      <a href="http://genome.ucsc.edu">UCSC Genome Table Browser</a> or 
+      <a href="https://main.g2.bx.psu.edu">Galaxy</a>.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_primary">
+      <p>SpaMo expects a single DNA motif as the primary motif. 
+      (If multiple motifs are input, then only the first motif will be used.) 
+      The primary motif is typically one you expect to be in many of the input sequences
+      (e.g., the DNA-binding motif of the ChIP-ed transcription factor if the sequences are
+      ChIP-seq peak regions).</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" style="display:none" id="pop_secondaries">
+      <p>Input motifs to analyze for spacing relative to the primary motif.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+
+    <div class="pop_content" id="pop_dumpseqs">
+      <p>SpaMo can create an additional text file containing one line for
+      each significant primary-secondary motif spacing found in each input sequence. 
+      The text file contains fields that from left to right contain:</p>
+      <ol>
+        <li>A portion of the sequence in lower case, with the motif 
+        matches in upper case.</li>
+        <li>The position (offset) of the secondary match within the sequence 
+        portion.</li>
+        <li>The fragment of the sequence that matched the primary 
+        motif.</li>
+        <li>The strand of the primary motif match.</li>
+        <li>The fragment of the sequence that matched the secondary
+        motif.</li>
+        <li>The strand of the secondary motif match.</li>
+        <li>Secondary site is on the same (s) or opposite (o) strand
+        to the primary site.</li>
+        <li>Secondary site is upstream (u) or downstream (d) of the 
+        primary site.</li>
+        <li>The gap between the primary and secondary site.</li>
+        <li>The name of the sequence.</li>
+      </ol>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <!--{help/}-->
+    <div class="content_box">
+      <!--{header}-->
+      <p>
+      <!--{title}-->SpaMo<!--{/title}--> - <!--{subtitle}-->Spaced Motif Analysis Tool<!--{/subtitle}--><br>
+      <!--{logo}-->../doc/images/spamo_icon.png<!--{/logo}-->: <!--{alt}-->SpaMo Logo<!--{/alt}--><br>
+      <!--{blurb}--><span class="blurb" data-id="spamo"></span><!--{/blurb}-->
+      </p>
+      <!--{/header}-->
+      <form enctype="multipart/form-data" accept-charset="utf-8"
+      method="POST" action="spamo" id="spamo_form">
+        <fieldset>
+          <legend>Data Submission Form</legend>
+          <p class="meme">Discover enriched spacings between motifs.</p> 
+          <!--{sequences}-->
+          <!--{prefix}-->sequences<!--{/prefix}-->
+          <!--{title}-->Input the sequences<!--{/title}-->
+          <!--{subtitle}-->Enter repeat-masked DNA sequences in which you want to analyse motif spacings.<!--{/subtitle}-->
+          <!--{default}-->FILE<!--{/default}-->
+          <!--{alphabets}-->DNA RNA<!--{/alphabets}-->
+          <!--{register}-->register_component<!--{/register}-->
+          <!--{/sequences}-->
+          
+          <!--{primary}-->
+          <!--{prefix}-->primary<!--{/prefix}-->
+          <!--{description}-->primary motif<!--{/description}-->
+          <!--{title}-->Input the primary motif<!--{/title}-->
+          <!--{subtitle}-->Upload or enter a motif to use as the primary.<!--{/subtitle}-->
+          <!--{default}-->FILE<!--{/default}-->
+          <!--{alphabets}-->DNA RNA<!--{/alphabets}-->
+          <!--{register}-->register_component<!--{/register}-->
+          <!--{/primary}-->
+
+          <!--{secondaries}-->
+          <!--{prefix}-->secondaries<!--{/prefix}-->
+          <!--{description}-->secondary motifs<!--{/description}-->
+          <!--{title}-->Input the secondary motifs.<!--{/title}-->
+          <!--{subtitle}-->Select, upload or enter motifs to check for preferred spacings relative to the primary motif.<!--{/subtitle}-->
+          <!--{default}-->DATABASE<!--{/default}-->
+          <!--{alphabets}-->DNA RNA<!--{/alphabets}-->
+          <!--{enable_db/}-->
+          <!--{register}-->register_component<!--{/register}-->
+          <!--{/secondaries}-->
+
+          <!--{job_details/}-->
+
+          <div style="margin-top: 5px; margin-bottom: 5px; width: 80%">
+            <!--{advanced_options/}-->
+            <div>
+              <input type="checkbox" class="meme" name="dumpseqs" id="dumpseqs" value="1">
+              <label for="dumpseqs">Print significant primary-secondary motif matches to a file.</label>
+              <div class="help" data-topic="pop_dumpseqs"></div>
+            </div>
+          </div>
+
+          <!--{submit_reset/}-->
+        </fieldset>
+      </form>
+      <!--{footer/}-->
+    </div>
+  </body>
+</html>

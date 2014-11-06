@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>mhmme (unsupported) - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>mhmme (unsupported)</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>mhmme [options] &lt;HMM filename&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Given a MEME Suite hidden Markov model (HMM), mhmme randomly
+      generates sequence from the model and prints them in
+      <a href="fasta-format.html">FASTA format</a>.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>HMM Filename</h4>
+      <div class="indent">
+        <p>An HMM in MEME Suite format must be provided. If the filename is
+        given as '-', then mhmme will attempt to read the HMM from standard
+        input.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>The program prints to standard output one or more sequences in
+      <a href="fasta-format.html">FASTA format</a>.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--numseq</td><td><span class="pdat">count</span></td>
+            <td>The number of sequences to emit.</td>
+            <td>One sequence is generated.</td>
+          </tr>
+          <tr>
+            <td class="popt">--occurs</td><td></td>
+            <td>Rather than printing the raw sequence, print a pseudo-sequence
+              in which non-motif regions are represented as hyphens and motifs
+              are represented like this: *____7___*, where 7 is the motif
+              index.</td>
+            <td>The output is normal <a href="fasta-format.html">FASTA format</a>.</td>
+          </tr>
+          <tr>
+            <td class="popt">--seed</td><td><span class="pdat">seed</span></td>
+            <td>Set the seed for the random number generator.</td>
+            <td>The seed is set from the clock.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

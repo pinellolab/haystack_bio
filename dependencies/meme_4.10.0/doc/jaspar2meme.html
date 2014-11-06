@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jaspar2meme - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+
+    <h2>jaspar2meme</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>jaspar2meme [options] &lt;jaspar directory&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Convert a directory of JASPAR files into a MEME motif suitable for
+      use with MEME Suite programs.</p>
+    </div>
+
+    <h3>Inputs</h3>
+    <div class="indent">
+      <h4>JASPAR Directory</h4>
+      <div class="indent">
+        <p>A directory containing one or more JASPAR motif files in one of
+        three formats.</p>
+        <h5>JASPAR Sites Format</h5>
+        <p>This format describes a motif in terms of a multiple alignment of
+        sites. It contains a multiple alignment in modified
+        <a href="fasta-format.html">FASTA format</a>. Only capitalized
+        sequence letters are part of the alignment. The sites formatted files
+        are expected to end with the <code>.sites</code> extension.</p>
+
+        <h5>JASPAR Count Format</h5>
+        <p>This format describes a motif in terms of a count matrix where the
+        rows correspond to A, C, G and T respectively. The JASPAR count
+        files are expected to end with the <code>.pfm</code> extension.</p>
+
+        <h5>CM Count Format</h5>
+        <p>This format describes a motif in terms of a count matrix with each
+        row preceeded by the letters <code>A|</code>, <code>C|</code>,
+        <code>G|</code> and <code>T|</code>. The CM count files are expected
+        to end with the <code>.cm</code> extension.</p>
+
+      </div>
+
+    </div>
+
+    <h3>Outputs</h3>
+    <div class="indent">
+      <script>wrdoc("2meme-output");</script>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">-pfm</td><td></td>
+            <td>Read JASPAR count files (<code>.pfm</code>).</td>
+            <td>Read JASPAR site files (<code>.sites</code>).</td>
+          </tr>
+          <tr>
+            <td class="popt">-cm</td><td></td>
+            <td>Read count files (<code>.cm</code>) with line labels <code>A|</code> etc.</td>
+            <td>Read JASPAR site files (<code>.sites</code>).</td>
+          </tr>
+          <tr>
+            <td class="popt">-strands</td><td><span class="popt">1</span>|<span class="popt">2</span></td>
+            <td>Specify if a single strand or both strands were considered to
+            create the motif.</td>
+            <td>Defaults to reporting that both strands were scanned.</td>
+          </tr>
+          <script>
+            wropt("2meme-numbers", {"id_source": "JASPAR ID"});
+            wropt("2meme-bg");
+            wropt("2meme-pseudo");
+            wropt("2meme-logodds");
+            wropt("2meme-url", {"type": "motif name", "example": "MA0024"});
+          </script>
+        </tbody>
+      </table>
+    </div>
+    
+    <h3>Example Input Formats</h3>
+    <div class="indent" >
+      <h4>JASPAR Sites Format Example</h4>
+      <pre>
+&gt;MA0024 E2F     1
+aTTTGGCGC
+&gt;MA0024 E2F     2
+TTTGGCGC
+&gt;MA0024 E2F     3
+TTTGGCGC
+&gt;MA0024 E2F     4
+TTTGGCGC
+&gt;MA0024 E2F     5
+TTTCGCGC
+&gt;MA0024 E2F     6
+TTTCGCGC
+&gt;MA0024 E2F     7
+TTTCGCGC
+&gt;MA0024 E2F     8
+TTTGCCGC
+&gt;MA0024 E2F     9
+TTTCCCGC
+&gt;MA0024 E2F     10
+TTTGGCGG
+
+A  [ 0  0  0  0  0  0  0  0 ]
+C  [ 0  0  0  4  2 10  0  9 ]
+G  [ 0  0  0  6  8  0 10  1 ]
+T  [10 10 10  0  0  0  0  0 ]
+      </pre>
+      <h4>JASPAR Count Format Example</h4>
+      <pre>
+ 0  3 79 40 66 48 65 11 65  0
+94 75  4  3  1  2  5  2  3  3
+ 1  0  3  4  1  0  5  3 28 88
+ 2 19 11 50 29 47 22 81  1  6
+      </pre>
+    
+      <h4>CM Count Format Example</h4>
+      <pre>
+A|  0  3 79 40 66 48 65 11 65  0
+C| 94 75  4  3  1  2  5  2  3  3
+G|  1  0  3  4  1  0  5  3 28 88
+T|  2 19 11 50 29 47 22 81  1  6
+      </pre>
+    </div>
+
+  </body>
+</html>
+

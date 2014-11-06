@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>reconcile-tree-alignment - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>reconcile-tree-alignment</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>reconcile-tree-alignment &lt;input tree&gt; &lt;input
+        alignment&gt; &lt;output tree&gt; &lt;output alignment&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Given a tree and an alignment, identify the intersection of the sets
+      of sequence IDs and leaf labels. Trim the extra sequences and leaves and
+      print the resulting alignment and tree.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Input Tree</h4>
+      <div class="indent">
+        <p>A tree in <a href="http://evolution.genetics.washington.edu/phylip/newicktree.html">Newick format</a>.</p>
+      </div>
+
+      <h4>Input Alignment</h4>
+      <div class="indent">
+        <p>A DNA or protein sequence alignment in <a href="clustalw-format.html">clustalw format</a>.
+        The alignment can be read from standard input if a "-" is given instead of a file name.</p>
+      </div>
+
+      <h4>Output Tree</h4>
+      <div class="indent">
+        <p>The file name to save the reconciled 
+        <a href="http://evolution.genetics.washington.edu/phylip/newicktree.html">Newick format</a>
+        tree.</p>
+      </div>
+
+      <h4>Output Alignment</h4>
+      <div class="indent">
+        <p>The file name to save the reconciled <a href="clustalw-format.html">clustalw format</a>
+        sequence alignment.</p>
+      </div>
+
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>The reconciled versions of the tree and alignment are written out to
+      the provided file names.</p>
+    </div>
+  </body>
+</html>
+

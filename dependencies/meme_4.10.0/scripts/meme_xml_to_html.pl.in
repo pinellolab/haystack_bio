@@ -1,0 +1,748 @@
+#!@WHICHPERL@
+=head1 NAME
+
+meme_xml_to_html - Make a MEME HTML output from a MEME XML output.
+
+=head1 SYNOPSIS
+
+meme_xml_to_html <MEME XML file> <MEME HTML file>
+=cut
+
+use strict;
+use warnings;
+
+use Cwd qw(abs_path);
+use Fcntl qw(O_RDONLY SEEK_SET);
+use File::Basename qw(fileparse);
+use File::Spec::Functions qw(tmpdir);
+use File::Temp qw(tempfile);
+use Getopt::Long;
+use Pod::Usage;
+
+use lib '@PERLLIBDIR@';
+
+my $etc_dir;
+my $temp_dir;
+my $scripts_dir;
+
+#
+# initialise the global constants
+# 
+sub initialise {
+  # setup etc dir
+  $etc_dir = defined($ENV{MEME_ETC_DIR}) ? $ENV{MEME_ETC_DIR} : '@APPCONFIGDIR@';
+  # setup temporary directory
+  $temp_dir = '@TMP_DIR@';
+  # use the perl default if none is supplied or the replace fails
+  $temp_dir = tmpdir() if ($temp_dir eq '' || $temp_dir =~ m/^\@TMP[_]DIR\@$/);
+
+  # find the location of the script
+  my $script_name;
+  ($script_name, $scripts_dir) = fileparse(__FILE__);
+  $scripts_dir = abs_path($scripts_dir);
+
+  # add script location to search path
+  unshift(@INC, $scripts_dir);
+
+  require HtmlMonolithWr;
+  require MemeSAX;
+}
+
+sub arguments {
+  # Set Option Defaults
+  my $options = {XML_PATH => undef, HTML_PATH => undef};
+  # General Options
+  my $help = 0; # FALSE
+  my @errors = ();
+  my @dbs = ();
+
+  # get the options from the arguments
+  my $options_success = 0; # FALSE
+  # redirect stderr to a temp file so we can get the error message from GetOptions
+  my $olderr;
+  my $tmperr = tempfile('GetOptions_XXXXXXXXXX', DIR => $temp_dir, UNLINK => 1);
+  open($olderr, ">&STDERR") or die("Can't dup STDERR: $!");
+  open(STDERR, '>&', $tmperr) or die("Can't redirect STDERR to temp file: $!");
+  # parse options
+  $options_success = GetOptions(
+    'help|?'          => \$help,
+  );
+  ($options->{XML_PATH}, $options->{HTML_PATH}) = @ARGV;
+  # display help
+  pod2usage(1) if $help;
+  # reset STDERR
+  open(STDERR, ">&", $olderr) or die("Can't reset STDERR: $!");
+  # read argument parsing errors
+  seek($tmperr, 0, SEEK_SET);
+  while (<$tmperr>) {chomp; push(@errors, $_);}
+  close($tmperr);
+  # check source XML file
+  unless (defined($options->{XML_PATH})) {
+    push(@errors, "No MEME XML file specified");
+  } elsif (not -e $options->{XML_PATH}) {
+    push(@errors, "The MEME XML file specified does not exist");
+  }
+  unless (defined($options->{HTML_PATH})) {
+    push(@errors, "No output file specified");
+  }
+  # print errors
+  foreach my $error (@errors) {
+    print STDERR $error, "\n";
+  }
+  pod2usage(2) if @errors;
+  # return options
+  return $options;
+}
+
+# start_meme
+sub start_meme {
+  my ($info, $major_ver, $minor_ver, $patch_ver, $release) = @_;
+  my $wr = $info->{wr};
+  $wr->str_prop('program', 'MEME');
+  $wr->str_prop('version', "$major_ver.$minor_ver.$patch_ver");
+  # meme doesn't include the revision information in the XML
+  $wr->str_prop('release', $release);
+}
+# end_meme
+sub end_meme {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+}
+# start_training_set
+sub start_training_set {
+  my ($info, $datafile, $length) = @_;
+  $info->{sequence_db} = {};
+  $info->{sequence_db}->{source} = $datafile;
+  $info->{sequence_db}->{temp} = tempfile("seq_db_info_XXXXXX", 
+    SUFFIX => '.tsv', DIR => $temp_dir, UNLINK => 1);
+}
+# end_training_set
+sub end_training_set {
+  my ($info) = @_;
+}
+# start_alphabet
+sub start_alphabet {
+  my ($info, $is_nucleotide, $length) = @_;
+  $info->{background} = {};
+  # store the symbols and id translations...
+  $info->{id_to_symbol} = {};
+  $info->{letters} = [];
+}
+# end_alphabet
+sub end_alphabet {
+  my ($info) = @_;
+  @{$info->{letters}} = sort @{$info->{letters}};
+}
+# handle_alphabet_letter
+sub handle_alphabet_letter {
+  my ($info, $id, $symbol) = @_;
+  $info->{id_to_symbol}->{$id} = {id => $id, symbol => $symbol, ambig => 0};
+  push(@{$info->{letters}}, $symbol);
+}
+# start_ambigs
+sub start_ambigs {
+  my ($info) = @_;
+}
+# end_ambigs
+sub end_ambigs {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  # prepare for reading sequences
+  $info->{counter} = 0;
+}
+# handle_ambigs_letter
+sub handle_ambigs_letter {
+  my ($info, $id, $symbol) = @_;
+  $info->{id_to_symbol}->{$id} = {id => $id, symbol => $symbol, ambig => 1};
+}
+# handle_sequence
+sub handle_sequence {
+  my ($info, $id, $name, $length, $weight) = @_;
+  my $wr = $info->{wr};
+  # double check that the id follows the expected pattern of
+  # sequence_x where x is from 0 to the number of sequences -1
+  # and where x increments with each sequence
+  die("Unexpected sequence id format") unless ($id =~ m/^sequence_(\d+)$/);
+  my $num = $1;
+  die("Sequence id number is not expected") unless ($info->{counter} == $num);
+  # store the sequence information to a temporary file as we don't want to write
+  # it out yet.
+  my $fh = $info->{sequence_db}->{temp};
+  print $fh "$name\t$length\t$weight\n";
+  $info->{counter}++;
+}
+# start_letter_frequencies
+sub start_letter_frequencies {
+  my ($info) = @_;
+  $info->{sequence_db}->{freqs} = {};
+}
+# end_letter_frequencies
+sub end_letter_frequencies {
+  my ($info) = @_;
+}
+# start_lf_alphabet_array
+sub start_lf_alphabet_array {
+  my ($info) = @_;
+}
+# end_lf_alphabet_array
+sub end_lf_alphabet_array {
+  my ($info) = @_;
+}
+# handle_lf_aa_value
+sub handle_lf_aa_value {
+  my ($info, $letter_id, $frequency) = @_;
+  my $symbol = $info->{id_to_symbol}->{$letter_id};
+  die("Expected non-ambiguous letter") if $symbol->{ambig};
+  $info->{sequence_db}->{freqs}->{$symbol->{symbol}} = $frequency;
+}
+# start_model
+sub start_model {
+  my ($info) = @_;
+}
+# end_model
+sub end_model {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+
+  $wr->str_array_prop("cmd", split(/\s+/, $info->{model}->{command_line}));
+  $wr->property("options");
+  $wr->start_object_value();
+  my %dtype = ('zoops' => 'zoops', 'oops' => 'oops', 'anr' => 'anr', 'tcm' => 'anr');
+  $wr->str_prop("distribution", $dtype{$info->{model}->{type}});
+  $wr->property("stop_conditions");
+  $wr->start_object_value();
+  $wr->num_prop("count", $info->{model}->{nmotifs});
+  unless ($info->{model}->{evalue_threshold} =~ m/^inf(inity)?$/i) {
+    $wr->num_prop("evalue", $info->{model}->{evalue_threshold});
+  }
+  $wr->end_object_value();
+  # more options to be put here
+  $wr->end_object_value();
+  $wr->property("alphabet");
+  $wr->start_object_value();
+  $wr->str_prop("symbols", join('', @{$info->{letters}}));
+  $wr->str_prop("strands", $info->{model}->{strands});
+  $wr->property("freqs");
+  $wr->start_array_value();
+  foreach my $sym (@{$info->{letters}}) {
+    $wr->num_value($info->{background}->{$sym});
+  }
+  $wr->end_array_value();
+  $wr->end_object_value();
+  $wr->property("sequence_db");
+  $wr->start_object_value();
+  $wr->str_prop("source", $info->{sequence_db}->{source});
+  $wr->property("freqs");
+  $wr->start_array_value();
+  foreach my $sym (@{$info->{letters}}) {
+    $wr->num_value($info->{sequence_db}->{freqs}->{$sym});
+  }
+  $wr->end_array_value();
+  $wr->property("sequences");
+  $wr->start_array_value();
+  my $fh = $info->{sequence_db}->{temp};
+  seek($fh, 0, SEEK_SET);
+  while (<$fh>) {
+    chomp($_);
+    my ($name, $len, $weight) = split(/\t/, $_);
+    $wr->start_object_value();
+    $wr->str_prop("name", $name);
+    $wr->num_prop("length", $len);
+    $wr->num_prop("weight", $weight);
+    $wr->end_object_value();
+  }
+  $wr->end_array_value();
+  $wr->end_object_value();
+  $info->{sequence_db}->{temp} = undef;
+  close($fh);
+}
+# handle_command_line
+sub handle_command_line {
+  my ($info, $command_line) = @_;
+  $info->{model}->{command_line} = $command_line;
+}
+# handle_host
+sub handle_host {
+  my ($info, $host) = @_;
+  $info->{model}->{host} = $host;
+}
+# handle_type
+sub handle_type {
+  my ($info, $type) = @_;
+  $info->{model}->{type} = $type;
+}
+# handle_nmotifs
+sub handle_nmotifs {
+  my ($info, $nmotifs) = @_;
+  $info->{model}->{nmotifs} = $nmotifs;
+}
+# handle_evalue_threshold
+sub handle_evalue_threshold {
+  my ($info, $num) = @_;
+  $info->{model}->{evalue_threshold} = $num;
+}
+# handle_object_function
+sub handle_object_function {
+  my ($info, $ob) = @_;
+  $info->{model}->{object_function} = $ob;
+}
+# handle_min_width
+sub handle_min_width {
+  my ($info, $min_width) = @_;
+  $info->{model}->{min_width} = $min_width;
+}
+# handle_max_width
+sub handle_max_width {
+  my ($info, $max_width) = @_;
+  $info->{model}->{max_width} = $max_width;
+}
+# handle_minic
+sub handle_minic {
+  my ($info, $minic) = @_;
+  $info->{model}->{minic} = $minic;
+}
+# handle_wg
+sub handle_wg {
+  my ($info, $wg) = @_;
+  $info->{model}->{wg} = $wg;
+}
+# handle_ws
+sub handle_ws {
+  my ($info, $ws) = @_;
+  $info->{model}->{ws} = $ws;
+}
+# handle_endgaps
+sub handle_endgaps {
+  my ($info, $endgaps) = @_;
+  $info->{model}->{endgaps} = $endgaps;
+}
+# handle_minsites
+sub handle_minsites {
+  my ($info, $minsites) = @_;
+  $info->{model}->{minsites} = $minsites;
+}
+# handle_maxsites
+sub handle_maxsites {
+  my ($info, $maxsites) = @_;
+  $info->{model}->{maxsites} = $maxsites;
+}
+# handle_wnsites
+sub handle_wnsites {
+  my ($info, $wnsites) = @_;
+  $info->{model}->{wnsites} = $wnsites;
+}
+# handle_prob
+sub handle_prob {
+  my ($info, $prob) = @_;
+  $info->{model}->{prob} = $prob;
+}
+# handle_spmap
+sub handle_spmap {
+  my ($info, $spmap) = @_;
+  $info->{model}->{spmap} = $spmap;
+}
+# handle_spfuzz
+sub handle_spfuzz {
+  my ($info, $spfuzz) = @_;
+  $info->{model}->{spfuzz} = $spfuzz;
+}
+# handle_prior
+sub handle_prior {
+  my ($info, $prior) = @_;
+  $info->{model}->{prior} = $prior;
+}
+# handle_beta
+sub handle_beta {
+  my ($info, $beta) = @_;
+  $info->{model}->{beta} = $beta;
+}
+# handle_maxiter
+sub handle_maxiter {
+  my ($info, $maxiter) = @_;
+  $info->{model}->{maxiter} = $maxiter;
+}
+# handle_distance
+sub handle_distance {
+  my ($info, $distance) = @_;
+  $info->{model}->{distance} = $distance;
+}
+# handle_num_sequences
+sub handle_num_sequences {
+  my ($info, $num_sequences) = @_;
+  $info->{model}->{num_sequences} = $num_sequences;
+}
+# handle_num_positions
+sub handle_num_positions {
+  my ($info, $num_positions) = @_;
+  $info->{model}->{num_positions} = $num_positions;
+}
+# handle_seed
+sub handle_seed {
+  my ($info, $seed) = @_;
+  $info->{model}->{seed} = $seed;
+}
+# handle_seqfrac
+sub handle_seqfrac {
+  my ($info, $seqfrac) = @_;
+  $info->{model}->{seqfrac} = $seqfrac;
+}
+# handle_strands
+sub handle_strands {
+  my ($info, $strands) = @_;
+  $info->{model}->{strands} = $strands;
+}
+# handle_priors_file
+sub handle_priors_file {
+  my ($info, $priors_file) = @_;
+  $info->{model}->{priors_file} = $priors_file;
+}
+# handle_reason_for_stopping
+sub handle_reason_for_stopping {
+  my ($info, $reason) = @_;
+  $info->{model}->{reason_for_stopping} = $reason;
+}
+# start_background_frequencies
+sub start_background_frequencies {
+  my ($info) = @_;
+}
+# end_background_frequencies
+sub end_background_frequencies {
+  my ($info) = @_;
+}
+# start_bf_alphabet_array
+sub start_bf_alphabet_array {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+}
+# end_bf_alphabet_array
+sub end_bf_alphabet_array {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+}
+# handle_bf_aa_value
+sub handle_bf_aa_value {
+  my ($info, $letter_id, $frequency) = @_;
+  my $wr = $info->{wr};
+  my $letter = $info->{id_to_symbol}->{$letter_id};
+  die("Expected non-ambiguous letter") if $letter->{ambig};
+  $info->{background}->{$letter->{symbol}} = $frequency;
+}
+# start_motifs
+sub start_motifs {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->property("motifs");
+  $wr->start_array_value();
+}
+# end_motifs
+sub end_motifs {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->end_array_value();
+}
+# start_motif
+sub start_motif {
+  my ($info, $id, $name, $width, $sites, $llr, $ic, $re, 
+    $bt, $evalue, $time, $url) = @_;
+  my $wr = $info->{wr};
+  $wr->start_object_value();
+  $wr->num_prop("db", 0);
+  $wr->str_prop("id", $name);
+  $wr->str_prop("alt", "MEME");
+  $wr->num_prop("len", $width);
+  $wr->num_prop("nsites", $sites);
+  $wr->str_prop("evalue", $evalue);
+  $wr->num_prop("ic", $ic); #information content
+  $wr->num_prop("re", $re); #relative entropy
+  $wr->num_prop("llr", $llr); #log likelihood ratio
+  $wr->num_prop("bt", $bt); # bayes threshold
+  $wr->num_prop("time", $time);
+  $wr->str_prop("url", $url) if $url;
+}
+# end_motif
+sub end_motif {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->end_object_value();
+}
+# start_scores
+sub start_scores {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->property("psm");
+}
+# start_probabilities
+sub start_probabilities {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->property("pwm");
+}
+# start_sc_alphabet_matrix
+# start_pr_alphabet_matrix
+sub start_alphabet_matrix {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->start_array_value();
+}
+# end_sc_alphabet_matrix
+# end_pr_alphabet_matrix
+sub end_alphabet_matrix {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->end_array_value();
+}
+# start_sc_am_alphabet_array
+# start_pr_am_alphabet_array
+sub start_alphabet_array {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $info->{alph_array} = {};
+}
+# end_sc_am_alphabet_array
+# end_pr_am_alphabet_array
+sub end_alphabet_array {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->start_array_value();
+  for (my $i = 0; $i < scalar(@{$info->{letters}}); $i++) {
+    $wr->num_value($info->{alph_array}->{$info->{letters}->[$i]});
+  }
+  $wr->end_array_value();
+}
+# handle_sc_am_aa_value
+# handle_pr_am_aa_value
+sub handle_aa_value {
+  my ($info, $letter_id, $num) = @_;
+  my $letter = $info->{id_to_symbol}->{$letter_id};
+  die("Expected id match") unless defined $letter;
+  die("Expected non-ambiguous letter") if $letter->{ambig};
+  $info->{alph_array}->{$letter->{symbol}} = $num;
+}
+# handle_regular_expression
+sub handle_regular_expression {
+  my ($info) = @_; # can be recreated so not storing it
+}
+# start_contributing_sites
+sub start_contributing_sites {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->property("sites");
+  $wr->start_array_value();
+}
+# end_contributing_sites
+sub end_contributing_sites {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->end_array_value();
+}
+# start_contributing_site
+sub start_contributing_site {
+  my ($info, $sequence_id, $position, $strand, $pvalue) = @_;
+  die("Bad sequence id\n") unless ($sequence_id =~ m/sequence_(\d+)/);
+  my $seq_num = $1;
+  my $wr = $info->{wr};
+  $wr->start_object_value();
+  $wr->num_prop("seq", $seq_num);
+  $wr->num_prop("pos", $position);
+  $wr->bool_prop("rc", $strand eq 'minus');
+  $wr->num_prop("pvalue", $pvalue);
+}
+# end_contributing_site
+sub end_contributing_site {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->end_object_value();
+}
+# handle_left_flank
+sub handle_left_flank {
+  my ($info, $left_flank) = @_;
+  my $wr = $info->{wr};
+  $wr->str_prop("lflank", $left_flank); 
+}
+# start_site
+sub start_site {
+  my ($info) = @_;
+  $info->{match} = '';
+}
+# end_site
+sub end_site {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->str_prop("match", $info->{match});
+}
+# handle_letter_ref
+sub handle_letter_ref {
+  my ($info, $letter_id) = @_;
+  my $letter = $info->{id_to_symbol}->{$letter_id};
+  die("Bad letter ID") unless defined $letter;
+  $info->{match} .= $letter->{symbol};
+}
+# handle_right_flank
+sub handle_right_flank {
+  my ($info, $right_flank) = @_;
+  my $wr = $info->{wr};
+  $wr->str_prop("rflank", $right_flank);
+}
+# start_scanned_sites_summary
+sub start_scanned_sites_summary {
+  my ($info, $scan_threhold) = @_;
+  $info->{model}->{scan_threshold} = $scan_threhold;
+  my $wr = $info->{wr};
+  $wr->property("scan");
+  $wr->start_array_value();
+  $info->{counter} = 0;
+}
+# end_scanned_sites_summary
+sub end_scanned_sites_summary {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->end_array_value();
+}
+# start_scanned_sites
+sub start_scanned_sites {
+  my ($info, $sequence_id, $pvalue, $num_sites) = @_;
+  my $wr = $info->{wr};
+  die("Bad sequence id\n") unless ($sequence_id =~ m/sequence_(\d+)/);
+  my $num = $1;
+  die("Sequence id number is not expected") unless ($info->{counter} == $num);
+  $wr->start_object_value();
+  $wr->num_prop("pvalue", $pvalue);
+  $wr->property("sites");
+  $wr->start_array_value();
+}
+# end_scanned_sites
+sub end_scanned_sites {
+  my ($info) = @_;
+  my $wr = $info->{wr};
+  $wr->end_array_value();
+  $wr->end_object_value();
+  $info->{counter}++;
+}
+# handle_scanned_site
+sub handle_scanned_site {
+  my ($info, $motif_id, $strand, $position, $pvalue) = @_;
+  die("Bad motif id\n") unless ($motif_id =~ m/motif_(\d+)/);
+  my $motif_num = $1 - 1;
+  die("Bad motif id\n") if ($motif_num < 0);
+  my $wr = $info->{wr};
+  $wr->start_object_value();
+  $wr->num_prop("motif", $motif_num);
+  $wr->num_prop("pos", $position); # TODO check is zero based.
+  $wr->bool_prop("rc", $strand eq 'minus');
+  $wr->num_prop("pvalue", $pvalue);
+  $wr->end_object_value();
+}
+
+
+
+sub transform_data {
+  my ($opts, $jsonwr) = @_;
+  my $info = {wr => $jsonwr};
+
+  my $sax = new MemeSAX($info, 
+    start_meme => \&start_meme,
+    end_meme => \&end_meme,
+    start_training_set => \&start_training_set,
+    end_training_set => \&end_training_set,
+    start_alphabet => \&start_alphabet,
+    end_alphabet => \&end_alphabet,
+    handle_alphabet_letter => \&handle_alphabet_letter,
+    start_ambigs => \&start_ambigs,
+    end_ambigs => \&end_ambigs,
+    handle_ambigs_letter => \&handle_ambigs_letter,
+    handle_sequence => \&handle_sequence,
+    start_letter_frequencies => \&start_letter_frequencies,
+    end_letter_frequencies => \&end_letter_frequencies,
+    start_lf_alphabet_array => \&start_lf_alphabet_array,
+    end_lf_alphabet_array => \&end_lf_alphabet_array,
+    handle_lf_aa_value => \&handle_lf_aa_value,
+    start_model => \&start_model,
+    end_model => \&end_model,
+    handle_command_line => \&handle_command_line,
+    handle_host => \&handle_host,
+    handle_type => \&handle_type,
+    handle_nmotifs => \&handle_nmotifs,
+    handle_evalue_threshold => \&handle_evalue_threshold,
+    handle_object_function => \&handle_object_function,
+    handle_min_width => \&handle_min_width,
+    handle_max_width => \&handle_max_width,
+    handle_minic => \&handle_minic,
+    handle_wg => \&handle_wg,
+    handle_ws => \&handle_ws,
+    handle_endgaps => \&handle_endgaps,
+    handle_minsites => \&handle_minsites,
+    handle_maxsites => \&handle_maxsites,
+    handle_wnsites => \&handle_wnsites,
+    handle_prob => \&handle_prob,
+    handle_spmap => \&handle_spmap,
+    handle_spfuzz => \&handle_spfuzz,
+    handle_prior => \&handle_prior,
+    handle_beta => \&handle_beta,
+    handle_maxiter => \&handle_maxiter,
+    handle_distance => \&handle_distance,
+    handle_num_sequences => \&handle_num_sequences,
+    handle_num_positions => \&handle_num_positions,
+    handle_seed => \&handle_seed,
+    handle_seqfrac => \&handle_seqfrac,
+    handle_strands => \&handle_strands,
+    handle_priors_file => \&handle_priors_file,
+    handle_reason_for_stopping => \&handle_reason_for_stopping,
+    start_background_frequencies => \&start_background_frequencies,
+    end_background_frequencies => \&end_background_frequencies,
+    start_bf_alphabet_array => \&start_bf_alphabet_array,
+    end_bf_alphabet_array => \&end_bf_alphabet_array,
+    handle_bf_aa_value => \&handle_bf_aa_value,
+    start_motifs => \&start_motifs,
+    end_motifs => \&end_motifs,
+    start_motif => \&start_motif,
+    end_motif => \&end_motif,
+    start_scores => \&start_scores,
+    start_sc_alphabet_matrix => \&start_alphabet_matrix,
+    end_sc_alphabet_matrix => \&end_alphabet_matrix,
+    start_sc_am_alphabet_array => \&start_alphabet_array,
+    end_sc_am_alphabet_array => \&end_alphabet_array,
+    handle_sc_am_aa_value => \&handle_aa_value,
+    start_probabilities => \&start_probabilities,
+    start_pr_alphabet_matrix => \&start_alphabet_matrix,
+    end_pr_alphabet_matrix => \&end_alphabet_matrix,
+    start_pr_am_alphabet_array => \&start_alphabet_array,
+    end_pr_am_alphabet_array => \&end_alphabet_array,
+    handle_pr_am_aa_value => \&handle_aa_value,
+    handle_regular_expression => \&handle_regular_expression,
+    start_contributing_sites => \&start_contributing_sites,
+    end_contributing_sites => \&end_contributing_sites,
+    start_contributing_site => \&start_contributing_site,
+    end_contributing_site => \&end_contributing_site,
+    handle_left_flank => \&handle_left_flank,
+    start_site => \&start_site,
+    end_site => \&end_site,
+    handle_letter_ref => \&handle_letter_ref,
+    handle_right_flank => \&handle_right_flank,
+    start_scanned_sites_summary => \&start_scanned_sites_summary,
+    end_scanned_sites_summary => \&end_scanned_sites_summary,
+    start_scanned_sites => \&start_scanned_sites,
+    end_scanned_sites => \&end_scanned_sites,
+    handle_scanned_site => \&handle_scanned_site
+  );
+  my $fh;
+  sysopen($fh, $opts->{XML_PATH}, O_RDONLY) or die("Failed to open file \"$opts->{XML_PATH}\"\n");
+  while (<$fh>) {
+    $sax->parse_more($_);
+  }
+  $sax->parse_done();
+}
+
+sub main {
+  &initialise();
+  my $opts = &arguments();
+  # start writing HTML
+  my $htmlwr = new HtmlMonolithWr($etc_dir, 'meme_template.html', 
+    $opts->{HTML_PATH}, 'meme_data.js' => 'data');
+  # transform the XML into JSON
+  &transform_data($opts, $htmlwr->output());
+  # finish writing HTML
+  $htmlwr->output();
+}
+
+&main();
+1;

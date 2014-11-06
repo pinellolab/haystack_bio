@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>GOMo verification</title>
+<link href="../css/status.css" rel="stylesheet" type="text/css" />
+<script src="../doc/js/utilities.js"></script>
+<script src="../js/status.js"></script>
+<script>
+var verify = 
+<!--{message}-->
+{
+  "items": [
+    {
+      "type": "motifs",
+      "name": "Motifs",
+      "key": "motifs"
+    }, 
+    {
+      "type": "gomo",
+      "name": "Database",
+      "key": "gomoSequences"
+    },
+    {
+      "type": "number",
+      "name": "Threshold",
+      "key": "threshold",
+      "any": "Reports GO terms where the <i>q</i>-value &lt; !!VALUE!!."
+    },
+    {
+      "type": "count",
+      "name": "Rounds",
+      "key": "shuffleRounds",
+      "any": "The score-sequence association will be shuffled !!VALUE!! times while calculating the empirical <i>p</i>-value."
+    },
+    {
+      "type": "flag",
+      "name": "Multiple Genomes?",
+      "key": "multiGenome",
+      "on": "When multiple genomes are available they will be used.",
+      "off": "Only the main genome will be used."
+    }
+  ]
+}<!--{/message}-->;
+
+var data = {
+  "when":1381207216291,
+  "expiry": 1381812016291,
+  "description": "This is a test of GOMo",
+  "inputs": {
+    "motifs": {
+      "source": "file",
+      "safe-file": "meme.html",
+      "orig-file": "meme.html",
+      "alphabet": "DNA",
+      "count": 2,
+      "min": 14,
+      "max": 18,
+      "avg": 16.0,
+      "total": 32
+    },
+    "gomoSequences": {
+      "db_name": "Danio rerio (Zebrafish)",
+      "db_description": "1000 bps upstream - 200 bps downstream (-1000 to 199) for <i>Danio rerio</i>."
+    },
+    "threshold": 0.05,
+    "shuffleRounds": 10,
+    "multiGenome": true
+  }
+};
+</script>
+</head>
+<body>
+<!--{title}-->GOMo<!--{/title}--> - <!--{subtitle}-->Gene Ontology for Motifs<!--{/subtitle}--><br>
+<!--{logo}-->doc/images/gomo_icon.png<!--{/logo}-->: <!--{alt}-->GOMo Logo<!--{/alt}--><br>
+<div id="info"></div>
+<script>display_job_information($("info"), verify["items"], data);</script>
+</body>
+</html>
+
+

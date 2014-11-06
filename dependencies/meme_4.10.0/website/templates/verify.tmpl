@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <!-- automatically redirect to the status page if the javascript fails -->
+  <meta http-equiv="refresh" content="5;URL='../info/status?service=XXXXserviceXXXX&id=XXXXidXXXX'" />
+  <title>Verification - MEME Suite</title>
+  <script>
+    (function() {
+      "use strict";
+      var version = "XXXXversionXXXX";
+      var data = XXXXdataXXXX;
+      // check for local storage support
+      try {
+        if (!('localStorage' in window && window['localStorage'] !== null)) return;
+      } catch (e) {
+        return;
+      }
+      // check for JSON support
+      if (!window.JSON) return;
+      // check to see if we have stored data for this job ID yet
+      if (localStorage.getItem(data["id"]) !== null) return;
+      // store the full data
+      localStorage.setItem(data["id"], JSON.stringify(data));
+      // add entry to meme_jobs listing
+      var jobs_json = localStorage.getItem("jobs");
+      var jobs_all = (jobs_json != null ? JSON.parse(jobs_json) : {});
+      var jobs_version = jobs_all[version];
+      if (jobs_version == null) {
+        jobs_version = [];
+        jobs_all[version] = jobs_version;
+      }
+      jobs_version.unshift({"service": data["service"],
+      "id": data["id"], "program": data["program"], 
+      "when": data["when"], "expiry": data["expiry"],
+      "description": data["description"]});
+      // store the updated jobs listing
+      localStorage.setItem("jobs", JSON.stringify(jobs_all));
+      // redirect to the status page
+      window.location.href = "../info/status?service=XXXXserviceXXXX&id=XXXXidXXXX";
+    })();
+  </script>
+</head>
+<body>
+  <p>If for some reason you are not redirected to the status page you can follow
+  <a href="../info/status?service=XXXXserviceXXXX&id=XXXXidXXXX">this link</a>.
+  </p>
+</body>
+</html>

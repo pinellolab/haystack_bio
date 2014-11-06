@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>gomo_highlight - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>gomo_highlight</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>gomo_highlight &lt;GO DAG&gt; &lt;GOMO XML&gt;+</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Updates the GOMO XML file(s) to add details about the GO terms, such
+      as their name, hierarchy, relative position in that hierarchy and which
+      are implied by others in the significant terms for each motif. This
+      allows many improvements to be made in the human readable html output
+      such as allowing the most specific terms to be highlighted. The same
+      postprocessing can be achieved by using the
+      <span class="popt">--dag</span> option to gomo.</p>
+    </div>
+
+    <h3>Inputs</h3>
+    <div class="indent">
+      <h4>GO DAG File</h4>
+      <p class="indent">A file containing the heirarchy of the GO terms in the format
+      specified <a href="godag-format.html" >here</a>.</p>
+      <h4>GOMO XML File</h4>
+      <p class="indent">An XML file from GOMO to update.</p>
+    </div>
+
+    <h3>Outputs</h3>
+    <div class="indent">
+      <p>The GOMO XML File is updated to contain details about the GO terms
+      heirarchy.</p>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <p>There are no optional arguments.</p>
+    </div>
+
+  </body>
+</html>
+

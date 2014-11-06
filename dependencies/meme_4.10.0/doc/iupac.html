@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MAST IUPAC Ambiguous Characters - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <style>
+      td.letter {
+        text-align: center;
+      }
+      td.letter.big {
+        font-size: larger;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      table, th, td {
+        border: 1px solid black;
+      }
+      th, td {
+        padding: 1px 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+
+    <h2>MAST IUPAC Ambiguous Characters</h2>
+    <div class="indent">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">optional<br />
+            letter</th>
+            <th colspan="2">matches</th>
+          </tr>
+          <tr>
+            <th>DNA</th>
+            <th>protein</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="letter">B</td>
+            <td>CGT</td>
+            <td style="width:19em;">DN</td>
+          </tr>
+          <tr>
+            <td class="letter">D</td>
+            <td>AGT</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">H</td>
+            <td>ACT</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">K</td>
+            <td>GT</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">M</td>
+            <td>AC</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">N</td>
+            <td>ACGT</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">R</td>
+            <td>AG</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">S</td>
+            <td>CG</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">U</td>
+            <td>T</td>
+            <td style="width:19em;">ACDEFGHIKLMNPQRSTVWY</td>
+          </tr>
+          <tr>
+            <td class="letter">V</td>
+            <td>CAG</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">W</td>
+            <td>AT</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">X</td>
+            <td></td>
+            <td>ACDEFGHIKLMNPQRSTVWY</td>
+          </tr>
+          <tr>
+            <td class="letter">Y</td>
+            <td>CT</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="letter">Z</td>
+            <td></td>
+            <td>EQ</td>
+          </tr>
+          <tr>
+            <td class="letter big">*</td>
+            <td>ACGT</td>
+            <td>ACDEFGHIKLMNPQRSTVWY</td>
+          </tr>
+          <tr>
+            <td class="letter big">-</td>
+            <td>ACGT</td>
+            <td>ACDEFGHIKLMNPQRSTVWY</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

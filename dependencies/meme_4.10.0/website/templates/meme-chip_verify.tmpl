@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>MEMECHIP verification</title>
+<link href="../css/status.css" rel="stylesheet" type="text/css" />
+<script src="../doc/js/utilities.js"></script>
+<script src="../js/status.js"></script>
+<script>
+var verify = 
+<!--{message}-->
+{
+  "items": [
+    {
+      "type": "sequences",
+      "name": "Sequences",
+      "key": "sequences"
+    },
+    {
+      "type": "motifs",
+      "name": "Motifs",
+      "key": "motifs"
+    },
+    {
+      "type": "background",
+      "name": "Background",
+      "key": "background"
+    },
+    {
+      "type": "flag",
+      "name": "No RC",
+      "key": "norc",
+      "on": "Motif sites will only be considered if they are on the given strand."
+    },
+    {
+      "type": "flag",
+      "name": "Non-random subsampling",
+      "key": "norand",
+      "on": "The programs requiring a subsampling of the sequences will choose sequences from the start of the input file rather than randomly."
+    },
+    {
+      "type": "choice",
+      "name": "MEME Site Distribution",
+      "key": "memeOptMode",
+      "options": {
+        "zoops": "MEME will only find motifs with zero or one occurrence (of a contributing motif site) per sequence.",
+        "oops": "MEME will only find motifs with one occurrence (of a contributing motif site) per sequence.",
+        "anr": "MEME will find motifs with any number of repetitions (of a contributing motif site per sequence)."
+      }
+    },
+    {
+      "type": "count",
+      "name": "MEME Motif Count",
+      "key": "memeOptNMotifs",
+      "one": "MEME will search for one motif.",
+      "any": "MEME will search for !!VALUE!! motifs."
+    },
+    {
+      "type": "range",
+      "name": "MEME Motif Sites",
+      "keyLow": "memeOptMinSites",
+      "keyHigh": "memeOptMaxSites",
+      "same": "MEME will find motifs with exactly !!LOW!! sites.",
+      "low": "MEME will find motifs with at least !!LOW!! sites.",
+      "high": "MEME will find motifs with at most !!HIGH!! sites.",
+      "both": "MEME will find motifs with between !!LOW!! and !!HIGH!! sites (inclusive)."
+    },
+    {
+      "type": "range",
+      "name": "MEME Motif Width",
+      "keyLow": "memeOptMinW",
+      "keyHigh": "memeOptMaxW",
+      "same": "MEME will find motifs which are exactly !!LOW!! wide.",
+      "low": "MEME will find motifs that are at least !!LOW!! wide.",
+      "high": "MEME will find motifs that are at most !!HIGH!! wide.",
+      "both": "MEME will find motifs that are between !!LOW!! and !!HIGH!! wide (inclusive)."
+    },
+    {
+      "type": "flag",
+      "name": "MEME Palindromes",
+      "key": "memeOptPal",
+      "on": "MEME will restrict its search to palindromic motifs."
+    },
+    {
+      "type": "number",
+      "name": "DREME Motif <i>E</i>-value",
+      "key": "dremeOptE",
+      "any": "DREME will search for motifs with an <i>E</i>-value &lt; !!VALUE!!."
+    },
+    {
+      "type": "count",
+      "name": "DREME Motif Count",
+      "key": "dremeOptM",
+      "one": "DREME will search for one motif.",
+      "any": "DREME will search for !!VALUE!! motifs."
+    },
+    {
+      "type": "number",
+      "name": "CentriMo Match Score",
+      "key": "centrimoOptScore",
+      "any": "CentriMo will only use motif sites if they have a match score &ge; !!VALUE!!."
+    },
+    {
+      "type": "number",
+      "name": "CentriMo Region Width",
+      "key": "centrimoOptMaxReg",
+      "any": "CentriMo will only consider regions if they are &le; !!VALUE!! in width."
+    },
+    {
+      "type": "number",
+      "name": "CentriMo <i>E</i>-value threshold",
+      "key": "centrimoOptEThresh",
+      "any": "CentriMo will only report motifs which have a region enrichment <i>E</i>-value &lt; !!VALUE!!."
+    },
+    {
+      "type": "flag",
+      "name": "CentriMo Local",
+      "key": "centrimoOptLocal",
+      "on": "CentriMo will search for enriched regions anywhere.",
+      "off": "CentriMo will only find central enriched regions."
+    },
+    {
+      "type": "flag",
+      "name": "CentriMo Store IDs",
+      "key": "centrimoOptStoreIds",
+      "on": "CentriMo will store the sequence identifiers and their mapping to the best region of all significant motifs."
+    }
+  ]
+}<!--{/message}-->;
+
+var data = {
+  "when":1381207216291,
+  "expiry": 1381812016291,
+  "description": "This is a test of MEMECHIP",
+  "inputs": {
+    "sequences": {
+      "source": "file",
+      "safe-file": "a_file.fa",
+      "orig-file": "a file.fa",
+      "alphabet": "DNA",
+      "count": 18,
+      "min": 105,
+      "max": 105,
+      "avg": 105.0,
+      "total": 1890
+    },
+    "motifs": {
+      "source": "db",
+      "db_name": "Human and Mouse (Jolma2013)",
+      "db_description": "Human and Mouse high-throughput SELEX motifs from <a href=\"http://dx.doi.org/10.1016/j.cell.2012.12.009\"> Cell 2013. 152(1-2):327-339</a>.",
+      "alphabet": "DNA",
+      "count": 738,
+      "min": 7,
+      "max": 23,
+      "avg": 12.423,
+      "total": 9168
+    },
+    "norc": false,
+    "background": {
+      "source": "FILE",
+      "file": {
+        "safe-file": "a_file.fa.bg",
+        "orig-file": "a file.fa.bg"
+      }
+    },
+    "memeOptMode": "zoops",
+    "memeOptNMotifs": 3,
+    "memeOptMinWidth": 6,
+    "memeOptMaxWidth": 50,
+    "memeOptMinSites": 20,
+    "memeOptMaxSites": 600,
+    "memeOptPal": true,
+    "dremeOptE": 0.05,
+    "dremeOptM": 10,
+    "centrimoOptScore": 5.0,
+    "centrimoOptMaxReg": 200,
+    "centrimoOptEThresh": 10.0,
+    "centrimoOptLocal": false,
+    "centrimoOptStoreIds": true
+  }
+};
+</script>
+</head>
+<body>
+<!--{title}-->MEME-ChIP<!--{/title}--> - <!--{subtitle}-->Motif Analysis of Large Nucleotide Datasets<!--{/subtitle}--><br>
+<!--{logo}-->doc/images/memechip_icon.png<!--{/logo}-->: <!--{alt}-->MEME-ChIP Logo<!--{/alt}--><br>
+<div id="info"></div>
+<script>display_job_information($("info"), verify["items"], data);</script>
+</body>
+</html>
+
+

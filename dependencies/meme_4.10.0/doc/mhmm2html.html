@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>mhmm2html - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>mhmm2html</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>mhmm2html [options] &lt;mhmmscan text file&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Converts text output from mhmmscan into HTML.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>mhmmscan Text File</h4>
+      <div class="indent">
+        <p>The text output from the program 
+        <a href="mhmmscan.html">mhmmscan</a>. If '-' is specified then the
+        file is read from standard input.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Output a mhmmscan output in HTML to standard output.</p>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">-alphabet</td><td><span
+                class="popt">dna</span>|&#8203;<span 
+                class="popt">protein</span></td>
+            <td>Specify the alphabet of the mhmmscan result.</td>
+            <td>The DNA alphabet is assumed.</td>
+          </tr>
+          <tr>
+            <td class="popt">-diagram-scale</td><td><span class="pdat">scale</span></td>
+            <td>Set the scale of the diagram.</td>
+            <td>A scale of 1 is used.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>See Also</h3>
+    <div class="indent">
+      <p>The program <a href="mhmmscan.html">mhmmscan</a>, which uses this
+      script to create HTML output.</p>
+    </div>
+  </body>
+</html>
+

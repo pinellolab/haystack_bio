@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MEME PSP Format - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>MEME Position Specific Priors Format</h2>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>These priors allow the user to bias the search for motifs in 
+      <a href="meme.html">MEME</a>. They give a position-specific prior
+      distribution on the location of motif sites in sequence(s) in the
+      input dataset.</p> </p>
+    </div>
+
+    <h3>Format Specification</h3>
+    <div class="indent">
+      <p>The MEME Position Specific Priors (PSP) format includes the name of
+      the sequence for which a prior distribution corresponds. Sequences not
+      named in the PSP file are given uniform prior distributions on site
+      locations by MEME.</p>
+
+      <p>A PSP must be created for a specific width of motif. This width must
+      be specified for each entry in the PSP file, and must be the same for
+      all entries. If MEME varies the motif width during computation, MEME
+      renormalises the PSP for each sequence.</p>
+
+      <p>MEME PSP format is similar to 
+      <a href="fasta-format.html">FASTA format</a>. Each entry should start
+      with a header line consisting of a sequence name (<b>ID</b>) followed by
+      the width (<b>WIDTH</b>) of the PSP prior. The sequence name must match
+      the name of a sequence in the FASTA file input to MEME. Any other text
+      on the header line after the name and width is ignored by MEME. The
+      following lines (<b>PRIORS</b>) contain one number for each position in
+      the identically-named FASTA sequence, where the number gives the prior
+      probability of a motif site at that position in the sequence (or in the
+      reverse complement if <span class="popt">-revcomp</span> is specified).
+      The last <code>w - 1</code> numbers for each entry should be 0 (shown in
+      blue in the example), since a motif of that width cannot start in those
+      positions. All numbers for an entry must be in the range [0,1], and must
+      sum to a number no greater than 1. If they sum to less than 1 and
+      <code>-mod oops</code> is specified, MEME will rescale the numbers so
+      that they sum to 1.</p>
+      <p>The format is arranged like this:</p>
+      <pre class="indent" style="font-weight:bold">
+&gt;ID WIDTH
+PRIORS
+      </pre>
+      <p>An example of the PSP format is given below:</p>
+      <pre class="indent">
+&gt;ICYA_MANSE 4
+0.075922 0.070764 0.082380 0.030292 0.025101 0.043139 0.032963
+0.086047 0.057445 <span style="color:blue">0.000000 0.000000 0.000000</span>
+
+&gt;LACB_BOVIN 4
+0.107099 0.099822 0.116208 0.042731 0.035408 0.060854 0.046499
+<span style="color:blue">0.000000 0.000000 0.000000</span>
+      </pre>
+    </div>
+
+    <h3>See Also</h3>
+    <div class="indent">
+      <p>The <a href="psp-gen.html">psp-gen</a> tool can be used to generate 
+      position specific priors when supplied with a discriminative
+      sequence dataset.</p>
+    </div>
+  </body>
+</html>
+

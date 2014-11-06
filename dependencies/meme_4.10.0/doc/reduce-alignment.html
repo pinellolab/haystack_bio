@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>reduce-alignment - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>reduce-alignment</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>reduce-alignment &lt;start column&gt; &lt;region width&gt; &lt;alignment&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Extract specified range of columns from an alignment.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Start Column</h4>
+      <div class="indent">
+        <p>The first column to extract. This offset is measured from 0.</p>
+      </div>
+
+      <h4>Region Width</h4>
+      <div class="indent">
+        <p>The number of columns to extract.</p>
+      </div>
+
+      <h4>Alignment</h4>
+      <div class="indent">
+        <p>A DNA or protein sequence alignment in
+        <a href="clustalw-format.html">clustalw format</a>. The alignment can
+        be read from standard input by specifying "-" as the file name.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>The extracted region of the sequence alignment is written to standard output.</p>
+    </div>
+  </body>
+</html>
+

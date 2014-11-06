@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DREME Tutorial - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>DREME Tutorial</h2>
+    <h3>Overview</h3>
+    <p>DREME is a tool for discovering short regular expression motifs that
+    are enriched in the provided dataset. It is limited to working with DNA or RNA
+    as the large combination space for amino acids makes DREME's approach
+    unfeasible. DREME also has the capability of using two datasets to
+    find motifs that are enriched in one when compared to the other.
+    <h3>How DREME works</h3>
+    <p>Note the following refers to the sequence set in which you are finding
+    motifs as the positive sequences and to the control sequence
+    set as the negative sequences.
+    <ol>
+      <li>If there are no negative sequences provided then di-nucleotide 
+      shuffle the positive sequences to create one.</li>
+      <li>Count the number of positive sequences and the number of negative
+      sequences.</li>
+      <li>Find all unique subsequences with no ambiguity characters that
+      have a length in the range given (3 to 8 nucleotides by default) 
+      in the positive sequences.</li>
+      <li>For each of the subsequences 
+      <ol>
+        <li>Count the number of sequences it occurs in for the positive and 
+        negative sequences.</li>
+        <li>Use Fisher's exact test to determine the significance.</li>
+        <li>Add the subsequence to a sorted (by <i>p</i>-value) set of regular 
+        expression motifs.</li>
+      </ol>
+      </li>
+      <li>Repeatedly pick the top motifs (default 100) to generalize 
+      by replacing one position with each possible ambiguity code and 
+      estimating the resultant <i>p</i>-value. This is done enough times to allow
+      each position to have an ambiguity code.</li>
+      <li>For each of the top (default 100) generalized RE motifs
+      <ol>
+        <li>Count the number of sequences matched in the positive and negative 
+        sequences.</li>
+        <li>Use Fisher's exact test to determine the significance.</li>
+      </ol>
+      </li>
+      <li>Pick the best RE motif and (assuming it meets the <i>E</i>-value threshold) 
+      scan for all matching sites to build up a frequency matrix and report 
+      it.</li>
+      <li>Mask the matched sites with the wildcard character 'N'.</li>
+      <li>If the limits have not been met then loop back to step 3 to find 
+      more motifs.</li>
+    </ol>
+    <h3>Sequence set</h3>
+    <p>DREME works best with lots of short (~100bp) sequences. If you have a
+    couple of long sequences then it might be beneficial to split them into
+    many smaller (~100bp) sequences. With ChIP-seq data we recommend using
+    100bp regions around the peaks.</p>
+    <h3>Comparative sequence set</h3>
+    <p>DREME always uses a control sequence set but you don't have to supply
+    it as DREME can create it by using di-nucleotide shuffling. If you wish 
+    to use your own sequence set then there are a few guidelines you should 
+    follow.</p>
+
+    <p>The sequence lengths of the control sequences should be roughly
+    the same as the sequences to search for motifs. This is because the null
+    model assumes that the probability of finding a match in a sequence in 
+    either sequence set will be roughly the same for an uninteresting motif. 
+    If the control sequences are longer this provides more 
+    locations that the motif could match making it more likely it will match 
+    and hence skewing the <i>p</i>-value calculations, possibly 
+    excluding a motif you would be interested in.</p>
+  </body>
+</html>
+

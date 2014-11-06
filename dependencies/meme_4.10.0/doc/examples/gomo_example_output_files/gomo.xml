@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Document definition -->
+<!DOCTYPE gomo[
+	<!ELEMENT gomo (program, motif*)>
+	<!ATTLIST gomo xmlns:xsi CDATA #IMPLIED
+			 version CDATA #REQUIRED
+			 release CDATA #REQUIRED
+			>
+		<!ELEMENT program (gomapfile, seqscorefile*)>
+		<!ATTLIST program
+				 name CDATA #REQUIRED
+				 cmd CDATA #REQUIRED
+				 gene_url CDATA #IMPLIED
+				 outdir CDATA #REQUIRED
+				 clobber CDATA #REQUIRED
+				 text_only CDATA #REQUIRED
+				 use_e_values CDATA #REQUIRED
+				 score_e_thresh CDATA #REQUIRED
+				 min_gene_count CDATA #REQUIRED
+				 motifs CDATA #IMPLIED
+				 shuffle_scores CDATA #REQUIRED
+				 q_threshold CDATA #REQUIRED
+				>
+			<!ELEMENT gomapfile EMPTY>
+			<!ATTLIST gomapfile path CDATA #REQUIRED >
+			<!ELEMENT seqscorefile EMPTY>
+			<!ATTLIST seqscorefile path CDATA #REQUIRED >
+		<!ELEMENT motif (goterm*)>
+		<!ATTLIST motif
+				 id CDATA #REQUIRED
+				 genecount CDATA #REQUIRED
+				 logo CDATA #IMPLIED
+				>
+			<!ELEMENT goterm (gene*)>
+			<!ATTLIST goterm
+					 id CDATA #REQUIRED
+					 score CDATA #REQUIRED
+					 pvalue CDATA #REQUIRED
+					 qvalue CDATA #REQUIRED
+					 annotated CDATA #REQUIRED
+					 group CDATA #REQUIRED
+					 nabove CDATA #REQUIRED
+					 nbelow CDATA #REQUIRED
+					 implied (u|y|n) #REQUIRED
+					 name CDATA #REQUIRED
+					>
+				<!ELEMENT gene EMPTY>
+				<!ATTLIST gene
+						 id CDATA #REQUIRED
+						 rank CDATA #REQUIRED
+						>
+]>
+<gomo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="4.10.0" release="Tue May 06 16:46:04 2014 +1000">
+	<program name="gomo"
+			 seed="200467453"
+			 cmd="gomo --oc gomo_example_output_files --dag go.dag --images . bacteria_escherichia_coli_k12_1000_199.na.csv ama.xml"
+			 gene_url="http://regulondb.ccg.unam.mx/SearchListController?object_form=GN&amp;object_id=!!GENEID!!&amp;key_id_org=ECK12&amp;Submit=Go"
+			 outdir="gomo_example_output_files" clobber="TRUE" text_only="FALSE"
+			 use_e_values="TRUE" score_e_thresh="0"
+			 min_gene_count="1"
+			 shuffle_scores="1000" q_threshold="0.05"
+			>
+		<gomapfile path="bacteria_escherichia_coli_k12_1000_199.na.csv" />
+		<seqscorefile path="ama.xml" />
+	</program>
+	<motif id="crp" genecount="2518" logo="logocrp.png">
+		<goterm id="GO:0044248" score="1.341e-06" pvalue="5.615e-07" qvalue="4.550e-04" annotated="52" group="b" nabove="5" nbelow="852" implied="y"
+				name="cellular catabolic process">
+			<gene id="deoC" rank="25" />
+			<gene id="fucP" rank="51" />
+			<gene id="fucA" rank="52" />
+			<gene id="uxaC" rank="64" />
+			<gene id="exuT" rank="65" />
+			<gene id="tdcA" rank="71" />
+			<gene id="rhaB" rank="83" />
+			<gene id="araB" rank="144" />
+			<gene id="fruB" rank="147" />
+			<gene id="fruB" rank="148" />
+		</goterm>
+		<goterm id="GO:0009056" score="8.869e-07" pvalue="5.615e-07" qvalue="4.550e-04" annotated="59" group="b" nabove="2" nbelow="1073" implied="y"
+				name="catabolic process">
+			<gene id="deoC" rank="25" />
+			<gene id="iraP" rank="37" />
+			<gene id="fucP" rank="51" />
+			<gene id="fucA" rank="52" />
+			<gene id="uxaC" rank="64" />
+			<gene id="exuT" rank="65" />
+			<gene id="tdcA" rank="71" />
+			<gene id="rhaB" rank="83" />
+			<gene id="araB" rank="144" />
+			<gene id="fruB" rank="147" />
+		</goterm>
+		<goterm id="GO:0008643" score="1.075e-04" pvalue="7.299e-06" qvalue="3.943e-03" annotated="7" group="b" nabove="4" nbelow="93" implied="n"
+				name="carbohydrate transport">
+			<gene id="fucP" rank="51" />
+			<gene id="malK" rank="138" />
+			<gene id="malE" rank="139" />
+			<gene id="ulaA" rank="174" />
+			<gene id="xylF" rank="179" />
+			<gene id="idnD" rank="197" />
+			<gene id="yjjL" rank="824" />
+		</goterm>
+		<goterm id="GO:0051119" score="2.285e-04" pvalue="2.527e-05" qvalue="8.948e-03" annotated="5" group="m" nabove="6" nbelow="113" implied="n"
+				name="sugar transmembrane transporter activity">
+			<gene id="fucP" rank="51" />
+			<gene id="glpT" rank="99" />
+			<gene id="malK" rank="138" />
+			<gene id="malE" rank="139" />
+			<gene id="xylF" rank="179" />
+		</goterm>
+		<goterm id="GO:0044275" score="2.652e-04" pvalue="3.313e-05" qvalue="8.948e-03" annotated="20" group="b" nabove="9" nbelow="124" implied="n"
+				name="cellular carbohydrate catabolic process">
+			<gene id="fucP" rank="51" />
+			<gene id="fucA" rank="52" />
+			<gene id="rhaB" rank="83" />
+			<gene id="araB" rank="144" />
+			<gene id="fruB" rank="147" />
+			<gene id="fruB" rank="148" />
+			<gene id="nagB" rank="153" />
+			<gene id="xylA" rank="178" />
+			<gene id="idnD" rank="197" />
+			<gene id="nanA" rank="201" />
+		</goterm>
+		<goterm id="GO:0015144" score="2.665e-04" pvalue="3.313e-05" qvalue="8.948e-03" annotated="7" group="m" nabove="5" nbelow="157" implied="y"
+				name="carbohydrate transmembrane transporter activity">
+			<gene id="fucP" rank="51" />
+			<gene id="glpT" rank="99" />
+			<gene id="malK" rank="138" />
+			<gene id="malE" rank="139" />
+			<gene id="ulaA" rank="174" />
+			<gene id="xylF" rank="179" />
+			<gene id="ycaI" rank="1391" />
+		</goterm>
+		<goterm id="GO:0016861" score="3.954e-04" pvalue="4.773e-05" qvalue="1.083e-02" annotated="13" group="m" nabove="4" nbelow="25" implied="n"
+				name="intramolecular oxidoreductase activity, interconverting aldoses and ketoses">
+			<gene id="fucP" rank="51" />
+			<gene id="uxaC" rank="64" />
+			<gene id="rhaB" rank="83" />
+			<gene id="srlA" rank="111" />
+			<gene id="araB" rank="144" />
+			<gene id="nagB" rank="153" />
+			<gene id="xylA" rank="178" />
+			<gene id="hisL" rank="641" />
+			<gene id="yihU" rank="858" />
+			<gene id="rpiB" rank="897" />
+		</goterm>
+		<goterm id="GO:0016860" score="4.737e-04" pvalue="5.896e-05" qvalue="1.083e-02" annotated="14" group="m" nabove="3" nbelow="70" implied="y"
+				name="intramolecular oxidoreductase activity">
+			<gene id="fucP" rank="51" />
+			<gene id="uxaC" rank="64" />
+			<gene id="rhaB" rank="83" />
+			<gene id="srlA" rank="111" />
+			<gene id="araB" rank="144" />
+			<gene id="nagB" rank="153" />
+			<gene id="xylA" rank="178" />
+			<gene id="hisL" rank="641" />
+			<gene id="yihU" rank="858" />
+			<gene id="rpiB" rank="897" />
+		</goterm>
+		<goterm id="GO:0016052" score="5.421e-04" pvalue="6.569e-05" qvalue="1.083e-02" annotated="24" group="b" nabove="5" nbelow="182" implied="y"
+				name="carbohydrate catabolic process">
+			<gene id="fucP" rank="51" />
+			<gene id="fucA" rank="52" />
+			<gene id="rhaB" rank="83" />
+			<gene id="araB" rank="144" />
+			<gene id="fruB" rank="147" />
+			<gene id="fruB" rank="148" />
+			<gene id="nagB" rank="153" />
+			<gene id="ybjQ" rank="158" />
+			<gene id="xylA" rank="178" />
+			<gene id="idnD" rank="197" />
+		</goterm>
+		<goterm id="GO:0009057" score="5.850e-04" pvalue="6.682e-05" qvalue="1.083e-02" annotated="30" group="b" nabove="4" nbelow="215" implied="y"
+				name="macromolecule catabolic process">
+			<gene id="iraP" rank="37" />
+			<gene id="fucP" rank="51" />
+			<gene id="fucA" rank="52" />
+			<gene id="rhaB" rank="83" />
+			<gene id="araB" rank="144" />
+			<gene id="fruB" rank="147" />
+			<gene id="fruB" rank="148" />
+			<gene id="nagB" rank="153" />
+			<gene id="ybjQ" rank="158" />
+			<gene id="xylA" rank="178" />
+		</goterm>
+		<goterm id="GO:0016853" score="7.322e-04" pvalue="9.938e-05" qvalue="1.464e-02" annotated="37" group="m" nabove="2" nbelow="232" implied="y"
+				name="isomerase activity">
+			<gene id="fucP" rank="51" />
+			<gene id="uxaC" rank="64" />
+			<gene id="yqcC" rank="77" />
+			<gene id="rhaB" rank="83" />
+			<gene id="srlA" rank="111" />
+			<gene id="araB" rank="144" />
+			<gene id="nagB" rank="153" />
+			<gene id="xylA" rank="178" />
+			<gene id="nanA" rank="201" />
+			<gene id="nanC" rank="239" />
+		</goterm>
+		<goterm id="GO:0044265" score="8.893e-04" pvalue="1.235e-04" qvalue="1.668e-02" annotated="23" group="b" nabove="9" nbelow="133" implied="n"
+				name="cellular macromolecule catabolic process">
+			<gene id="fucP" rank="51" />
+			<gene id="fucA" rank="52" />
+			<gene id="rhaB" rank="83" />
+			<gene id="araB" rank="144" />
+			<gene id="fruB" rank="147" />
+			<gene id="fruB" rank="148" />
+			<gene id="nagB" rank="153" />
+			<gene id="xylA" rank="178" />
+			<gene id="idnD" rank="197" />
+			<gene id="nanA" rank="201" />
+		</goterm>
+		<goterm id="GO:0019321" score="1.272e-03" pvalue="1.898e-04" qvalue="2.366e-02" annotated="8" group="b" nabove="10" nbelow="53" implied="n"
+				name="pentose metabolic process">
+			<gene id="fucP" rank="51" />
+			<gene id="fucA" rank="52" />
+			<gene id="rhaB" rank="83" />
+			<gene id="araB" rank="144" />
+			<gene id="xylA" rank="178" />
+			<gene id="rbsD" rank="364" />
+			<gene id="aldA" rank="1071" />
+			<gene id="yiaK" rank="1938" />
+		</goterm>
+	</motif>
+	<motif id="nagC" genecount="2518" logo="logonagC.png">
+		<goterm id="GO:0051704" score="1.801e-04" pvalue="1.628e-05" qvalue="2.444e-02" annotated="13" group="b" nabove="1" nbelow="1141" implied="y"
+				name="multi-organism process">
+			<gene id="srlA" rank="79" />
+			<gene id="solA" rank="181" />
+			<gene id="yjbE" rank="305" />
+			<gene id="bhsA" rank="376" />
+			<gene id="ymgC" rank="387" />
+			<gene id="dcuB" rank="442" />
+			<gene id="yihR" rank="478" />
+			<gene id="hlyE" rank="536" />
+			<gene id="ttdA" rank="588" />
+			<gene id="zwf" rank="720" />
+		</goterm>
+		<goterm id="GO:0042710" score="4.020e-04" pvalue="4.155e-05" qvalue="2.444e-02" annotated="11" group="b" nabove="2" nbelow="11" implied="n"
+				name="biofilm formation">
+			<gene id="srlA" rank="79" />
+			<gene id="solA" rank="181" />
+			<gene id="yjbE" rank="305" />
+			<gene id="bhsA" rank="376" />
+			<gene id="ymgC" rank="387" />
+			<gene id="dcuB" rank="442" />
+			<gene id="yihR" rank="478" />
+			<gene id="ttdA" rank="588" />
+			<gene id="ymgA" rank="821" />
+			<gene id="yjiP" rank="889" />
+		</goterm>
+		<goterm id="GO:0031504" score="8.308e-04" pvalue="1.095e-04" qvalue="2.444e-02" annotated="5" group="b" nabove="8" nbelow="0" implied="n"
+				name="peptidoglycan-based cell wall organization">
+			<gene id="mltB" rank="78" />
+			<gene id="mltA" rank="98" />
+			<gene id="mipA" rank="128" />
+			<gene id="mraZ" rank="166" />
+			<gene id="zwf" rank="720" />
+		</goterm>
+		<goterm id="GO:0009252" score="8.308e-04" pvalue="1.095e-04" qvalue="2.444e-02" annotated="5" group="b" nabove="31" nbelow="4" implied="n"
+				name="peptidoglycan biosynthetic process">
+			<gene id="mltB" rank="78" />
+			<gene id="mltA" rank="98" />
+			<gene id="mipA" rank="128" />
+			<gene id="mraZ" rank="166" />
+			<gene id="zwf" rank="720" />
+		</goterm>
+		<goterm id="GO:0009273" score="8.308e-04" pvalue="1.095e-04" qvalue="2.444e-02" annotated="5" group="b" nabove="6" nbelow="15" implied="y"
+				name="peptidoglycan-based cell wall biogenesis">
+			<gene id="mltB" rank="78" />
+			<gene id="mltA" rank="98" />
+			<gene id="mipA" rank="128" />
+			<gene id="mraZ" rank="166" />
+			<gene id="zwf" rank="720" />
+		</goterm>
+		<goterm id="GO:0007047" score="8.308e-04" pvalue="1.095e-04" qvalue="2.444e-02" annotated="5" group="b" nabove="7" nbelow="12" implied="y"
+				name="cellular cell wall organization">
+			<gene id="mltB" rank="78" />
+			<gene id="mltA" rank="98" />
+			<gene id="mipA" rank="128" />
+			<gene id="mraZ" rank="166" />
+			<gene id="zwf" rank="720" />
+		</goterm>
+		<goterm id="GO:0042546" score="8.308e-04" pvalue="1.095e-04" qvalue="2.444e-02" annotated="5" group="b" nabove="5" nbelow="59" implied="y"
+				name="cell wall biogenesis">
+			<gene id="mltB" rank="78" />
+			<gene id="mltA" rank="98" />
+			<gene id="mipA" rank="128" />
+			<gene id="mraZ" rank="166" />
+			<gene id="zwf" rank="720" />
+		</goterm>
+		<goterm id="GO:0016798" score="1.101e-03" pvalue="1.724e-04" qvalue="2.992e-02" annotated="5" group="m" nabove="3" nbelow="215" implied="y"
+				name="hydrolase activity, acting on glycosyl bonds">
+			<gene id="chiA" rank="11" />
+			<gene id="uidA" rank="95" />
+			<gene id="mltA" rank="98" />
+			<gene id="essD" rank="386" />
+		</goterm>
+		<goterm id="GO:0004553" score="1.101e-03" pvalue="1.724e-04" qvalue="2.992e-02" annotated="5" group="m" nabove="4" nbelow="163" implied="n"
+				name="hydrolase activity, hydrolyzing O-glycosyl compounds">
+			<gene id="chiA" rank="11" />
+			<gene id="uidA" rank="95" />
+			<gene id="mltA" rank="98" />
+			<gene id="essD" rank="386" />
+		</goterm>
+	</motif>
+	<motif id="narP" genecount="2518" logo="logonarP.png">
+		<goterm id="GO:0009061" score="3.737e-04" pvalue="4.380e-05" qvalue="3.811e-02" annotated="11" group="b" nabove="7" nbelow="6" implied="n"
+				name="anaerobic respiration">
+			<gene id="fdnG" rank="3" />
+			<gene id="nirB" rank="9" />
+			<gene id="narG" rank="21" />
+			<gene id="frdA" rank="25" />
+			<gene id="dmsA" rank="32" />
+			<gene id="torC" rank="228" />
+			<gene id="lldP" rank="715" />
+			<gene id="narZ" rank="798" />
+			<gene id="zwf" rank="2156" />
+		</goterm>
+		<goterm id="GO:0045333" score="5.182e-04" pvalue="6.625e-05" qvalue="3.811e-02" annotated="15" group="b" nabove="6" nbelow="34" implied="y"
+				name="cellular respiration">
+			<gene id="fdnG" rank="3" />
+			<gene id="nirB" rank="9" />
+			<gene id="narG" rank="21" />
+			<gene id="frdA" rank="25" />
+			<gene id="dmsA" rank="32" />
+			<gene id="torC" rank="228" />
+			<gene id="sdhC" rank="672" />
+			<gene id="lldP" rank="715" />
+			<gene id="narZ" rank="798" />
+			<gene id="cyoA" rank="984" />
+		</goterm>
+		<goterm id="GO:0030151" score="6.633e-04" pvalue="9.882e-05" qvalue="3.811e-02" annotated="5" group="m" nabove="6" nbelow="0" implied="n"
+				name="molybdenum ion binding">
+			<gene id="fdnG" rank="3" />
+			<gene id="narG" rank="21" />
+			<gene id="dmsA" rank="32" />
+			<gene id="torC" rank="228" />
+			<gene id="narZ" rank="798" />
+		</goterm>
+		<goterm id="GO:0015980" score="9.717e-04" pvalue="1.494e-04" qvalue="3.811e-02" annotated="16" group="b" nabove="5" nbelow="75" implied="y"
+				name="energy derivation by oxidation of organic compounds">
+			<gene id="fdnG" rank="3" />
+			<gene id="nirB" rank="9" />
+			<gene id="narG" rank="21" />
+			<gene id="frdA" rank="25" />
+			<gene id="dmsA" rank="32" />
+			<gene id="torC" rank="228" />
+			<gene id="sdhC" rank="672" />
+			<gene id="lldP" rank="715" />
+			<gene id="narZ" rank="798" />
+			<gene id="cyoA" rank="984" />
+		</goterm>
+		<goterm id="GO:0006091" score="9.717e-04" pvalue="1.494e-04" qvalue="3.811e-02" annotated="16" group="b" nabove="4" nbelow="102" implied="y"
+				name="generation of precursor metabolites and energy">
+			<gene id="fdnG" rank="3" />
+			<gene id="nirB" rank="9" />
+			<gene id="narG" rank="21" />
+			<gene id="frdA" rank="25" />
+			<gene id="dmsA" rank="32" />
+			<gene id="torC" rank="228" />
+			<gene id="sdhC" rank="672" />
+			<gene id="lldP" rank="715" />
+			<gene id="narZ" rank="798" />
+			<gene id="cyoA" rank="984" />
+		</goterm>
+		<goterm id="GO:0017004" score="1.063e-03" pvalue="1.628e-04" qvalue="3.811e-02" annotated="5" group="b" nabove="12" nbelow="14" implied="n"
+				name="cytochrome complex assembly">
+			<gene id="napF" rank="1" />
+			<gene id="fdnG" rank="3" />
+			<gene id="narG" rank="21" />
+			<gene id="cydA" rank="609" />
+			<gene id="sdhC" rank="672" />
+		</goterm>
+		<goterm id="GO:0043623" score="1.063e-03" pvalue="1.628e-04" qvalue="3.811e-02" annotated="5" group="b" nabove="11" nbelow="105" implied="y"
+				name="cellular protein complex assembly">
+			<gene id="napF" rank="1" />
+			<gene id="fdnG" rank="3" />
+			<gene id="narG" rank="21" />
+			<gene id="cydA" rank="609" />
+			<gene id="sdhC" rank="672" />
+		</goterm>
+		<goterm id="GO:0042592" score="1.382e-03" pvalue="2.190e-04" qvalue="3.811e-02" annotated="13" group="b" nabove="3" nbelow="275" implied="y"
+				name="homeostatic process">
+			<gene id="aqpZ" rank="28" />
+			<gene id="nhaB" rank="30" />
+			<gene id="adiC" rank="60" />
+			<gene id="gadB" rank="80" />
+			<gene id="mscS" rank="155" />
+			<gene id="gadA" rank="255" />
+			<gene id="adiA" rank="370" />
+			<gene id="nhaA" rank="532" />
+			<gene id="kefA" rank="565" />
+			<gene id="mscL" rank="821" />
+		</goterm>
+		<goterm id="GO:0048878" score="1.382e-03" pvalue="2.190e-04" qvalue="3.811e-02" annotated="13" group="b" nabove="4" nbelow="188" implied="n"
+				name="chemical homeostasis">
+			<gene id="aqpZ" rank="28" />
+			<gene id="nhaB" rank="30" />
+			<gene id="adiC" rank="60" />
+			<gene id="gadB" rank="80" />
+			<gene id="mscS" rank="155" />
+			<gene id="gadA" rank="255" />
+			<gene id="adiA" rank="370" />
+			<gene id="nhaA" rank="532" />
+			<gene id="kefA" rank="565" />
+			<gene id="mscL" rank="821" />
+		</goterm>
+		<goterm id="GO:0019725" score="1.382e-03" pvalue="2.190e-04" qvalue="3.811e-02" annotated="13" group="b" nabove="5" nbelow="131" implied="n"
+				name="cellular homeostasis">
+			<gene id="aqpZ" rank="28" />
+			<gene id="nhaB" rank="30" />
+			<gene id="adiC" rank="60" />
+			<gene id="gadB" rank="80" />
+			<gene id="mscS" rank="155" />
+			<gene id="gadA" rank="255" />
+			<gene id="adiA" rank="370" />
+			<gene id="nhaA" rank="532" />
+			<gene id="kefA" rank="565" />
+			<gene id="mscL" rank="821" />
+		</goterm>
+		<goterm id="GO:0009055" score="1.539e-03" pvalue="2.448e-04" qvalue="3.873e-02" annotated="14" group="m" nabove="1" nbelow="7" implied="n"
+				name="electron carrier activity">
+			<gene id="fdnG" rank="3" />
+			<gene id="narG" rank="21" />
+			<gene id="frdA" rank="25" />
+			<gene id="dmsA" rank="32" />
+			<gene id="torC" rank="228" />
+			<gene id="cydA" rank="609" />
+			<gene id="sdhC" rank="672" />
+			<gene id="narZ" rank="798" />
+			<gene id="cyoA" rank="984" />
+			<gene id="ndh" rank="1013" />
+		</goterm>
+		<goterm id="GO:0065007" score="1.695e-03" pvalue="2.746e-04" qvalue="3.982e-02" annotated="46" group="b" nabove="1" nbelow="6719" implied="y"
+				name="biological regulation">
+			<gene id="napF" rank="1" />
+			<gene id="aqpZ" rank="28" />
+			<gene id="nhaB" rank="30" />
+			<gene id="adiC" rank="60" />
+			<gene id="gadB" rank="80" />
+			<gene id="acnA" rank="106" />
+			<gene id="lptA" rank="147" />
+			<gene id="mscS" rank="155" />
+			<gene id="sohA" rank="224" />
+			<gene id="alaS" rank="236" />
+		</goterm>
+		<goterm id="GO:0065008" score="1.839e-03" pvalue="3.099e-04" qvalue="4.149e-02" annotated="15" group="b" nabove="2" nbelow="1381" implied="y"
+				name="regulation of biological quality">
+			<gene id="aqpZ" rank="28" />
+			<gene id="nhaB" rank="30" />
+			<gene id="adiC" rank="60" />
+			<gene id="gadB" rank="80" />
+			<gene id="mscS" rank="155" />
+			<gene id="sohA" rank="224" />
+			<gene id="gadA" rank="255" />
+			<gene id="adiA" rank="370" />
+			<gene id="nhaA" rank="532" />
+			<gene id="kefA" rank="565" />
+		</goterm>
+		<goterm id="GO:0043169" score="2.049e-03" pvalue="3.543e-04" qvalue="4.404e-02" annotated="26" group="m" nabove="3" nbelow="29" implied="y"
+				name="cation binding">
+			<gene id="fdnG" rank="3" />
+			<gene id="nirB" rank="9" />
+			<gene id="narG" rank="21" />
+			<gene id="dmsA" rank="32" />
+			<gene id="uxaC" rank="172" />
+			<gene id="torC" rank="228" />
+			<gene id="alaS" rank="236" />
+			<gene id="nagB" rank="246" />
+			<gene id="yfdR" rank="378" />
+			<gene id="fucA" rank="510" />
+		</goterm>
+	</motif>
+</gomo>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MHMM Format - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>MHMM Format</h2>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>This format describes a hidden markov model of motif sites in a sequence.</p>
+    </div>
+
+    <h3>Format Specification</h3>
+    <div class="indent">
+      <h4>Overview</h4>
+      <div class="indent">
+        <ul>
+          <li>The MEME Suite version number and release date.</li>
+          <li>The program name, file contents and date the file was created.</li>
+          <li>A link to the MEME Suite home page.</li>
+          <li>A reference to cite if you publish results from the MEME Suite.</li>
+          <li>Some global information about the MHMM.</li>
+          <li>A list of the states in the MHMM.</li>
+          <li>The matrix of transition probabilities between states of the MHMM.</li>
+        </ul>
+      </div>
+      <h4>Global Information</h4>
+      <div class="indent">
+        <p>The list of states in the MEME Suite HMM begins with eight lines
+        that specify the global characteristics of the model. These lines tell</p>
+        <ul>
+          <li>whether the model has a linear or completely connected topology
+          (i.e., whether the model allows for repetition and shuffling of
+          motifs),</li>
+          <li>the total number of states in the model,</li>
+          <li>the total number of spacers (i.e., inter-motif regions) in the
+          model,</li>
+          <li>the number of states used to represent each spacer,</li>
+          <li>the number of letters in the alphabet (4 for DNA and 20 for amino
+          acids),</li>
+          <li>the alphabet,</li>
+          <li>the background frequencies used as emission probabilities in the
+          spacer states, and</li>
+          <li>the name of the MEME output file that was used to generate this
+          MHMM.</li>
+        </ul>
+      </div>
+      <h4>States</h4>
+      <div class="indent">
+        <p>Following the global characteristics is a list of state
+        descriptions. Each state description consists of six lines. These 
+        lines tell</p>
+        <ul>
+          <li>the index of the state (numbered from 0),</li>
+          <li>the type of state (i.e, whether it is a start or end state, a
+          spacer state, or the beginning, middle or end of a motif),</li>
+          <li>the index of the motif within which this state appears (This
+          value is arbitrarily set to -1 for non-motif states.),</li>
+          <li>the position of the state within the motif or spacer region,
+          and</li>
+          <li>the letter that is printed above this state when the MEME motif
+          ID is printed centered with respect to the motif,</li>
+          <li>the list of probabilities that this state will emit each of the
+          letters in the alphabet.</li>
+        </ul>
+        <p>The final item (the list of emission probabilities) is omitted
+        from the start and end states, which do not emit letters.</p>
+      </div>
+      <h4>Transition probability matrix</h4>
+      <div class="indent">
+        <p>The MHMM file ends with a square matrix containing n
+        rows and n columns, where n is the number of states in the model.
+        The entry in row i, column j of this matrix is the probability of
+        transitioning from state i to state j in the model. Consequently,
+        each row in the matrix sums to 1.0.</p>
+      </div>
+    </div>
+
+    <h3>See Also</h3>
+    <div class="indent">
+      <p>The program <a href="mhmm.html">mhmm</a> can be used to create a file
+      in MHMM format from <a href="meme-format.html">MEME motifs</a>.</p>
+    </div>
+
+  </body>
+</html>
+

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>MCAST - Submission form</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../doc/images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="../doc/images/memesuite_icon.png">
+    <link href="../doc/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/fasta-debug.css" rel="stylesheet" type="text/css" />
+    <link href="../css/component_motifs.css" rel="stylesheet" type="text/css">
+    <link href="../css/component_sequences.css" rel="stylesheet" type="text/css">
+    <script src="../doc/js/menu-path.js"></script>
+    <script src="../doc/js/menu.js"></script>
+    <script src="../doc/js/motif_logo.js"></script>
+    <script src="../doc/js/utilities.js"></script>
+    <script src="../js/site.js"></script>
+    <script src="../js/fasta-debug.js"></script>
+    <!-- wicked-good-xpath library: http://code.google.com/p/wicked-good-xpath/ -->
+    <script src="../js/wgxpath.install.js"></script>
+    <script src="../js/motif_parser.js"></script>
+    <script src="../js/component_motifs.js"></script>
+    <script src="../js/component_sequences.js"></script>
+    <script src="../js/mcast.js"></script>
+  </head>
+  <body>
+    <!--{help/}-->
+    <div class="pop_content" id="pop_pseudocount">
+      <p>This pseudocount value is added to each of the motif's letter counts in
+      proportion to the background frequency before generating the
+      postion specific scoring matrices.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_motif_pv">
+      <p>This value sets the scale for calculating p-scores of motif hits. Hit
+      <i>p</i>-values below this threshold get positive scores while hit
+      <i>p</i>-values above this threshold get negative scores.</p>
+      <p>The p-score <b>S</b> for a hit with <i>p</i>-value <b>p</b> is:<br>
+      <code><b>S</b> = -log<sub>2</sub>(<b>p</b> / <span class="pdat">hit p-value threshold</span>)</code></p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_max_gap">
+      <p>This value specifies the longest distance allowed between two hits in
+      a match. Hits separated by more than this value will be placed in
+      different matches.</p>
+      <p>Large values for this field combined with large values for the
+      hit <i>p</i>-value threshold may prevent MCAST from computing E-values.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_output_ev">
+      <p>This value sets the <i>E</i>-value threshold for displaying search
+      results. If the <i>E</i>-value of a match is greater than this value,
+      then the match will not be included in the output.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="content_box">
+      <!--{header}-->
+      <p>
+      <!--{title}-->MCAST<!--{/title}--> - <!--{subtitle}-->Motif Cluster Alignment and Search Tool<!--{/subtitle}--><br>
+      <!--{logo}-->../doc/images/mcast_icon.png<!--{/logo}-->: <!--{alt}-->MCAST Logo<!--{/alt}--><br>
+      <!--{blurb}--><span class="blurb" data-id="mcast"></span><!--{/blurb}-->
+      </p>
+      <!--{/header}-->
+      <form enctype="multipart/form-data" accept-charset="utf-8"
+      method="POST" action="mcast" id="mcast_form">
+        <fieldset>
+          <legend>Data Submission Form</legend>
+          <p class="meme">Scan sequences for clusters of motifs.</p> 
+          <!--{motifs}-->
+          <!--{prefix}-->motifs<!--{/prefix}-->
+          <!--{title}-->Input the motifs<!--{/title}-->
+          <!--{alphabets}-->DNA RNA<!--{/alphabets}-->
+          <!--{default}-->FILE<!--{/default}-->
+          <!--{register}-->register_component<!--{/register}-->
+          <!--{/motifs}-->
+
+          <!--{sequences}-->
+          <!--{prefix}-->sequences<!--{/prefix}-->
+          <!--{title}-->Input the sequences<!--{/title}-->
+          <!--{alphabets}-->DNA RNA<!--{/alphabets}-->
+          <!--{default}-->DATABASE<!--{/default}-->
+          <!--{enable_db/}-->
+          <!--{register}-->register_component<!--{/register}-->
+          <!--{/sequences}-->
+
+          <!--{job_details/}-->
+          <div style="margin-top: 5px; margin-bottom: 5px; width: 80%">
+            <!--{advanced_options/}-->
+            <div>
+              <!-- pseudocount -->
+              <h3 class="meme">What pseudocount should be added to motifs?</h3>
+              <label for="">Pseudocount:</label>
+              <input class="meme numonly sz2" type="text" id="pseudocount"
+              name="pseudocount" value="4" step="any" min="0" size="2">
+              <div class="help" data-topic="pop_pseudocount"></div>
+              <!-- /pseudocount -->
+              <!-- hit pvalue -->
+              <h3 class="meme">What <i>p</i>-value threshold should be used for scoring motif hits?</h3>
+              <label for="motif_pv">Hit </i>p</i>-value &lt;</label>
+              <input class="meme numonly sz5" type="text" id="motif_pv"
+              name="motif_pv" value="0.0005" step="any" min="0" max="1" size="5">
+              <div class="help" data-topic="pop_motif_pv"></div>
+              <!-- /hit pvalue -->
+              <!-- max gap -->
+              <h3 class="meme">How far apart can adjacent motif hits be spaced?</h3>
+              <label for="max_gap">Spacing &le;</label>
+              <input class="meme intonly sz2" type="number" id="max_gap"
+              name="max_gap" value="50" step="1" min="0" size="2">
+              <div class="help" data-topic="pop_max_gap"></div>
+              <!-- /max gap -->
+              <!-- output evalue -->
+              <h3 class="meme">How should matches be filtered before output?</h3>
+              <label for="output_ev">Match <i>E</i>-value &lt;</label>
+              <select class="meme" name="output_ev" id="output_ev">
+                <option value="0.01">0.01</option>
+                <option value="0.1">0.1</option>
+                <option value="1">1.0</option>
+                <option value="10" selected>10.0</option>
+                <option value="100">100.0</option>
+                <option value="1000">1000.0</option>
+                <option value="10000">10000.0</option>
+              </select>
+              <div class="help" data-topic="pop_output_ev"></div>
+              <!-- /output evalue -->
+            </div>
+          </div>
+          <!--{submit_reset/}-->
+        </fieldset>
+      </form>
+      <!--{footer/}-->
+      </div>
+    </div>
+  </body>
+</html>
+

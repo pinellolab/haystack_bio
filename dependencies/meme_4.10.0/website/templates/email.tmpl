@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>${program} Job Verification</title>
+    <style>
+      /*****************************************************************************
+       * Program logo styling
+       ****************************************************************************/
+      div.prog_logo {
+        border-bottom: 0.25em solid #0f5f60;
+        height: 4.5em;
+        width: 24em;
+        display:inline-block;
+      }
+      div.prog_logo img {
+        float:left;
+        width: 4em;
+        border-style: none;
+        margin-right: 0.2em;
+      }
+      div.prog_logo h1, div.prog_logo h1:hover, div.prog_logo h1:active, div.prog_logo h1:visited {
+        margin:0;
+        padding:0;
+        font-family: Arial, Helvetica,  sans-serif;
+        font-size: 3.2em;
+        line-height: 1em;
+        vertical-align: top;
+        display: block;
+        color: #026666;
+        letter-spacing: -0.06em;
+        text-shadow: 0.04em 0.06em 0.05em #666;
+      }
+      div.prog_logo h2, div.prog_logo h2:hover, div.prog_logo h2:active, div.prog_logo h2:visited {
+        display: block;
+        margin:0;
+        padding:0;
+        font-family: Helvetica, sans-serif;
+        font-size: 0.9em;
+        line-height: 1em;
+        letter-spacing: -0.06em;
+        color: black;
+      }
+
+      /*****************************************************************************
+       * Information table styling
+       ****************************************************************************/
+      table.job_details {
+        width: 100%;
+      }
+
+      table.job_details tr th {
+        text-align: left;
+      }
+
+      table.job_details tr.odd {
+        background-color: #b6e4cd;
+      }
+
+      table.job_details tr.even {
+        background-color: #E4ECEC;
+      }
+
+      table.job_details span.file {
+        font-family: monospace;
+        white-space: pre;
+        padding: 2px;
+        border: 1px solid black;
+      }
+
+      tr.preformatted td {
+        white-space: pre-line;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="prog_logo">
+      <img src="${site_url}${logo}" alt="${alt}">
+      <h1>${title}</h1>
+      <h2>${subtitle}</h2>
+    </div>
+    <p>This is an auto-generated response to your job submission.</p>
+    <p>Your job ID is: <b>${id}</b></p>
+    <p>You can view your job results at: 
+    <a href="${site_url}info/status?service=${service}&id=${id}"
+    >${site_url}info/status?service=${service}&id=${id}</a></p>
+
+    <h3>Job Details</h3>
+    <table class="job_details">
+      <!--{details}-->
+      <tr class="XXXXclassXXXX">
+        <th>${name}</th><td>${value}</td>
+      </tr>
+      <!--{/details}-->
+    </table>
+  </body>
+</html>
+

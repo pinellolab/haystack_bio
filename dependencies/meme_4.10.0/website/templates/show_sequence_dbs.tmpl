@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sequence Databases - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../doc/images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="../doc/images/memesuite_icon.png">
+    <link href="../doc/css/style.css" rel="stylesheet" type="text/css" />
+    <script src="../doc/js/menu-path.js"></script>
+    <script src="../doc/js/menu.js"></script>
+    <script src="../doc/js/utilities.js"></script>
+    <script src="../js/site.js"></script>
+    <style>
+      div.category {
+        border: 1px solid black;
+        padding: 5px;
+      }
+      div.listing + div.listing {
+        margin-top: 20px;
+      }
+      div.listing h4, div.listing p {
+        margin-top: 0;
+        margin-bottom: 2px;
+      }
+      div.versions h5 {
+        display: inline;
+        margin-right: 5px;
+      }
+      div.versions div.out {
+        display: none;
+      }
+      div.versions div.out.active {
+        display: block;
+        margin-top: 5px;
+      }
+      div.version {
+        display: inline-block;
+      }
+      div.version + div.version {
+        margin-left: 5px;
+      }
+      div.button {
+        display: inline-block;
+        font-variant: small-caps;
+        font-weight: bold;
+        padding: 2px;
+        border: 1px solid green;
+        color: green;
+        vertical-align: middle;
+        cursor: pointer;
+        font-size: x-small;
+      }
+      div.button:hover {
+        color: DarkGreen;
+        border-color: DarkGreen;
+      }
+      div.button.active {
+        color: white;
+        background-color: DarkGreen;
+        border-color: black;
+      }
+      div.button.deactivated {
+        color: gray;
+        border-color: gray;
+      }
+      div.description {
+        display: none;
+      }
+    </style>
+    <script>
+      function version(version_button) {
+        var temp, version, versions, description, out;
+        var i, buttons, alphabet, alphabet_description;
+        var first_button, first_description;
+        // do nothing if the button is deactivated
+        if (has_class(version_button, "deactivated")) return;
+        // find the containers
+        temp = version_button.parentNode;
+        while (temp.className != "version") temp = temp.parentNode;
+        version = temp;
+        temp = version.parentNode;
+        while (temp.className != "versions") temp = temp.parentNode;
+        versions = temp;
+        // get the output area
+        out = versions.querySelector("div.out");
+        // get the alphabets
+        if (has_class(version_button, "active")) {
+          // unselect version
+          toggle_class(version_button, "active", false);
+          // reactivate alphabets
+          buttons = versions.querySelectorAll("span.alphabets div.button");
+          for (i = 0; i < buttons.length; i++) {
+            toggle_class(buttons[i], "deactivated", false);
+          }
+          // set descriptive text
+          toggle_class(out, "active", false);
+          out.innerHTML = "";
+        } else {
+          // select version
+          buttons = versions.querySelectorAll("span.version div.button");
+          for (i = 0; i < buttons.length; i++) {
+            toggle_class(buttons[i], "active", (buttons[i] == version_button));
+          }
+          buttons = versions.querySelectorAll("span.alphabets div.button");
+          first_button = null;
+          first_description = null;
+          for (i = 0; i < buttons.length; i++) {
+            alphabet = /\b(dna|rna|protein)\b/.exec(buttons[i].className)[1];
+            alphabet_description = version.querySelector("div.description." + alphabet);
+            toggle_class(buttons[i], "deactivated", alphabet_description == null);
+            if (has_class(buttons[i], "active")) description = alphabet_description;
+            if (first_button == null && alphabet_description != null) {
+              first_button = buttons[i];
+              first_description = alphabet_description;
+            }
+          }
+          if (description == null && first_button != null) {
+            description = first_description;
+            toggle_class(first_button, "active", true);
+          }
+          out.innerHTML = "";
+          if (description != null) {
+            for (i = 0; i < description.childNodes.length; i++) {
+              out.appendChild(description.childNodes[i].cloneNode(true));
+            }
+          }
+          toggle_class(out, "active", description != null);
+        }
+      }
+
+      function alphabet(alphabet_button) {
+        var temp, alphabets, versions, alphabet;
+        var all, i, version_button, version_description, description;
+        var first_description, first_button;
+        // do nothing if the button is deactivated
+        if (has_class(alphabet_button, "deactivated")) return;
+        // find the containers
+        temp = alphabet_button.parentNode;
+        while (temp.className != "alphabets") temp = temp.parentNode;
+        alphabets = temp;
+        temp = alphabets.parentNode;
+        while (temp.className != "versions") temp = temp.parentNode;
+        versions = temp;
+        // get the output area
+        out = versions.querySelector("div.out");
+        // determine the alphabet
+        alphabet = /\b(dna|rna|protein)\b/.exec(alphabet_button.className)[1];
+        if (has_class(alphabet_button, "active")) {
+          // unselect alphabet
+          toggle_class(alphabet_button, "active", false);
+          // reactivate versions
+          all = versions.querySelectorAll("span.version div.button");
+          for (i = 0; i < all.length; i++) {
+            toggle_class(all[i], "deactivated", false);
+          }
+          // set descriptive text
+          toggle_class(out, "active", false);
+          out.innerHTML = "";
+        } else {
+          // select alphabet
+          all = alphabets.querySelectorAll("div.button");
+          for (i = 0; i < all.length; i++) {
+            toggle_class(all[i], "active", (all[i] == alphabet_button));
+          }
+          // iterate over the versions and deactivate any that don't have this alphabet 
+          all = versions.querySelectorAll("span.version");
+          for (i = 0; i < all.length; i++) {
+            version_button = all[i].querySelector("div.button");
+            version_description = all[i].querySelector("div.description." + alphabet);
+            toggle_class(version_button, "deactivated", version_description == null);
+            if (has_class(version_button, "active")) description = version_description;
+            if (first_button == null && version_description != null) {
+              first_button = version_button;
+              first_description = version_description;
+            }
+          }
+          if (description == null && first_button != null) {
+            description = first_description;
+            toggle_class(first_button, "active", true);
+          }
+          // set descriptive text
+          out.innerHTML = "";
+          if (description != null) {
+            for (i = 0; i < description.childNodes.length; i++) {
+              out.appendChild(description.childNodes[i].cloneNode(true));
+            }
+          }
+          toggle_class(out, "active", description != null);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="content_box">
+      <noscript>
+        <div class="no_script">
+          <div class="no_script_warning">
+          <h1>Javascript is disabled! &#9785;</h1>
+          <p>The MEME Suite web application requires the use of JavaScript but
+          Javascript doesn't seem to be available on your browser.</p>
+          <p>Please re-enable Javascript to use the MEME Suite.</p>
+          </div>
+        </div>
+      </noscript>
+      <div class="memesuitelogo">
+        <h1>The MEME Suite</h1>
+        <h2>Motif-based sequence analysis tools</h2>
+      </div>
+      <h1>Sequence Databases</h1>
+      <div class="subcontent">
+        <!--{content}-->
+        <h2>Categories</h2>
+        <ul>
+          <!--{category_li}--><li><a href="#cat_${id}"><!--{name}-->A Category<!--{/name}--></a></li><!--{/category_li}-->
+        </ul>
+        <h2>Databases</h2>
+        <div class="subcontent">
+          <!--{category}-->
+          <h3 id="cat_${id}"><!--{name}-->A Category<!--{/name}--></h3>
+          <div class="category">
+            <!--{listing}-->
+            <div class="listing">
+              <h4><!--{name}-->A Listing<!--{/name}--></h4>
+              <div class="subcontent">
+                <p><!--{description}-->A description of the listing will go here. It
+                will be about two or three sentences long.<!--{/description}--></p>
+                <div class="versions">
+                  <h5>Versions: </h5>
+                  <!--{version}-->
+                  <span class="version">
+                    <div class="button" onclick="version(this)"><!--{name}-->Version Name<!--{/name}--></div>
+                    <!--{dna}--><div class="description dna"><!--{description}-->
+                    This is a description of the DNA version.<!--{/description}--></div><!--{/dna}-->
+                    <!--{rna}--><div class="description rna"><!--{description}-->
+                    This is a description of the RNA version.<!--{/description}--></div><!--{/rna}-->
+                    <!--{protein}--><div class="description protein"><!--{description}-->
+                    This is a description of the protein version.<!--{/description}--></div><!--{/protein}-->
+                  </span>
+                  <!--{/version}-->
+                  <h5>&nbsp;&nbsp;Alphabets: </h5>
+                  <span class="alphabets">
+                    <!--{dna}--><div class="button dna" onclick="alphabet(this)">DNA</div><!--{/dna}-->
+                    <!--{rna}--><div class="button rna" onclick="alphabet(this)">RNA</div><!--{/rna}-->
+                    <!--{protein}--><div class="button protein" onclick="alphabet(this)">Protein</div><!--{/protein}-->
+                  </span>
+                  <div class="out"></div>
+                </div>
+              </div>
+            </div>
+            <!--{/listing}-->
+          </div>
+          <!--{/category}-->
+        </div>
+        <!--{/content}-->
+      </div>
+    </div>
+  </body>
+</html>
+
+

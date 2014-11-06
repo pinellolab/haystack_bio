@@ -1,0 +1,154 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="MEME @SERVICE_VERSION@">
+    <usage>MEME: Discovers motifs</usage>
+    <info>
+    <![CDATA[
+    meme_webservice [options] <sequences>
+
+      Options: 
+        -alpha [dna|protein]      The alphabet of the sequences. Default: dna
+        -mod [oops|zoops|anr]     The expected number of motif repeats per sequence.
+                                  Default: zoops
+        -nmotifs <count>          The number of motif to find. Default: 3
+        -minw <width>             The minimum width of the motif. Default: 6
+        -maxw <width>             The maximum width of the motif. Default: 50
+        -minsites <num>           The minimum number of sites per motif.
+        -maxsites <num>           The maximum number of sites per motif.
+        -bfile <file>             A background file.
+        -neg <file>               A negative sequences set, for generating PSPs.
+        -norevcomp                Restrict sites to only given strand.
+        -pal                      Only find palindromes.
+        -help                     Show this brief help message.
+    ]]>
+    </info>
+    <!-- information about command-line arguments -->
+    <types>
+      <flags>
+        <flag>
+          <id>norevcomp</id>
+          <tag>-norevcomp</tag>
+          <textDesc>Scan given strand only</textDesc>
+          <default>false</default>
+        </flag>
+        <flag>
+          <id>pal</id>
+          <tag>-pal</tag>
+          <textDesc>Palindromic motifs only</textDesc>
+          <default>false</default>
+        </flag>
+      </flags>
+      <taggedParams>
+        <separator> </separator>
+        <param>
+          <id>alpha</id>
+          <tag>-alpha</tag>
+          <paramType>STRING</paramType>
+          <required>true</required>
+          <value>dna</value>
+          <value>protein</value>
+          <default>dna</default>
+          <textDesc>Sequences alphabet</textDesc>
+        </param>
+        <param>
+          <id>mod</id>
+          <tag>-mod</tag>
+          <paramType>STRING</paramType>
+          <required>true</required>
+          <value>oops</value>
+          <value>zoops</value>
+          <value>anr</value>
+          <default>zoops</default>
+          <textDesc>Site distribution</textDesc>
+        </param>
+        <param>
+          <id>nmotifs</id>
+          <tag>-nmotifs</tag>
+          <paramType>INT</paramType>
+          <default>3</default>
+          <required>true</required>
+          <textDesc>Count</textDesc>
+        </param>
+        <param>
+          <id>minw</id>
+          <tag>-minw</tag>
+          <paramType>INT</paramType>
+          <default>6</default>
+          <required>true</required>
+          <textDesc>Minimum width</textDesc>
+        </param>
+        <param>
+          <id>maxw</id>
+          <tag>-maxw</tag>
+          <paramType>INT</paramType>
+          <default>50</default>
+          <required>true</required>
+          <textDesc>Maximum width</textDesc>
+        </param>
+        <param>
+          <id>minsites</id>
+          <tag>-minsites</tag>
+          <paramType>INT</paramType>
+          <textDesc>Minimum sites</textDesc>
+        </param>
+        <param>
+          <id>maxsites</id>
+          <tag>-maxsites</tag>
+          <paramType>INT</paramType>
+          <textDesc>Maximum sites</textDesc>
+        </param>
+        <param>
+          <id>bfile</id>
+          <tag>-bfile</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Background file</textDesc>
+        </param>
+        <param>
+          <id>neg</id>
+          <tag>-neg</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Negative sequences</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>sequences</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>true</required>
+          <textDesc>Input sequences</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>sequence_file</name>
+          <elements>sequences alpha norevcomp</elements>
+          <textDesc>Sequences</textDesc>
+        </group>
+        <group>
+          <name>motif_width</name>
+          <elements>minw maxw</elements>
+          <textDesc>Motif Width</textDesc>
+        </group>
+        <group>
+          <name>motif_sites</name>
+          <elements>mod minsites maxsites</elements>
+          <textDesc>Motif Sites</textDesc>
+        </group>
+        <group>
+          <name>motif_options</name>
+          <elements>nmotifs pal</elements>
+          <textDesc>Motif Options</textDesc>
+        </group>
+        <group>
+          <name>optional_files</name>
+          <elements>bfile neg</elements>
+          <textDesc>Optional Files</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/meme_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

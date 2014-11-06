@@ -1,0 +1,94 @@
+#!@WHICHPERL@ -w
+
+use strict;
+use warnings;
+
+use Getopt::Long qw(:config posix_default);
+use Pod::Usage;
+
+=head1 NAME
+
+lrun - simplified interface to running an MPI jobs using LAM both under PBS and
+       as interactive processes.
+
+=head1 SYNOPSIS
+
+lrun [options] <MPI job>
+
+ Options:
+   -n N   specifies number of MPI processes - under PBS the default is the
+          number of cpus requested (-lncpus), there is no default for
+          interactive use
+ 
+   -v     specifies verbose output and logging
+=cut
+
+sub check {
+  my ($prog) = @_;
+  if ($? == -1) {
+    # system writes out a message
+  } elsif ($? & 127) {
+    printf("$prog died with signal %d, %s coredump\n", ($? & 127), ($? & 128) ? 'with' : 'without');
+  } else {
+    printf("$prog exited with value %d\n", $? >> 8);
+  }
+  exit(1) if $? != 0;
+}
+
+sub main {
+  # programs
+  my $lamboot = '@LAM_BIN@/lamboot';
+  my $mpirun = '@LAM_BIN@/mpirun';
+  my $lamhalt = '@LAM_BIN@/lamhalt';
+
+  die("The LAM binary directory isn't configured correctly.\n") unless (-X $lamboot && -X $mpirun && -X $lamhalt);
+
+  # configuration
+  my $num_procs = undef;
+  my $no_opt = 0; # FALSE
+  my $debug = 0; # FALSE
+  my $verbose = 0; # FALSE
+  my $help = 0; # FALSE
+
+  # get default for num_procs
+  if (defined $ENV{PBS_NODEFILE} && -e $ENV{PBS_NODEFILE}) {
+    my $pbs_node_file = $ENV{PBS_NODEFILE};
+    $num_procs = `cat $pbs_node_file | wc -l`;
+  }
+
+  GetOptions(
+    "n=i" => \$num_procs, 
+    "v" => \$verbose,
+    "NO" => \$no_opt, # no optimisation?
+    "d" => \$debug,
+    "help|?" => \$help 
+  ) or pod2usage(2);
+
+  # display help
+  pod2usage(1) if $help;
+
+  my @exec = @ARGV;
+
+  pod2usage("Error: must specify number of MPI processes (-n)") unless defined($num_procs);
+  pod2usage("Error: number of MPI processes (-n) is out of range") unless $num_procs >= 1 && $num_procs <= 100;
+  pod2usage("Error: no binary specified") unless @exec;
+
+  print(" \nStarting lamd ...\n \n") if $verbose;
+  system($lamboot, ($verbose ? '-v' : '-H'), ($debug ? '-d' : ()));
+  check('lamboot');
+  sleep(1);
+
+  print(" \nRunning MPI job ...\n \n") if $verbose;
+  system($mpirun, '-np', $num_procs, ($verbose ? '-v' : ()), ($no_opt ? '-NO' : '-O'), @exec);
+  check('mpirun');
+
+  print(" \nCleaning up ...\n \n") if $verbose;
+  system($lamhalt, ($verbose ? '-v' : ()));
+  check('lamhalt');
+
+  print(" \nDone!\n \n");
+  sleep(1);
+}
+
+main();
+1;

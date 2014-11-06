@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>qvalue - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>qvalue</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>qvalue [options] &lt;<i>p</i>-values file&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Takes as input a list of <i>p</i>-values and prints a corresponding list of
+      <i>q</i>-values, computed using the method of Benjamini and Hochberg
+      (<i>Journal of the Royal Statistical Society B</i>, 57:289-300, 1995).</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4><i>p</i>-values File</h4>
+      <div class="indent">
+        <p>A tab separated file containing a column of <i>p</i>-values. Other
+        columns may exist.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Outputs tab-delimited columns. If the <span class="popt">--append</span>
+      option is specified then the line from the input is listed first, 
+      followed by the <i>p</i>-value (only when raw scores are specified) and
+      <i>q</i>-value. Otherwise it outputs the raw score (only when raw scores
+      are specified) followed by the <i>p</i>-value and <i>q</i>-value. The
+      lines are sorted by <i>p</i>-value.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--null</td><td><span class="pdat">file</span></td>
+            <td>Treat the primary input file as raw scores, and begin by
+              estimating <i>p</i>-values from the empirical null scores given
+              in this file. The <span class="popt">--header</span> and
+              <span class="popt">--column</span> arguments apply to this file
+              as well as the primary input file. </td>
+            <td>The primary input is assumed to actually contain <i>p</i>-values.</td>
+          </tr>
+          <tr>
+            <td class="popt">--good-score</td><td><span
+                class="popt">high</span>|&#8203;<span
+                class="popt">low</span></td>
+            <td>Choose <span class="popt">low</span> if smaller scores are
+              better or <span class="popt">high</span> if larger scores are
+              better.</td>
+            <td>Smaller scores are considered better.</td>
+          </tr>
+          <tr>
+            <td class="popt">--pi-zero</td><td></td>
+            <td>Estimate the percentage of the empirical distribution that is
+              drawn according to the null hypothesis (pi-zero). This uses the
+              method described in: 
+              <div class="citation">
+                John Storey, "A direct approach to false discovery rates."
+                Journal of the Royal Statistical Society B, 2002.
+              </div>
+              </td>
+              <td>The estimation step is skipped and the program 
+              conservatively sets pi-zero to 100%.</td>
+          </tr>
+          <tr>
+            <td class="popt">--pi-zero-file</td><td><span class="pdat">file name</span></td>
+            <td>Specify a file to store the pi-zero estimate in. This option
+              implies the <span class="popt">--pi-zero</span> option.</td>
+            <td>The results of the pi-zero estimate (if calculated) are not
+              stored in a file.</td>
+          </tr>
+          <tr>
+            <td class="popt">--fdr</td><td></td>
+            <td>Only compute false discovery rate (FDR) estimates.</td>
+            <td>The FDR values are converted into <i>q</i>-values.</td>
+          </tr>
+          <tr>
+            <td class="popt">--bootstraps</td><td><span class="pdat">num</span></td>
+            <td>Number of bootstraps to perform when estimating pi-zero.</td>
+            <td>The program performs 1000 bootstraps.</td>
+          </tr>
+          <tr>
+            <td class="popt">--header</td><td><span class="pdat">line count</span></td>
+            <td>Treat the first <span class="pdat">line count</span> lines of
+              the <i>p</i>-values file as the header. If the 
+              <span class="popt">--append</span> option is specified these
+              lines will also be included in the output.</td>
+            <td>No lines are treated as headers.</td>
+          </tr>
+          <tr>
+            <td class="popt">--column</td><td><span class="pdat">column number</span></td>
+            <td>Read the <i>p</i>-value from the specified
+              <span class="popt">column number</span>. The first column is 1,
+              the second column is 2 and so on...</td>
+            <td>The <i>p</i>-value is read from the first column.</td>
+          </tr>
+          <tr>
+            <td class="popt">--append</td><td></td>
+            <td>Print all the columns in the input file to standard output with
+              additional <i>p</i>-value (raw scores only) and <i>q</i>-value columns.</td>
+            <td>Print the raw score (only when raw scores are supplied), 
+              <i>p</i>-value and <i>q</i>-value in tab separated columns.</td>
+          </tr>
+          <tr>
+            <td class="popt">--seed</td><td><span class="pdat">seed</span></td>
+            <td>Set the seed value for the pseudo-random number generator.</td>
+            <td>The seed value is set from the system clock.</td>
+          </tr>
+          <script>wropt("all-verbosity", {"ddash": true});</script>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

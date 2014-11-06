@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>shadow - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>shadow</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>shadow [options] &lt;tree file&gt; &lt;alignment file&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Perform phylogenetic shadowing on a given DNA alignment, using a given
+      tree (Boffelli et al, Science 2003).  This program is a simplified
+      version of <a href="motiph.html">motiph</a>, in which the
+      equilibrium distribution is set equal to the background model, rather
+      than being taken from a given motif.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Tree File</h4>
+      <div class="indent">
+        <p>a phylogenetic tree in 
+        <a href="http://evolution.genetics.washington.edu/phylip/newicktree.html"
+        >Phylip Newick</a> format. This tree may contain additional species
+        not represented in the alignment.</p>
+      </div>
+
+      <h4>Alignment File</h4>
+      <div class="indent">
+        <p>A DNA multiple alignment in <a 
+        href="clustalw-format.html">ClustalW</a> format. Alternatively, if the
+        <span class="popt">--list</span> option is used, this file may contain
+        a list of alignment files.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Shadow will create a directory, named <code>shadow_out</code> by default.
+      Any existing output files in the directory will be overwritten.
+      The directory will contain:</p>
+      <ul>
+        <li>An XML file named <code>shadow.xml</code> using the
+        <a href="http://zlab.bu.edu/~phaverty/SupplementalData/CisML">CisML</a>
+        schema.</li>
+        <li>An HTML file named <code>shadow.html</code></li>
+        <li>A plain text file named <code>shadow.text</code></li>
+      </ul>
+      <p>The output directory can be changed using the
+      <span class="popt">--o</span> or <span class="popt">--oc</span> options
+      which are described below.</p>
+      <p>The <span class="popt">--text</span> will limit output to plain text
+      sent to the standard output.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--bg</td><td><span class="pdat">rate</span></td>
+            <td>The mutation rate for sites in the background model.</td>
+            <td>The background mutation rate is set to 1.</td>
+          </tr>
+          <tr>
+            <td class="popt">--fg</td><td><span class="pdat">rate</span></td>
+            <td>The mutation rate for sites in the foreground model(s).</td>
+            <td>The mutation rate is set to 1.</td>
+          </tr>
+          <tr>
+            <td class="popt">-gap</td><td><span
+                class="popt">skip</span>|&#8203;<span
+                class="popt">fixed</span>|&#8203;<span
+                class="popt">wildcard</span>|&#8203;<span
+                class="popt">minimum</span></td>
+            <td>Specifies the gap handling strategy.
+              <table class="dark" style="width:100%">
+                <tr><th>Value</th><th>Description</th></tr>
+                <tr>
+                  <td class="popt">skip</td>
+                  <td>Skip those sites where any position in the alignment
+                    window contains a gap.</td>
+                </tr>
+                <tr>
+                  <td class="popt">fixed</td>
+                  <td>Sites containing gaps are assigned a fixed score,
+                    specified by <span class="popt">--gap-cost</span>.</td>
+                </tr>
+                <tr>
+                  <td class="popt">wildcard</td>
+                  <td>The gap character matches any base, and the score is the
+                    product of the corresponding probabilities.</td>
+                </tr>
+                <tr>
+                  <td class="popt">minimum</td>
+                  <td>The gap character is assigned the score corresponding to
+                    the least likely letter at the given position.</td>
+                </tr>
+              </table>
+            </td>
+            <td>Gaps are skipped.</td>
+          </tr>
+          <tr>
+            <td class="popt">--gap-cost</td><td><span class="pdat">cost</span></td>
+            <td>Specifies the costs for gaps when using the
+              <span class="popt">fixed</span> gap handling strategy.</td>
+            <td>The gap cost is zero.</td>
+          </tr>
+          <tr>
+            <td class="popt">--list</td><td></td>
+            <td>Treat the second required input as a list of alignments,
+              rather than a single alignment.</td>
+            <td>The second required input is a single alignment.</td>
+          </tr>
+          <tr>
+            <td class="popt">--model</td><td><span
+                class="popt">single</span>|&#8203;<span
+                class="popt">average</span>|&#8203;<span
+                class="popt">jc</span>|&#8203;<span
+                class="popt">k2</span>|&#8203;<span
+                class="popt">f81</span>|&#8203;<span
+                class="popt">f84</span>|&#8203;<span
+                class="popt">hky</span>|&#8203;<span
+                class="popt">tn</span></td>
+            <td>The evolutionary model to use.
+              <table class="dark" style="width:100%">
+                <tr>
+                  <th>Value</th><th>Name</th><th>Description</th>
+                </tr>
+                <tr>
+                  <td class="popt">single</td><td>Single Score</td>
+                  <td>score first sequence: compute standard log-odds score of
+                    first sequence in the alignment; ignores tree but does NOT
+                    remove gaps.</td>
+                </tr>
+                <tr>
+                  <td class="popt">average</td><td>Average Score</td>
+                  <td>compute average of standard log-odds score of aligned
+                    sites.</td>
+                </tr>
+                <tr>
+                  <td class="popt">jc</td><td>Jukes-Cantor</td>
+                  <td>equilibrium base frequencies are all 1/4; the only free
+                    parameter is the mutation rate.</td>
+                </tr>
+                <tr>
+                  <td class="popt">k2</td><td>Kimura 2-parameter</td>
+                  <td>equilibrium base frequencies are all 1/4; the free
+                    parameters are the mutation rate and the
+                    transition/transversion rate ratio.</td>
+                </tr>
+                <tr>
+                  <td class="popt">f81</td><td>Felsenstein 1981</td>
+                  <td>equilibrium base frequencies are taken from the
+                    alignment; the only free parameter is the mutation rate.</td>
+                </tr>
+                <tr>
+                  <td class="popt">f84</td><td>Felsenstein 1984</td>
+                  <td>equilibrium base frequencies are taken from the
+                    alignment; the free parameters are the mutation rate and
+                    the transition/transversion rate ratio. The ratio of
+                    purine-purine to pyrimidine-&gt;pyrimidine transitions is
+                    assumed to be 1.</td>
+                </tr>
+                <tr>
+                  <td class="popt">hky</td><td>Hasegawa-Kishino-Yano</td>
+                  <td>equilibrium base frequencies are taken from the
+                    alignment; the free parameters are the mutation rate and
+                    the transition/transversion rate ratio. The ratio of
+                    purine-purine to pyrimidine-pyrimidine transitions is
+                    assumed to be equal to the ratio of purines to
+                    pyrimidines.</td>
+                </tr>
+                <tr>
+                  <td class="popt">tn</td><td>Tamura-Nei</td>
+                  <td>equilibrium base frequencies are taken from the
+                    alignment; the free parameters are the mutation rate, the
+                    transition/transversion rate ratio, and the ratio of
+                    purine-purine transitions to pyrimidine-pyrimidine 
+                    transitions.</td>
+                </tr>
+              </table>
+              A description of the <span class="popt">f81</span> model is
+              available in chapter 13 of <i>Statistical Methods in
+              Bioinformatics</i> by Ewens and Grant. The other models are
+              described in chapters 9 and 13 of <i>Inferring Phylogenies</i>
+              by Felsenstein. 
+            </td>
+            <td>Behaves as if <span class="popt">--model f81</span> was specified.</td>
+          </tr>
+          <tr>
+            <td class="popt">--pur-pyr</td><td><span class="pdat">ratio</span></td>
+            <td>The ratio of the purine transition rate to pyrimidine
+              transition rate. This parameter is used by the Tamura-nei
+              model.</td>
+            <td>The ratio is set to 1.0.</td>
+          </tr>
+          <tr>
+            <td class="popt">--transition-transversion</td><td><span class="pdat">ratio</span></td>
+            <td>The ratio of the transition rate to the transversion rate.
+              This parameter is used by the Kimura 2-parameter, F84, HKY, and
+              Tamura-nei models.</td>
+            <td>The ratio is set to 0.5.</td>
+          </tr>
+          <tr>
+            <td class="popt">--bgfile</td><td></td>
+            <td>The file should be in <a href="bfile-format.html">MEME background file format</a>.
+              The keyword <code>motif-file</code> can be used to indicate that
+              the frequencies should be taken from the motif file.</td>
+            <td>Use the alignment frequencies.</td>
+          </tr>
+          <tr>
+            <td class="popt">--max-stored-scores</td><td><span class="pdat">count</span></td>
+            <td>Set the maximum number of scores that will be stored.
+            Keeping a complete list of scores may exceed available memory.
+            Once the number of stored scores reaches the maximum allowed,
+            the least significant 50% of scores will be dropped.
+            In this case, the list of reported motifs may be incomplete and 
+            the q-value calculation will be approximate.
+            </td>
+            <td>The maximum number of stored matches is 100,000.</td>
+          </tr>
+          <tr>
+            <td class="popt">--no-pvalue</td><td></td>
+            <td>Skip the <i>p</i>-value calculation. This switch will be
+              necessary when a large number n of species are in the tree,
+              because the memory requirement is 4n. This also disables
+              computation of <i>q</i>-values.</td>
+            <td>The <i>p</i>-values are calculated.</td>
+          </tr>
+          <tr>
+            <td class="popt">--no-qvalue</td><td></td>
+            <td>Do not compute a <i>q</i>-value for each <i>p</i>-value. The
+              <i>q</i>-value calculation is that of Benjamini and Hochberg
+              (1995).</td>
+            <td>The <i>q</i>-values are calculated.</td>
+          </tr>
+          <script>
+            wropt("all-o", {"ddash": true, "dir": "shadow_out"});
+            wropt("all-oc", {"ddash": true, "dir": "shadow_out"});
+          </script>
+          <tr>
+            <td class="popt">--output-pthresh</td><td><span class="pdat"><i>p</i>-value threshold</span></td>
+            <td>The <i>p</i>-value threshold for displaying search results. If
+              the <i>p</i>-value of a match is greater than this value, then
+              the match will not be printed. If both the
+              <span class="popt">--output-pthresh</span> and
+              <span class="popt">--output-qthresh</span> options appear on the
+              command line, whichever appears later on the command line will
+              be applied.</td>
+            <td>The <i>p</i>-value threshold is set to 1e<sup>-4</sup>.</td>
+          </tr>
+          <tr>
+            <td class="popt">--output-qthresh</td><td><span class="pdat"><i>q</i>-value threshold</span></td>
+            <td>The <i>q</i>-value threshold for displaying search results. If
+              the <i>q</i>-value of a match is greater than this value, then
+              the match will not be printed.</td>
+            <td>No <i>q</i>-value threshold is applied.</td>
+          </tr>
+          <tr>
+            <td class="popt">--text</td><td></td>
+            <td>Limits output to plain text sent to standard out. For shadow,
+              the text output is unsorted, and q-values are not reported. This
+              mode allows the program to search an arbitrarily large database,
+              because results are not stored in memory.</td>
+            <td>Outputs are created as normal.</td>
+          </tr>
+          <script>wropt("all-verbosity", {"ddash": true});</script>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

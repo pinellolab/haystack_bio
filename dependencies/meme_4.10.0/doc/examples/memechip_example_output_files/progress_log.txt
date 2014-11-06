@@ -1,0 +1,102 @@
+Invoking:
+  fasta-get-markov -nostatus -m 1 < memechip_example_output_files/sample-dna-Klf1.fa 1> memechip_example_output_files/background
+Finished invoke:
+  name: bg  status: 0  time: 0.01086
+Invoking:
+  getsize memechip_example_output_files/sample-dna-Klf1.fa 1> $metrics
+Finished invoke:
+  name: count_seqs  status: 0  time: 0.035918
+Invoking:
+  fasta-most -min 50 < memechip_example_output_files/sample-dna-Klf1.fa 1> $metrics
+Finished invoke:
+  name: most_seqs  status: 0  time: 0.052292
+Invoking:
+  fasta-center -len 100 < memechip_example_output_files/sample-dna-Klf1.fa 1> memechip_example_output_files/seqs-centered
+Finished invoke:
+  name: center_seqs  status: 0  time: 0.040839
+Invoking:
+  fasta-dinucleotide-shuffle -f memechip_example_output_files/seqs-centered -t -dinuc 1> memechip_example_output_files/seqs-shuffled
+Finished invoke:
+  name: shuffle_seqs  status: 0  time: 2.844394
+Invoking:
+  fasta-subsample memechip_example_output_files/seqs-centered 600 -rest memechip_example_output_files/seqs-discarded 1> memechip_example_output_files/seqs-sampled
+Finished invoke:
+  name: sample_seqs  status: 0  time: 0.065115
+Invoking:
+  meme memechip_example_output_files/seqs-sampled -oc memechip_example_output_files/meme_out -dna -mod zoops -nmotifs 3 -minw 6 -maxw 30 -bfile memechip_example_output_files/background -p 6 -revcomp -nostatus
+Finished invoke:
+  name: meme  status: 256  time: 0.004038
+Invoking:
+  dreme -v 1 -oc memechip_example_output_files/dreme_out -p memechip_example_output_files/seqs-centered -n memechip_example_output_files/seqs-shuffled -png
+Finished invoke:
+  name: dreme  status: 0  time: 19.057875
+Invoking:
+  centrimo -seqlen 500 -verbosity 1 -oc memechip_example_output_files/centrimo_out -bgfile memechip_example_output_files/background memechip_example_output_files/sample-dna-Klf1.fa memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: centrimo  status: 0  time: 15.819858
+Invoking:
+  tomtom -verbosity 1 -oc memechip_example_output_files/dreme_tomtom_out -min-overlap 5 -dist pearson -evalue -thresh 1 -no-ssc -bfile memechip_example_output_files/background memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: dreme_tomtom  status: 0  time: 0.848902
+Invoking:
+  tomtom -verbosity 1 -text -thresh 0.1 memechip_example_output_files/combined.meme memechip_example_output_files/combined.meme 1> memechip_example_output_files/motif_alignment.txt
+Finished invoke:
+  name: align  status: 0  time: 0.866002
+Invoking:
+  spamo -verbosity 1 -oc memechip_example_output_files/spamo_out_1 -bgfile memechip_example_output_files/background -primary GGGYGK memechip_example_output_files/sample-dna-Klf1.fa memechip_example_output_files/dreme_out/dreme.xml memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: spamo1  status: 0  time: 16.064009
+Invoking:
+  spamo -verbosity 1 -oc memechip_example_output_files/spamo_out_2 -bgfile memechip_example_output_files/background -primary TTATCW memechip_example_output_files/sample-dna-Klf1.fa memechip_example_output_files/dreme_out/dreme.xml memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: spamo2  status: 0  time: 11.312686
+Invoking:
+  spamo -verbosity 1 -oc memechip_example_output_files/spamo_out_3 -bgfile memechip_example_output_files/background -primary MA0450.1 memechip_example_output_files/sample-dna-Klf1.fa JASPAR_CORE_2009.meme memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: spamo3  status: 0  time: 5.825866
+Invoking:
+  spamo -verbosity 1 -oc memechip_example_output_files/spamo_out_4 -bgfile memechip_example_output_files/background -primary MA0036.1 memechip_example_output_files/sample-dna-Klf1.fa JASPAR_CORE_2009.meme memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: spamo4  status: 0  time: 0.572537
+Invoking:
+  spamo -verbosity 1 -oc memechip_example_output_files/spamo_out_5 -bgfile memechip_example_output_files/background -primary MA0334.1 memechip_example_output_files/sample-dna-Klf1.fa JASPAR_CORE_2009.meme memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: spamo5  status: 0  time: 12.322127
+Invoking:
+  spamo -verbosity 1 -oc memechip_example_output_files/spamo_out_6 -bgfile memechip_example_output_files/background -primary MA0425.1 memechip_example_output_files/sample-dna-Klf1.fa JASPAR_CORE_2009.meme memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: spamo6  status: 0  time: 9.530643
+Invoking:
+  spamo -verbosity 1 -oc memechip_example_output_files/spamo_out_7 -bgfile memechip_example_output_files/background -primary MA0027.1 memechip_example_output_files/sample-dna-Klf1.fa JASPAR_CORE_2009.meme memechip_example_output_files/dreme_out/dreme.xml JASPAR_CORE_2009.meme
+Finished invoke:
+  name: spamo7  status: 0  time: 9.712212
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc memechip_example_output_files/fimo_out_1 --bgfile memechip_example_output_files/background --motif GGGYGK memechip_example_output_files/dreme_out/dreme.xml memechip_example_output_files/sample-dna-Klf1.fa
+Finished invoke:
+  name: fimo1  status: 0  time: 0.287648
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc memechip_example_output_files/fimo_out_2 --bgfile memechip_example_output_files/background --motif TTATCW memechip_example_output_files/dreme_out/dreme.xml memechip_example_output_files/sample-dna-Klf1.fa
+Finished invoke:
+  name: fimo2  status: 0  time: 0.273133
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc memechip_example_output_files/fimo_out_3 --bgfile memechip_example_output_files/background --motif MA0450.1 JASPAR_CORE_2009.meme memechip_example_output_files/sample-dna-Klf1.fa
+Finished invoke:
+  name: fimo3  status: 0  time: 0.566197
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc memechip_example_output_files/fimo_out_4 --bgfile memechip_example_output_files/background --motif MA0036.1 JASPAR_CORE_2009.meme memechip_example_output_files/sample-dna-Klf1.fa
+Finished invoke:
+  name: fimo4  status: 0  time: 0.510907
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc memechip_example_output_files/fimo_out_5 --bgfile memechip_example_output_files/background --motif MA0334.1 JASPAR_CORE_2009.meme memechip_example_output_files/sample-dna-Klf1.fa
+Finished invoke:
+  name: fimo5  status: 0  time: 0.549286
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc memechip_example_output_files/fimo_out_6 --bgfile memechip_example_output_files/background --motif MA0425.1 JASPAR_CORE_2009.meme memechip_example_output_files/sample-dna-Klf1.fa
+Finished invoke:
+  name: fimo6  status: 0  time: 0.623338
+Invoking:
+  fimo --parse-genomic-coord --verbosity 1 --oc memechip_example_output_files/fimo_out_7 --bgfile memechip_example_output_files/background --motif MA0027.1 JASPAR_CORE_2009.meme memechip_example_output_files/sample-dna-Klf1.fa
+Finished invoke:
+  name: fimo7  status: 0  time: 0.573607
+Writing output
+Done

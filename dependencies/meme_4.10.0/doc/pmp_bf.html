@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>pmp_bf - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>pmp_bf</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>pmp_bf [options] &lt;tree&gt; &lt;motif&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>This utility calculates the statistical power of a phylogenetic
+      motif model.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Tree File</h4>
+      <div class="indent">
+        <p>A file containing a phylogenetic tree in
+        <a href="http://evolution.genetics.washington.edu/phylip/newicktree.html"
+          >Newick format</a>.</p>
+      </div>
+
+      <h4>Motif File</h4>
+      <div class="indent">
+        <p>A file containing <a href="meme-format.html">MEME formatted motifs</a>.
+        Outputs from MEME and DREME are supported along with minimal MEME
+        format for which there are conversion scripts available to support
+        other formats.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Prints the false positive and false negative rate at each of 10000 score values to standard output.</p>
+      <p style="margin-bottom:0">Each line of the output has the following:</p>
+      <div class="indent cmd">
+        <span class="pdat">Motif ID</span> score <span class="pdat">score</span>
+        FPR <span class="pdat">False Positive Rate</span> TPR
+        <span class="pdat">True Positive Rate</span>
+      </div>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--hb</td><td></td>
+            <td>Use the Halpern-Bruno modification to the evolutionary model.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--model</td><td><span
+                class="popt">single</span>|&#8203;<span
+                class="popt">average</span>|&#8203;<span
+                class="popt">jc</span>|&#8203;<span
+                class="popt">k2</span>|&#8203;<span
+                class="popt">f81</span>|&#8203;<span
+                class="popt">f84</span>|&#8203;<span
+                class="popt">hky</span>|&#8203;<span
+                class="popt">tn</span></td>
+            <td>The evolutionary model to use.
+              <table class="dark">
+                <tr>
+                  <th>Value</th><th>Name</th><th>Description</th>
+                </tr>
+                <tr>
+                  <td class="popt">single</td><td>Single Score</td>
+                  <td>score first sequence: compute standard log-odds score of
+                    first sequence in the alignment; ignores tree but does NOT
+                    remove gaps.</td>
+                </tr>
+                <tr>
+                  <td class="popt">average</td><td>Average Score</td>
+                  <td>compute average of standard log-odds score of aligned
+                    sites.</td>
+                </tr>
+                <tr>
+                  <td class="popt">jc</td><td>Jukes-Cantor</td>
+                  <td>equilibrium base frequencies are all 1/4; the only free
+                    parameter is the mutation rate.</td>
+                </tr>
+                <tr>
+                  <td class="popt">k2</td><td>Kimura 2-parameter</td>
+                  <td>equilibrium base frequencies are all 1/4; the free
+                    parameters are the mutation rate and the
+                    transition/transversion rate ratio.</td>
+                </tr>
+                <tr>
+                  <td class="popt">f81</td><td>Felsenstein 1981</td>
+                  <td>equilibrium base frequencies are taken from the
+                    alignment; the only free parameter is the mutation rate.</td>
+                </tr>
+                <tr>
+                  <td class="popt">f84</td><td>Felsenstein 1984</td>
+                  <td>equilibrium base frequencies are taken from the
+                    alignment; the free parameters are the mutation rate and
+                    the transition/transversion rate ratio. The ratio of
+                    purine-purine to pyrimidine-&gt;pyrimidine transitions is
+                    assumed to be 1.</td>
+                </tr>
+                <tr>
+                  <td class="popt">hky</td><td>Hasegawa-Kishino-Yano</td>
+                  <td>equilibrium base frequencies are taken from the
+                    alignment; the free parameters are the mutation rate and
+                    the transition/transversion rate ratio. The ratio of
+                    purine-purine to pyrimidine-pyrimidine transitions is
+                    assumed to be equal to the ratio of purines to
+                    pyrimidines.</td>
+                </tr>
+                <tr>
+                  <td class="popt">tn</td><td>Tamura-Nei</td>
+                  <td>equilibrium base frequencies are taken from the
+                    alignment; the free parameters are the mutation rate, the
+                    transition/transversion rate ratio, and the ratio of
+                    purine-purine transitions to pyrimidine-pyrimidine 
+                    transitions.</td>
+                </tr>
+              </table>
+              A description of the <span class="popt">f81</span> model is
+              available in chapter 13 of <i>Statistical Methods in
+              Bioinformatics</i> by Ewens and Grant. The other models are
+              described in chapters 9 and 13 of <i>Inferring Phylogenies</i>
+              by Felsenstein. 
+            </td>
+            <td>Behaves as if <span class="popt">--model f81</span> was specified.</td>
+          </tr>
+          <tr>
+            <td class="popt">--pur-pyr</td><td><span class="pdat">ratio</span></td>
+            <td>The ratio of the purine transition rate to pyrimidine
+              transition rate. This parameter is used by the Tamura-nei
+              model.</td>
+            <td>The ratio is set to 1.0.</td>
+          </tr>
+          <tr>
+            <td class="popt">--transition-transversion</td><td><span class="pdat">ratio</span></td>
+            <td>The ratio of the transition rate to the transversion rate.
+              This parameter is used by the Kimura 2-parameter, F84, HKY, and
+              Tamura-nei models.</td>
+            <td>The ratio is set to 0.5.</td>
+          </tr>
+          <tr>
+            <td class="popt">--bg</td><td><span class="pdat">rate</span></td>
+            <td>The mutation rate for sites in the background model.</td>
+            <td>The background mutation rate is set to 1.</td>
+          </tr>
+          <tr>
+            <td class="popt">--fg</td><td><span class="pdat">rate</span></td>
+            <td>The mutation rate for sites in the foreground model(s).</td>
+            <td>The mutation rate is set to 1.</td>
+          </tr>
+          <tr>
+            <td class="popt">--motif</td><td><span class="pdat">ID</span></td>
+            <td>Use only the motif identified by <span class="pdat">ID</span>.
+              This option may be repeated.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--bgfile</td><td></td>
+            <td>The file should be in <a href="bfile-format.html">MEME background file format</a>.
+              The keyword <code>motif-file</code> can be used to indicate that
+              the frequencies should be taken from the motif file.</td>
+            <td>Use frequencies embedded in the application from the
+            non-redundant database.</td>
+          </tr>
+          <tr>
+            <td class="popt">--pseudocounts</td><td></td>
+            <td>A pseudocount to be added to each count in the motif matrix,
+              weighted by the background frequencies for the nucleotides
+              (Dirichlet prior), before converting the motif to probabilities.</td>
+            <td>The pseudocount is set to 0.1.</td>
+          </tr>
+          <tr>
+            <td class="popt">--ustar</td><td><span class="pdat">target</span></td>
+            <td>Convert the tree into a uniform star tree with the
+              <span class="pdat">target</span> sequence at its center.</td>
+            <td></td>
+          </tr>
+          <script>wropt("all-verbosity");</script>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

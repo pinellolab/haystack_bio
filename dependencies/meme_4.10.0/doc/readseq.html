@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>readseq - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>readseq</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>readseq [options] &lt;sequences file&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Converts protein and DNA sequence formats.</p>
+      
+      <p>This program was written by D. G. Gilbert of the Biology Department,
+      Indiana University, Bloomington.
+      As this is not an internally developed program some of this documentation
+      may be incomplete or incorrect; we've had to read the source-code to try
+      to discover what some options do.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Sequence File</h4>
+      <div class="indent">
+        <p>A file containing DNA or protein sequences. See the
+        <span class="popt">-format</span> option for a list of supported formats.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Writes sequences to standard output in the user specified format.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <p>Unlike other programs included with the MEME Suite this program does
+      not allow a gap between the option and the parameter. The gray parts of
+      the option can be left out.</p>
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option &amp; Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="3">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">-a<span class="pskp">ll</span></td>
+            <td>Select all sequences. <!-- I don't really understand what this
+              option does differently from the default. --></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-c<span class="pskp">aselower</span></td>
+            <td>Output sequences in lower case.</td>
+            <td>The letter case is not changed.</td>
+          </tr>
+          <tr>
+            <td class="popt">-C<span class="pskp">ASEUPPER</span></td>
+            <td>Output sequences in upper case.</td>
+            <td>The letter case is not changed.</td>
+          </tr>
+          <tr>
+            <td><span class="popt">-deg<span class="pskp">ap</span>=</span><span class="pdat">gap symbol</span></td>
+            <td>Remove gap symbols from sequences. When the '=' is not present
+            the gap symbol defaults to '-'.</td>
+            <td>Gaps are left unchanged.</td>
+          </tr>
+          <tr>
+            <td><span class="popt">-i<span class="pskp">tem=</span></span><span class="pdat">list</span></td>
+            <td>Select only the sequences identified in the comma separated
+              list. For example to select the second, third and fourth
+              sequences you would specify <span class="popt">-item=2,3,4</span> .
+              <!-- This is all guesswork, I can't follow the code to figure it out -->
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><span class="popt">-o<span class="pskp">utput=</span></span><span class="pdat">output file</span></td>
+            <td>Specify the name of the output file.</td>
+            <td>The output is written to standard output.</td>
+          </tr>
+          <tr>
+            <td class="popt">-p<span class="pskp">ipe</span></td>
+            <td>The program reads sequence from standard input and stores them
+            in a temporary file for processing.</td>
+            <td>The program reads the sequences from the input file.</td>
+          </tr>
+          <tr>
+            <td class="popt">-r<span class="pskp">everse</span></td>
+            <td>Change the sequences to their reverse complement. This option
+            should only be used with DNA sequences.</td>
+            <td>The sequences are used as they are.</td>
+          </tr>
+          <tr>
+            <td class="popt">-v<span class="pskp">erbose</span></td>
+            <td>The program prints out verbose information on progress to standard error.</td>
+            <td>The program only prints out important messages to standard error.</td>
+          </tr>
+          <tr>
+            <td><span class="popt">-f<span class="pskp">ormat=</span></span><span class="pdat">Name or #</span></td>
+            <td>Choose the output format for the sequences. If you wish to use
+              the name of the format then the '=' must be included, otherwise
+              only numbers are accepted. To work with MEME Suite programs you
+              should use <span class="popt">-f8</span> or
+              <span class="popt">-format=fasta</span> to set the output format.
+              <div>
+                <div style="float:left; width: 49%;">
+                  <table class="dark" style="width:100%">
+                    <tr>
+                      <th>in</th><th>out</th><th>#</th><th>Name</th><th>Alternate Name</th>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>1</td><td>ig</td><td>stanford</td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>2</td><td>genbank</td><td>gb</td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>3</td><td>nbrf</td><td></td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>4</td><td>embl</td><td></td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>5</td><td>gcg</td><td></td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>6</td><td>dnastrider</td><td>strider</td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>7</td><td>fitch</td><td></td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>8</td><td>pearson</td><td>fasta</td>
+                    </tr>
+                    <tr style="color:gray">
+                      <td>&#10004;</td><td></td><td>9</td><td>zuker</td><td></td>
+                    </tr>
+                    <tr style="color:gray">
+                      <td>&#10004;</td><td></td><td>10</td><td>olsen</td><td></td>
+                    </tr>
+                  </table>
+                </div>
+                <div style="margin-left: 50%">
+                  <table class="dark" style="width:100%">
+                    <tr>
+                      <th>in</th><th>out</th><th>#</th><th>Name</th><th>Alternate Name</th>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>11</td><td>phylip3.2</td><td>phylip-sequential</td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td></td><td>phylip3.3</td><td></td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td></td><td>phylip3.4</td><td>phylip-interleaved</td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>12</td><td>phylip</td><td></td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>13</td><td>plain</td><td>raw</td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>14</td><td>pir</td><td>codata</td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>15</td><td>msf</td><td></td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>16</td><td>asn.1</td><td></td>
+                    </tr>
+                    <tr>
+                      <td>&#10004;</td><td>&#10004;</td><td>17</td><td>paup</td><td>nexus</td>
+                    </tr>
+                    <tr>
+                      <td></td><td>&#10004;</td><td>18</td><td>pretty</td><td></td>
+                    </tr>
+                  </table>
+
+                </div>
+              </div>
+            </div>
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <th colspan="3">Format Options for "pretty" output</th>
+          </tr>
+          <tr>
+            <td><span class="popt">-w<span class="pskp">idth=</span></span><span class="pdat">line width</span></td>
+            <td>The sequence line width.</td>
+            <td>The sequence line width is set to 50.</td>
+          </tr>
+          <tr>
+            <td><span class="popt">-tab<span class="pskp">=</span></span><span class="pdat">left indent</span></td>
+            <td>The sequences in the output are indented by <span class="pdat">left indent</span> spaces.</td>
+            <td>The sequences in the output are not indented.</td>
+          </tr>
+          <tr>
+            <td><span class="popt">-col<span class="pskp">space</span>=</span><span class="pdat">space</span></td>
+            <td>The column space within sequence line on output.</td>
+            <td>The column space is set to 10.</td>
+          </tr>
+          <tr>
+            <td class="popt">-gap<span class="pskp">count</span></td>
+            <td>Count gap characters when calculating in sequence numbers.</td>
+            <td>Gap characters are not counted.</td>
+          </tr>
+          <tr>
+            <td><span class="popt">-namele<span class="pskp">ft=</span></span><span class="pdat">expected width</span></td>
+            <td>Display the name on the left side. If the 
+              <span class="pdat">expected width</span> is not specified then
+              it defaults to 8.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><span class="popt">-nameri<span class="pskp">ght=</span></span><span class="pdat">expected width</span></td>
+            <td>Display the name on right side. If the
+              <span class="pdat">expected width</span> is not specified then
+              it defaults to 8.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-namet<span class="pskp">op</span></td>
+            <td>Display the name at the top.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><span class="popt">-numle<span class="pskp">ft=</span></span><span class="pdat">expected width</span></td>
+            <td>Display the sequence index on left side. If the
+              <span class="pdat">expected width</span>
+            is not specified it defaults to 5.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><span class="popt">-numri<span class="pskp">ght=</span></span><span class="pdat">expected width</span></td>
+            <td>Display the sequence index on right side. If the
+              <span class="pdat">expected width</span>
+            is not specified it defaults to 5.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-numto<span class="pskp">p</span></td>
+            <td>Display the sequence index at the top.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-numbo<span class="pskp">ttom</span></td>
+            <td>Display the sequence index at the bottom.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><span class="popt">-matc<span class="pskp">h</span>=</span><span class="pdat">match character</span></td>
+            <td>Use match base for 2..n species. If the 
+              <span class="pdat">match character</span> is not specified then
+            it defaults to '.' .</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-int<span class="pskp">erline</span></td>
+            <td>Include a blank line(s) between sequence blocks.</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

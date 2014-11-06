@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>clustalw2fasta - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>clustalw2fasta</h2>
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>clustalw2fasta [options] &lt;alignment file&gt;</code>
+    </div>
+    
+    <h3>Description</h3>
+    <div class="indent">
+      <p>This program converts a multiple alignment in clustalw
+      format into a FASTA file.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Alignment File</h4>
+      <p>A file containing one or more aligned sequences in
+      <a href="clustalw-format.html">Clustalw format</a>.</p>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Writes <a href="fasta-format.html">FASTA formatted</a> sequences to
+      standard output.</p>
+      <p>The program outputs each of the sequences in the multiple
+      alignment.</p>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">Input/Output</th>
+          </tr>
+          <tr>
+            <td class="popt">-consensus</td><td><span class="pdat">threshold</span></td>
+            <td>Rather than printing each of the sequences to the FASTA file,
+            the program prints their consensus, with gaps (hyphens) inserted
+            whenever the consensus character occurs in less than
+            <span class="pdat">threshold</span>% of the sequences.</td>
+            <td>Output the sequences as normal.</td>
+          </tr>
+          <tr>
+            <td class="popt">-nogap</td><td></td>
+            <td>Do not include gap characters in the output.</td>
+            <td>Include the gap characters.</td>
+          </tr>
+          <tr>
+            <td class="popt">-seqorder</td><td><span class="pdat">seqorder&nbsp;filename</span></td>
+            <td>Output the sequences in the order given in the
+            <span class="pdat">seqorder&nbsp;filename</span> file. This file must
+            contain a superset of the sequences in the Clustalw alignment
+            file.</td>
+            <td>Output the sequences in the same order that they appear in
+            the input.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

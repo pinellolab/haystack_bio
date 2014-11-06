@@ -1,0 +1,1827 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="fimo-to-html.xsl"?>
+<!-- Begin document body -->
+<cis-element-search
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://zlab.bu.edu/schema/cisml cisml.xsd"
+  xmlns="http://zlab.bu.edu/schema/cisml"
+  xmlns:mem="http://noble.gs.washington.edu/meme"
+>
+<program-name>fimo</program-name>
+<parameters>
+<pattern-file>memechip_example_output_files/dreme_out/dreme.xml</pattern-file>
+<sequence-file>memechip_example_output_files/sample-dna-Klf1.fa</sequence-file>
+<site-pvalue-cutoff>0.0001</site-pvalue-cutoff>
+<sequence-filtering on-off="off"/>
+</parameters>
+<pattern accession="GGGYGK" name="GGGYGK">
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr1" name="chr1">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr2" name="chr2">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr3" name="chr3">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr4" name="chr4">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr5" name="chr5">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr6" name="chr6">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr7" name="chr7">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr8" name="chr8">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chr9" name="chr9">
+</scanned-sequence>
+<scanned-sequence accession="chrX" name="chrX">
+</scanned-sequence>
+<scanned-sequence accession="chrX" name="chrX">
+</scanned-sequence>
+<scanned-sequence accession="chrX" name="chrX">
+</scanned-sequence>
+<scanned-sequence accession="chrX" name="chrX">
+</scanned-sequence>
+<scanned-sequence accession="chrX" name="chrX">
+</scanned-sequence>
+<scanned-sequence accession="chrX" name="chrX">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr10" name="chr10">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr11" name="chr11">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr12" name="chr12">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr13" name="chr13">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr14" name="chr14">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr15" name="chr15">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr16" name="chr16">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr17" name="chr17">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr18" name="chr18">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+<scanned-sequence accession="chr19" name="chr19">
+</scanned-sequence>
+</pattern>
+</cis-element-search>

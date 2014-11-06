@@ -1,0 +1,93 @@
+#preview {
+  width: 100%;
+  height: 500px;
+  border-style:none;
+  margin: 0;
+  padding:0;
+  visibility: hidden;
+}
+
+#preview.expanded {
+  visibility: visible;
+}
+
+/* These styles are for the details expansion */
+#details h3 {
+  display: inline;
+  margin: 0;
+}
+#details {
+  /* make it behave like a link */
+  cursor: pointer;
+  /* padding */
+  margin: 0;
+  padding: 2px;
+}
+#details:hover {
+  color: #AA2244;
+}
+#details:active {
+  color: #884466;
+}
+#details > span {
+  /* heading font styling */
+  font-size: 0.8em; 
+  font-style: normal;
+  font-family: Arial, serif;
+  font-weight: bold;
+}
+#details > span.expanded {
+  display: none;
+}
+#details > span.collapsed {
+  display: inline;
+}
+#details.expanded > span.expanded {
+  display:inline;
+}
+#details.expanded > span.collapsed {
+  display:none;
+}
+#details + div {
+  display:none;
+  margin-top: 0;
+  margin-left: 5px;
+  padding: 5px;
+}
+#details.expanded + div {
+  display: block;
+}
+
+table.job_details {
+  width: 100%;
+}
+
+table.job_details tr th {
+  text-align: left;
+}
+
+table.job_details tr.odd {
+  background-color: #b6e4cd;
+}
+
+table.job_details tr.even {
+  background-color: #E4ECEC;
+}
+
+table.job_details span.file {
+  font-family: monospace;
+  white-space: pre;
+  padding: 2px;
+  border: 1px solid black;
+}
+
+span.info.expired, span.info.pending, span.info.active, span.info.suspended,
+    span.info.failed, span.info.done, span.info.unknown {
+  display: none;
+}
+
+p.expired span.info.expired, p.pending span.info.pending, 
+p.active span.info.active, p.suspended span.info.suspended,
+p.failed span.info.failed, p.done span.info.done, p.unknown span.info.unknown {
+  display: inline;
+}

@@ -1,0 +1,18 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="AME @SERVICE_VERSION@">
+    <usage>AME: Analysis of Motif Enrichment</usage>
+    <info>
+    <![CDATA[
+ame_webservice [options] <sequences> <motifs>+
+
+  Options: 
+    -control <control sequences>  Use the specified control sequences.
+    -help                         Show this brief help message.
+
+  Motif databases can be specified by prefixing the file name by "db/".
+    ]]>
+    </info>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/ame_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

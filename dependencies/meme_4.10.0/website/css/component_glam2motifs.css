@@ -1,0 +1,14 @@
+
+div.motif_input > span.motif_file, 
+div.motif_input > div.motif_embed {
+  /* hide until active */
+  display: none;
+}
+
+div.motif_input.file > span.motif_file {
+  display: inline-block;
+}
+
+div.motif_input.embed > div.motif_embed {
+  display: block;
+}

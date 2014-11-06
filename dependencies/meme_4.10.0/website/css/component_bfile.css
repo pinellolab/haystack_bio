@@ -1,0 +1,111 @@
+div.bfile_input > span.bfile_file {
+  /* hide until active */
+  display: none;
+}
+
+
+div.bfile_input.file > span.bfile_file {
+  display: inline-block;
+}
+
+div.bfile_input > select.bfile_source {
+  margin: 2px;
+}
+
+.bfile_file {
+  /* note that this must be block or inline block */
+  position: relative;
+  padding: 2px;
+}
+
+.bfile_file span.background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -2;
+}
+
+.bfile_file span.indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  z-index: -1;
+  transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s; /* Firefox 4 */
+  -webkit-transition: background-color 0.5s; /* Safari and Chrome */
+  -o-transition: background-color 0.5s; /* Opera */
+}
+
+.bfile_file input[type="file"] {
+  transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s; /* Firefox 4 */
+  -webkit-transition: background-color 0.5s; /* Safari and Chrome */
+  -o-transition: background-color 0.5s; /* Opera */
+}
+
+.bfile_file.good input[type="file"], 
+.bfile_file.warning input[type="file"], 
+.bfile_file.error input[type="file"]  {
+  background: transparent;
+}
+
+.bfile_file.good span.indicator {
+  background-color: #00c800;
+}
+
+.bfile_file.warning span.indicator {
+  background-color: #d1bf00; 
+}
+
+.bfile_file.error span.indicator {
+  background-color: #d00a00;
+}
+
+.bfile_file.good span.background {
+  background-color: #d9ecd9;
+}
+
+.bfile_file.warning span.background {
+  background-color: #EEE8AA; /*#eeecd6;*/
+}
+
+.bfile_file.error span.background {
+  background-color:  #FFC4C1;/*#ffeceb;*/
+}
+
+.bfile_file div.popup {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 100%;
+  width: 500px;
+  padding: 5px;
+  border-style: double;
+  border-width: 3px;
+}
+
+.bfile_file.warning:hover div.popup {
+  display: block;
+  background-color: #EEE8AA;
+}
+
+.bfile_file.error:hover div.popup {
+  display: block;
+  background-color: #FFE4E1;
+  border-color: #AA2244;
+}
+
+.bfile_file div.popup table td {
+  vertical-align: top;
+}
+
+.bfile_file div.popup table td ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+

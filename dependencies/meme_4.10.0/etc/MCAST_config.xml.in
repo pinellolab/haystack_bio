@@ -1,0 +1,91 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="MCAST @SERVICE_VERSION@">
+    <usage>MCAST: Find clusters of motifs</usage>
+    <info xsd:type="xsd:string">
+    <![CDATA[
+    mcast_webservice [options] <motifs> <sequence db>
+
+      Options:
+        -upseqs <file>        Uploaded sequences
+        -bgweight <b>         Add b * background frequency to each count in query
+        -motif_pvthresh <pv>  p-value threshold for motif hits
+        -max_gap  <gap>       Maximum allowed distance between adjacent hits
+        -output_evthresh <ev> Print matches with E-values less than E
+        -help                 brief help message
+    ]]>
+    </info>
+    <types>
+      <taggedParams>
+        <param>
+          <id>upseqs</id>
+          <tag>-upseqs</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Uploaded Sequence Database</textDesc>
+        </param>
+        <param>
+          <id>bgweight</id>
+          <tag>-bgweight</tag>
+          <paramType>FLOAT</paramType>
+          <default>4</default>
+          <textDesc>Pseudocount weight</textDesc>
+        </param>
+        <param>
+          <id>motif_pvthresh</id>
+          <tag>-motif_pvthresh</tag>
+          <paramType>FLOAT</paramType>
+          <default>0.0005</default>
+          <textDesc>Motif hit p-value threshold</textDesc>
+        </param>
+        <param>
+          <id>max_gap</id>
+          <tag>-max_gap</tag>
+          <paramType>INT</paramType>
+          <default>50</default>
+          <textDesc>Maximum distance between adjacent hits</textDesc>
+        </param>
+        <param>
+          <id>output_evthresh</id>
+          <tag>-output_evthresh</tag>
+          <paramType>FLOAT</paramType>
+          <default>10</default>
+          <textDesc>Print matches with E-value less than</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>motifs</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>true</required>
+          <textDesc>Motifs</textDesc>
+        </param>
+        <param>
+          <id>database</id>
+          <paramType>STRING</paramType>
+          <required>true</required>
+          <textDesc>Filename of Sequence Database</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>g1</name>
+          <elements>motifs </elements>
+          <textDesc>Motifs</textDesc>
+        </group>
+        <group>
+          <name>g2</name>
+          <elements>database upseqs</elements>
+          <textDesc>Sequence Database</textDesc>
+        </group>
+        <group>
+          <name>g3</name>
+          <elements>motif_pvthresh max_gap output_evthresh bgweight</elements>
+          <textDesc>Other Options</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/mcast_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

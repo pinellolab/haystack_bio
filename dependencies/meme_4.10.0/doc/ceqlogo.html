@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ceqlogo - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>Ceqlogo</h2>
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>ceqlogo -i &lt;motif file&gt; [options]</code>
+    </div>
+    <h3>Examples</h3>
+    <div class="indent">
+      
+      <p>Load all motifs within a MEME motif file and write to logo.eps in EPS format:<br />
+      <code>ceqlogo -i meme.motifs -o logo.eps -f EPS</code></p>
+
+      <p>Load second motif from each of two files and shift the first one:<br />
+      <code>ceqlogo -i2 meme1.motifs -s 3 -i2 meme2.motifs -o logo.eps -f EPS</code></p>
+
+    </div>
+    <h3>Description</h3>
+    <div class="indent">
+
+      <p>The ceqlogo program generates one or multiple, aligned logos in EPS
+      or SVG format, based on a set of nucleotide or amino acid frequency
+      matrices provided in the <a href="meme-format.html">MEME file format</a>.
+      The code of <code>ceqlogo</code> is based on the Perl code of
+      <a href="http://weblogo.berkeley.edu/">weblogo</a> but is written in C
+      and supports SVG output. Note that the program strives to use command
+      line options similar to those of <code>weblogo</code>.</p>
+      
+      <p>The letter stacks are calculated by the following equations found in
+      Schneider and Stephens paper
+      <a href="http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=332411"
+        >"Sequence Logos: A New Way to Display Consensus Sequences"</a> and 
+      adapted from the weblogo documentation. The height of a letter is 
+      calculated as:</p>
+
+      <p><code>height(b,l) = f(b,l) * R(l)</code></p>
+
+      <p>where <code>f(b,l)</code> is the frequency of base or amino acid
+      <code>b</code> at position <code>l</code>. The stack height
+      <code>R(l)</code> is the amount of information present at position
+      <code>l</code> and can be quantified as follows:</p>
+      
+      <p><code>R(l) for amino acids   = log(20) - (H(l) + e(n))</code></p>
+
+      <p><code>R(l) for nucleic acids =    2    - (H(l) + e(n))</code></p>
+
+      <p>where <code>log</code> is taken base <code>2</code>,
+      <code>H(l)</code> is the uncertainty at position <code>l</code>, and
+      <code>e(n)</code> is the error correction factor for small sample sizes
+      <code>n</code>. <code>H(l)</code> is computed as follows:</p>
+      
+      <p><code>H(l) = - (Sum f(b,l) * log[ f(b,l) ])</code></p>
+
+      <p>where again, <code>log</code> is taken base <code>2</code>.
+      <code>f(b,l)</code> is the frequency of base <code>b</code> at position
+      <code>l</code>. The sum is taken over all amino acids or bases.</p>
+
+      <p>The error correction factor <code>e(n)</code> is approximated by:</p>
+      
+      <p><code>e(n) = (s-1) / (2 * ln 2 * n)</code></p>
+
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Motif File</h4>
+      <p>A file containing one or more motifs in <a href="meme-format.html">MEME format</a>.</p>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>If no output file is specified <code>ceqlogo</code> writes to standard output.</p>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">Options with arguments</th>
+          </tr>
+          <tr>
+            <td class="popt">-i</td><td><span class="pdat">motif file</span></td>
+            <td>Load all motifs within the
+            <span class="pdat">motif file</span>.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><span class="popt">-i</span><span class="pdat">n</span></td>
+            <td><span class="pdat">motif file</span></td>
+            <td>Load the <span class="pdat">n</span>th motif within the
+            <span class="pdat">motif file</span>.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-s</td><td><span class="pdat">shift</span></td>
+            <td>Offset the previously loaded motif by <span class="pdat">shift</span>.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-b</td><td><span class="pdat">bar bits</span></td>
+            <td>Number of bits in bar (real # &gt; 0).</td>
+            <td>DNA motifs have a default height of 2 bits and protein motifs
+            have a default height of 4.3 bits.</td>
+          </tr>
+          <tr>
+            <td class="popt">-c</td><td><span class="pdat">tic bits</span></td>
+            <td>Number of bits between tic marks.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-e</td><td><span class="pdat">error bar fraction</span></td>
+            <td>Fraction of error bar to show (real # &gt; 0).</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-f</td><td><span class="popt">EPS</span>|<span class="popt">SVG</span></td>
+            <td>Set the format of the output.</td>
+            <td>The output is created in EPS.</td>
+          </tr>
+          <tr>
+            <td class="popt">-h</td><td><span class="pdat">logo height</span></td>
+            <td>Height of output logo in cm (real # &gt; 0).</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-k</td><td><span class="popt">AA</span>|<span class="popt">NA</span></td>
+            <td>Set Ceqlogo to handle the correct kind of data.
+            Set the value to <span class="popt">AA</span> for protein
+            motifs and <span class="popt">NA</span> for DNA motifs.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-o</td><td><span class="pdat">image file</span></td>
+            <td>Create an image called <span class="pdat">image file</span>
+            and send the output to it.</td>
+            <td>Send the output to standard out.</td>
+          </tr>
+          <tr>
+            <td class="popt">-n</td><td><span class="pdat">sample number</span></td>
+            <td>Set the sample count of the previously loaded motif to
+            <span class="pdat">sample number</span>. This value is used to
+            calculate error bars.</td>
+            <td>Use the sample count embeded in the motif file.</td>
+          </tr>
+          <tr>
+            <td class="popt">-t</td><td><span class="pdat">title label</span></td>
+            <td>Set the title of the image to <span class="pdat">title label</span>.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-w</td><td><span class="pdat">logo width</span></td>
+            <td>Width of output logo in cm (real # &gt; 0)</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-x</td><td><span class="pdat">x-axis label</span></td>
+            <td>Label for x-axis.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-y</td><td><span class="pdat">y-axis label</span></td>
+            <td>Label for y-axis.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-p</td><td><span class="pdat">pseudocount</span></td>
+            <td>Pseudocount for motifs.</td>
+            <td>A pseudocount value of 1 is used.</td>
+          </tr>
+          <tr>
+            <td class="popt">-test</td><td><span class="pdat">verbosity level</span></td>
+            <td>Runs a self test, ignoring all other options. The 
+            <span class="pdat">verbosity level</span> [0..3] is optional.</td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <th colspan="4">Toggles</th>
+          </tr>
+          <tr>
+            <td class="popt">-B</td><td>&nbsp;</td>
+            <td>Toggle bar ends.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-E</td><td>&nbsp;</td>
+            <td>Toggle error bar.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-O</td><td>&nbsp;</td>
+            <td>Toggle outlining of characters.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-P</td><td>&nbsp;</td>
+            <td>Toggle fineprint.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-N</td><td>&nbsp;</td>
+            <td>Toggle numbering of x-axis.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-X</td><td>&nbsp;</td>
+            <td>Toggle boxing of characters.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-Y</td><td>&nbsp;</td>
+            <td>Toggle y-axis.</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>
+

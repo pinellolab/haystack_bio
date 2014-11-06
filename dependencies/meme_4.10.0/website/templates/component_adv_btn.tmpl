@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Advanced Button Template</title>
+    <link href="../doc/css/style.css" rel="stylesheet" type="text/css">
+    <script src="../doc/js/utilities.js"></script>
+    <script src="../js/site.js"></script>
+    <script>
+      function XXXXchange_fnXXXX() {
+        return document.getElementById("test").checked;
+      }
+      function XXXXreset_fnXXXX() {
+        document.getElementById("test").checked = false;
+      }
+    </script>
+  </head>
+  <body>
+    <!--{help}-->
+    <!--{/help}-->
+    <!--{component}-->
+          <!-- Options Button -->
+          <div class="more_opts" tabindex="0" id="${id}">
+            <span class="collapsed">&#x25B6;</span>
+            <span class="expanded">&#x25BC;</span>
+            <span class="spacer">
+              <!--{title}-->Advanced options<!--{/title}-->
+            </span>
+            <span class="modified">hidden modifications!</span>
+            <span class="reset">[Reset]</span>
+            <script>
+            // create scope to avoid polluting global scope
+            (function() {
+              "use strict";
+              var btn, reset;
+              btn = document.getElementById("${id}");
+              reset = btn.querySelector("span.reset");
+              btn.addEventListener("click", function() {
+                more_opts(btn, XXXXchange_fnXXXX);
+              }, false);
+              btn.addEventListener("keypress", function(evt) {
+                more_opts_key(evt, btn, XXXXchange_fnXXXX);
+              }, false);
+              reset.addEventListener("click", function(evt) {
+                more_opts_reset(evt, btn, "${title}", XXXXchange_fnXXXX, XXXXreset_fnXXXX);
+              }, false);
+              window.addEventListener("load", function load_handler(evt) {
+                window.removeEventListener("load", load_handler, false);
+                toggle_class(btn, 'expanded', XXXXchange_fnXXXX());
+              }, false);
+            })();
+            </script>
+          </div>
+          <!-- /Options Button -->
+    <!--{/component}-->
+          <div>
+            <p>Lots of advanced options go here.</p>
+            <input type="checkbox" value="1" id="test"><label for="test">This is a test value</label>
+          </div>
+          <div>
+            <p>This is not part of the advanced options.</p>
+          </div>
+  </body>
+</html>
+

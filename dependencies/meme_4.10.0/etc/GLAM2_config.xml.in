@@ -1,0 +1,146 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="GLAM2 @SERVICE_VERSION@">
+    <usage>GLAM2: Find gapped local alignment motifs</usage>
+    <info xsd:type="xsd:string">
+    <![CDATA[
+    glam2_webservice [options] <sequences>
+
+      Options:
+        -alpha [DNA|PROTEIN]  Alphabet; default DNA
+        -min_seqs <n>         Minimum number of sequences in an alignment (-z)
+        -min_cols <n>         Minimum number of aligned columns (-a)
+        -max_cols <n>         Maximum number of aligned columns (-b)
+        -initial_cols <n>     Initial number of aligned columns (-w)
+        -runs <n>             Number of alignment replicates (-r)
+        -run_no_impr <n>      Number of iterations without improvement (-n)
+        -del_pseudo <n>       Deletion pseudocount (-D)
+        -no_del_pseudo <n>    No-deletion pseudocount (-E)
+        -ins_pseudo <n>       Insertion pseudocount (-I)
+        -no_ins_pseudo <n>    No-insertion pseudocount (-J)
+        -rev_comp             Check both strands (-2)
+        -embed                Embed the sequences (-M)
+        -help                 brief help message
+    ]]>
+    </info>
+    <types>
+      <flags>
+        <flag>
+          <id>rev_comp</id>
+          <tag>-rev_comp</tag>
+          <default>false</default>
+          <textDesc>Check both strands</textDesc>
+        </flag>
+        <flag>
+          <id>embed</id>
+          <tag>-embed</tag>
+          <default>true</default>
+          <textDesc>Embed the sequences in the HTML output</textDesc>
+        </flag>
+      </flags>
+      <taggedParams>
+        <separator> </separator>
+        <param>
+          <id>alpha</id>
+          <tag>-alpha</tag>
+          <paramType>STRING</paramType>
+          <value>DNA</value>
+          <value>PROTEIN</value>
+          <default>DNA</default>
+          <textDesc>Alphabet</textDesc>
+        </param>
+        <param>
+          <id>min_seqs</id>
+          <tag>-min_seqs</tag>
+          <paramType>INT</paramType>
+          <textDesc>Minimum sequences in an alignment</textDesc>
+        </param>
+        <param>
+          <id>min_cols</id>
+          <tag>-min_cols</tag>
+          <paramType>INT</paramType>
+          <textDesc>Minimum number of aligned columns</textDesc>
+        </param>
+        <param>
+          <id>max_cols</id>
+          <tag>-max_cols</tag>
+          <paramType>INT</paramType>
+          <textDesc>Maximum number of aligned columns</textDesc>
+        </param>
+        <param>
+          <id>initial_cols</id>
+          <tag>-initial_cols</tag>
+          <paramType>INT</paramType>
+          <textDesc>Initial number of aligned columns</textDesc>
+        </param>
+        <param>
+          <id>runs</id>
+          <tag>-runs</tag>
+          <paramType>INT</paramType>
+          <textDesc>Number of alignment replicates</textDesc>
+        </param>
+        <param>
+          <id>run_no_impr</id>
+          <tag>-run_no_impr</tag>
+          <paramType>INT</paramType>
+          <textDesc>Number of iterations without improvement</textDesc>
+        </param>
+        <param>
+          <id>del_pseudo</id>
+          <tag>-del_pseudo</tag>
+          <paramType>FLOAT</paramType>
+          <textDesc>Deletion pseudocount</textDesc>
+        </param>
+        <param>
+          <id>no_del_pseudo</id>
+          <tag>-no_del_pseudo</tag>
+          <paramType>FLOAT</paramType>
+          <textDesc>No-deletion pseudocount</textDesc>
+        </param>
+        <param>
+          <id>ins_pseudo</id>
+          <tag>-ins_pseudo</tag>
+          <paramType>FLOAT</paramType>
+          <textDesc>Insertion pseudocount</textDesc>
+        </param>
+        <param>
+          <id>no_ins_pseudo</id>
+          <tag>-no_ins_pseudo</tag>
+          <paramType>FLOAT</paramType>
+          <textDesc>No-insertion pseudocount</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>sequences</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Input sequences</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>g1</name>
+          <elements>sequences alpha rev_comp embed</elements>
+          <textDesc>Sequences</textDesc>
+        </group>
+        <group>
+          <name>g2</name>
+          <elements>min_seqs min_cols max_cols initial_cols</elements>
+          <textDesc>Alignment Constraints</textDesc>
+        </group>
+        <group>
+          <name>g4</name>
+          <elements>del_pseudo no_del_pseudo ins_pseudo no_ins_pseudo</elements>
+          <textDesc>Alignment Pseudocounts</textDesc>
+        </group>
+        <group>
+          <name>g3</name>
+          <elements>runs run_no_impr</elements>
+          <textDesc>Alignment Attempts</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/glam2_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

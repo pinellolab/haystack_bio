@@ -1,0 +1,93 @@
+
+span.fasta_file_box {
+  display: inline-block;
+  position: relative;
+  padding: 2px;
+}
+
+span.fasta_file_bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -2;
+}
+
+span.fasta_file_meter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  z-index: -1;
+  transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s; /* Firefox 4 */
+  -webkit-transition: background-color 0.5s; /* Safari and Chrome */
+  -o-transition: background-color 0.5s; /* Opera */
+}
+
+span.fasta_file_box.good span.fasta_file_meter {
+  background-color: #00c800;
+}
+
+span.fasta_file_box.warning span.fasta_file_meter {
+  background-color: #d1bf00; 
+}
+
+span.fasta_file_box.error span.fasta_file_meter {
+  background-color: #d00a00;
+}
+
+
+span.fasta_file_box.good span.fasta_file_bg {
+  background-color: #d9ecd9;
+}
+
+span.fasta_file_box.warning span.fasta_file_bg {
+  background-color: #EEE8AA; /*#eeecd6;*/
+}
+
+span.fasta_file_box.error span.fasta_file_bg {
+  background-color:  #FFC4C1;/*#ffeceb;*/
+}
+
+
+span.fasta_file_box.no_trans span.fasta_file_meter {
+  transition: background-color 0s;
+  -moz-transition: background-color 0s; /* Firefox 4 */
+  -webkit-transition: background-color 0s; /* Safari and Chrome */
+  -o-transition: background-color 0s; /* Opera */
+}
+
+div.fasta_file_popup {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 100%;
+  width: 500px;
+  padding: 5px;
+  border-style: double;
+  border-width: 3px;
+}
+
+span.fasta_file_box.warning:hover div.fasta_file_popup {
+  display: block;
+  background-color: #EEE8AA;
+}
+
+span.fasta_file_box.error:hover div.fasta_file_popup {
+  display: block;
+  background-color: #FFE4E1;
+  border-color: #AA2244;
+}
+
+div.fasta_file_popup table td {
+  vertical-align: top;
+}
+
+div.fasta_file_popup table td ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}

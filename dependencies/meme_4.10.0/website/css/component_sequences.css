@@ -1,0 +1,203 @@
+
+div.sequence_input > div.sequence_text,
+div.sequence_input > span.sequence_file,
+div.sequence_input > select.sequence_db, 
+div.sequence_input > div.help.sequence_db {
+  /* hide until active */
+  display: none;
+}
+
+div.sequence_input.text > div.sequence_text {
+  display: inline-block;
+}
+
+div.sequence_input.file > span.sequence_file {
+  display: inline-block;
+}
+
+div.sequence_input.db > select.sequence_db {
+  display: inline-block;
+  min-width: 16em;
+  margin: 2px;
+}
+
+div.sequence_input.db > div.help.sequence_db {
+  display: inline-block;
+}
+
+div.sequence_input > select.sequence_source {
+  margin: 2px;
+}
+
+div.sequence_input.text > select.sequence_source,
+div.sequence_input.file > select.sequence_source {
+  max-width: 12em;
+}
+
+/* sequence editor rules */
+div.sequence_input div.editor {
+  margin-top: 1px;
+  overflow-y: auto;
+  border: 1px solid #999;
+  border-radius: 4px;
+  width: 400px;
+  max-height: 300px;
+  background: #E4ECEC;
+}
+div.sequence_input div.editor > div {
+  position: relative;
+  display: inline-block;
+  min-width: 100%;
+}
+div.sequence_input div.editor > div > textarea, div.sequence_input div.editor > div > pre {
+  margin: 0;
+  outline: 0;
+  border: 0;
+  padding: 2px;
+  min-height: 50px;
+  background: transparent;
+  font: 400 13px/16px monospace;
+  /* Make the text soft-wrap */
+  white-space: pre;
+  margin-right: 20px;
+}
+div.sequence_input div.editor > div > textarea {
+  /* The border-box box model is used to allow
+   * padding whilst still keeping the overall width
+   * at exactly that of the containing element.
+   */
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 100%;
+  /* Hide any scrollbars */
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  /* Remove WebKit user-resize widget */
+  resize: none;
+}
+div.sequence_input div.editor > div > pre {
+  display: block;
+  /* Hide the text; just using it for sizing */
+  color: rgba(0, 255, 0, 0);
+}
+
+/* imported from fasta-debug */
+
+.fasta_debug {
+  /* note that this must be block or inline block */
+  position: relative;
+  padding: 2px;
+}
+
+.fasta_debug span.background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -2;
+}
+
+.fasta_debug span.indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  z-index: -1;
+  transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s; /* Firefox 4 */
+  -webkit-transition: background-color 0.5s; /* Safari and Chrome */
+  -o-transition: background-color 0.5s; /* Opera */
+}
+
+.fasta_debug input[type="file"] {
+  transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s; /* Firefox 4 */
+  -webkit-transition: background-color 0.5s; /* Safari and Chrome */
+  -o-transition: background-color 0.5s; /* Opera */
+}
+
+.fasta_debug.good input[type="file"],
+.fasta_debug.warning input[type="file"],
+.fasta_debug.error input[type="file"] {
+  background-color: transparent;
+}
+
+.fasta_debug.good span.indicator {
+  background-color: #00c800;
+}
+
+.fasta_debug.warning span.indicator {
+  background-color: #d1bf00; 
+}
+
+.fasta_debug.error span.indicator {
+  background-color: #d00a00;
+}
+
+.fasta_debug.good span.background {
+  background-color: #d9ecd9;
+}
+
+.fasta_debug.warning span.background {
+  background-color: #EEE8AA; /*#eeecd6;*/
+}
+
+.fasta_debug.error span.background {
+  background-color:  #FFC4C1;/*#ffeceb;*/
+}
+
+.fasta_debug div.popup {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 100%;
+  width: 500px;
+  padding: 5px;
+  border-style: double;
+  border-width: 3px;
+}
+
+.fasta_debug.warning:hover div.popup {
+  display: block;
+  background-color: #EEE8AA;
+}
+
+.fasta_debug.error:hover div.popup {
+  display: block;
+  background-color: #FFE4E1;
+  border-color: #AA2244;
+}
+
+.fasta_debug div.popup table td {
+  vertical-align: top;
+}
+
+.fasta_debug div.popup table td ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+div.alphainc {
+  display: inline-block;
+  font-variant: small-caps;
+  font-weight: bold;
+  padding: 2px;
+  border: 1px solid #DDD;
+  color: #DDD;
+  vertical-align: middle;
+  cursor: default;
+  font-size: x-small;
+}
+
+div.sequence_input.dna div.alphainc.dna, div.sequence_input.protein div.alphainc.protein {
+  color: DarkGreen;
+  border-color: DarkGreen;
+}

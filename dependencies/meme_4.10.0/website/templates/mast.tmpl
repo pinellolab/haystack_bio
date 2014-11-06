@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>MAST - Submission form</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../doc/images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="../doc/images/memesuite_icon.png">
+    <link href="../doc/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/component_motifs.css" rel="stylesheet" type="text/css">
+    <link href="../css/component_sequences.css" rel="stylesheet" type="text/css">
+    <script src="../doc/js/menu-path.js"></script>
+    <script src="../doc/js/menu.js"></script>
+    <script src="../doc/js/motif_logo.js"></script>
+    <script src="../doc/js/utilities.js"></script>
+    <script src="../js/site.js"></script>
+    <script src="../js/fasta-debug.js"></script>
+    <!-- wicked-good-xpath library: http://code.google.com/p/wicked-good-xpath/ -->
+    <script src="../js/wgxpath.install.js"></script>
+    <script src="../js/motif_parser.js"></script>
+    <script src="../js/component_motifs.js"></script>
+    <script src="../js/component_sequences.js"></script>
+    <script src="../js/mast.js"></script>
+  </head>
+  <body>
+    <div class="pop_content" id="pop_translate_dna">
+      <p>Select this option if you have protein motifs but DNA sequences.
+      The DNA sequences will be translated on the fly to protein at each frame
+      for comparison with the motifs.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_seq_evalue">
+      <p>MAST only displays sequences matching your query with <i>E</i>-values
+      below the given threshold you specify here. By default, sequences in the
+      database with matches with <i>E</i>-values less than 10 are displayed. 
+      If your motifs are very short or have low information content (are not
+      very specific), it may be impossible for any sequence to achieve a low
+      E-value. If your MAST search returns no hits, you may wish to increase
+      the E-value display threshold and repeat the search.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_motif_evalue">
+      <p>MAST can ignore motifs in the query with <i>E</i>-values above a
+      threshold you select. This is desirable because motifs with high
+      <i>E</i>-values are unlikely to be biologically significant. If this 
+      option is disabled then MAST will use <b>all</b> the motifs in the query,
+      regardless of their <i>E</i>-values.</p>
+      <p>This option only works for motifs where the <i>E</i>-value is included
+      in the motif file. MAST does not have any capability for re-assessing the
+      signficance of a motif.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_seq_comp">
+      <p>This option can improve search selectivity when erroneous matches are
+      due to <b>biased sequence composition</b>.</p>
+      
+      <p>MAST normally computes <i>E</i>-values and <i>p</i>-values using a 
+      random sequence model based on the <b>overall</b> letter composition of
+      the <b>database</b> being searched. Selecting this option will cause MAST
+      to use a <b>different</b> random model for <b>each target sequence</b>.
+      The random model for each target sequence will be based on its letter
+      composition, not that of the entire database.</p>
+      
+      <p>Using this option will tend to give more accurate
+      <i>E</i>-values and increase the <i>E</i>-values of compositionally
+      biased sequences. This option may <b>increase search times
+      substantially</b> if used in conjunction with <i>E</i>-value display 
+      thresholds over 10, since MAST must compute a new set of motif score
+      distributions for each high-scoring sequence.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_scale_m">
+      <p>MAST displays motifs that score above a threshold for all high-scoring
+      sequences. By default, this threshold is based on the probability of the
+      motifs without regard to the length of the sequence. The threshold was
+      chosen with protein sequences of average length in mind. Consequently, 
+      many positions in very long sequences may match motifs with scores above
+      this threshold by chance, making the results difficult to interpret.</p>
+
+      <p>Selecting this option causes the motif display threshold to take
+      sequence length into account. This will reduce the number of weak motifs
+      displayed in long sequences and minimize the size of the output file.</p>
+
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_strands" style="width: 400px">
+      <p>MAST can automatically generate the reverse complement strand for each
+      nucleotide sequence in the database and treat it in three different ways.
+      ("Given strand" refers to the sequence as it appears in the database MAST
+      is searching.):</p>
+      <dl>
+        <dt>combine with given strand</dt>
+        <dd>MAST searches for motif occurrences on either the given strand or
+        its reverse complement together, not allowing occurrences on the two
+        strands to overlap each other, and displays them together as a single
+        sequence. This allows motifs to occur on either strand and still count
+        toward the overall E-value of the match. (The given strand is the
+        sequence as it appears in the database MAST is searching.)</dd>
+        <dt>treat as separate sequence</dt>
+        <dd>MAST to search for motifs in both the given strand and its reverse
+        complement, treating them as two, independent sequences. As of version
+        4.3.2 the results are displayed together in the html though in previous
+        versions the results were displayed separately for the two strands, as
+        though both had occurred in the database.</dd>
+        <dt>none</dt>
+        <dd>MAST searches only the given strand of each sequence in the database.</dd>
+      </dl>
+      <p>Note: this field has no effect when the database contains protein sequences.</p>
+      </dl>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <!--{help/}-->
+    <div class="content_box">
+      <!--{header}-->
+      <p>
+      <!--{title}-->MAST<!--{/title}--> - <!--{subtitle}-->Motif Alignment &amp; Search Tool<!--{/subtitle}--><br>
+      <!--{logo}-->../doc/images/mast_icon.png<!--{/logo}-->: <!--{alt}-->MAST Logo<!--{/alt}--><br>
+      <!--{blurb}--><span class="blurb" data-id="mast"></span><!--{/blurb}-->
+      </p>
+      <!--{/header}-->
+      <form enctype="multipart/form-data" accept-charset="utf-8"
+      method="POST" action="mast" id="mast_form">
+        <fieldset>
+          <legend>Data Submission Form</legend>
+          <p class="meme">Find sequences that match a set of motifs.</p> 
+          <!--{motifs}-->
+          <hr>
+          <!--{prefix}-->motifs<!--{/prefix}--><br>
+          <!--{title}-->Input the motifs<!--{/title}--><br>
+          <!--{default}-->FILE<!--{/default}-->
+          <!--{register}-->register_component<!--{/register}-->
+          <hr>
+          <!--{/motifs}-->
+
+          <!--{sequences}-->
+          <!--{prefix}-->sequences<!--{/prefix}--><br>
+          <!--{title}-->Input the sequences<!--{/title}--><br>
+          <!--{default}-->DATABASE<!--{/default}--><br>
+          <!--{enable_db/}-->
+          <!--{register}-->register_component<!--{/register}-->
+          <hr>
+          <!--{/sequences}-->
+
+          <!--{job_details/}-->
+          <div style="margin-top: 5px; margin-bottom: 5px; width: 80%">
+            <!--{advanced_options/}-->
+            <div>
+              <!-- strand handling -->
+              <h3 class="meme">Reverse-complement strand handling</h3>
+              <label for="strands">RC strand handing:</label>
+              <select class="meme" name="strands" id="strands">
+                <option value="combine">combine with given strand</option>
+                <option value="separate">treat as separate sequence</option>
+                <option value="ignore">none</option>
+              </select>
+              <div class="help" data-topic="pop_strands"></div>
+
+              <!-- translation of DNA sequences for seaching by protein motifs -->
+              <h3 class="meme">Translate DNA sequences to protein?</h3>
+              <input type="checkbox" value="1" name="translate_dna" id="translate_dna">
+              <label for="translate_dna">Search DNA sequences with protein motifs?</label>
+              <div class="help" data-topic="pop_translate_dna"></div>
+
+              <!-- output sequence display E-value threshold -->
+              <h3 class="meme">Set a sequence display threshold</h3>
+              <label for="seq_evalue">Sequence <i>E</i>-value &le;</label>
+              <input class="meme numonly sz5" type="text" id="seq_evalue"
+              name="seq_evalue" value="10" step="any" min="0" size="5">
+              <div class="help" data-topic="pop_seq_evalue"></div>
+              
+              <!-- Use individual sequence composition in p/E-value calculation -->
+              <h3 class="meme">Use individual sequence composition</h3>
+              <input type="checkbox" value="1" name="use_seq_comp"
+              id="use_seq_comp">
+              <label for="use_seq_comp">Use per sequence composition in
+              significance calculation?</label>
+              <div class="help" data-topic="pop_seq_comp"></div>
+
+              <!-- Scale motif display threshold -->
+              <h3 class="meme">Scale the motif display threshold</h3>
+              <input type="checkbox" value="1" name="scale_m" id="scale_m">
+              <label for="scale_m">Scale motif display threshold by sequence
+              length?</label>
+              <div class="help" data-topic="pop_scale_m"></div>
+
+              <!-- motif E-value threshold -->
+              <h3 class="meme">Filter motifs by <i>E</i>-value threshold</h3>
+              <span class="enabopt">
+              <input type="checkbox" value="1" name="motif_evalue_enable"
+              id="motif_evalue_enable">
+              <label for="motif_evalue">Motif <i>E</i>-value &le;</label>
+              <input class="meme numonly sz5" type="text" id="motif_evalue"
+              name="motif_evalue" value="0.05" step="any" min="0" size="5">
+              <div class="help" data-topic="pop_motif_evalue"></div>
+              </span>
+
+            </div>
+          </div>
+          <!--{submit_reset/}-->
+        </fieldset>
+      </form>
+      <!--{footer/}-->
+    </div>
+  </body>
+</html>

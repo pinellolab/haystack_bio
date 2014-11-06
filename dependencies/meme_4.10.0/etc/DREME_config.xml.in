@@ -1,0 +1,69 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="DREME @SERVICE_VERSION@">
+    <usage>DREME: Discovers regular expression motifs</usage>
+    <info>
+    <![CDATA[
+    dreme_webservice [options] <positive sequences file>
+
+      Options:
+        -n <file>         file containing negative sequences
+        -e <evalue>       maximum motif evalue
+        -m <count>        maximum motif count
+        -help             brief help message
+    ]]>
+    </info>
+    <!-- information about command-line arguments -->
+    <types>
+      <taggedParams>
+        <separator> </separator>
+        <param>
+          <id>negative_sequences</id>
+          <tag>-n</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>false</required>
+          <textDesc>Comparative sequences</textDesc>
+        </param>
+        <param>
+          <id>evalue_threshold</id>
+          <tag>-e</tag>
+          <paramType>FLOAT</paramType>
+          <required>false</required>
+          <default>0.05</default>
+          <textDesc>Maximum evalue</textDesc>
+        </param>
+        <param>
+          <id>count_threshold</id>
+          <tag>-m</tag>
+          <paramType>INT</paramType>
+          <required>false</required>
+          <textDesc>Maximum motif count</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>sequences</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>true</required>
+          <textDesc>Sequences</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>required_params</name>
+          <elements>sequences</elements>
+          <textDesc>Required Parameters</textDesc>
+        </group>
+        <group>
+          <name>optional_params</name>
+          <elements>negative_sequences evalue_threshold count_threshold</elements>
+          <textDesc>Optional Parameters</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/dreme_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>
+

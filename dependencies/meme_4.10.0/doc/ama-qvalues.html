@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ama-qvalues - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>ama-qvalues</h2>
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>ama-qvalues [options]</code>
+    </div>
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Read an AMA output file and output each sequence name, <i>p</i>-value
+      and <i>q</i>-value. At the end of file, the value of pi_0 (number of
+      sequences not showing significant binding to motif) is shown, unless
+      there are fewer than 100 p-values in the input.</p>
+    </div>
+    <h3>Input</h3>
+    <div class="indent">
+      <p>Reads standard input expecting an AMA output file.</p>
+    </div>
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Writes to standard output.</p>
+      <p>For each sequence in the input, outputs the sequence name, the
+      <i>p</i>-value of the sequence and the <i>q</i>-value (minimum false
+      discovery rate).</p>
+      <p>If there are more than 99 sequences with <i>p</i>-values in the input
+      then it provides an estimate of the number of sequences that contain the
+      motif, otherwise known as the pi_0.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <p>No optional arguments.</p>
+    </div>
+    <h3>See Also</h3>
+    <div class="indent">
+      <p><a href="qvalue.html">qvalue utility</a></p>
+    </div>
+  </body>
+</html>
+

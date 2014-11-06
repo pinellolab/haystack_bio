@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>mhmm - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>mhmm (unsupported)</h2>
+
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>mhmm [options] &lt;motif file&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>This program creates motif-based hidden Markov models
+      (HMMs) of families of related biosequences. The program takes as
+      input a set of DNA or protein motif models and produces as output a
+      single HMM containing the given motifs. The program can produce
+      three types of models: linear models, in which the motifs are
+      arranged like beads on a string, completely connected models, which
+      allow for repetitions of motifs and for motifs to appear in any
+      order, and star models. Mhmm writes its output in a
+      format readable by the other MEME Suite programs, 
+      <a href="mhmms.html">mhmms</a> and <a href="mhmmscan.html">mhmmscan</a>.
+      
+      <p>Three types of models may be produced. A linear motif-based HMM
+      consists of a sequence of motif models, each separated by one or
+      more tied insert states that represent the spacer region between
+      motifs. A completely connected model, on the other hand, includes
+      transitions from the end of each motif to the beginning of every
+      other motif in the model (with a spacer model along each
+      transition). This more general topology allows for motifs that are
+      repeated, deleted or shuffled. A star model is also available. By
+      default, the program produces a linear model.</p>
+
+      <p>Transition probabilities among motifs are derived from the motif
+      occurence information in the given MEME file. For the completely
+      connected topology, this information is derived from all of the
+      motif occurences. For the linear topology, the information is
+      derived only from the best-scoring sequence. Alternatively, the
+      order and spacing of motifs within a linear model may be specified
+      via the <span class="popt">--order</span> option.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Motif File</h4>
+      <div class="indent">
+        <p>A file containing <a href="meme-format.html">MEME formatted motifs</a>.
+        Outputs from MEME and DREME are supported along with minimal MEME
+        format for which there are conversion scripts available to support
+        other formats. Input motifs that are likely to appear in the
+        sequences.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Writes a motif-based hidden Markov model in 
+      <a href="mhmm-format.html">MHMM format</a> to standard output.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">Input/Output</th>
+          </tr>
+          <tr>
+            <td class="popt">--motif</td><td><span class="pdat">motif #</span></td>
+            <td>This option (which may be repeated) allows the user to select
+              a specific motif for inclusion in the HMM. The specified motif
+              number corresponds to the motif index in the MEME file.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--nmotifs</td><td><span class="pdat">n</span></td>
+            <td>This option is similar to the <span class="popt">-motif</span>
+              option, except that it tells mhmm to use the first
+              <span class="pdat">n</span> motifs in the given MEME file.</td>
+            <td>All motifs are included.</td>
+          </tr>
+          <tr>
+            <td class="popt">--ethresh</td><td><span class="pdat">ev</span></td>
+            <td>This option sets an E-value threshold for inclusion of motifs
+              in the model. Motifs with E-values &lt; 
+              <span class="pdat">ev</span> are ignored.</td>
+            <td>All motifs are included.</td>
+          </tr>
+          <tr>
+            <td class="popt">--lowcomp</td><td><span class="pdat">threshold</span></td>
+            <td>Eliminate low-complexity motifs from the model. Motif
+              complexity is the average K-L distance between the &quot;motif
+              background distribution&quot; and each column of the motif. The
+              motif background is just the average distribution of all the
+              columns. The K-L distance, which measures the difference
+              between two distributions, p and f, is the same as the
+              information content:
+              <div class="indent" style="font-family: monospace">
+                p<sub>1</sub>.log(p<sub>1</sub>/f<sub>1</sub>) + 
+                p<sub>2</sub>.log(p<sub>2</sub>/f<sub>2</sub>) + ... +
+                p<sub>n</sub>.log(p<sub>n</sub>/f<sub>n</sub>)
+              </div>
+              This value increases with increasing complexity.
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--order</td><td><span class="pdat">string</span></td>
+            <td>This option instructs mhmm to build an HMM with linear
+              topology. The given string specifies the order and spacing of
+              the motifs within the model, and has the format
+              "<code>s=m=s=m=&hellip;=s=m=s</code>", where "s" is the length of a spacer
+              between motifs, and "m" is a motif ID. Thus, for example, the
+              string "<code>34=3=17=2=5</code>" specifies a two-motif linear model, with
+              motifs 3 and 2 separated by 17 letters and flanked by 34 letters
+              and 5 letters on the left and right. If the MEME file contains
+              motif occurrences on both strands, then the motif IDs in the
+              order string should be preceded by "+" or "-" indicating the
+              strandedness of the motif. If this option is specified then the
+              <span class="popt">--type</span> option must either be
+              <span class="popt">linear</span> or not set.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--type</td><td><span 
+                class="popt">linear</span>|&#8203;<span
+                class="popt">complete</span>|&#8203;<span
+                class="popt">star</span></td>
+            <td>
+              <table class="dark">
+                <tr>
+                  <th>Value</th><th>Name</th><th>Description</th>
+                </tr>
+                <tr>
+                  <td class="popt">linear</td><td>Linear HMM</td>
+                  <td>A linear motif-based HMM consists of a sequence of motif
+                    models, each separated by one or more tied insert states
+                    that represent the spacer region between motifs.</td>
+                </tr>
+                <tr>
+                  <td class="popt">complete</td><td>Completely Connected HMM</td>
+                  <td>A completely connected model includes transitions from
+                    the end of each motif to the beginning of every other
+                    motif in the model (with a spacer model along each
+                    transition). This more general topology allows for motifs
+                    that are repeated, deleted or shuffled.</td>
+                </tr>
+                <tr>
+                  <td class="popt">star</td><td>Star HMM</td>
+                  <td>A star connected model has transitions from a single
+                    spacer state to every motif and then returning back to the
+                    spacer before continuing.</td>
+                </tr>
+              </table>
+              
+                 </td>
+            <td>A linear HMM is created.</td>
+          </tr>
+          <tr>
+            <td class="popt">--pthresh</td><td><span class="pdat"><i>p</i>-value</span></td>
+            <td>This option sets a p-value threshold for inclusion of motif
+              occurences in the transition probability matrix used to
+              construct the HMM.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--nspacer</td><td><span class="pdat">num</span></td>
+            <td>Normally the mhmm program models each spacer using a single
+              insert state. The distribution of spacer lengths produced by a
+              single insert stage is exponential in form. A more reasonable
+              distribution would be a bell-shaped curve such as a Gaussian.
+              Modeling the length distribution explicitly is computationally
+              expensive; however, as a Gaussian distribution can only be
+              approximated using multiple insert states to represent a single
+              spacer region. The <span class="popt">--nspacer</span> option
+              specifies the number of insert states used to represent each
+              spacer. Note that this Gaussian approximation is only effective
+              in conjunction with total probability training and scoring.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--transpseudo</td><td><span class="pdat">pseudocount</span></td>
+            <td>Specify the value of the pseudocount used in converting
+              transition counts to transition probabilities.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--spacerpseudo</td><td><span class="pdat">pseudocount</span></td>
+            <td>Specify the value of the pseudocount used in converting
+              transition counts to spacer self-loop probabilities.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--description</td><td><span class="pdat">text</span></td>
+            <td>Specify descriptive text to be stored as a comment in the
+              MHMM file.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--fim</td><td></td>
+            <td>A free-insertion module (FIM) is an insert state with 1.0
+              probability of self-transition and 1.0 probability of exit
+              transition. Thus, traversing such a state has zero transition
+              cost. Specifying this option causes all spacers to be
+              represented using FIMs.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--keep-unused</td><td></td>
+            <td>By default, mhmm remove from the transition probability matrix
+              all inter-motif transitions that are not observed in the data.
+              This option allows those transitions to be retained. This option
+              is only relevant if the model has a completely connected
+              topology.</td>
+            <td></td>
+          </tr>
+          <script>wropt("all-verbosity", {"ddash": true});</script>
+          <tr>
+            <td class="popt">--noheader</td><td></td>
+            <td>Do not put a header on the output file.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--noparams</td><td></td>
+            <td>Do not list the parameters at the end of the output.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--notime</td><td></td>
+            <td>Do not print the running time and host name at the end of the output.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--quiet</td><td></td>
+            <td>Combine the previous three flags and set verbosity to 1.</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

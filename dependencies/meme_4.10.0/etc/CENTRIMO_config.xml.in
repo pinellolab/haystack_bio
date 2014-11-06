@@ -1,0 +1,150 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="CENTRIMO @SERVICE_VERSION@">
+    <usage>CENTRIMO: Determine which motifs occur centrally in ChIP-seq output.</usage>
+    <info>
+    <![CDATA[
+      centrimo_webservice [options] <sequences file> <motif databases>
+
+        Options:
+          -local            compute the enrichment of all regions; 
+                             default: central regions only
+          -score <score>    minimum score counted as hit
+          -optsc            search for optimized score above the threshold given by
+                             '-score' argument. Slow computation due to multiple tests
+          -ethresh <evalue> minimum E-value to report
+          -maxreg <region>  maximum region size to test
+          -neg <file>       plot a negative set of sequences against the default set
+                            and test each window with Fisher's Exact Test
+          -upmotifs <file>  uploaded motifs
+          -bfile <file>     background file (0-order)
+          -norc             don't scan with the reverse complement motif
+          -flip             allow 'fliping' of sequences causing rc matches to appear
+                             'reflected' around center
+          -noseq            don't store sequence ids in the output
+          -help             brief help message
+
+        Motif Databases
+          The motif databases may be specified as a pattern using * as a wildcard.
+    ]]>
+    </info>
+
+    <!-- information about command-line arguments -->
+    <types>
+      <flags>
+        <flag>
+          <id>local</id>
+          <tag>-local</tag>
+          <textDesc>Localized Search</textDesc>
+          <default>false</default>
+        </flag>
+        <flag>
+          <id>optsc</id>
+          <tag>-optsc</tag>
+          <textDesc>Optimize Score</textDesc>
+          <default>false</default>
+        </flag>
+        <flag>
+          <id>norc</id>
+          <tag>-norc</tag>
+          <textDesc>No Reverse Complement</textDesc>
+          <default>false</default>
+        </flag>
+        <flag>
+          <id>flip</id>
+          <tag>-flip</tag>
+          <textDesc>Reflect RC Matches</textDesc>
+          <default>false</default>
+        </flag>
+        <flag>
+          <id>noseq</id>
+          <tag>-noseq</tag>
+          <textDesc>Don't Store Seq IDs</textDesc>
+          <default>false</default>
+        </flag>
+      </flags>
+      <taggedParams>
+        <separator> </separator>
+        <param>
+          <id>score</id>
+          <tag>-score</tag>
+          <paramType>FLOAT</paramType>
+          <default>5</default>
+          <textDesc>Minimum Site Score</textDesc>
+        </param>
+        <param>
+          <id>ethresh</id>
+          <tag>-ethresh</tag>
+          <paramType>FLOAT</paramType>
+          <default>10</default>
+          <textDesc>E-value threshold</textDesc>
+        </param>
+        <param>
+          <id>maxreg</id>
+          <tag>-maxreg</tag>
+          <paramType>INT</paramType>
+          <textDesc>Maximum region size to test</textDesc>
+        </param>
+        <param>
+          <id>neg</id>
+          <tag>-neg</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Comparative Sequences</textDesc>
+        </param>
+        <param>
+          <id>bfile</id>
+          <tag>-bfile</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Upload Background</textDesc>
+        </param>
+        <param>
+          <id>upmotifs</id>
+          <tag>-upmotifs</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Upload Motif Database</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>sequences</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>true</required>
+          <textDesc>Sequences</textDesc>
+        </param>
+        <param>
+          <id>dbmotifs</id>
+          <paramType>STRING</paramType>
+          <textDesc>Filename of Motif Database</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>inputs</name>
+          <elements>sequences dbmotifs neg upmotifs bfile</elements>
+          <textDesc>Inputs</textDesc>
+        </group>
+        <group>
+          <name>scan_options</name>
+          <elements>local norc flip</elements>
+          <textDesc>Scan Options</textDesc>
+        </group>
+        <group>
+          <name>threshold</name>
+          <elements>score optsc maxreg ethresh</elements>
+          <textDesc>Thresholds</textDesc>
+        </group>
+        <group>
+          <name>output_options</name>
+          <elements>noseq</elements>
+          <textDesc>Output Options</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/centrimo_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>
+

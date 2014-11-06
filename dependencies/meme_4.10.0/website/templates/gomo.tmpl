@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>GOMo - Submission form</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../doc/images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="../doc/images/memesuite_icon.png">
+    <link href="../doc/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/fasta-debug.css" rel="stylesheet" type="text/css" />
+    <link href="../css/component_motifs.css" rel="stylesheet" type="text/css">
+    <link href="../css/component_sequences.css" rel="stylesheet" type="text/css">
+    <script src="../doc/js/menu-path.js"></script>
+    <script src="../doc/js/menu.js"></script>
+    <script src="../doc/js/motif_logo.js"></script>
+    <script src="../doc/js/utilities.js"></script>
+    <script src="../js/site.js"></script>
+    <script src="../js/fasta-debug.js"></script>
+    <!-- wicked-good-xpath library: http://code.google.com/p/wicked-good-xpath/ -->
+    <script src="../js/wgxpath.install.js"></script>
+    <script src="../js/motif_parser.js"></script>
+    <script src="../js/component_motifs.js"></script>
+    <script src="../js/component_sequences.js"></script>
+    <script src="../js/gomo.js"></script>
+  </head>
+  <body>
+    <div class="pop_content" id="pop_motifs">
+      <p>The motifs to scan with and determine associated GO terms.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_gomo_sequences">
+      <p>Select the species' whose promoters wll be scanned for matches
+      to each of your motifs.  GOMo will look for enrichment
+      of each motif in the promoters (-1000, +200bp relative to the TSS)
+      of all annotated genes in your selected species.
+      See the GOMo 
+      <a style="color:red" href="../db/gomo">species database documentation</a>
+      for more information on the available promoter databases.</p>
+
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_threshold">
+      <p>The threshold above which results are not considered significant.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_shuffle_rounds">
+      <p>GOMo calculates empirical <i>p</i>-values by shuffling the association
+      between sequences and their score and determining how likely the actual
+      result was by chance. Increasing the number of shuffling rounds can
+      improve this calculation.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_multi_genome">
+      <p>Some datasets are setup to use multiple genomes but you can force GOMo
+      to only use the main genome by deselecting this option.</p>
+      <div class="pop_close">[ <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <!--{help/}-->
+    <div class="content_box">
+      <!--{header}-->
+      <p>
+      <!--{title}-->GOMo<!--{/title}--> - <!--{subtitle}-->Gene Ontology for Motifs<!--{/subtitle}--><br>
+      <!--{logo}-->../doc/images/gomo_icon.png<!--{/logo}-->: <!--{alt}-->GOMo Logo<!--{/alt}--><br>
+      <!--{blurb}--><span class="blurb" data-id="gomo"></span><!--{/blurb}-->
+      </p>
+      <!--{/header}-->
+      <form enctype="multipart/form-data" accept-charset="utf-8"
+      method="POST" action="gomo" id="gomo_form">
+        <fieldset>
+          <legend>Data Submission Form</legend>
+          <p class="meme">Perform GO term association with DNA motifs.</p> 
+          <!--{motifs}-->
+          <!--{prefix}-->motifs<!--{/prefix}-->
+          <!--{title}-->Input the motifs<!--{/title}-->
+          <!--{subtitle}-->Upload or enter nucleotide motifs to analyze for association with GO terms.<!--{/subtitle}-->
+          <!--{alphabets}-->DNA RNA<!--{/alphabets}-->
+          <!--{default}-->FILE<!--{/default}-->
+          <!--{register}-->register_component<!--{/register}-->
+          <!--{/motifs}-->
+
+          <!--{gomo_sequences}-->
+          <!--{prefix}-->gomo_sequences<!--{/prefix}-->
+          <!--{title}-->Select the species<!--{/title}-->
+          <!--{subtitle}-->Choose which species' promoters to analyze.<!--{/subtitle}-->
+          <!--{/gomo_sequences}-->
+
+          <!--{job_details/}-->
+          <div style="margin-top: 5px; margin-bottom: 5px; width: 80%">
+            <!--{advanced_options/}-->
+            <div>
+              <!-- Significance threshold -->
+              <h2 class="meme">Set the significance threshold</h2>
+              <div class="subcontent">
+                <label for="threshold"><i>q</i>-value &lt;</label>
+                <input class="meme numonly sz4" type="text" id="threshold"
+                name="threshold" value="0.05" step="any" min="0" max="0.5" size="4"> 
+                <div class="help" data-topic="pop_threshold"></div><br>
+              </div>
+              <!-- score shuffling rounds -->
+              <h2 class="meme">Set the number of score shuffling rounds</h2>
+              <div class="subcontent">
+                <label for="shuffle_rounds">rounds:</label>
+                <input class="meme intonly sz3" type="number" id="shuffle_rounds"
+                name="shuffle_rounds" value="10" step="1" min="1" size="3"> 
+                <div class="help" data-topic="pop_shuffle_rounds"></div><br>
+              </div>
+              <!-- enable multi-genome mode -->
+              <h2 class="meme">Use multiple genomes?</h2>
+              <div class="subcontent">
+                <input class="meme" type="checkbox" id="multi_genome"
+                name="multi_genome" value="1" checked>
+                <label for="multi_genome">Use multiple genomes when available</label>
+                <div class="help" data-topic="pop_multi_genome"></div>
+              </div>
+            </div>
+          </div>
+          <!--{submit_reset/}-->
+        </fieldset>
+      </form>
+      <!--{footer/}-->
+    </div>
+  </body>
+</html>
+

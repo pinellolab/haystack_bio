@@ -1,0 +1,282 @@
+
+/* motif input rules */
+
+.pop_logo {
+  position:absolute;
+  z-index:1;
+  top:0px;
+  left:0px;
+  /* normally hide */
+  display: none;
+}
+
+/* show when the mouse is over the textarea and a logo exists to show */
+.pop_logo.mouseover.logo_exists {
+  display: block;
+}
+
+div.motif_input > select.motif_text_alphabet, 
+div.motif_input > div.motif_text,
+div.motif_input > span.motif_file, 
+div.motif_input > div.motif_embed,
+div.motif_input > div.motif_filter {
+  /* hide until active */
+  display: none;
+}
+
+div.motif_input.text > select.motif_text_alphabet {
+  display: inline;
+}
+
+div.motif_input.text > div.motif_text {
+  display: block;
+}
+
+div.motif_input.file > span.motif_file {
+  display: inline-block;
+}
+
+div.motif_input.file > div.motif_filter {
+  display: block;
+}
+
+div.motif_input.embed > div.motif_embed {
+  display: block;
+}
+
+div.motif_input.text > select.motif_source, div.motif_input.file > select.motif_source {
+  max-width: 10em;
+}
+
+/* until we have validation on motif inputs like the fasta_debug this 2px margin
+ * makes the fields look similar */
+
+div.motif_input > select.motif_source {
+  margin: 2px;
+}
+
+div.motif_input > select.motif_text_alphabet {
+  margin: 2px;
+}
+
+/* motif editor rules */
+div.motif_input div.motif_text {
+  margin: 2px;
+  overflow-y: auto;
+  border: 1px solid #999;
+  border-radius: 4px;
+  width: 400px;
+  max-height: 300px;
+  /* hide until active */
+  background: #E4ECEC;
+}
+div.motif_input div.motif_text > div {
+  position: relative;
+  display: inline-block;
+  min-width: 100%;
+  background: #E4ECEC;
+}
+div.motif_input div.motif_text > div > textarea, div.motif_input > div.motif_text > div > pre {
+  margin: 0;
+  outline: 0;
+  border: 0;
+  padding: 5px 10px;
+  padding-bottom: 13px;
+  background: transparent;
+  font: 400 13px/16px monospace;
+  text-transform: uppercase;
+  /* turn off wrap as it doesn't make sense for motifs */
+  white-space: pre;
+  word-wrap: normal;
+}
+div.motif_input div.motif_text > div > textarea {
+  /* The border-box box model is used to allow
+   * padding whilst still keeping the overall width
+   * at exactly that of the containing element.
+   */
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 100%;
+  /* Hide any scrollbars */
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  /* Remove WebKit user-resize widget */
+  resize: none;
+}
+div.motif_input div.motif_text > div > pre {
+  display: block;
+  /* Hide the text; just using it for sizing */
+  color: rgba(0, 255, 0, 0);
+}
+/*
+ * this box surrounds a motif, unfortunately we can't give it a border directly
+ * as it will throw off the layout of the hidden pre
+ */
+div.motif_input div.motif_text > div > pre div.motif_box {
+  position: relative;
+  margin: 0;
+  outline: 0;
+  border: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+div.motif_input div.motif_text > div > pre div.motif_box > div.motif_bracket_left {
+  position: absolute;
+  top: -1px;
+  padding: 1px;
+  left: -6px;
+  width: 3px;
+  height: 100%;
+  border: 1px solid #008F8F;
+  border-right-style: none;
+}
+
+div.motif_input div.motif_text > div > pre div.motif_box > div.motif_bracket_right {
+  position: absolute;
+  top: -1px;
+  padding: 1px;
+  right: -10px;
+  width: 3px;
+  height: 100%;
+  border: 1px solid #008F8F;
+  border-left-style: none;
+}
+
+div.motif_input div.motif_text > div > pre div.motif_box span.token {
+  position: relative;
+  margin: 0;
+  outline: 0;
+  border: 0;
+  padding: 0;
+}
+
+div.motif_input div.motif_text > div > pre div.motif_box span.token.error {
+  background: red;
+}
+
+div.motif_input div.motif_text > div > pre div.motif_box span.token.warn {
+  background: yellow;
+}
+
+div.motif_input div.motif_text > div > pre div.motif_box span.token > div.indicator {
+  position: absolute;
+  font-size: 8px;
+  color: red;
+  font-family: sans-serif;
+}
+
+div.motif_input div.motif_text > div > pre div.motif_box span.token > div.indicator.east {
+  top: 0;
+  left: 100%;
+  margin-left: 11px;
+}
+
+div.motif_input div.motif_text > div > pre div.motif_box span.token > div.indicator.south {
+  top: 100%;
+  margin-top: -5px;
+  right: 0;
+}
+.motif_debug {
+  /* note that this must be block or inline block */
+  position: relative;
+  padding: 2px;
+}
+
+.motif_debug span.background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -2;
+}
+
+.motif_debug span.indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  z-index: -1;
+  transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s; /* Firefox 4 */
+  -webkit-transition: background-color 0.5s; /* Safari and Chrome */
+  -o-transition: background-color 0.5s; /* Opera */
+}
+
+.motif_debug input[type="file"] {
+  transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s; /* Firefox 4 */
+  -webkit-transition: background-color 0.5s; /* Safari and Chrome */
+  -o-transition: background-color 0.5s; /* Opera */
+}
+
+.motif_debug.good input[type="file"],
+.motif_debug.warning input[type="file"],
+.motif_debug.error input[type="file"] {
+  background-color: transparent;
+}
+
+.motif_debug.good span.indicator {
+  background-color: #00c800;
+}
+
+.motif_debug.warning span.indicator {
+  background-color: #d1bf00; 
+}
+
+.motif_debug.error span.indicator {
+  background-color: #d00a00;
+}
+
+.motif_debug.good span.background {
+  background-color: #d9ecd9;
+}
+
+.motif_debug.warning span.background {
+  background-color: #EEE8AA; /*#eeecd6;*/
+}
+
+.motif_debug.error span.background {
+  background-color:  #FFC4C1;/*#ffeceb;*/
+}
+
+.motif_debug div.popup {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 100%;
+  width: 500px;
+  padding: 5px;
+  border-style: double;
+  border-width: 3px;
+}
+
+.motif_debug.warning:hover div.popup {
+  display: block;
+  background-color: #EEE8AA;
+}
+
+.motif_debug.error:hover div.popup {
+  display: block;
+  background-color: #FFE4E1;
+  border-color: #AA2244;
+}
+
+.motif_debug div.popup table td {
+  vertical-align: top;
+}
+
+.motif_debug div.popup table td ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+

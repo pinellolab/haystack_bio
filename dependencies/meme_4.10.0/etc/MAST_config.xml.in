@@ -1,0 +1,126 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="MAST @SERVICE_VERSION@">
+    <usage>MAST: Search for groups of motifs in sequence databases</usage>
+    <info xsd:type="xsd:string">
+    <![CDATA[    
+    mast_webservice [options] <motifs file> [<sequence database>]
+
+      Options:
+        -dna              search nucleotide database with protein motifs
+        -seqp             Scale motif display threshold by sequence length
+        -comp             Use individual sequence composition in E-value and p-value calculation
+        -sep              treat the rc strand as a separate sequence; not compatible with -norc
+        -norc             don't process the rc strand; not compatible with -sep
+        -ev <thresh>      display sequences with evalue below this threshold
+        -mev <thresh>     Ignore motifs with evalue above this threshold
+        -nseqs <count>    Reduce memory usage by allowing early calculation of E-values
+        -upload_db <file> uploaded sequence database
+        -df <name>        Name to show for sequence database; underscores are converted to spaces
+        -help             brief help message
+    ]]>
+    </info>
+    <types>
+      <flags>
+        <flag>
+          <id>dna</id>
+          <tag>-dna</tag>
+          <default>false</default>
+          <textDesc>Translate to protein (for scanning DNA sequences with protein motifs)</textDesc>
+        </flag>
+        <flag>
+          <id>seqp</id>
+          <tag>-seqp</tag>
+          <default>false</default>
+          <textDesc>Scale motif display threshold by sequence length</textDesc>
+        </flag>
+        <flag>
+          <id>comp</id>
+          <tag>-comp</tag>
+          <default>false</default>
+          <textDesc>Calculate per-sequence background frequencies</textDesc>
+        </flag>
+        <flag>
+          <id>sep</id>
+          <tag>-sep</tag>
+          <default>false</default>
+          <textDesc>Scan the reverse complement strand as if it was a separate sequence</textDesc>
+        </flag>
+        <flag>
+          <id>norc</id>
+          <tag>-norc</tag>
+          <default>false</default>
+          <textDesc>Do not scan the reverse complement strand</textDesc>
+        </flag>
+      </flags>
+      <taggedParams>
+        <separator> </separator>
+        <param>
+          <id>ev</id>
+          <tag>-ev</tag>
+          <paramType>FLOAT</paramType>
+          <default>10</default>
+          <textDesc>Sequence E-value threshold</textDesc>
+        </param>
+        <param>
+          <id>mev</id>
+          <tag>-mev</tag>
+          <paramType>FLOAT</paramType>
+          <textDesc>Filter by E-value</textDesc>
+        </param>
+        <param>
+          <id>upload_db</id>
+          <tag>-upload_db</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Upload Sequence Database</textDesc>
+        </param>
+        <param>
+          <id>df</id>
+          <tag>-df</tag>
+          <paramType>STRING</paramType>
+          <textDesc>Display Name</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>motifs</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>true</required>
+          <textDesc>Motifs</textDesc>
+        </param>
+        <param>
+          <id>seq_db_name</id>
+          <paramType>STRING</paramType>
+          <required>false</required>
+          <textDesc>Filename of Sequence Database</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>motifs_in</name>
+          <elements>motifs mev</elements>
+          <textDesc>Motifs</textDesc>
+        </group>
+        <group>
+          <name>sequences_in</name>
+          <elements>seq_db_name upload_db df dna comp</elements>
+          <textDesc>Sequences</textDesc>
+        </group>
+        <group>
+          <name>strand_options</name>
+          <elements>sep norc</elements>
+          <exclusive>true</exclusive>
+          <textDesc>Sequence Strand Options (exclusive)</textDesc>
+        </group>
+        <group>
+          <name>scan_options</name>
+          <elements>ev seqp</elements>
+          <textDesc>Output Options</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/mast_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

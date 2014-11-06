@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>mhmmscan Format - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+
+    <h2>mhmmscan Format</h2>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>The mhmmscan/MCAST output shows parts of sequences which match a
+      given HMM.</p>
+    </div>
+
+    <h3>Format Specification</h3>
+    <div class="indent">
+      <p>The mhmmscan/MCAST output has up to three sections
+      containing your search results:</p>
+      <ul>
+        <li><a href="#search">Database Search Results</a></li>
+        <li><a href="#align">Alignments</a></li>
+        <li><a href="#diagrams">Motif Diagrams</a></li>
+      </ul>
+      
+      <p>All three sections are always present in MCAST output. The second two
+      sections will not be present in mhmmscan output unless the
+      <span class="popt">-fancy</span> option was specified.</p>
+
+      <p>The results in all three sections are sorted by increasing
+      <i>E</i>-value if possible, or by decreasing match score if
+      <i>E</i>-values could not be computed.</p>
+
+      <h4 id="search">Database Search Results</h4>
+      <p>The "Database Search Results" section consists of lines of the
+      following form:</p>
+      <div class="form">&lt;ID&gt; &lt;<i>E</i>-value&gt;
+      &lt;Score&gt; &lt;Hits&gt; &lt;Span&gt; &lt;Start&gt; &lt;End&gt;
+      &lt;Length&gt; &lt;Description&gt;</div>
+      <p>These fields contain, for each match found,</p>
+      <ul>
+        <li><b>ID</b> - The sequence identifier, as given in the database
+        file.</li>
+        <li><b><i>E</i>-value</b> - The <i>E</i>-value, which is the total
+        number of matches that you would expect with match scores as good
+        as this match if the database contained only sequences unrelated to
+        the query. Thus, a small <i>E</i>-value indicates a good
+        match.</li>
+        <li><b>Score</b> - The match score, which is the sum of the scores
+        for hits, minus the penalties for gaps.</li>
+        <li><b>Hits</b> - The number of hits in the match.</li>
+        <li><b>Span</b> - The length of the match, measured from the start
+        of the first hit to the end of the last hit.</li>
+        <li><b>Start</b> - The position in the sequence where the match
+        begins.</li>
+        <li><b>End</b> - The position in the sequence where the match
+        ends.</li>
+        <li><b>Length</b> - The length of the sequence that contains the
+        match.</li>
+        <li><b>Description</b> - The sequence descriptor. This description
+        is taken from the FASTA database file, and is truncated so that the
+        output fits easily on one line.</li>
+      </ul>
+      <h4 id="align">Alignments</h4>
+      <p>Each alignment lists the sequence identifier, match
+      <i>E</i>-value and log-odds score along the left. On the right, it
+      shows the alignment of the match with the sequence in groups of
+      four segments. An example segment from an alignment is given below,
+      followed by a description of what each line of the segment means.
+      (The example shows <i>p</i>-value score mode. The row of
+      <i>p</i>-values would be replaced by log-odds scores in log-odds
+      score mode. If <span class="popt">--motif-scoring</span> is not on,
+      the row of <i>p</i>-values or scores is absent.)</p>
+
+      <table>
+        <tr>
+          <td style="text-align: center">
+            hb_P1_element<br>
+            1.5e-07<br>
+            55.02
+          </td>
+          <td>
+            <pre>
+                             2.4e-04                           2.4e-04            1.3e-04
+                             *_____+3__*                       *____-2__*         *___+1_*
+                             <font color=
+      "green"><b>T</b></font><font color=
+      "green"><b>T</b></font><font color=
+      "green"><b>T</b></font><font color=
+      "green"><b>T</b></font><font color=
+      "green"><b>T</b></font><font color=
+      "green"><b>T</b></font><font color=
+      "red"><b>A</b></font><font color="green"><b>T</b></font><font color="ORANGE"><b>G</b></font><font color="blue"><b>C</b></font><font color="ORANGE"><b>G</b></font>.......................<font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="red"><b>A</b></font><font color="green"><b>T</b></font><font color="ORANGE"><b>G</b></font><font color="red"><b>A</b></font><font color="blue"><b>C</b></font><font color="green"><b>T</b></font>.........<font color="blue"><b>C</b></font><font color="green"><b>T</b></font><font color="red"><b>A</b></font><font color="red"><b>A</b></font><font color="green"><b>T</b></font><font color="blue"><b>C</b></font><font color="blue"><b>C</b></font><font color="ORANGE"><b>G</b></font>..................................
+                              TTTTTAT+ +                       TTTTAT A T         +TAATC+G
+          220 CGGAACATTAAAATG<font color=
+      "red"><b>A</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="red"><b>A</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="blue"><b>C</b></font>TATGCTAAATCTGTTGTATTTAC<font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="red"><b>A</b></font><font color="green"><b>T</b></font><font color="red"><b>A</b></font><font color="red"><b>A</b></font><font color="red"><b>A</b></font><font color="green"><b>T</b></font>TTAATGTGT<font color="green"><b>T</b></font><font color="green"><b>T</b></font><font color="red"><b>A</b></font><font color="red"><b>A</b></font><font color="green"><b>T</b></font><font color="blue"><b>C</b></font><font color="green"><b>T</b></font><font color="ORANGE"><b>G</b></font>TTCACATTTTTAAATACTTCGTATGCTATCNNNN     329 
+            </pre>
+          </td>
+        </tr>
+      </table>
+
+      <ul>
+        <li>The bottom-most line in each segment contains 50 letters from
+        the target database sequence, flanked by that segment's start and
+        end locations within the entire sequence. Thus, the first segment
+        would be flanked by "1" and "49", the second by "50" and "99",
+        etc.</li>
+
+        <li>Aligned above these 50-letter segments are the motifs
+        corresponding to the hits in the match. The motifs are labeled with
+        numbers in the order they appear in the query. A plus or minus sign
+        preceding a hit indicates that the hit occurs on the given (+) or
+        reverse complement (-) of the DNA sequence in the database. Each
+        position within a motif region is indicated by a letter, and each
+        gap position is indicated with a period.</li>
+
+        <li>In between the sequence segment and the corresponding match
+        positions is a line that indicates the degree of match between the
+        motifs and the sequence. If the letter in the motif with the
+        largest log-odds score appears in the sequence, then the match row
+        contains that letter. If the sequence letter does not have the
+        largest log-odds score, but does have a positive log-odds score,
+        then the match row contains a plus sign. Otherwise, the match row
+        is empty.</li>
+
+        <li>The top-most row of each segment shows the <i>p</i>-value (or
+        log-odds score) of each hit aligned above the start of the hit,
+        depending on the score mode.</li>
+
+      </ul>
+
+      <h4 id="diagrams">Motif Diagrams</h4>
+      <p>The motif diagrams section shows the matches in schematic
+      format. For each match, in the right two columns, it shows the
+      sequence identifier and the match <i>E</i>-value. On the left, it
+      shows the positions and spacings of the hits making up the match.
+      Hits are labeled with numbers corresponding to the order the motifs
+      were given in the query. A plus or minus sign preceding a hit
+      indicates that the hit occurs on the given (+) or reverse
+      complement (-) of the DNA sequence in the database.</p>
+
+      <h4>Log-odds Scores</h4>
+      <p>The log-odds scores for each motif column are created using
+      prior information on the letters appearing in alignment columns.
+      The prior information is the target frequencies [Karlin,S. and
+      Altschul,S.F., PNAS USA , 87, 2264-2268] implicit in a scoring
+      matrix. Meta-MEME can read a user-specified scoring matrix (in the
+      same format as used by the BLAST family of programs) from a file or
+      generate a PAM matrix. By default, PAM 250 is used for proteins,
+      and PAM 1 is used for DNA. For DNA, the "PAM 1" frequency matrix
+      is</p>
+      <pre class="indent">
+.990 .002 .006 .002
+.002 .990 .002 .006
+.060 .002 .990 .020
+.020 .060 .002 .990
+      </pre>
+      <p>Meta-MEME calculates the target frequencies <i>q<sub>ij</sub> =
+      p<sub>i</sub>p<sub>j</sub> exp(L s<sub>ij</sub>)</i> from the
+      scoring matrix <i>s<sub>ij</sub></i> and the background letter
+      frequencies <i>p<sub>i</sub></i> by finding the value of <i>L</i>
+      that makes the <i>q<sub>ij</sub></i> sum to one. These target
+      frequencies are then used to create pseudo-frequencies to be added
+      to the emission frequencies of the column, following the approach
+      of [Henikoff,S. and Henikoff,J.G., JMB, 243, 574-578]. The
+      pseudo-frequency for the <i>i</i><sup>th</sup> letter is computed
+      as: <i>g<sub>i</sub> = sum <sub>j in alphabet</sub> (f<sub>j</sub>
+      q<sub>ij</sub>/p<sub>j</sub>)</i>.</p>
+      <p>The pseudo-frequencies, <i>g<sub>i</sub></i>, are then combined
+      with the emission frequencies, <i>f<sub>i</sub></i> to give
+      frequency estimates</p>
+      <center><i>Q<sub>i</sub> = (alpha f<sub>i</sub> + beta
+      g<sub>i</sub>) / (alpha + beta).</i></center>
+      <br>
+      <p>
+      Finally, the log-odds score for a letter in the motif column
+      is computed by dividing by the background frequency of the letter and
+      taking the logarithm,
+      </p>
+      <center><i>
+        S<sub>i</sub> = log(Q<sub>i</sub> / p<sub>i</sub>).
+      </i></center>
+      <p>
+      In general, alpha should be proportional to the amount of
+      independent information in the emission frequencies. We have set it
+      to the constant 20. The parameter beta is arbitrary and controls
+      the relative importance of prior information. We set it to the
+      constant 10.
+      </p>
+      <p>Our method is essentially that used in PSI-BLAST [Altschul,S.F
+      et al., NAR, 25:17, 3389-3402] without</p>
+      <ol>
+      <li>sequence weighting, and</li>
+      <li>scaling for amount of independent information (alpha).</li>
+      </ol>
+      <p>
+      To do 1) and 2) correctly would require having and using alignment
+      information rather than emission frequencies as the starting
+      point.</p>
+    </div>
+  </body>
+</html>
+

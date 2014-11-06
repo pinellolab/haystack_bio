@@ -1,0 +1,68 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="GOMO @SERVICE_VERSION@">
+    <usage>GOMO: Find Gene Ontology roles for motifs</usage>
+    <info xsd:type="xsd:string">
+    <![CDATA[
+    gomo_webservice [options] <motif> <databases>
+
+      Options:
+        -shuffle_scores <times> shuffle scores
+        -t <threshold>          q-value threshold
+        -help                   brief help message
+    ]]>
+    </info>
+    <types>
+      <taggedParams>
+        <separator> </separator>
+        <param>
+          <id>shuffle_scores</id>
+          <tag>-shuffle_scores</tag>
+          <paramType>INT</paramType>
+          <default>100</default>
+          <textDesc>Times to shuffle scores (q-value calculation)</textDesc>
+        </param>
+        <param>
+          <id>threshold</id>
+          <tag>-t</tag>
+          <paramType>FLOAT</paramType>
+          <default>0.05</default>
+          <textDesc>q-value Threshold</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>motifs</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>true</required>
+          <textDesc>Upload Motifs</textDesc>
+        </param>
+        <param>
+          <id>databases</id>
+          <paramType>STRING</paramType>
+          <required>true</required>
+          <textDesc>Basenames of databases</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>motifs_in</name>
+          <elements>motifs</elements>
+          <textDesc>Motifs</textDesc>
+        </group>
+        <group>
+          <name>databases_in</name>
+          <elements>databases</elements>
+          <textDesc>GOMO Databases</textDesc>
+        </group>
+        <group>
+          <name>opts</name>
+          <elements>threshold shuffle_scores</elements>
+          <textDesc>Scoring Options</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/gomo_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

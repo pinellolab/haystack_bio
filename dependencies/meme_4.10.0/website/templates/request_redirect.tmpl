@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting Request</title>
+  </head>
+  <body>
+    <form id="request" action="../tools/${tool}" method="post"><!--{parameter}-->
+      <input type="hidden" name="${name}" value="${value}"><!--{/parameter}-->
+      <p>This page should automatically redirect your request but if for some reason that fails try pressing the button below.</p>
+      <input type="submit" value="Redirect">
+    </form>
+    <script>document.getElementById("request").submit();</script>
+  </body>
+</html>

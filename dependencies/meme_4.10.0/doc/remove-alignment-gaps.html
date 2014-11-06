@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>remove-alignment-gaps - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>remove-alignment-gaps</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>remove-alignment-gaps &lt;species&gt; &lt;alignment&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Remove from an alignment all columns that contain a gap in the
+      specified species.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Species</h4>
+      <div class="indent">
+        <p>The name of a species present in the alignment for which gaps
+        should be removed.</p>
+      </div>
+
+      <h4>Alignment</h4>
+      <div class="indent">
+        <p>A DNA or protein sequence alignment in <a href="clustalw-format.html">clustalw format</a>.
+        The alignment can be read from standard input if a "-" is given instead of a file name.</p>
+      </div>
+
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>The alignment, with the remaining columns that don't have gaps in the
+      specified species, is written to standard output.</p>
+    </div>
+  </body>
+</html>
+

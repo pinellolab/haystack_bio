@@ -1,0 +1,14 @@
+
+MemeMenu.config = {
+  "VERSION": "@VERSION@",
+  "URL": "@URL@",
+  "PREV_VER": "@PREV_VER@",
+  "PREV_URL": "@PREV_URL@",
+  "NOTICES": "@NOTICES_URL@",
+  "NEWS": "@NEWS_URL@",
+  "CONTACT": "@CONTACT@",
+  "DEV_CONTACT": "@DEV_CONTACT@"
+};
+// indicate to the caller that the file is loaded
+MemeMenu.config_loaded = true;
+MemeMenu.script_loaded();

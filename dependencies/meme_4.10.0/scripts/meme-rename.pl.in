@@ -1,0 +1,112 @@
+#!@WHICHPERL@ -w
+
+use strict;
+use warnings;
+
+use Cwd qw(abs_path);
+use Getopt::Long;
+use File::Basename;
+use File::Copy;
+use File::Path qw(mkpath);
+use File::Spec::Functions qw(catfile);
+use Pod::Usage;
+
+=head1 NAME
+
+meme-rename - copy & rename files so they can be stored together avoiding naming conflicts.
+
+=head1 SYNOPSIS
+
+meme-rename [options] <dir>+
+
+  Options
+    <dir>+          full path of MEME Suite program output directory
+    [-d <dest>]     destination directory; default: working directory 
+    [-h]            print this message
+
+    Copy HTML files from MEME Suite programs to files with distinct names to 
+    make it easier to share them:
+            <dest>/<program>.<last_dir>[.<arg_order_num>].html
+    where <last_dir> is the last directory on the path, and <program> is the
+    name of the MEME Suite program. If the <program>.<last_dir> combination is
+    not unique then a number based on the argument order is added.
+
+=cut
+
+sub cp {
+  my ($from, $to) = @_;
+  print STDERR "Copying $from to $to\n";
+  copy($from, $to);
+}
+
+sub main {
+  # configuration
+  my $dest = ".";
+  my $help = 0; # FALSE
+  GetOptions(
+    "destination=s" => \$dest,
+    "help|?" => \$help 
+  ) or pod2usage(2);
+  my @dirs = @ARGV;
+
+  # display help
+  pod2usage(1) if $help;
+
+  # check source directories are provided
+  pod2usage("No directories specified") unless (@dirs);
+
+  # check destination is ok
+  if (-e $dest) {
+    die("The destination is not a writable directory.") unless (-d $dest && -w $dest);
+  } else {
+    mkpath($dest, {verbose => 1});
+  }
+
+  # store map of destination file names to lists of source files
+  my %dest_names = ();
+
+  # check each directory for a HTML file
+  foreach my $dir (@dirs) {
+    my ($dh, $name, $file, $prog, $experiment);
+    opendir($dh, $dir) or die("Unable to list files in directory: $!");
+    while (($name = readdir($dh))) {
+      $file = catfile($dir, $name);
+      next if (-d $file);
+      next unless ($name =~ m/^([a-zA-Z\-]+)\.html$/);
+      # store the program name
+      $prog = $1;
+      # get the name of the last directory, which is 
+      # assumed to describe the experiment
+      $experiment = basename(dirname(abs_path($file)));
+      last;
+    }
+    closedir($dh);
+    # check that we found a file
+    die("No MEME Suite HTML file found in directory: $dir") unless (defined($prog) && defined($experiment));
+    # remove program name from end of the experiment description
+    $experiment =~ s/\.$prog$//;
+    # now store the destination name with a list of source files that would share the name
+    my $dest_name = $prog . '.' . $experiment;
+    if (defined($dest_names{$dest_name})) {
+      push(@{$dest_names{$dest_name}}, $file);
+    } else {
+      $dest_names{$dest_name} = [$file];
+    }
+  }
+
+  # copy files
+  keys %dest_names; # reset hash iterator
+  while (my ($dest_name, $source_files) = each %dest_names) {
+    if (scalar(@{$source_files}) == 1) {
+      # destination file is unique just from the experiment and program
+      &cp($source_files->[0], catfile($dest, $dest_name . '.html'));
+    } else {
+      # destination file requires numbering to make unique
+      for (my $i = 0; $i < scalar(@{$source_files}); $i++) {
+        &cp($source_files->[$i], catfile($dest, $dest_name.'.'.($i+1).'.html'));
+      }
+    }
+  }
+}
+&main();
+1;

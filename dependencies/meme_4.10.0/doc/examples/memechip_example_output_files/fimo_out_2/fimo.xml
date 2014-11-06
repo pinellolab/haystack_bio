@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="fimo-to-html.xsl"?>
+<!-- Begin document body -->
+<fimo version="4.10.0" release="Tue May 06 16:46:04 2014 +1000">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation=  xmlns:fimo="http://noble.gs.washington.edu/schema/fimo"
+>
+<command-line>/Users/cegrant/meme_4.10.0/bin/fimo --parse-genomic-coord --verbosity 1 --oc memechip_example_output_files/fimo_out_2 --bgfile memechip_example_output_files/background --motif TTATCW memechip_example_output_files/dreme_out/dreme.xml memechip_example_output_files/sample-dna-Klf1.fa</command-line>
+<settings>
+<setting name="output directory">memechip_example_output_files/fimo_out_2</setting>
+<setting name="MEME file name">memechip_example_output_files/dreme_out/dreme.xml</setting>
+<setting name="sequence file name">memechip_example_output_files/sample-dna-Klf1.fa</setting>
+<setting name="background file name">memechip_example_output_files/background</setting>
+<setting name="allow clobber">true</setting>
+<setting name="compute q-values">true</setting>
+<setting name="parse genomic coord.">true</setting>
+<setting name="text only">false</setting>
+<setting name="scan both strands">true</setting>
+<setting name="max sequence length">250000000</setting>
+<setting name="output threshold">0.0001</setting>
+<setting name="threshold type">p-value</setting>
+<setting name="max stored scores">100000</setting>
+<setting name="pseudocount">0.1</setting>
+<setting name="verbosity">1</setting>
+<setting name="selected motif">TTATCW</setting>
+</settings>
+<sequence-data num-sequences="904" num-residues="452000" />
+<alphabet>nucleotide</alphabet>
+<motif name="GGGYGK" width="6" best-possible-match="GGGTGT"/>
+<motif name="TTATCW" width="6" best-possible-match="TTATCT"/>
+<motif name="AGAWA" width="5" best-possible-match="AGAAA"/>
+<background source="memechip_example_output_files/background">
+<value letter="A">0.256</value>
+<value letter="C">0.244</value>
+<value letter="G">0.244</value>
+<value letter="T">0.256</value>
+</background>
+<cisml-file>cisml.xml</cisml-file>
+</fimo>

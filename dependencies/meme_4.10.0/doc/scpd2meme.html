@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>scpd2meme - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>scpd2meme</h2>
+    
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>scpd2meme [options] &lt;matrix file&gt;</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Convert an SCPD matrix file into a
+      <a href="meme-format.html">MEME motif</a> suitable for use with
+      MEME Suite programs.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Matrix File</h4>
+      <div class="indent">
+        <p>An SCPD matrix file describes one or more motifs in terms of
+        letter frequencies.</p>
+        <h5>Sample Input</h5>
+        <pre class="indent">
+&gt;RLM1   22      524     MCB 1997, 17:1848-1859
+A  10  14  11   0   0   0  42  16  22  23  32   0  42   0  27   4   7  10
+T   8  10  30  37   0  42   0  26  20  19  10  42   0   0   1  20  16   7
+G  10  16   1   5   0   0   0   0   0   0   0   0   0  42   0   2   3  10
+C  10   2   0   0  42   0   0   0   0   0   0   0   0   0  14  15  16  13
+&gt;SMP1   11      405     MCB 1997, 17:1848-1859
+A   8   8  11   0   0   8   0   0  30   6  13  14  21   0  30   2   8  27   9   6
+T   4  12   0   9  30  11   1  30   0  24  16  16   9  30   0   0   7   1   9   7
+G   5   4  19   0   0  11   0   0   0   0   0   0   0   0   0  28   0   0   7   4
+C   3   5   0  21   0   0  29   0   0   0   0   0   0   0   0   0  14   0   4   9
+        </pre>
+
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <script>wrdoc("2meme-output");</script>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <script>
+            wropt("2meme-skip");
+            wropt("2meme-numbers", {"id_source": "SCPD ID"});
+            wropt("2meme-bg");
+            wropt("2meme-pseudo");
+            wropt("2meme-logodds");
+            wropt("2meme-url", {"type": "SCPD ID", "example": "scpd_id"});
+          </script>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+

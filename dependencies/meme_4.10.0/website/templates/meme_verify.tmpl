@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>MEME verification</title>
+<link href="../css/status.css" rel="stylesheet" type="text/css" />
+<script src="../doc/js/utilities.js"></script>
+<script src="../js/status.js"></script>
+<script>
+
+var verify = 
+<!--{message}-->
+{
+  "items": [
+    {
+      "type": "sequences",
+      "name": "Sequences",
+      "key": "posSeq"
+    },
+    {
+      "type": "sequences",
+      "name": "Control Sequences",
+      "key": "negSeq"
+    },
+    {
+      "type": "background",
+      "name": "Background",
+      "key": "background"
+    },
+    {
+      "type": "choice",
+      "name": "Site Distribution",
+      "key": "mode",
+      "options": {
+        "zoops": "Zero or one occurrence (of a contributing motif site) per sequence.",
+        "oops": "One occurrence (of a contributing motif site) per sequence",
+        "anr": "Any number of repetitions (of a contributing motif site per sequence)"
+      }
+    },
+    {
+      "type": "count",
+      "name": "Motif Count",
+      "key": "nMotifs",
+      "one": "Searching for one motif.",
+      "any": "Searching for !!VALUE!! motifs."
+    },
+    {
+      "type": "range",
+      "name": "Motif Sites",
+      "keyLow": "minSites",
+      "keyHigh": "maxSites",
+      "same": "Exactly !!LOW!! sites.",
+      "low": "At least !!LOW!! sites.",
+      "high": "At most !!HIGH!! sites.",
+      "both": "Between !!LOW!! sites and !!HIGH!! sites (inclusive)."
+    },
+    {
+      "type": "range",
+      "name": "Motif Width",
+      "keyLow": "minWidth",
+      "keyHigh": "maxWidth",
+      "same": "Exactly !!LOW!! wide.",
+      "low": "At least !!LOW!! wide.",
+      "high": "At most !!HIGH!! wide.",
+      "both": "Between !!LOW!! wide and !!HIGH!! wide (inclusive)."
+    },
+    {
+      "type": "flag",
+      "name": "Palindromes",
+      "key": "palindrome",
+      "on": "Restricting search to palindromic motifs."
+    },
+    {
+      "type": "flag",
+      "name": "No RC",
+      "key": "norc",
+      "on": "Motif sites will only be considered if they are on the given strand."
+    },
+    {
+      "type": "flag",
+      "name": "Shuffle",
+      "key": "shuffle",
+      "on": "The letters in the input sequences will be shuffled."
+    }
+  ]
+}<!--{/message}-->;
+
+var data = {
+  "service": "MEME",
+  "id": "appMEME_4.10.01381207214457-2050656034",
+  "when":1381207216291,
+  "expiry": 1381812016291,
+  "description": "This is a test of MEME",
+  "inputs": {
+    "posSeq": {
+      "source": "file",
+      "safe-file": "a_file.fa",
+      "orig-file": "a file.fa",
+      "alphabet": "DNA",
+      "count": 18,
+      "min": 105,
+      "max": 105,
+      "avg": 105.0,
+      "total": 1890
+    },
+    "mode": "zoops",
+    "nMotifs": 3,
+    "minWidth": 6,
+    "maxWidth": 50,
+    "shuffle": true,
+    "palindrome": true,
+    "norc":true 
+  }
+};
+</script>
+</head>
+<body>
+<!--{title}-->MEME<!--{/title}--> - <!--{subtitle}-->Multiple Em for Motif Elicitation<!--{/subtitle}--><br>
+<!--{logo}-->doc/images/meme_icon.png<!--{/logo}-->: <!--{alt}-->MEME Logo<!--{/alt}--><br>
+<div id="info"></div>
+<script>display_job_information($("info"), verify["items"], data);</script>
+</body>
+</html>

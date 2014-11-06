@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>fitevd - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>fitevd</h2>
+
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>fitevd &lt;query length&gt; [options]</code>
+    </div>
+
+    <h3>Description</h3>
+    <div class="indent">
+      <p>fitevd fits an extreme value distribution to a set of score-length
+      pairs.</p>
+      <p>The outer loop alternates between estimating lambda and K with H
+      fixed and estimating H with lambda and K fixed. The inner loop is the
+      Newton-Raphson algorithm, which is used for solving the estimation
+      problems.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <p>Reads white-space separated score-length pairs from standard input.</p>
+      <h4>Query Length</h4>
+      <p>The query length.<!-- FIXME I don't know what this means --></p>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>Writes the EVD parameters to standard output.</p>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">-d</td><td><span class="pdat">smin</span> <span class="pdat">smax</span></td>
+            <td>Print length vs <i>p</i>-value for 
+            <span class="pdat">smin</span> &le; score &le; 
+            <span class="pdat">smax</span>.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">-h</td><td><span class="pdat">H</span></td>
+            <td>Initial value of H.</td>
+            <td>H is set to 1.0 .</td>
+          </tr>
+          <tr>
+            <td class="popt">-ilh</td><td><span class="pdat">ilh</span></td>
+            <td>Maximum iterations in outer L-H loop.</td>
+            <td>The maximum iterations in outer L-H loop is 10.</td>
+          </tr>
+          <tr>
+            <td class="popt">-inr</td><td><span class="pdat">inr</span></td>
+            <td>Maximum iterations in inner N-R loop.</td>
+            <td>The maximum iterations in inner N-R loop is 20.</td>
+          </tr>
+          <tr>
+            <td class="popt">-lr</td><td><span class="pdat">lr</span></td>
+            <td>Minimum ratio of shortest to longest in group.</td>
+            <td>The minimum ratio of shortest to longest in the group is 1.50.</td>
+          </tr>
+          <tr>
+            <td class="popt">-p</td><td>&nbsp;</td>
+            <td>Print <i>p</i>-values.</td>
+            <td>The <i>p</i>-values are not printed.</td>
+          </tr>
+          <tr>
+            <td class="popt">-r</td><td><span class="pdat">n</span></td>
+            <td>Use <span class="pdat">n</span> randomly selected scores.</td>
+            <td>All are used.</td>
+          </tr>
+          <tr>
+            <td class="popt">-s</td><td><span class="pdat">s</span></td>
+            <td>Size of length groups.</td>
+            <td>The size of length groups is 10,000.</td>
+          </tr>
+          <tr>
+            <td class="popt">-t</td><td>&nbsp;</td>
+            <td>Turn on debug tracing.</td>
+            <td>Debug tracing is not on.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>
+

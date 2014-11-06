@@ -1,0 +1,74 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="FIMO @SERVICE_VERSION@">
+    <usage>FIMO: Search sequences for individual motif sites</usage>
+    <info xsd:type="xsd:string">
+    <![CDATA[
+    fimo_webservice [options] <motifs> <db seqs>
+
+      Options:
+        -upseqs <file>    uploaded sequences
+        -pvthresh <pv>    output p-value threshold
+        -norc             scan given strand only
+        -help             brief help message
+    ]]>
+    </info>
+    <types>
+      <flags>
+        <flag>
+          <id>norc</id>
+          <tag>-norc</tag>
+          <default>false</default>
+          <textDesc>Scan given strand only (DNA)</textDesc>
+        </flag>
+      </flags>
+      <taggedParams>
+        <param>
+          <id>upseqs</id>
+          <tag>-upseqs</tag>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <textDesc>Uploaded Sequence Database</textDesc>
+        </param>
+        <param>
+          <id>pvthresh</id>
+          <tag>-pvthresh</tag>
+          <paramType>FLOAT</paramType>
+          <textDesc>Output p-value threshold</textDesc>
+        </param>
+      </taggedParams>
+      <untaggedParams>
+        <param>
+          <id>motifs</id>
+          <paramType>FILE</paramType>
+          <ioType>INPUT</ioType>
+          <required>true</required>
+          <textDesc>Motifs</textDesc>
+        </param>
+        <param>
+          <id>database</id>
+          <paramType>STRING</paramType>
+          <textDesc>Filename of Sequence Database</textDesc>
+        </param>
+      </untaggedParams>
+      <groups>
+        <group>
+          <name>g1</name>
+          <elements>motifs</elements>
+          <textDesc>Motifs</textDesc>
+        </group>
+        <group>
+          <name>g2</name>
+          <elements>database upseqs norc</elements>
+          <textDesc>Sequence Database</textDesc>
+        </group>
+        <group>
+          <name>g3</name>
+          <elements>pvthresh</elements>
+          <textDesc>Output Options</textDesc>
+        </group>
+      </groups>
+    </types>
+  </metadata>
+  <binaryLocation>@SERVICE_DIR@/fimo_webservice</binaryLocation>
+  <parallel>false</parallel>
+</appConfig>

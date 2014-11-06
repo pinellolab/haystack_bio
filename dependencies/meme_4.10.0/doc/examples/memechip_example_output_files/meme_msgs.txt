@@ -1,0 +1,1 @@
+-p <np> given but Parallel MEME not configured. Refer to doc/install.html.

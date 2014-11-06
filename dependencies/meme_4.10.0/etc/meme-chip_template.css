@@ -1,0 +1,193 @@
+table.inputs {
+  margin-top: 20px;
+  border-collapse:collapse;
+}
+table.inputs * td, table.inputs * th {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+table.motifs {
+  table-layout: fixed;
+}
+table.motifs * td {
+  padding: 1px 5px;
+}
+
+div.motifbox {
+  border-radius: 10px; 
+  border: 2px solid #CCC;
+  margin-bottom: 5px;
+  padding: 5px;
+  padding-left:30px;
+  position: relative;
+}
+
+div.motifexpander {
+  overflow-y: hidden;
+  -moz-transition: max-height 1s; 
+  -webkit-transition: max-height 1s;  
+  -ms-transition: max-height 1s;  
+  -o-transition: max-height 1s;  
+  transition: max-height 1s;
+}
+
+canvas.normal_logo {
+  display: block;
+}
+
+canvas.flipped_logo {
+  display: none;
+}
+
+div.flipped_logos * canvas.normal_logo {
+  display: none;
+}
+
+div.flipped_logos * canvas.flipped_logo {
+  display: block;
+}
+
+*.action {
+  display: inline-block;
+  margin-right: 30px;
+  cursor: pointer;
+  font-size: large;
+  -moz-user-select: none;  
+  -webkit-user-select: none;  
+  -ms-user-select: none;
+}
+*.action:hover {
+  color: #AA2244;
+}
+*.action a {
+  color: inherit;
+  text-decoration:none;
+}
+*.more_logos * span.more_action {
+  display: none;
+}
+*.more_logos * span.less_action {
+  display: inline-block;
+}
+span.more_action {
+  display: inline-block;
+}
+span.less_action {
+  display: none;
+}
+*.more_logo {
+  display: none;
+}
+*.more_logos * tr.more_logo {
+  display: table-row;
+}
+
+canvas.moving_less_action{
+  display: none;
+  cursor: pointer;
+  position: absolute;
+  left: 0px;
+  top: 20px;
+  -moz-transition: top 1s; 
+  -webkit-transition: top 1s;  
+  -ms-transition: top 1s;  
+  -o-transition: top 1s;  
+  transition: top 1s;
+}
+
+*.more_logos:hover > canvas.moving_less_action {
+  display: block;
+}
+
+*.more_logos.inprogress:hover > canvas.moving_less_action {
+  display: none;
+}
+
+span.aligned {
+  display: none;
+}
+span.unaligned {
+  display: inline;
+}
+*.more_logos * span.aligned {
+  display: inline;
+}
+*.more_logos * span.unaligned {
+  display: none;
+}
+
+td.col_distribution {
+  text-align: center;
+}
+th.col_distribution, td.col_distribution {
+  display: none;
+}
+*.show_distribution * th.col_distribution, 
+  *.show_distribution * td.col_distribution {
+  display: table-cell;
+}
+
+th.col_known_motifs, td.col_known_motifs {
+  display: none;
+}
+
+*.show_known_motifs * th.col_known_motifs, 
+  *.show_known_motifs * td.col_known_motifs {
+  display: table-cell;
+}
+
+table.programs {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.programs * td, table.programs * th {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+th.col_cmd, td.col_cmd {
+}
+
+td.col_cmd {
+  vertical-align: top;
+}
+
+div.col_cmd {
+}
+
+th.col_runtime, td.col_runtime {
+  width: 9em;
+}
+
+td.col_runtime {
+  vertical-align: top;
+  text-align: right;
+  padding-right: 10px;
+}
+
+th.col_status, td.col_status {
+  width: 10em;
+  vertical-align: top;
+}
+
+td.col_status {
+  text-align: center;
+}
+
+th.col_outputs, td.col_outputs {
+  width: 15em;
+  vertical-align:top;
+}
+
+td.col_outputs ul {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+p.tar {
+  font-size: larger;
+}

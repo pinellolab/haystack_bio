@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>create-priors - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>create-priors</h2>
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>create-priors &lt;wiggle file&gt;</code>
+    </div>
+    <h3>Description</h3>
+    <div class="indent">
+      <p>The program create-priors takes as input a series of numeric values
+      defined with respect to one or more DNA sequences. The program converts
+      the data into a probabilistic prior using the method described in:</p>
+      
+      <div class="citation">
+        Gabriel Cuellar-Partida, Fabian A. Buske, Robert C. McLeay,
+        Tom Whitington, William Stafford Noble, and Timothy L. Bailey,<br />
+        "Epigenetic priors for identifying active transcription factor binding sites",<br />
+        <em>Bioinformatics</em> 28(1): 56-62, 2012
+        <a href="http://bioinformatics.oxfordjournals.org/content/28/1/56.full.pdf">[pdf]</a>
+      </div>
+
+      <p>A binned distribution for the priors is also generated. Examples of
+      input data types include sequence tags counts from a DNaseI
+      hypersensitivity or histone modification ChIP-seq assay, or sequence
+      conservation scores.</p>
+    </div>
+
+    <h3>Input</h3>
+    <div class="indent">
+      <h4>Wiggle File</h4>
+      <p>A file in <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">wiggle</a> or 
+      <a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig format</a>.</p>
+    </div>
+
+    <h3>Output</h3>
+    <div class="indent">
+      <p>create-priors will create a directory, named <code>create-priors_out</code>
+      by default. Any existing output files in the directory will be
+      overwritten. The directory will contain:</p>
+      <ul>
+        <li>A <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">wiggle</a>
+        file named <code>create-priors.wig</code>. This file will contain the
+        position specific priors computed from the input tag counts.</li>
+        
+        <li>A text file named <code>priordist.txt</code>. This file will
+        contain a probability distribution for the priors 
+        (<a href="examples/compute_prior_dist_example_output_files/prior.dist.txt">sample file</a>).
+        The first two lines are the minimum and maximum priors. Each
+        succeeding line contains the probability that a prior is in the
+        corresponding bin. The value of the prior is calculated from the bin
+        number using the formula
+        <pre>
+    prior = ((bin #) / (num bins) * (max prior - min prior)) + (min prior)
+        </pre>
+        </li>
+      </ul>
+      <p>The default output directory can be overridden using the
+      <span class="popt">--o</span> or <span class="popt">--oc</span> options
+      which are described below.</p>
+    </div>
+
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">--alpha</td><td><span class="pdat">num</span></td>
+            <td>The alpha parameter for calculating position specific priors.
+            Alpha represents the fraction of all transcription factor binding
+            sites that are binding sites for the TF of interest. Alpha must be
+            between 0 and 1.</td>
+            <td>The default value is 1.0.</td>
+          </tr>
+          <tr>
+            <td class="popt">--beta</td><td><span class="pdat">num</span></td>
+            <td>The beta parameter for calculating position specific priors.
+            Beta represents an estimate of the total number of binding sites
+            for <em>all</em> transcription factors in the input data. Beta
+            must be greater than 0.</td>
+            <td>The default value is 10000.</td>
+          </tr>
+          <tr>
+            <td class="popt">--bigwig</td><td>&nbsp;</td>
+            <td>Directs <code>create-priors</code> to output the priors in
+            <a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig format</a>.
+            The name of the output file will be <code>create-priors.bwg</code>.
+            This format is more efficent when the size of the input file is large.</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="popt">--est-seq-size</td><td><span class="pdat">n</span></td>
+            <td>Estimated length of the full sequence represented by the
+            wiggle input file. The wiggle file may not contain scores for
+            every position in the underlying sequence. The sequence size is
+            used to esimate the amount of missing data. A rough guess is all
+            that is required.</td>
+            <td>The default behavior is to estimate the sequence size by
+            summing the maximum coordinate of each sequence in the input
+            wiggle file.</td>
+          </tr>
+          <tr>
+            <td class="popt">--numbins</td><td><span class="pdat">n</span></td>
+            <td>Number of bins to use in prior distribution file.</td>
+            <td>The default value is 100.</td>
+          </tr>
+          <script>
+            wropt("all-o", {"ddash": true, "dir": "create-priors_out"});
+            wropt("all-oc", {"ddash": true, "dir": "create-priors_out"});
+          </script>
+          <tr>
+            <td class="popt">--psp</td><td>&nbsp;</td>
+            <td>Directs <code>create-priors</code> to also output the priors in
+            <a href="http://meme.nbcr.net/meme/doc/meme.html#MEME-PSP">MEME PSP format</a>.
+            The name of the output file will be <code>create-priors.psp</code>.
+            This format is only suitable when the number of postions is
+            relatively small.</td>
+            <td></td>
+          </tr>
+        </tbody> 
+      </table>
+    </div>
+  </body>
+</html>
+

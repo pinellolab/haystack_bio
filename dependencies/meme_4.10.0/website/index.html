@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Introduction - MEME Suite</title>
+    <link rel="shortcut icon" href="doc/images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="doc/images/memesuite_icon.png">
+    <link href="doc/css/style.css" rel="stylesheet" type="text/css">
+    <script src="doc/js/utilities.js"></script>
+    <script src="doc/js/menu.js"></script>
+    <style>
+      img {
+        border-style: none;
+      }
+      img.schema {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      table.prog div.prog_logo {
+        font-size: 9px;
+      }
+      div.prog_logo.gtscan h1, div.prog_logo.gtscan h1:hover, div.prog_logo.gtscan h1:active, div.prog_logo.gtscan h1:visited {
+        color: #0B67CD;
+      }
+      div.prog_logo.gtscan h2, div.prog_logo.gtscan h2:hover, div.prog_logo.gtscan h2:active, div.prog_logo.gtscan h2:visited {
+        color: #0B67CD;
+      }
+      table.logos {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      table.logos td {
+        margin: 0 20px;
+      }
+      .blurb nav {
+        display: none;
+      }
+    </style>
+    <script>
+      function show_blurb(elem, topic) {
+        "use strict";
+        var pop;
+        pop = $(elem.getAttribute("data-blurb"))
+        //must make the popup visible to measure it or it has zero width
+        pop.style.display = 'block';
+        position_popup(elem, pop);
+      }
+
+      function hide_blurb(elem) {
+        "use strict";
+        var pop;
+        pop = $(elem.getAttribute("data-blurb"))
+        pop.style.display = 'none';
+      }
+
+      function setup_blurb(elem) {
+        "use strict";
+        var blurb;
+        if (elem.hasAttribute("data-blurb")) {
+          elem.addEventListener("mouseover", function() {
+            show_blurb(elem);
+          }, false);
+          elem.addEventListener("mouseout", function() {
+            hide_blurb(elem);
+          }, false);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <div class="no_script">
+        <div class="no_script_warning">
+        <h1>Javascript is disabled! &#9785;</h1>
+        <p>The MEME Suite web application requires the use of JavaScript but
+        Javascript doesn't seem to be available on your browser.</p>
+        <p>Please re-enable Javascript to use the MEME Suite.</p>
+        </div>
+      </div>
+    </noscript>
+    <div id="meme_blurb" class="pop_content blurb" data-id="meme"></div>
+    <div id="mast_blurb" class="pop_content blurb" data-id="mast"></div>
+    <div id="tomtom_blurb" class="pop_content blurb" data-id="tomtom"></div>
+    <div id="gomo_blurb" class="pop_content blurb" data-id="gomo"></div>
+    <div id="glam2_blurb" class="pop_content blurb" data-id="glam2"></div>
+    <div id="glam2scan_blurb" class="pop_content blurb" data-id="glam2scan"></div>
+    <div id="fimo_blurb" class="pop_content blurb" data-id="fimo"></div>
+    <div id="mcast_blurb" class="pop_content blurb" data-id="mcast"></div>
+    <div id="memechip_blurb" class="pop_content blurb" data-id="memechip"></div>
+    <div id="spamo_blurb" class="pop_content blurb" data-id="spamo"></div>
+    <div id="dreme_blurb" class="pop_content blurb" data-id="dreme"></div>
+    <div id="centrimo_blurb" class="pop_content blurb" data-id="centrimo"></div>
+    <div id="ame_blurb" class="pop_content blurb" data-id="ame"></div>
+    <div id="gtscan_blurb" class="pop_content blurb">
+      <dfn>GT-Scan</dfn> finds <em>optimal targets</em> for genome editing or
+      regulatory interference using CRISPR/Cas or zinc-finger nuclease systems. 
+    </div>
+    <div class="content_box">
+      <div class="memesuitelogo">
+        <h1>The MEME Suite</h1>
+        <h2>Motif-based sequence analysis tools</h2>
+      </div>
+      <noscript>
+        The MEME Suite web application requires the use of JavaScript
+        <br />
+        Javascript doesn't seem to be available on your browser.
+      </noscript>
+      <map name="webserver_schema_map">
+        <area shape="rect" coords="133,72,204,84" href="tools/meme" alt="MEME" data-blurb="meme_blurb"/>
+        <area shape="rect" coords="133,85,204,99" href="tools/dreme" alt="DREME" data-blurb="dreme_blurb"/>
+        <area shape="rect" coords="133,100,204,111" href="tools/meme-chip" alt="MEME-ChIP" data-blurb="memechip_blurb"/>
+        <area shape="rect" coords="133,112,204,125" href="tools/glam2" alt="GLAM2" data-blurb="glam2_blurb"/>
+        <area shape="rect" coords="370,51,442,75" href="tools/tomtom" alt="Tomtom" data-blurb="tomtom_blurb"/>
+        <area shape="rect" coords="370,94,442,105" href="tools/centrimo" alt="CentriMo" data-blurb="centrimo_blurb"/>
+        <area shape="rect" coords="370,106,442,119" href="tools/ame" alt="AME" data-blurb="ame_blurb"/>
+        <area shape="rect" coords="370,120,442,134" href="tools/spamo" alt="SpaMo" data-blurb="spamo_blurb"/>
+        <area shape="rect" coords="370,156,442,169" href="tools/fimo" alt="FIMO" data-blurb="fimo_blurb"/>
+        <area shape="rect" coords="370,170,442,183" href="tools/mast" alt="MAST" data-blurb="mast_blurb"/>
+        <area shape="rect" coords="370,184,442,196" href="tools/mcast" alt="MCAST" data-blurb="mcast_blurb"/>
+        <area shape="rect" coords="370,197,442,210" href="tools/glam2scan" alt="GLAM2Scan" data-blurb="glam2scan_blurb"/>
+        <area shape="rect" coords="370,236,442,257" href="tools/gomo" alt="GOMo" data-blurb="gomo_blurb"/>
+        <area shape="rect" coords="297,4,351,48" href="db/motifs" alt="Motif Databases"/>
+        <area shape="rect" coords="297,184,350,214" href="db/sequences" alt="Sequence Databases"/>
+        <area shape="rect" coords="297,215,350,227" href="db/gomo" alt="GOMO Sequence Databases"/>
+        <area shape="rect" coords="297,262,350,307" href="http://www.geneontology.org/" alt="Gene Ontology"/>
+        <area shape="rect" coords="8,152,264,164" href="tools/meme" alt="MEME" data-blurb="meme_blurb"/>
+        <area shape="rect" coords="8,165,264,175" href="tools/dreme" alt="DREME" data-blurb="dreme_blurb"/>
+        <area shape="rect" coords="8,176,264,187" href="tools/meme-chip" alt="MEME-ChIP" data-blurb="memechip_blurb"/>
+        <area shape="rect" coords="8,188,264,198" href="tools/glam2" alt="GLAM2" data-blurb="glam2_blurb"/>
+        <area shape="rect" coords="8,199,264,209" href="tools/tomtom" alt="TOMTOM" data-blurb="tomtom_blurb"/>
+        <area shape="rect" coords="8,210,264,221" href="tools/centrimo" alt="CentriMo" data-blurb="centrimo_blurb"/>
+        <area shape="rect" coords="8,222,264,232" href="tools/ame" alt="AME" data-blurb="ame_blurb"/>
+        <area shape="rect" coords="8,233,264,244" href="tools/spamo" alt="SpaMo" data-blurb="spamo_blurb"/>
+        <area shape="rect" coords="8,245,264,255" href="tools/fimo" alt="FIMO" data-blurb="fimo_blurb"/>
+        <area shape="rect" coords="8,256,264,266" href="tools/mast" alt="MAST" data-blurb="mast_blurb"/>
+        <area shape="rect" coords="8,267,264,278" href="tools/mcast" alt="MCAST" data-blurb="mcast_blurb"/>
+        <area shape="rect" coords="8,279,264,290" href="tools/glam2scan" alt="GLAM2Scan" data-blurb="glam2scan_blurb"/>
+        <area shape="rect" coords="8,291,264,302" href="tools/gomo" alt="GOMo" data-blurb="gomo_blurb"/>
+      </map>
+      <img src="doc/images/webserver_schema.png" class="schema" alt="Web Tools Schema"
+      usemap="#webserver_schema_map" />
+      <script>
+        // add popup blurbs to the map
+        (function() {
+          var all_area, i;
+          all_area = document.querySelectorAll("area");
+          for (i = 0; i < all_area.length; i++) {
+            setup_blurb(all_area[i]);
+          }
+        })();
+      </script>
+      <p style="font-size: larger;">The MEME Suite allows you to:</p>
+      <ul>
+        <li>
+          discover motifs using
+          <a href="tools/meme">MEME</a>,
+          <a href="tools/meme">MEME-ChIP</a> (nucleotide only),
+          <a href="tools/dreme">DREME</a> (nucleotide only) 
+          or 
+          <a href="tools/glam2">GLAM2</a> 
+          on groups of related DNA or protein sequences, 
+        </li>
+        <li>
+          search sequence databases with motifs using
+          <a href="tools/mast">MAST</a>,
+          <a href="tools/fimo">FIMO</a>,
+          <a href="tools/mcast">MCAST</a> or
+          <a href="tools/glam2scan">GLAM2SCAN</a>,
+
+        </li>
+        <li>
+          <a href="tools/tomtom">compare</a> motif(s) to
+          all motifs in a database of motifs, 
+        </li>
+        <li>
+          <a href="tools/gomo">associate</a> motifs with Gene
+          Ontology terms via their putative target genes, and
+        </li>
+        <li>
+          analyze motif enrichment using
+          <a href="tools/centrimo">AME</a>,
+          <a href="tools/centrimo">CentriMo</a> or
+          <a href="tools/spamo">SpaMo</a>.
+        </li>
+      </ul>
+      <p style="font-size: larger;">
+        To use one of the online tools either click on a logo below or select a
+        tool from the menu on the left side of the page.
+      </p>
+      <hr/>
+      <table class="prog">
+        <tr>
+          <td>
+            <a href="tools/meme" data-blurb="meme_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/meme_icon.png" alt="MEME Logo">
+                <h1>MEME</h1>
+                <h2>Multiple Em for Motif Elicitation</h2>
+              </div>
+            </a>
+          </td>
+          <td>
+            <a href="tools/mast" data-blurb="mast_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/mast_icon.png" alt="MAST Logo">
+                <h1>MAST</h1>
+                <h2>Motif Alignment &amp; Search Tool</h2>
+              </div>
+            </a>
+          </td>
+          <td>
+            <a href="tools/tomtom" data-blurb="tomtom_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/tomtom_icon.png" alt="Tomtom Logo">
+                <h1>Tomtom</h1>
+                <h2>Motif Comparison Tool</h2>
+              </div>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="tools/gomo" data-blurb="gomo_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/gomo_icon.png" alt="GOMo Logo">
+                <h1>GOMo</h1>
+                <h2>Gene Ontology for Motifs</h2>
+              </div>
+            </a>
+          </td>
+          <td>
+            <a href="tools/glam2" data-blurb="glam2_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/glam2_icon.png" alt="GLAM2 Logo">
+                <h1>GLAM2</h1>
+                <h2>Gapped Local Alignment of Motifs</h2>
+              </div>
+            </a>
+          </td>
+          <td>
+            <a href="tools/glam2scan" data-blurb="glam2scan_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/glam2scan_icon.png" alt="GLAM2Scan Logo">
+                <h1>GLAM2Scan</h1>
+                <h2>Scanning with Gapped Motifs</h2>
+              </div>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="tools/fimo" data-blurb="fimo_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/fimo_icon.png" alt="FIMO Logo">
+                <h1>FIMO</h1>
+                <h2>Find Individual Motif Occurrences</h2>
+              </div>
+            </a>
+          </td>
+          <td>
+            <a href="tools/mcast" data-blurb="mcast_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/mcast_icon.png" alt="MCAST Logo">
+                <h1>MCAST</h1>
+                <h2>Motif Cluster Alignment and Search Tool</h2>
+              </div>
+            </a>
+          </td>
+          <td>
+            <a href="tools/meme-chip" data-blurb="memechip_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/memechip_icon.png" alt="MEME-ChIP Logo">
+                <h1>MEME-ChIP</h1>
+                <h2>Motif Analysis of Large Nucleotide Datasets</h2>
+              </div>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="tools/spamo" data-blurb="spamo_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/spamo_icon.png" alt="SpaMo Logo">
+                <h1>SpaMo</h1>
+                <h2>Spaced Motif Analysis Tool</h2>
+              </div>
+            </a>
+          </td>
+          <td>
+            <a href="tools/dreme" data-blurb="dreme_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/dreme_icon.png" alt="DREME Logo">
+                <h1>DREME</h1>
+                <h2>Discriminative Regular Expression Motif Elicitation</h2>
+              </div>
+            </a>
+          </td>
+          <td>
+            <a href="tools/centrimo" data-blurb="centrimo_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/centrimo_icon.png" alt="CentriMo Logo">
+                <h1>CentriMo</h1>
+                <h2>Local Motif Enrichment Analysis</h2>
+              </div>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="tools/ame" data-blurb="ame_blurb">
+              <div class="prog_logo">
+                <img src="doc/images/ame_icon.png" alt="AME Logo">
+                <h1>AME</h1>
+                <h2>Analysis of Motif Enrichment</h2>
+              </div>
+            </a>
+          </td>
+          <td>
+            <a href="http://crispr.braembl.org.au/gt-scan" data-blurb="gtscan_blurb">
+              <div class="prog_logo gtscan">
+                <img src="doc/images/gtscan_icon.png" alt="GT-Scan Logo">
+                <h1>GT-Scan</h1>
+                <h2>Identifying Unique Genomic Targets</h2>
+              </div>
+            </a>
+          </td>
+          <td></td>
+        </tr>
+      </table>
+      <script>
+        (function() {
+          var all_link, i;
+          all_link = document.querySelectorAll("table.prog a");
+          for (i = 0; i < all_link.length; i++) {
+            setup_blurb(all_link[i]);
+          }
+        })();
+      </script>
+      <hr/>
+      <p style="font-size: large;">
+        Maintenance and development of the MEME Suite is funded by the 
+        National Center for Research Resources grant NIH/NCRR R01 RR021692.
+        The MEME Suite web server is funded by the 
+        <a href= "http://www.sdsc.edu/NBCR">National Biomedical Computation Resource</a>.
+      </p>
+      <hr/>
+      <b><font>Developed and maintained by:</font></b>
+      <table class="logos">
+        <tr>
+          <td>
+            <a href="http://www.uq.edu.au">
+              <img src="doc/images/uq_logo.png" alt="UQ logo">
+            </a>
+          </td>
+          <td>
+            <a href="http://www.washington.edu">
+              <img src="doc/images/UWlogo150p.gif" alt="UW logo">
+            </a>
+          </td>
+          <td>
+            <a href="http://infopath.ucsd.edu">
+              <img src="doc/images/ucsd_logo.png" alt="UCSD logo">
+            </a>
+          </td>
+          <td>
+            <a href="http://www.sdsc.edu">
+              <img src="doc/images/sdsc_logo.png" alt="SDSC logo">
+            </a>
+          </td>
+        </tr>
+      </table>
+      <table class="logos">
+        <tr>
+          <td>
+            <a href="http://nbcr.net">
+              <img src="doc/images/nbcr_logo_trans.gif" alt="NBCR logo">
+            </a>
+          </td>
+          <td>
+            <a href="http://www.cbrc.jp">
+              <img src="doc/images/cbrc_logo.png" alt="CBRC logo">
+            </a>
+          </td>
+          <td>
+            <a href="http://www.ncrr.nih.gov">
+              <img src="doc/images/ncrr_logo.gif" alt="NCRR logo">
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
+

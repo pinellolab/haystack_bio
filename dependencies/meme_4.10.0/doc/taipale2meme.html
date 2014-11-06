@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>taipale2meme - MEME Suite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/memesuite_icon.ico">
+    <link rel="icon" type="image/png" href="images/memesuite_icon.png">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/menu.js"></script>
+    <script src="js/shared-doc.js"></script>
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2>taipale2meme</h2>
+    <div class="usage">
+      <h3>Usage:</h3>
+      <code>taipale2meme [options]</code>
+    </div>
+    <h3>Description</h3>
+    <div class="indent">
+      <p>Convert a file containing the tab separated columns exported from the
+      spreadsheet of Taipale results into MEME motif format.</p>
+    </div>
+    <h3>Input</h3>
+    <div class="indent">
+      <p>Reads a Taipale file from standard input.</p>
+      <p>A Taipale file describes one or more motifs in terms of a probability
+      matrix in column orientation.</p>
+      <p>The Taipale file must be exported from the Excel spreadsheet using the following steps:</p>
+      <ol>
+        <li>Open the xls file in OpenOffice (presumably Excel will work the same)</li>
+        <li>Select "Save As" from the File menu</li>
+        <li>Change the file name to "sheetX" where X is the number of the sheet,
+        set the output type as "Text CSV (.csv)", press save</li>
+        <li>Leave the character set as UTF-8, change the field delimiter to
+        {Tab} and leave the text delimeter as "</li>
+        <li>You should now have a file called sheetX.csv</li>
+        <li>Close OpenOffice</li>
+        <li>Repeat from step 1 as needed for other sheets</li>
+      </ol>
+      <p>See the <a href="#example">example</a> Taipale file.</p>
+    </div>
+    <h3>Output</h3>
+    <div class="indent">
+      <script>wrdoc("2meme-output");</script>
+    </div>
+    <h3>Options</h3>
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">General Options</th>
+          </tr>
+          <tr>
+            <td class="popt">-nc</td><td><span class="pdat">column</span></td>
+            <td>Repeat this option to specify which file columns should be used
+              to create the motif names by joining with "_".</td>
+            <td>The first non-empty column is used as the motif name</td>
+          </tr>
+          <tr>
+            <td class="popt">-oc</td><td><span class="pdat">column</span></td>
+            <td>Repeat this option to specify one or more columns that should be
+              empty in the line of information that identifies the motif. If the
+              column is not empty then the motif is skipped.</td>
+            <td>All motifs are kept.</td>
+          </tr>
+          <tr>
+            <td class="popt">-postfix</td><td><span class="pdat">appended text</span></td>
+            <td>Specify text to append to the motif names.</td>
+            <td>Motif names are left unchanged.</td>
+          </tr>
+          <tr>
+            <td class="popt">-strands</td><td><span class="popt">1</span>|<span class="popt">2</span></td>
+            <td>Specify if the PWM was generated from single or double stranded
+              datasets.</td>
+            <td>Assumes the PWM was generated from a double stranded dataset.</td>
+          </tr>
+          <script>
+            wropt("2meme-bg");
+            wropt("2meme-pseudo");
+            wropt("2meme-logodds");
+            wropt("2meme-url", {"type": "TAMO ID", "example": "tamo_id"});
+          </script>
+        </tbody>
+      </table>
+    </div>
+    <h3 id="example">Example Taipale file</h3>
+    <div class="indent" style="overflow-x: scroll;">
+      <pre>
+"TABLE S1"											
+"MEASURED BINDING PROFILES (DATA FOR FIG1D)"											
+"GLI1"	1	2	3	4	5	6	7	8	9	10	14
+"A"	0.010	0.855	0.021	0.000	0.855	0.000	0.124	0.040	0.982	0.287	0.033
+"C"	0.001	0.069	0.972	1.000	0.069	1.000	0.876	0.914	0.006	0.518	0.068
+"G"	0.973	0.076	0.000	0.000	0.015	0.000	0.000	0.008	0.004	0.097	0.792
+"T"	0.016	0.000	0.006	0.000	0.061	0.000	0.000	0.038	0.008	0.098	0.107
+											
+"GLI2"	1	2	3	4	5	6	7	8	9	10	14
+"A"	0.000	0.822	0.041	0.000	0.839	0.000	0.098	0.013	0.997	0.383	0.040
+"C"	0.000	0.090	0.959	1.000	0.064	1.000	0.902	0.887	0.000	0.361	0.156
+"G"	0.981	0.088	0.000	0.000	0.010	0.000	0.000	0.005	0.000	0.121	0.713
+"T"	0.018	0.000	0.000	0.000	0.087	0.000	0.000	0.095	0.003	0.135	0.091
+											
+"GLI3"	1	2	3	4	5	6	7	8	9	10	14
+"A"	0.004	0.785	0.034	0.000	0.767	0.000	0.147	0.054	0.937	0.307	0.052
+"C"	0.000	0.097	0.966	1.000	0.106	1.000	0.853	0.846	0.031	0.359	0.133
+"G"	0.969	0.119	0.000	0.000	0.024	0.000	0.000	0.013	0.004	0.181	0.652
+"T"	0.027	0.000	0.000	0.000	0.104	0.000	0.000	0.088	0.027	0.154	0.163
+											
+											
+"Ci"	1	2	3	4	5	6	7	8	9	10	14
+"A"	0.010	0.903	0.012	0.000	0.899	0.000	0.074	0.020	0.968	0.414	0.029
+"C"	0.001	0.048	0.985	1.000	0.058	1.000	0.926	0.951	0.013	0.455	0.047
+"G"	0.980	0.049	0.000	0.000	0.008	0.000	0.000	0.007	0.006	0.066	0.860
+"T"	0.009	0.000	0.003	0.000	0.035	0.000	0.000	0.022	0.013	0.064	0.064
+											
+											
+"Tcf4"	1	2	3	4	5	6	7	8	9		
+"A"	0.197	0.036	0.056	0.024	0.058	0.048	0.876	0.194	0.097		
+"C"	0.337	0.662	0.103	0.032	0.004	0.165	0.000	0.000	0.366		
+"G"	0.228	0.143	0.003	0.029	0.010	0.675	0.022	0.017	0.481		
+"T"	0.238	0.159	0.837	0.915	0.929	0.112	0.099	0.782	0.056		
+											
+											
+"cETS1"	1	2	3	4	5	6	7	8	9		
+"A"	0.326	0.108	0.002	0.000	0.975	0.375	0.647	0.141	0.315		
+"C"	0.345	0.842	0.000	0.002	0.003	0.078	0.046	0.354	0.300		
+"G"	0.209	0.044	0.993	0.992	0.003	0.014	0.290	0.136	0.145		
+"T"	0.120	0.006	0.005	0.004	0.019	0.533	0.018	0.369	0.240		
+											
+"Known mismatches with activity in vivo (GLI, Tcf4) are indicated by boxes, the degenerate high affinity sequence derived from semiquantitative SELEX analysis (c-ETS1) is indicated by green backround. References:"											
+	"GENE"	"Comment"				"Reference"					
+"GLI1, 2, 3"	"FOXA2"	"FOXA2 requires high amounts of Shh to be induced"				"Sasaki H, Hui C, Nakafuku M, Kondoh H. A binding site for Gli proteins is essential for HNF-3beta floor plate enhancer activity in transgenics and can respond to Shh in vitro. Development 12:1313-1322, 1997."					
+"Tcf4"	"CDX1"	"two binding sites mutated"				"Jho EH, Zhang T, Domon C, Joo CK, Freund JN, Costantini F. Wnt/beta-catenin/Tcf signaling induces the transcription of Axin2, a negative regulator of the signaling pathway. Mol Cell Biol. 22:1172-1183, 2002."					
+"c-ETS1"	"-"	"Consensus from SELEX: (A)CMGGAWRTT"				"Woods DB, Ghysdael J, Owen MJ. Identification of nucleotide preferences in DNA sequences recognised specifically by c-Ets-1 protein. Nucleic Acids Res. 20:699-704, 1992. "					
+      </pre>
+    </div>
+  </body>
+</html>
+
