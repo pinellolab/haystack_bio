@@ -70,7 +70,7 @@ def check_fimo():
             print('Ok be patient!')
             os.chdir('dependencies/meme_4.9.1/')
 
-            cmd_cfg='./configure --prefix=%s --enable-build-libxml2 --enable-build-libxslt ' % INSTALLATION_PATH
+            cmd_cfg='autoreconf && ./configure --prefix=%s --enable-build-libxml2 --enable-build-libxslt ' % INSTALLATION_PATH
             if CURRENT_PLATFORM=='CYGWIN':
                 cmd_cfg+=' --build=x86_64-cygwin'
 
