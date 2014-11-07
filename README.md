@@ -61,7 +61,7 @@ The current version is compatible only with Unix like operating systems on 64 bi
 - OSX Maverick and Mountain Lion
 - Cygwin x86_64 (1.7) on Windows 7/8 64 bit
  
-If you have an outdated Linux distribution and have problem running Haystack you should download instead this setup file:
+**If you have an outdated Linux distribution and have problem running Haystack you should download instead this setup file:**
 
 http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_old_architectures_setup_with_genomes.zip
 
@@ -166,7 +166,7 @@ The output will consist of:
 - The normalized bigwig files for each track
 - The hotspots i.e. the regions that are most variable
 - The regions that are variable and specific for each track, this means that the signal is more enriched to a particular track compared to the rest.
-- A session file (.xml) for the IGV software (http://www.broadinstitute.org/igv/) from the Broad Institute to easily visualize all the tracks produced, the hotspots and the specific regions for each cell line. To load it just drag and drop the file _OPEN_ME_WITH_IGV.xml_ from the output folder on top of the IGV window or alternatively load it in IGV with File-> Open Session...
+- A session file (.xml) for the IGV software (http://www.broadinstitute.org/igv/) from the Broad Institute to easily visualize all the tracks produced, the hotspots and the specific regions for each cell line. To load it just drag and drop the file _OPEN_ME_WITH_IGV.xml_ from the output folder on top of the IGV window or alternatively load it in IGV with File-> Open Session... If you have trouble opening the file please update your IGV version. Additonaly, please don't move the .xml file only, you need all the files in the output folder to correctly load the session.
 
 **_Examples_**
 Suppose you have a folder called /users/luca/mybamfolder you can run the variability analysis with: 
