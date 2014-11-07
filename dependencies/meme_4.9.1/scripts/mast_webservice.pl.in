@@ -1,0 +1,299 @@
+#!@WHICHPERL@
+=head1 NAME
+
+mast_webservice - Run mast in a restricted mode and create an index webpage.
+
+=head1 SYNOPSIS
+
+mast_webservice [options] <motifs file> [<sequence database>]
+
+  Options:
+    -dna              search nucleotide database with protein motifs
+    -seqp             Scale motif display threshold by sequence length
+    -comp             Use individual sequence composition in E-value and p-value calculation
+    -sep              treat the rc strand as a seperate sequence; not compatible with -norc
+    -norc             don't process the rc strand; not compatible with -sep
+    -ev <thresh>      display sequences with evalue below this threshold
+    -mev <thresh>     Ignore motifs with evalue above this threshold
+    -upload_db <file> uploaded sequence database
+    -df <name>        Name to show for sequence database; underscores are converted to spaces
+    -help             brief help message
+
+=cut
+
+use strict;
+use warnings;
+
+use Cwd qw(getcwd);
+use Encode;
+use Fcntl qw(SEEK_SET O_RDONLY);
+use File::Basename qw(fileparse);
+use File::Spec::Functions qw(catfile tmpdir);
+use File::Temp qw(tempfile);
+use Getopt::Long;
+use Pod::Usage;
+use Time::HiRes qw(gettimeofday tv_interval);
+
+use lib qw(@PERLLIBDIR@);
+
+use ExecUtils qw(stringify_args invoke);
+use MemeWebUtils qw(is_safe_name add_status_msg update_status loggable_date write_invocation_log);
+use Globals;
+
+# Globals
+my $t0 = [&gettimeofday()];
+# constants
+my $tmpdir = '@TMP_DIR@';
+# use the perl default if none is supplied or the replace fails
+$tmpdir = &tmpdir() if ($tmpdir eq '' || $tmpdir =~ m/^\@TMP[_]DIR\@$/);
+my $dbdir = '@MEMEDB@/fasta_databases';
+my $workdir = getcwd;
+
+# variables for the service invocation log
+my $log_args = stringify_args(@ARGV);
+my $log_date = loggable_date();
+my $log_file = 'mast-log';
+
+# timeout vars
+my $timeout = $Globals::MAXTIME; # updated just before use
+my $oot = 0; #FALSE
+
+# error files
+my $messages = "messages.txt";
+
+#status page
+my $file_list;
+my @arg_errors = ();
+my $msg_list = [];
+my $program = 'MAST';
+my $page = 'index.html';
+my $refresh = 10;
+
+# required parameters
+my $motifs;
+my $db_pattern;
+# option defaults
+my $help = 0; #FALSE
+my $translate = 0; #FALSE
+my $seqp = 0; #FALSE
+my $comp = 0; #FALSE
+my $sep = 0; #FALSE
+my $norc = 0; #FALSE
+my $ev = undef;
+my $mev = undef;
+my $upload_db = undef;
+my $df = undef;
+# derived defaults
+my $db;
+my $bfile = undef;
+my $nseqs = undef;
+
+add_status_msg('Parsing arguments', $msg_list);
+
+# redirect stderr so we can get the error message from GetOpts
+my ($err_old, $err_tmp, $opts_ok, $opts_msg);
+open($err_old, ">&STDERR") or die("Can't dup STDERR: $!");
+$err_tmp = tempfile('GetOptions_XXXXXXXXXX', DIR => $tmpdir, UNLINK => 1); # make a temporary file
+open(STDERR, '>&', $err_tmp) or die("Can't redirect STDERR: $!");
+# parse options
+$opts_ok = GetOptions(
+  'dna' => \$translate,
+  'seqp' => \$seqp,
+  'comp' => \$comp,
+  'sep' => \$sep,
+  'norc' => \$norc,
+  'ev=f' => \$ev,
+  'mev=f' => \$mev,
+  'upload_db=s' => \$upload_db,
+  'df=s' => \$df,
+  'help|?' => \$help
+);
+($motifs, $db_pattern) = @ARGV;
+# display help
+pod2usage(1) if $help;
+# reset stderr and get the error message if any
+open(STDERR, ">&", $err_old) or die("Can't reset STDERR: $!");
+seek($err_tmp, 0, SEEK_SET);
+while ($opts_msg = <$err_tmp>) {
+  chomp($opts_msg);
+  push(@arg_errors, $opts_msg);
+}
+close($err_tmp);
+
+if (defined($df)) {
+  # decode modified URL (uses _ instead of %) and utf8 encoding, this is to work
+  # around Opal and DRMAA being stupid and not understanding quoted strings and
+  # also disliking brackets percent signs or any number of things that should
+  # work fine...
+  $df =~ s/_([0-9A-Fa-f]{2})/chr(hex($1))/eg;
+  $df = decode("utf8", $df);
+}
+
+# remove any path from the files to ensure they are in this directory
+if (defined($motifs)) {
+  $motifs = fileparse($motifs);
+}
+if (defined($upload_db)) {
+  $upload_db = fileparse($upload_db);
+}
+# process the db patterns, we only need the first one
+if ($db_pattern) {
+  # look in the database directory
+  chdir($dbdir);
+  my $file = fileparse($db_pattern);
+  if (-e $file) {
+    $db = catfile('db', $file);
+    # get the background file if it exists
+    $bfile = $db . '.bfile' if (-e ($file . '.bfile'));
+    # get the number of sequences if it exists
+    if (-e ($file . '.nseqs')) {
+      my ($nseqs_file, $content);
+      sysopen($nseqs_file, $file . '.nseqs', O_RDONLY);
+      $content = do {local $/; <$nseqs_file>}; #slurp file
+      close($nseqs_file);
+      if ($content =~ m/^\s*(\d+)\s*$/) {
+        $nseqs = int($1);
+      }
+    }
+  } else {
+    push(@arg_errors, "Database \"$file\" does not exist in the database directory \"$dbdir\"");
+  }
+  chdir($workdir);
+}
+
+# test the arguments
+if ($sep && $norc) {
+  push(@arg_errors, "Option norc incompatible with option sep");
+}
+if (defined($ev)) {
+  if ($ev < 0) {
+    push(@arg_errors, "Value \"$ev\" invalid for option ev (must be positive)");
+  }
+}
+if (defined($mev)) {
+  if ($mev < 0) {
+    push(@arg_errors, "Value \"$mev\" invalid for option mev (must be positive)");
+  }
+}
+if (defined($upload_db)) {
+  if (not is_safe_name($upload_db)) {
+    push(@arg_errors, "Value \"$upload_db\" invalid for option upload_db (does not fit allowed file name pattern)");
+  } elsif (not -e $upload_db) {
+    push(@arg_errors, "Value \"$upload_db\" invalid for option upload_db (file does not exist)");
+  } else {
+    $db = $upload_db;
+    $bfile = undef;
+    $nseqs = undef;
+  }
+}
+unless (defined($motifs)) {
+  push(@arg_errors, "No motifs provided");
+} elsif (not is_safe_name($motifs)) {
+  push(@arg_errors, "Motifs file \"$motifs\" does not fit allowed file name pattern.");
+} elsif (not -e $motifs) {
+  push(@arg_errors, "Motifs file \"$motifs\" does not exist");
+}
+
+unless ($db) {
+  push(@arg_errors, "No sequences provided");
+}
+
+$opts_ok = 0 if (scalar(@arg_errors) > 0);
+foreach my $arg_error (@arg_errors) {
+  print STDERR $arg_error, "\n";
+  add_status_msg($arg_error, $msg_list);
+}
+
+# setup status page
+$file_list = [
+    {file => 'mast.html', desc => 'MAST html output'},
+    {file => 'mast.xml', desc => 'MAST xml output'}, 
+    {file => 'mast.txt', desc => 'MAST txt output'},
+    {file => $motifs, desc => 'Input Motifs'},
+    {file => $upload_db, desc => 'Uploaded Input Sequences'},
+];
+
+if ($opts_ok) {
+  add_status_msg('Arguments ok', $msg_list);
+} else {
+  add_status_msg("Error parsing arguments", $msg_list);
+}
+
+update_status($page, $program, ($opts_ok ? $refresh : 0), $file_list, 
+    $msg_list, ($opts_ok ? "Starting" : "Error"));
+
+# exit if there was an error reading the arguments
+unless ($opts_ok) {
+  write_invocation_log($log_file, $log_date, $log_args);
+  pod2usage(2);
+}
+
+# Run MAST
+my @mast_args = ($motifs, $db, '-oc', '.', '-nostatus', '-remcorr');
+#if (-e 'description') {
+  #TODO make mast accept a description file
+  #push(@mast_args, '-fdesc', 'description');
+#}
+push(@mast_args, '-bfile', $bfile) if (defined($bfile) && not $translate);
+push(@mast_args, '-minseqs', $nseqs) if defined($nseqs);
+push(@mast_args, '-dna') if $translate;
+push(@mast_args, '-seqp', '-mt', 0.01) if $seqp;
+push(@mast_args, '-comp') if $comp;
+push(@mast_args, '-sep') if $sep;
+push(@mast_args, '-norc') if $norc;
+push(@mast_args, '-ev', $ev) if defined($ev);
+push(@mast_args, '-mev', $mev) if defined($mev);
+push(@mast_args, '-df', $df) if defined($df);
+
+add_status_msg('Starting mast<br><code>' . stringify_args('mast', @mast_args) . '</code>', $msg_list);
+
+update_status($page, $program, $refresh, $file_list, $msg_list, "Starting");
+
+my ($time, $status_code);
+# create the symlink
+symlink($dbdir, 'db') unless $upload_db;
+# run the program
+$timeout = $Globals::MAXTIME - int(&tv_interval($t0, [&gettimeofday()]) + 0.5);
+$status_code = invoke(
+  PROG => 'mast', 
+  ARGS => \@mast_args, 
+  BIN => '@BINDIR@', 
+  ALL_FILE => $messages, 
+  TIME => \$time,
+  TIMEOUT => $timeout,
+  OOT => \$oot);
+# remove the simlink
+unlink('db') unless $upload_db;
+
+my $status_msg;
+if ($oot) {
+    $status_msg = "Ran out of time! Stopping mast.";
+    add_status_msg($status_msg, $msg_list);
+    print STDERR $status_msg;
+}
+if ($status_code != 0 || $oot) {
+  if ($status_code == -1) {
+    $status_msg = "mast failed to run";
+  } elsif ($status_code & 127) {
+    $status_msg = "mast process died with signal " . 
+        ($status_code & 127) . ", " . 
+        (($status_code & 128) ? 'with' : 'without') . " coredump";
+  } else {
+    $status_msg = "mast exited with error code " . ($status_code >> 8);
+  }
+  print STDERR $status_msg;
+  push(@{$file_list}, {file => $messages, desc => 'Error Messages'});
+} else {
+  $status_msg = 'mast ran successfully in ' . 
+      (int($time * 100 + 0.5) / 100) . ' seconds';
+  push(@{$file_list}, {file => $messages, desc => 'Warning Messages'});
+}
+add_status_msg($status_msg, $msg_list);
+
+update_status($page, $program, 0, $file_list, $msg_list, 
+    ($status_code ? "Error" : "Done"));
+
+
+write_invocation_log($log_file, $log_date, $log_args);
+exit(1) if ($status_code || $oot);
+1;

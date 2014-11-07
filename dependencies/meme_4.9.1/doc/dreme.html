@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DREME - a motif discovery tool</title>
+    <link href="./meme-suite-docs.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+  </head>
+  <body>
+    <div class="memesuitelogo">
+      <h1>The MEME Suite</h1>
+      <h2>Motif-based sequence analysis tools</h2>
+    </div>
+    <h2><img src="images/dreme_logo.png" alt="DREME" title="DREME"></h2>
+    <div class="usage">
+      <h3>Usage:</h3> 
+      <code>dreme [options] -p &lt;sequence file&gt; [-n &lt;background sequence file&gt;]</code>
+    </div>
+    <h3>Description</h3>
+    <div class="indent">
+      <p>DREME (Discriminative Regular Expression Motif Elicitation) finds
+      relatively short motifs (up to 8 bases) fast, and can perform
+      <i>discriminative</i> motif discovery if given a negative set, consisting
+      of sequences unlikely to contain a motif of interest that is however
+      likely to be found in the main ("positive") sequence set. If you do not
+      provide a negative set the program shuffles the positive set to provide a
+      background (in the role of the negative set).</p>
+
+      <p>The input to DREME is one or two sets of DNA sequences.
+      The program uses a Fisher Exact Test to determine significance of each
+      motif found in the postive set as compared with its representation in the
+      negative set, using a significance threshold that may be set on the
+      command line.</p>
+
+      <p>DREME achieves its high speed by restricting its search to regular
+      expressions based on the IUPAC alphabet representing bases and ambiguous
+      characters, and by using a heuristic estimate of generalised motifs'
+      statistical significance.</p>
+    </div>
+
+    <h3>Inputs</h3>
+    <div class="indent">
+      <h4>Sequence file (positives)</h4>
+      <p>A collection of sequences in <a href="fasta-format.html">FASTA</a>
+      format. The sequences should all be approximately the same length.</p>
+    </div>
+    <h3>Optional Inputs</h3>
+    <div class="indent">
+      <h4>Background Sequence File (negatives)</h4>
+      <p>A collection of sequences in  <a href="fasta-format.html">FASTA</a>
+      format. The sequences should be approximately the same length as the
+      positive sequences.</p>
+      <p>If these sequences are not supplied then the program will shuffle
+      the positive sequences and use that set for the negative sequences.</p>
+    </div>
+    <h3>Output</h3>
+    <div class="indent">
+      <p>DREME writes an XML file to the output folder and converts it into a 
+      minimal MEME-formatted motif file and a human readable html file.</p>
+
+      <p>Additionally DREME can output motif logos if the -png and/or -eps options
+      are specified.</p>
+    </div>
+
+    <h3>Options:</h3> 
+    <div class="indent">
+      <table class="options">
+        <thead>
+          <tr>
+            <th>Option</th><th>Parameter</th><th>Description</th><th>Default Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th colspan="4">Output</th>
+          </tr>
+          <tr>
+            <td class="popt">-o</td><td><span class="pdat">name</span></td>
+            <td>Create a folder called <span class="pdat">name</span> and write
+            output files in it. This option is not compatible with -oc as only one
+            output folder is allowed.</td>
+            <td>The program behaves as if <code>-oc dreme_out</code> had been specified.</td>
+          </tr>
+          <tr>
+            <td class="popt">-oc</td><td><span class="pdat">name</span></td>
+            <td>Create a folder called <span class="pdat">name</span> but if it
+            already exists allow overwriting the contents. This option is not
+            compatible with -o as only one output folder is allowed.</td>
+            <td>The program behaves as if <code>-oc dreme_out</code> had been
+            specified.</td>
+          </tr>
+          <tr>
+            <td class="popt">-png</td><td>&nbsp;</td>
+            <td>Output motif logo images in portable network graphics (png)
+            format. This format is useful for display on websites.</td>
+            <td>Images are not output in png format.</td>
+          </tr>
+          <tr>
+            <td class="popt">-eps</td><td>&nbsp;</td>
+            <td>Output motif logo images in Encapsulated Postscript (eps)
+            format. This format is useful for inclusion in publications as
+            it is a vector graphics format and can be easily scaled.</td>
+            <td>Images are not output in eps format.</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <th colspan="4">General</th>
+          </tr>
+          <tr>
+            <td class="popt">-g</td><td><span class="pdat">ngen</span></td>
+            <td>Set the number of REs to generalize. Increasing
+            <span class="pdat">ngen</span> will make the search more
+            through at some cost in speed.</td>
+            <td>DREME will generalise 100 REs.</td>
+          </tr>
+          <tr>
+            <td class="popt">-s</td><td><span class="pdat">seed</span></td>
+            <td>Set the seed for the random number generator used to shuffle
+            the sequences. When the <span class="popt">-n</span> option is
+            given the negative sequences will be used instead of shuffling.</td>
+            <td>The random number generator is initilised with a value of 1.</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <th colspan="4">Stopping Conditions</th>
+          </tr>
+          <tr>
+            <td class="popt">-e</td><td><span class="pdat">e</span></td>
+            <td>Stop searching for motifs when the next motif's <i>E</i>-value
+              is &gt; <span class="pdat">e</span>.</td>
+            <td>Stop discovering motifs if the <i>E</i>-value threshold of 0.05
+            is exceeded.</td>
+          </tr>
+          <tr>
+            <td class="popt">-m</td><td><span class="pdat">m</span></td>
+            <td>Stop searching for motifs when <span class="pdat">m</span>
+            motifs have been found.</td>
+            <td>There is no limit on the number of discovered motifs.</td>
+          </tr>
+          <tr>
+            <td class="popt">-t</td><td><span class="pdat">t</span></td>
+            <td>Stop searching for motifs when <span class="pdat">t</span>
+            seconds have elapsed.</td>
+            <td>There is no limit on the time taken to discover motifs.</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <th colspan="4">Set Core Motif Width</th>
+          </tr>
+          <tr>
+            <td class="popt">-mink</td><td><span class="pdat">mink</span></td>
+            <td>Set the minimum width of the motif core.</td>
+            <td>A minimum core width of 3 is used.</td>
+          </tr>
+          <tr>
+            <td class="popt">-maxk</td><td><span class="pdat">maxk</span></td>
+            <td>Set the maximum width of the motif core.</td>
+            <td>A maximum core width of 7 is used.</td>
+          </tr>
+          <tr>
+            <td class="popt">-k</td><td><span class="pdat">k</span></td>
+            <td>Set the width of the motif core. This sets minimum width and
+            maximum width to the same number.</td>
+            <td>The defaults for minimum and maximum width are used.</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <th colspan="4">Miscellaneous</th>
+          </tr>
+          <tr>
+            <td class="popt">-desc</td>
+            <td><span class="pdat">description</span></td>
+            <td>Include the text <span class="pdat">description</span> in the
+            HTML output.</td>
+            <td>No description in the HTML output.</td>
+          </tr>
+          <tr>
+            <td class="popt">-dfile</td>
+            <td><span class="pdat">desc file</span></td>
+            <td>Include the first 500 characters of text from the file
+            <span class="pdat">desc file</span> in the HTML output.</td>
+            <td>No description in the HTML output.</td>
+          </tr>
+          <tr>
+            <td class="popt">-verbosity</td><td>1|2|3|4|5</td>
+            <td>A number that regulates the verbosity level of the output 
+            information messages. If set to 1 (quiet) then it will only 
+            output error messages whereas the other extreme 5 (dump) 
+            outputs lots of mostly useless information.</td>
+            <td>The verbosity level is set to 2 (normal).</td>
+          </tr>
+          <tr>
+            <td class="popt">-h</td><td>&nbsp;</td>
+            <td>Display a usage message and exit.</td>
+            <td>Run as normal</td>
+        </tbody>
+        <tbody>
+          <tr>
+            <th colspan="4">Experimental (use at own risk)</th>
+          </tr>
+          <tr>
+            <td class="popt">-l</td><td>&nbsp;</td>
+            <td>Print list of enrichment of all REs tested.</td>
+            <td>&nbsp;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

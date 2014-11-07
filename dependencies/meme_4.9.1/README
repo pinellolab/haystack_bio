@@ -1,0 +1,91 @@
+
+                               README
+
+=============================================================================
+                           Introduction             
+=============================================================================
+The  MEME suite provides online tools for discovering and using protein and 
+DNA sequence motifs.  A motif is a pattern of nucleotides or amino acids that 
+appears repeatedly in a group of related  DNA or protein sequences.  The MEME 
+suite represents motifs as position-dependent scoring matrices. 
+
+The MEME suite consists of programs which allow you to: 
+  meme      - for discovery of motifs shared by a group of sequences, 
+  mast      - for search of databases for sequences containing these motifs,
+  tomtom    - for searching databases of motifs for similar motifs,
+  gomo      - for finding Gene Ontology terms linked to the motifs,
+  glam2     - for discovery of gapped motifs,
+  glam2scan - for scanning sequences with gapped motifs,
+  fimo      - for scanning sequences with motifs,
+  mcast     - for finding motif clusters,
+  meme-chip - for analysis of large DNA datasets like ChIPseq output,
+  spamo     - for finding motif complexes by analysing motif spacing,
+  dreme     - for discovery of short regular expression motifs,
+and that's just the web enabled tools.
+
+You can download the C source code for MEME suite from
+http://meme.nbcr.net/meme/meme-download.html
+
+You can also use the MEME suite via its website at http://meme.nbcr.net
+
+To cite the full MEME suite, please cite:
+    Timothy L. Bailey, Mikael Bodén, Fabian A. Buske, Martin Frith, 
+    Charles E. Grant, Luca Clementi, Jingyuan Ren, Wilfred W. Li, 
+    William S. Noble, "MEME SUITE: tools for motif discovery and searching", 
+    Nucleic Acids Research, 37:W202-W208, 2009.
+
+To cite individual tools, please check the citation page:
+    http://meme.nbcr.net/meme/doc/cite.html
+
+=============================================================================
+                          Installation         
+=============================================================================
+See INSTALL for operating system requirements, prerequisite software, 
+and installation instructions.
+
+=============================================================================
+                          Documentation 
+=============================================================================
+Documentation is available online at http://meme.nbcr.net/meme
+If you did installation with the --enable-web switch, the html documentation
+will be installed in your <install-path>/web/ directory. 
+
+=============================================================================
+                        Using MEME/MAST
+=============================================================================
+To find out how to use MEME or MAST execute:
+    meme
+or
+    mast
+
+The usage will be printed on stdout.
+
+=============================================================================
+                      Problems and comments 
+=============================================================================
+Please address any problems or comments to: 
+
+    meme@nbcr.net
+
+=============================================================================
+                          Release Notes 
+=============================================================================
+See file <install-path>/web/release_notes.html
+
+=============================================================================
+                          Developers Notes
+=============================================================================
+Detailed notes are given in the MEME wiki: 
+  https://nbcr.net/pub/wiki/index.php?title=MEME_Developers%27_Guide
+
+1. Clone from bitbucket (you have to be granted access to this mercurial repository):
+    hg clone ssh://hg@bitbucket.org/tlbailey/meme
+
+2. To create a distribution tar ball meme_VERSION.tar.gz.  (Note: the
+        version number is set in configure.ac using variable
+        AM_INIT_AUTOMAKE.)
+    cd trunk
+    ./bootstrap
+    ./configure --enable-web --enable-opt --enable-build-libxml2 --enable-build-libxslt
+    make dist
+

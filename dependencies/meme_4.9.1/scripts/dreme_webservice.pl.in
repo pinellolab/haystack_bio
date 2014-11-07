@@ -1,0 +1,197 @@
+#!@WHICHPERL@
+=head1 NAME
+
+dreme_webservice - Run dreme in a restricted mode and create an index webpage.
+
+=head1 SYNOPSIS
+
+dreme_webservice [options] <positive sequences file>
+
+  Options:
+    -n <file>         file containing negative sequences
+    -norc             use given strand only
+    -e <evalue>       maximum motif evalue
+    -m <count>        maximum motif count
+    -help             brief help message
+
+=cut
+
+use strict;
+use warnings;
+
+use Fcntl qw(SEEK_SET);
+use File::Spec::Functions qw(tmpdir);
+use File::Temp qw(tempfile);
+use Getopt::Long;
+use Pod::Usage;
+
+use lib qw(@PERLLIBDIR@);
+
+use ExecUtils qw(stringify_args invoke);
+use MemeWebUtils qw(add_status_msg update_status loggable_date write_invocation_log);
+use Globals;
+
+# constants
+my $tmpdir = '@TMP_DIR@';
+# use the perl default if none is supplied or the replace fails
+$tmpdir = &tmpdir() if ($tmpdir eq '' || $tmpdir =~ m/^\@TMP[_]DIR\@$/);
+
+# variables for the service invocation log
+my $log_args = stringify_args(@ARGV);
+my $log_date = loggable_date();
+my $log_file = 'dreme-log';
+
+# error files
+my $messages = "messages.txt";
+
+#status page
+my $file_list;
+my @arg_errors = ();
+my $msg_list = [];
+my $program = 'DREME';
+my $page = 'index.html';
+my $refresh = 10;
+
+# required parameters
+my $positives;
+# option defaults
+my $help = 0; # FALSE
+my $negatives = undef;
+my $norc = 0; # FALSE
+my $evalue_threshold = undef;
+my $count_threshold = undef;
+
+add_status_msg('Parsing arguments', $msg_list);
+
+# redirect stderr so we can get the error message from GetOpts
+my ($err_old, $err_tmp, $opts_ok, $opts_msg);
+open($err_old, ">&STDERR") or die("Can't dup STDERR: $!");
+$err_tmp = tempfile('GetOptions_XXXXXXXXXX', DIR => $tmpdir, UNLINK => 1); # make a temporary file
+open(STDERR, '>&', $err_tmp) or die("Can't redirect STDERR: $!");
+# parse options
+$opts_ok = GetOptions(
+  'n=s' => \$negatives, 
+  'norc' => \$norc,
+  'e=f' => \$evalue_threshold, 
+  'm=i' => \$count_threshold,
+  'help|?' => \$help
+);
+($positives) = @ARGV;
+# display help
+pod2usage(1) if $help;
+# reset stderr and get the error message if any
+open(STDERR, ">&", $err_old) or die("Can't reset STDERR: $!");
+seek($err_tmp, 0, SEEK_SET);
+while ($opts_msg = <$err_tmp>) {
+  chomp($opts_msg);
+  push(@arg_errors, $opts_msg);
+}
+close($err_tmp);
+
+# test the arguments
+if (defined($negatives)) {
+  unless (-e $negatives) {
+    push(@arg_errors, "Value \"$negatives\" invalid for option n (file does not exist)")
+  }
+} else {
+  $negatives = '';
+}
+if (defined($evalue_threshold)) {
+  unless ($evalue_threshold > 0) {
+    push(@arg_errors, "Value $evalue_threshold invalid for option e (positive number expected)");
+  }
+}
+if (defined($count_threshold)) {
+  unless ($count_threshold >= 1) {
+    push(@arg_errors, "Value $count_threshold invalid for option m (positive number expected)");
+  }
+}
+if (not defined($positives)) {
+  push(@arg_errors, "Parameter sequences is required");
+  $positives = '';
+} elsif (not -e $positives) {
+  push(@arg_errors, "Value \"$positives\" invalid for parameter sequences (file does not exist)");
+}
+
+$opts_ok = 0 if (scalar(@arg_errors) > 0);
+foreach my $arg_error (@arg_errors) {
+  print STDERR $arg_error, "\n";
+  add_status_msg($arg_error, $msg_list);
+}
+
+# setup status page
+$file_list = [{file => 'dreme.html', desc => 'DREME html output'},
+    {file => 'dreme.xml', desc => 'DREME xml output'}, 
+    {file => 'dreme.txt', desc => 'DREME txt output'},
+    {file => $positives, desc => 'Input sequences'},
+    {file => $negatives, desc => 'Input comparative sequences'}
+];
+
+
+if ($opts_ok) {
+  add_status_msg('Arguments ok', $msg_list);
+} else {
+  add_status_msg("Error parsing arguments", $msg_list);
+}
+
+update_status($page, $program, ($opts_ok ? $refresh : 0), $file_list, 
+    $msg_list, ($opts_ok ? "Starting" : "Error"));
+
+# exit if there was an error reading the arguments
+unless ($opts_ok) {
+  write_invocation_log($log_file, $log_date, $log_args);
+  pod2usage(2);
+}
+
+# construct the arguments to dreme
+my @dreme_args = ('-png', '-v', 1, '-oc', '.', '-t', $Globals::MAXTIME, '-p', $positives);
+push(@dreme_args, '-n', $negatives) if $negatives;
+push(@dreme_args, '-norc') if ($norc);
+push(@dreme_args, '-e', $evalue_threshold) if defined($evalue_threshold);
+push(@dreme_args, '-m', $count_threshold) if defined($count_threshold);
+push(@dreme_args, '-dfile', 'description') if (-e 'description');
+
+add_status_msg('Starting ' . stringify_args('dreme', @dreme_args), $msg_list);
+
+update_status($page, $program, $refresh, $file_list, $msg_list, "Starting");
+
+my $time = 0;
+# run the program
+my $status_code = invoke(
+  PROG => 'dreme', 
+  ARGS => \@dreme_args,
+  BIN => '@BINDIR@', 
+  ALL_FILE => $messages, 
+  TIME => \$time
+);
+
+# check that the program succeeded
+my $status_msg;
+if ($status_code != 0) {
+  if ($status_code == -1) {
+    $status_msg = $program . " failed to run";
+  } elsif ($status_code & 127) {
+    $status_msg = $program . " process died with signal " . 
+        ($status_code & 127) . ", " . 
+        (($status_code & 128) ? 'with' : 'without') . " coredump";
+  } else {
+    $status_msg = $program . " exited with error code " . ($status_code >> 8);
+  }
+  print STDERR $status_msg;
+  push(@{$file_list}, {file => $messages, desc => 'Error Messages'});
+} else {
+  $status_msg = $program . ' ran successfully in ' . 
+      (int($time * 100 + 0.5) / 100) . ' seconds';
+  push(@{$file_list}, {file => $messages, desc => 'Warning Messages'});
+}
+add_status_msg($status_msg, $msg_list);
+
+update_status($page, $program, 0, $file_list, $msg_list, 
+    ($status_code ? "Error" : "Done"));
+
+write_invocation_log($log_file, $log_date, $log_args);
+
+# exit if there was an error running DREME
+exit(1) if ($status_code);
+
+1;

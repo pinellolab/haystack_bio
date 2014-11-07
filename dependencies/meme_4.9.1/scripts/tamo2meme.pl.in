@@ -1,0 +1,300 @@
+#!@WHICHPERL@ -w
+#
+# $Id $
+# $Log $
+#
+# FILE: tamo2meme
+# AUTHOR: Timothy L. Bailey
+# CREATE DATE: 18/04/08
+# DESCRIPTION: Convert a file containing list of TFBS motif matrices from TAMO
+# to MEME output format.
+
+use warnings;
+use strict;
+
+use lib qw(@PERLLIBDIR@);
+
+use MotifUtils qw(intern_to_meme read_background_file);
+
+use Fcntl qw(O_RDONLY);
+use Getopt::Long;
+use Pod::Usage;
+use Scalar::Util qw(looks_like_number);
+
+=head1 SYNOPSIS
+
+tamo2meme [options] <tamo file>
+
+ Options:
+  -skip <TAMO ID>               skip this ID (may be repeated)
+  -numbers                      use numbers instead of strings as motif names
+  -bg <background file>         file with background frequencies of letters;
+                                default: uniform background
+  -pseudo <total pseudocounts>  add <total pseudocounts> times letter
+                                background to each frequency; default: 0
+  -logodds                      print log-odds matrix, too;
+                                default: print frequency matrix only
+  -url <website>                website for the motif; The tamo ID is
+                                substituted for MOTIF_NAME; default: no url
+
+=cut
+
+# Set parameter defaults
+my %skips = ();
+my $use_numbers = 0;
+my $bg_file;
+my $pseudo_total = 0;
+my $print_logodds = 0;
+my $url_pattern = "";
+my $tamo_file;
+
+GetOptions("skip=s" => sub {$skips{$_[1]} = 1}, "numbers" => \$use_numbers,
+  "bg=s" => \$bg_file, "pseudo=f" => \$pseudo_total, "logodds" => \$print_logodds,
+  "url=s" => \$url_pattern) or pod2usage(2);
+#check tamo file
+pod2usage("A tamo file must be specified for the conversion.") unless @ARGV;
+$tamo_file = shift(@ARGV);
+pod2usage("Only one tamo file may be specified for the conversion.") if @ARGV;
+#check pseudo total
+pod2usage("Option -pseudo must have a positive value.") if ($pseudo_total < 0);
+
+# read the background file
+my %bg = &read_background_file(1, $bg_file);
+
+# Open the tamo file for reading.
+my $tamo_fp;
+sysopen($tamo_fp, $tamo_file, O_RDONLY) || die("Can't open $tamo_file.\n");
+
+# Read the input file.
+my %non_unique_ids = ();
+my $line;
+my %motifs;
+my $motif;
+my @ALPH = qw(A C G T);
+my $line_number = 0;
+while ($line = <$tamo_fp>) {
+  chomp($line);
+  $line_number++;
+
+  if ($line =~ m/^Log-odds matrix.*\((\d+)\)/) {
+    my $sites = $1;
+    die("Expected motif source before next motif! Line $line_number\n") if $motif;
+    $motif = &read_tamo_matrix($tamo_fp);
+    $sites = 20 if $sites == 0;
+    $motif->{sites} = $sites;
+  } elsif ($line =~ m/^Source:\s+(\S+)\b/) {
+    my $id = $1;
+    die("Expected motif log-odds matrix before motif source! Line $line_number\n") unless $motif;
+    if ($skips{$id}) {
+      $motif = undef;
+      next;
+    }
+    my $url = $url_pattern;
+    $url =~ s/MOTIF_NAME/$id/g; #use the original id in the url
+    if (defined $non_unique_ids{$id}) {
+      $id .= "_" . ++$non_unique_ids{$id};
+    } else {
+      $non_unique_ids{$id} = 0;
+    }
+    $motif->{id} = $id;
+    $motif->{url} = $url;
+    $motifs{$id} = $motif;
+    $motif = undef;
+  }
+}
+close($tamo_fp);
+
+unless ($bg_file) {
+  my ($bgATsum, $bgATcount) = (0,0);
+  # sum up all the background values
+  # from all the motifs
+  foreach $motif (values %motifs) {
+    $bgATsum += $motif->{bg}->{A};
+    $bgATcount++;
+  }
+  # calculate the average background
+  $bg{A} = $bgATsum / $bgATcount;
+  $bg{C} = 0.5 - $bg{A};
+  $bg{G} = $bg{C};
+  $bg{T} = $bg{A};
+  $bg{dna} = 1;
+  $bg{source} = "multiple tamo log-odds matricies";
+}
+# set the background
+foreach $motif (values %motifs) {
+  $motif->{bg} = \%bg;
+}
+# apply the pseudocount
+if ($pseudo_total > 0) {
+  my $count_total = $motif->{sites} + $pseudo_total;
+  foreach $motif (values %motifs) {
+    $motif->{pseudo} = $pseudo_total;
+    for (my $j = 0; $j < scalar(@ALPH); ++$j) {
+      my $bgfreq = $bg{$ALPH[$j]};
+      my $bgcount = $bgfreq * $pseudo_total;
+      for (my $i = 0; $i < $motif->{width}; ++$i) {
+        my $freq = $motif->{pspm}->{$ALPH[$j]}->[$i];
+        my $count = $freq * $motif->{sites} + $bgcount;
+        $motif->{pspm}->{$ALPH[$j]}->[$i] = $count / $count_total;
+      }
+    }
+  }
+}
+
+my $num_motifs = 0;
+foreach my $name (sort keys %motifs) {
+  my $motif = $motifs{$name};
+  if ($use_numbers) {
+    $motif->{id} = $num_motifs + 1;
+    $motif->{alt} = $name;
+  }
+  print intern_to_meme($motif, $print_logodds, 1, !($num_motifs++));
+}
+
+
+
+#
+# Read in the tamo matrix
+# It's a DNA log odds matrix in a weird order
+#
+sub read_tamo_matrix {
+  my ($fp) = @_;
+  my @alphabet = qw(A C T G);
+  my @alphabeti = (0, 1, 3, 2);
+  my @llm = ();
+  my @pm = ();
+  my $length = -1;
+
+  # read the headers, which we don't actually need
+  my $line = <$fp>;
+  $line_number++;
+  # read each line of the log-odds matrix
+  for (my $i = 0; $i < 4; $i++) {
+    $line = <$fp>;
+    $line_number++;
+    my $alph = $alphabet[$i];
+    die("Expected #$alph at start of log-odds matrix line. Line $line_number\n") unless $line =~ m/^#[$alph]\s/;
+    chomp($line); # remove newline
+    my @elems = split(/\s+/, $line);
+    shift(@elems); # get rid of the #A or #G or #T or #C
+    pop(@elems) if ($elems[-1] =~ m/^\s*$/); # get rid of trailing space
+    # check that everything that remains is a number
+    for (my $j = 0; $j < scalar(@elems); $j++) {
+      die("Expected number in log-odds matrix line. Line $line_number\n") unless looks_like_number($elems[$j]);
+    }
+    if ($length == -1) {
+      $length = scalar(@elems);
+      for (my $j = 0; $j < $length*4; $j++) {
+        $llm[$j] = 0;
+      }
+    } else {
+      die("Expected $length elements in row. Line $line_number\n") unless ($length == scalar(@elems));
+    }
+    # copy values over to matrix and transpose
+    for (my $j = 0; $j < $length; $j++) {
+      $llm[$alphabeti[$i] + $j * 4] = $elems[$j];
+    }
+  }
+
+  # Compute background model from log-likelihood matrix
+  #  by noting that:   
+  #       pA  + pT  + pC  + pG  = 1
+  #       and     bgA + bgT + bgC + bgG = 1
+  #       and     bgA = bgT,   bgC = bgG
+  #       and so  bgA = 0.5 - bgC
+  #       and     pA  = lA * bgA,  etc for T, C, G
+  #       so...
+  #              (lA + lT)bgA + (lC + lG)bgC          =  1
+  #              (lA + lT)bgA + (lC + lG)(0.5 - bgA)  =  1
+  #              (lA + lT - lC - lG)bgA +(lC +lG)*0.5 =  1
+  #               bgA                                 =  {1 - 0.5(lC + lG)}
+  #                                                      / (lA + lT - lC - lG)
+  my $bgATtot = 0;
+  my $bgATcount = 0;
+  my ($bgAT, $bgGC) = (0.25, 0.25);
+  for (my $j = 0; $j < $length; $j++) {
+    my $offset = 4 * $j;
+    my ($lA, $lC, $lG, $lT) = @llm[$offset..($offset+3)];
+    next if (&near0($lA) and &near0($lC) and &near0($lG) and &near0($lT));
+    my $ATtot = (2 ** $lA) + (2 ** $lT);
+    my $GCtot = (2 ** $lG) + (2 ** $lC);
+    next if (&near0($ATtot - $GCtot));
+    my $bgAT_j = (1.0 - 0.5 * $GCtot) / ($ATtot - $GCtot);
+    next if ($bgAT_j < 0.1 or $bgAT_j > 1.1);
+    $bgATtot += $bgAT_j;
+    $bgATcount++;
+  }
+  if ($bgATcount > 0) {
+    $bgAT = $bgATtot / $bgATcount;
+    $bgGC = 0.5 - $bgAT;
+    #print "AT: $bgAT   GC: $bgGC\n";
+  } else {
+    #print "Can not calculate bg\n";
+  }
+
+  # compute the probability matrix
+  # ll         = log(p / bg);
+  # ll         =  log(p) - log(bg);
+  # log(p)     = ll + log(bg);
+  # 2 ^ log(p) = 2 ^ (ll + log(bg))
+  # p          = 2 ^ (ll + log(bg))
+  my $log_bgAT = log($bgAT) / log(2);
+  my $log_bgGC = log($bgGC) / log(2);
+  my @log_bg = ($log_bgAT, $log_bgGC, $log_bgGC, $log_bgAT);
+  for (my $j = 0; $j < $length; $j++) {
+    for (my $i = 0; $i < 4; $i++) {
+      my $offset = $j*4 + $i;
+      $pm[$offset] = (2 ** ($llm[$offset] + $log_bg[$i]));
+      # clip to bounds
+      if ($pm[$offset] < 0) { $pm[$offset] = 0;}
+    }
+  }
+
+  # put into internal motif format
+  my $motif = {
+    bg => {
+      A => $bgAT,
+      C => $bgGC,
+      G => $bgGC,
+      T => $bgAT,
+      dna => 1,
+      source => "tamo log-odds matrix"
+    },
+    strands => 2,
+    id => "",
+    alt => "",
+    url => "",
+    width => $length,
+    sites => 20,
+    pseudo => 0,
+    evalue => 0,
+    pspm => {
+      A => [],
+      C => [],
+      G => [],
+      T => []
+    }
+  };
+  # normalise and assign to matrix
+  for (my $j = 0; $j < $length; $j++) {
+    my $offset = $j*4;
+    my $row_sum = $pm[$offset + 0] + $pm[$offset + 1] + $pm[$offset + 2] + $pm[$offset + 3];
+    # avoid division by zero
+    if ($row_sum == 0) {
+      $pm[$offset + 0] = 0.25;
+      $pm[$offset + 1] = 0.25;
+      $pm[$offset + 2] = 0.25;
+      $pm[$offset + 3] = 0.25;
+      $row_sum = 1;
+    }
+    $motif->{pspm}->{A}->[$j] = $pm[$offset + 0] / $row_sum;
+    $motif->{pspm}->{C}->[$j] = $pm[$offset + 1] / $row_sum;
+    $motif->{pspm}->{G}->[$j] = $pm[$offset + 2] / $row_sum;
+    $motif->{pspm}->{T}->[$j] = $pm[$offset + 3] / $row_sum;
+  }
+  return $motif;
+}
+
+sub near0 {
+  return (-0.01 < $_[0] and $_[0] < 0.01);
+}

@@ -1,0 +1,344 @@
+#!@WHICHPERL@
+=head1 NAME
+
+centrimo_webservice - Run centrimo in a restricted mode and create an index webpage.
+
+=head1 SYNOPSIS
+
+centrimo_webservice [options] <sequences file> <motif databases>
+
+  Options:
+    -local            compute the enrichment of all regions; 
+                       default: central regions only
+    -score <score>    minimum score counted as hit
+    -optsc            search for optimized score above the threshold given by
+                       '-score' argument. Slow computation due to multiple tests
+    -ethresh <evalue> minimum E-value to report
+    -maxreg <region>  maximum region size to test
+    -neg <file>       plot a negative set of sequences against the default set
+                      and test each window with the Fisher Exact Test
+    -upmotifs <file>  uploaded motifs
+    -bfile <file>     background file (0-order)
+    -norc             don't scan with the reverse complement motif
+    -flip             allow 'fliping' of sequences causing rc matches to appear
+                       'reflected' around center
+    -noseq            don't store sequence ids in the output
+    -help             brief help message
+
+  Motif Databases
+    The motif databases may be specified as a pattern using * as a wildcard.
+
+=cut
+
+use strict;
+use warnings;
+
+use Cwd qw(getcwd abs_path);
+use Fcntl qw(SEEK_SET);
+use File::Basename qw(fileparse);
+use File::Spec::Functions qw(catfile tmpdir);
+use File::Temp qw(tempfile);
+use Getopt::Long;
+use Pod::Usage;
+use Time::HiRes qw(gettimeofday tv_interval);
+
+use lib qw(@PERLLIBDIR@);
+
+use ExecUtils qw(stringify_args stringify_args2 invoke);
+use MemeWebUtils qw(is_safe_name add_status_msg update_status loggable_date write_invocation_log);
+use Globals;
+
+# Globals
+my $t0 = [&gettimeofday()];
+# constants
+my $tmpdir = '@TMP_DIR@';
+my $bin_dir = '@BINDIR@';
+# use the perl default if none is supplied or the replace fails
+$tmpdir = &tmpdir() if ($tmpdir eq '' || $tmpdir =~ m/^\@TMP[_]DIR\@$/);
+my $dbdir = '@MEMEDB@/motif_databases';
+my $workdir = getcwd;
+
+# variables for the service invocation log
+my $log_args = stringify_args(@ARGV);
+my $log_date = loggable_date();
+my $log_file = 'centrimo-log';
+
+# timeout vars
+my $timeout = $Globals::MAXTIME; # updated just before use
+my $oot = 0; #FALSE
+
+# error files
+my $messages = "messages.txt";
+
+#status page
+my $file_list;
+my @arg_errors = ();
+my $msg_list = [];
+my $program = 'CENTRIMO';
+my $page = 'index.html';
+my $refresh = 10;
+
+# required parameters
+my @dbmotifs;
+my $sequences;
+# option defaults
+my $upmotif;
+my $neg_sequences;
+my $bfile;
+my $score;
+my $ethresh;
+my $maxreg;
+my $local = 0; #FALSE
+my $optsc = 0; #FALSE
+my $flip = 0; #FALSE
+my $norc = 0; #FALSE
+my $noseq = 0; #FALSE
+my $help = 0; #FALSE
+# derived defaults
+my @motifs = ();
+
+add_status_msg('Parsing arguments', $msg_list);
+
+# redirect stderr so we can get the error message from GetOpts
+my ($err_old, $err_tmp, $opts_ok, $opts_msg);
+open($err_old, ">&STDERR") or die("Can't dup STDERR: $!");
+$err_tmp = tempfile('GetOptions_XXXXXXXXXX', DIR => $tmpdir, UNLINK => 1); # make a temporary file
+open(STDERR, '>&', $err_tmp) or die("Can't redirect STDERR: $!");
+# parse options
+$opts_ok = GetOptions(
+  'local' => \$local,
+  'score=f' => \$score,
+  'optsc' => \$optsc,
+  'ethresh=f' => \$ethresh,
+  'maxreg=i' => \$maxreg,
+  'upmotifs=s' => \$upmotif,
+  'bfile=s' => \$bfile,
+  'neg=s' => \$neg_sequences,
+  'norc' => \$norc,
+  'noseq' => \$noseq,
+  'flip' => \$flip,
+  'help|?' => \$help
+);
+($sequences, @dbmotifs) = @ARGV;
+# display help
+pod2usage(1) if $help;
+# reset stderr and get the error message if any
+open(STDERR, ">&", $err_old) or die("Can't reset STDERR: $!");
+seek($err_tmp, 0, SEEK_SET);
+while ($opts_msg = <$err_tmp>) {
+  chomp($opts_msg);
+  push(@arg_errors, $opts_msg);
+}
+close($err_tmp);
+
+# remove any path from the files to ensure they are in this directory
+unless (defined($sequences)) {
+  push(@arg_errors, "No sequences provided.");
+} else {
+  $sequences = fileparse($sequences);
+  if (not is_safe_name($sequences)) {
+    push(@arg_errors, "Sequences \"$sequences\" does not fit allowed file name pattern.");
+  } elsif (not -e $sequences) {
+    push(@arg_errors, "Sequences \"$sequences\" does not exist.");
+  } 
+}
+
+if (defined($neg_sequences)) {
+  $neg_sequences = fileparse($neg_sequences);
+  if (not is_safe_name($neg_sequences)) {
+    push(@arg_errors, "Negative sequences \"$neg_sequences\" does not fit allowed file name pattern.");
+  } elsif (not -e $neg_sequences) {
+    push(@arg_errors, "Negative sequences \"$neg_sequences\" does not exist.");
+  } 
+}
+
+if (defined($upmotif)) {
+  $upmotif = fileparse($upmotif);
+  if (not is_safe_name($upmotif)) {
+    push(@arg_errors, "Value \"$upmotif\" invalid for option upmotif (does not fit allowed file name pattern)");
+  } elsif (not -e $upmotif) {
+    push(@arg_errors, "Value \"$upmotif\" invalid for option upmotif (file does not exist)");
+  } else {
+    push(@motifs, $upmotif);
+  }
+} 
+
+if (@dbmotifs) {
+  # The expansion must be evaluated in the database directory
+  chdir($dbdir);
+  my @expanded_motifs = glob(join(' ', @dbmotifs));
+  chdir($workdir);
+  # check that the expanded files really are in the db dir
+  for (my $i = 0; $i < scalar(@expanded_motifs); $i++) {
+    $expanded_motifs[$i] = fileparse($expanded_motifs[$i]);
+    if (-e catfile($dbdir, $expanded_motifs[$i])) {
+      push(@motifs, catfile('db',$expanded_motifs[$i]));
+    }
+  }
+}
+
+unless (@motifs) {
+  push(@arg_errors, "No motifs provided.");
+}
+if (defined($bfile)) {
+  $bfile = fileparse($bfile);
+  if (not is_safe_name($bfile)) {
+    push(@arg_errors, "Value \"$bfile\" invalid for option bfile (does not fit allowed file name pattern)");
+  } elsif (not -e $bfile) {
+    push(@arg_errors, "Value \"$bfile\" invalid for option bfile (file does not exist)");
+  }
+}
+if (defined($ethresh)) {
+  if ($ethresh <= 0) {
+    push(@arg_errors, "Value \"$ethresh\" invalid for option ethresh (not a valid e-value)");
+  }
+}
+if (defined($maxreg)) {
+  if ($maxreg < 0) {
+    push(@arg_errors, "Value \"$maxreg\" invalid for option maxreg (must be >= 0)");
+  }
+}
+
+$opts_ok = 0 if (scalar(@arg_errors) > 0);
+foreach my $arg_error (@arg_errors) {
+  print STDERR $arg_error, "\n";
+  add_status_msg($arg_error, $msg_list);
+}
+
+# setup status page
+$file_list = [
+    {file => 'centrimo.html', desc => 'CentriMo HTML output'},
+    {file => 'centrimo.txt', desc => 'CentriMo text output'},
+    {file => $sequences, desc => 'Input Sequences'},
+    {file => $upmotif, desc => 'Uploaded Motifs'}
+];
+
+if ($opts_ok) {
+  add_status_msg('Arguments ok', $msg_list);
+} else {
+  add_status_msg("Error parsing arguments", $msg_list);
+}
+
+update_status($page, $program, ($opts_ok ? $refresh : 0), $file_list, 
+    $msg_list, ($opts_ok ? "Starting" : "Error"));
+
+# exit if there was an error reading the arguments
+unless ($opts_ok) {
+  write_invocation_log($log_file, $log_date, $log_args);
+  pod2usage(2);
+}
+
+my ($time, $status_code, $status_msg);
+
+# when no background provided run fasta-get-markov
+unless (defined($bfile)) {
+  $bfile = $sequences . '.bg';
+  push(@{$file_list}, {file => $bfile, desc => 'Calculated Background'});
+
+  $timeout = $Globals::MAXTIME - int(&tv_interval($t0, [&gettimeofday()]) + 0.5);
+  my %fasta_get_markov = (PROG => 'fasta-get-markov', BIN => $bin_dir,
+    ARGS => ['-nostatus', '-m', 1], OUT_FILE => $bfile,
+    ERR_FILE => $messages, IN_FILE => $sequences, TIME => \$time,
+    TIMEOUT => $timeout, OOT => \$oot);
+
+  add_status_msg('Starting fasta-get-markov (to calculate background)<br><code>' . 
+    stringify_args2(%fasta_get_markov) . '</code>', $msg_list);
+
+  update_status($page, $program, $refresh, $file_list, $msg_list, "Starting");
+
+  $status_code = invoke(%fasta_get_markov);
+  if ($oot) {
+    $status_msg = "Ran out of time! Stopping fasta-get-markov.";
+    add_status_msg($status_msg, $msg_list);
+    print STDERR $status_msg;
+  }
+  if ($status_code != 0 || $oot) {
+    if ($status_code == -1) {
+      $status_msg = "fasta-get-markov failed to run";
+    } elsif ($status_code & 127) {
+      $status_msg = "fasta-get-markov process died with signal " . 
+          ($status_code & 127) . ", " . 
+          (($status_code & 128) ? 'with' : 'without') . " coredump";
+    } else {
+      $status_msg = "fasta-get-markov exited with error code " . ($status_code >> 8);
+    }
+    add_status_msg($status_msg, $msg_list);
+    print STDERR $status_msg;
+    push(@{$file_list}, {file => $messages, desc => 'Error Messages'});
+    update_status($page, $program, 0, $file_list, $msg_list, "Error");
+    write_invocation_log($log_file, $log_date, $log_args);
+    exit(1);
+  }
+  $status_msg = 'fasta-get-markov ran successfully in ' . 
+      (int($time * 100 + 0.5) / 100) . ' seconds';
+  add_status_msg($status_msg, $msg_list);
+  update_status($page, $program, $refresh, $file_list, $msg_list, "In Progress");
+} else {
+  push(@{$file_list}, {file => $bfile, desc => 'Uploaded Background'});
+}
+
+# Run CentriMo
+my @centrimo_args = ('--oc', '.', '--verbosity', 1);
+push(@centrimo_args, '--noseq') if ($noseq);
+push(@centrimo_args, '--norc') if ($norc);
+push(@centrimo_args, '--local') if ($local);
+push(@centrimo_args, '--optimize_score') if ($optsc);
+push(@centrimo_args, '--score', $score) if (defined($score));
+push(@centrimo_args, '--ethresh', $ethresh) if (defined($ethresh));
+push(@centrimo_args, '--maxreg', $maxreg) if (defined($maxreg));
+push(@centrimo_args, '--neg', $neg_sequences) if (defined($neg_sequences));
+push(@centrimo_args, '--bgfile', $bfile) if (defined($bfile));
+push(@centrimo_args, '-dfile', 'description') if (-e 'description');
+push(@centrimo_args, $sequences, @motifs);
+add_status_msg('Starting centrimo<br><code>' . stringify_args('centrimo', @centrimo_args) . '</code>', $msg_list);
+
+update_status($page, $program, $refresh, $file_list, $msg_list, "In Progress");
+
+# create the symlink
+symlink($dbdir, 'db') if (@dbmotifs);
+# run the program
+$timeout = $Globals::MAXTIME - int(&tv_interval($t0, [&gettimeofday()]) + 0.5);
+$status_code = invoke(
+  PROG => 'centrimo', 
+  ARGS => \@centrimo_args, 
+  BIN => $bin_dir, 
+  ALL_FILE => $messages, 
+  TIME => \$time,
+  TIMEOUT => $timeout,
+  OOT => \$oot);
+# remove the simlink
+unlink('db') if (@dbmotifs);
+
+if ($oot) {
+  $status_msg = "Ran out of time! Stopping centrimo.";
+  add_status_msg($status_msg, $msg_list);
+  print STDERR $status_msg;
+}
+if ($status_code != 0 || $oot) {
+  if ($status_code == -1) {
+    $status_msg = "centrimo failed to run";
+  } elsif ($status_code & 127) {
+    $status_msg = "centrimo process died with signal " . 
+        ($status_code & 127) . ", " . 
+        (($status_code & 128) ? 'with' : 'without') . " coredump";
+  } else {
+    $status_msg = "centrimo exited with error code " . ($status_code >> 8);
+  }
+  print STDERR $status_msg;
+  push(@{$file_list}, {file => $messages, desc => 'Error Messages'});
+} else {
+  $status_msg = 'centrimo ran successfully in ' . 
+      (int($time * 100 + 0.5) / 100) . ' seconds';
+  push(@{$file_list}, {file => $messages, desc => 'Warning Messages'});
+}
+add_status_msg($status_msg, $msg_list);
+
+update_status($page, $program, 0, $file_list, $msg_list, 
+    ($status_code ? "Error" : "Done"));
+
+
+write_invocation_log($log_file, $log_date, $log_args);
+exit(1) if ($status_code || $oot);
+1;
+
+

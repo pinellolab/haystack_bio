@@ -1,0 +1,45 @@
+<!--
+FILE: meme2meme
+AUTHOR: James Johnson
+CREATE DATE: 1 September 2010
+PROJECT: MEME Suite
+-->
+<head>
+<title>meme2meme</title>
+<link href="./meme-suite.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+</head>
+<body>
+<div id="main">
+<script src="./meme-suite-logo.js" type="text/javascript">></script>
+<h1>meme2meme</h1>
+<p><b>Usage:</b> <code>meme2meme [options] [&lt;meme file&gt;]+</code></p>
+<p><b>Description:</b></p>
+<p>
+Convert and merge multiple MEME formatted files into a single minimal 
+meme format file.
+</p>
+<p><b>Input:</b></p>
+<p>Multiple meme files. The new meme html format is supported but the old html format is not.</p>
+
+<p><b>Options:</b></p>
+<dl>
+  <dt>-consensus</dt>
+  <dd>numeric names are swapped for an IUPAC consensus; default: use existing names</dd>
+  <dt>-numbers</dt>
+  <dd>use numbers instead of strings for motif names; default: use existing ID</dd>
+  <dt>-bg &lt;background file&gt;</dt><dd>file with background frequencies of letters; default: use first file background</dd>
+  <dt>-logodds</dt>
+  <dd>print log-odds matrix as well as frequency matrix; default: frequency matrix only</dd>
+  <dt>-url &lt;website&gt;</dt>
+  <dd>website for the motif if it doesn't have one already; The motif name is substituted for MOTIF_NAME; default: use existing url</dd>
+  <dt>-forceurl</dt>
+  <dd>Existing urls are ignored</dd>
+</dl>
+<p><b>Output:</b></p>
+<p>
+Writes MEME format to standard output.
+</p>
+</div>
+</body>
+</html>

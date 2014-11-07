@@ -1,0 +1,4042 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>MEME</title>
+<style type="text/css">
+    
+    /* START INCLUDED FILE "meme.css" */
+        /* The following is the content of meme.css */
+        body { background-color:white; font-size: 12px; font-family: Verdana, Arial, Helvetica, sans-serif;}
+
+        div.help {
+          display: inline-block;
+          margin: 0px;
+          padding: 0px;
+          width: 12px;
+          height: 13px;
+          cursor: pointer;
+          background-image: url("help.gif");
+          background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAANAQMAAACn5x0BAAAAAXNSR0IArs4c6QAAAAZQTFRFAAAAnp6eqp814gAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH2gMJBQgGYqhNZQAAACZJREFUCNdj+P+BoUGAoV+AYeYEEGoWYGgTYGgRAAm2gRGQ8f8DAOnhC2lYnqs6AAAAAElFTkSuQmCC");
+        }
+
+        div.help2 {
+          color: #999;
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          border: 1px solid #999;
+          font-size: 13px;
+          line-height:12px;
+          font-family: Helvetica, sans-serif;
+          font-weight: bold;
+          font-style: normal;
+          cursor: pointer;
+        }
+        div.help2:hover {
+          color: #000;
+          border-color: #000;
+        }
+        
+        p.spaced { line-height: 1.8em;}
+        
+        span.citation { font-family: "Book Antiqua", "Palatino Linotype", serif; color: #004a4d;}
+
+        p.pad { padding-left: 30px; padding-top: 5px; padding-bottom: 10px;}
+
+        td.jump { font-size: 13px; color: #ffffff; background-color: #00666a;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        a.jump { margin: 15px 0 0; font-style: normal; font-variant: small-caps;
+          font-weight: bolder; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h2.mainh {font-size: 1.5em; font-style: normal; margin: 15px 0 0;
+          font-variant: small-caps; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h2.line {border-bottom: 1px solid #CCCCCC; font-size: 1.5em; font-style: normal;
+          margin: 15px 0 0; padding-bottom: 3px; font-variant: small-caps;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h4 {border-bottom: 1px solid #CCCCCC; font-size: 1.2em; font-style: normal;
+          margin: 10px 0 0; padding-bottom: 3px; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h5 {margin: 0px}
+
+        a.help { font-size: 9px; font-style: normal; text-transform: uppercase;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        div.pad { padding-left: 30px; padding-top: 5px; padding-bottom: 10px;}
+        
+        div.pad1 { margin: 10px 5px;}
+
+        div.pad2 { margin: 25px 5px 5px;}
+        h2.pad2 { padding: 25px 5px 5px;}
+
+        div.pad3 { padding: 5px 0px 10px 30px;}
+
+        div.box { border: 2px solid #CCCCCC; padding:10px;}
+
+        div.bar { border-left: 7px solid #00666a; padding:5px; margin-top:25px; }
+
+        div.subsection {margin:25px 0px;}
+
+        img {border:0px none;}
+
+        th.majorth {text-align:left;}
+        th.minorth {font-weight:normal; text-align:left; width:8em; padding: 3px 0px;}
+        th.actionth {font-weight:normal; text-align:left;}
+
+        .strand_name {text-align:left;}
+        .strand_side {padding:0px 10px;}
+        .strand_start {padding:0px 10px;}
+        .strand_pvalue {text-align:center; padding:0px 10px;}
+        .strand_lflank {text-align:right; padding-right:5px; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace; color:gray;}
+        .strand_seq {text-align:center; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace;}
+        .strand_rflank {text-align:left; padding-left:5px; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace; color:gray;}
+
+        .block_td {height:25px;}
+        .block_container {position:relative; width:98%; height:25px; padding:0px; margin: 0px 0px 0px 1em;}
+        .block_motif {position:absolute; z-index:3; height:12px; top:0px; text-align:center; vertical-align:middle; background-color:cyan;}
+        .block_rule {position:absolute; z-index:2; width:100%; height:1px; top:12px; left:0px; background-color:gray;}
+        .block_plus_sym {position:absolute; z-index:4; line-height:12px; top:0px; left:-1em;}
+        .block_minus_sym {position:absolute; z-index:4; line-height:12px; top:13px; left:-1em;}
+
+        .tic_major {position:absolute; border-left:2px solid blue; height:0.5em; top:0em;}
+        .tic_minor {position:absolute; border-left:1px solid blue; height:0.2em; top:0em;}
+        .tic_label {position:absolute; top:0.5em;  height: 1em; text-align:center; vertical-align:middle}
+
+        .explain h5 {font-size:1em; margin-left: 1em;}
+
+        div.doc {margin-left: 2em; margin-bottom: 3em;}
+        
+        div.tabArea {
+          font-size: 80%;
+          font-weight: bold;
+        }
+
+        a.tab {
+          background-color: #ddddff;
+          border: 1px solid #000000;
+          padding: 2px 1em 2px 1em;
+          text-decoration: none;
+        }
+        div.tabArea.base a.tab {
+          border-top-width: 0px;
+        }
+        div.tabArea.top a.tab {
+          border-bottom-width: 0px;
+        }
+
+        a.tab, a.tab:visited {
+          color: #808080;
+        }
+
+        a.tab:hover {
+          background-color: #d0d0d0;
+          color: #606060;
+        }
+        a.tab.activeTab, a.tab.activeTab:hover, a.tab.activeTab:visited {
+          background-color: #f0f0f0;
+          color: #000000;
+        }
+        div.tabMain {
+          border: 1px solid #000000;
+          background-color: #ffffff;
+          padding: 5px;
+          margin-right: 5px;
+        }
+        th.trainingset {
+          border-bottom: thin dashed black; 
+          font-weight:normal; 
+          padding:0px 10px;
+        }
+        .dnaseq {
+          font-weight: bold; 
+          font-size: large; 
+          font-family: 'Courier New', Courier, monospace;
+        }
+        .dna_A {
+          color: rgb(204,0,0);
+        }
+        .dna_C {
+          color: rgb(0,0,204);
+        }
+        .dna_G {
+          color: rgb(255,179,0);
+        }
+        .dna_T {
+          color: rgb(0,128,0);
+        }
+    /* END INCLUDED FILE "meme.css" */
+    
+  </style>
+<script type="text/javascript">
+    
+    /* START INCLUDED FILE "motif_logo.js" */
+//======================================================================
+// start Alphabet object
+//======================================================================
+var Alphabet = function (alphabet, bg) {
+  "use strict";
+  var is_letter, is_prob, pos, letter, parts, i, freq;
+  //variable prototype
+  this.freqs = new Array();
+  this.alphabet = new Array();
+  this.letter_count = 0;
+  //construct
+  is_letter = /^\w$/;
+  is_prob = /^((1(\.0+)?)|(0(\.\d+)?))$/;
+  for (pos = 0; pos < alphabet.length; pos++) {
+    letter = alphabet.charAt(pos);
+    if (is_letter.test(letter)) {
+      this.alphabet[this.letter_count] = letter.toUpperCase();
+      this.freqs[this.letter_count] = -1;
+      this.letter_count++;
+    }
+  }
+  if (typeof bg !== "undefined") {
+    parts = bg.split(/\s+/);
+    for (i = 0, pos = 0; (i + 1) < parts.length; i += 2) {
+      letter = parts[i];
+      freq = parts[i+1];
+      if (is_letter.test(letter) && is_prob.test(freq)) {
+        letter = letter.toUpperCase();          //find the letter it matches
+        for (;pos < this.letter_count; pos++) {
+          if (this.alphabet[pos] == letter) {
+            break;
+          }
+        }
+        if (pos >= this.letter_count) {
+          throw new Error("NOT_IN_ALPHABET");
+        }
+        this.freqs[pos] = (+freq);
+      }
+    }
+  } else {
+    //assume uniform background
+    freq = 1.0 / this.letter_count;
+    for (pos = 0; pos < this.letter_count; pos++) {
+      this.freqs[pos] = freq;
+    }
+  }
+};
+
+
+Alphabet.prototype.get_ic = function() {
+  "use strict";
+  if (this.is_nucleotide()) {
+    return 2;
+  } else {
+    return Math.log(20) / Math.LN2;
+  }
+};
+
+Alphabet.prototype.get_size = function() {
+  "use strict";
+  return this.letter_count;
+};
+
+Alphabet.prototype.get_letter = function(alph_index) {
+  "use strict";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  return this.alphabet[alph_index];
+};
+
+Alphabet.prototype.get_bg_freq = function(alph_index) {
+  "use strict";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  if (this.freqs[alph_index] == -1) {
+    throw new Error("BG_FREQ_NOT_SET");
+  }
+  return this.freqs[alph_index];
+};
+
+Alphabet.prototype.get_colour = function(alph_index) {
+  "use strict";
+  var red, blue, orange, green, yellow, purple, magenta, pink, turquoise;
+  red = "rgb(204,0,0)";
+  blue = "rgb(0,0,204)";
+  orange = "rgb(255,179,0)";
+  green = "rgb(0,128,0)";
+  yellow = "rgb(255,255,0)";
+  purple = "rgb(204,0,204)";
+  magenta = "rgb(255,0,255)";
+  pink = "rgb(255,204,204)";
+  turquoise = "rgb(51,230,204)";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  if (this.is_nucleotide()) {
+    switch (this.alphabet[alph_index]) {
+      case "A":
+        return red;
+      case "C":
+        return blue;
+      case "G":
+        return orange;
+      case "T":
+        return green;
+      default:
+        throw new Error("Invalid nucleotide letter");
+    }
+  } else {
+    switch (this.alphabet[alph_index]) {
+      case "A":
+      case "C":
+      case "F":
+      case "I":
+      case "L":
+      case "V":
+      case "W":
+      case "M":
+        return blue;
+      case "N":
+      case "Q":
+      case "S":
+      case "T":
+        return green;
+      case "D":
+      case "E":
+        return magenta;
+      case "K":
+      case "R":
+        return red;
+      case "H":
+        return pink;
+      case "G":
+        return orange;
+      case "P":
+        return yellow;
+      case "Y":
+        return turquoise;
+      default:
+        throw new Error("Invalid protein letter");
+    }
+  }
+  return "black";
+};
+
+Alphabet.prototype.is_ambig = function(alph_index) {
+  "use strict";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  if (this.is_nucleotide()) {
+    return ("ACGT".indexOf(this.alphabet[alph_index]) == -1);
+  } else {
+    return ("ACDEFGHIKLMNPQRSTVWY".indexOf(this.alphabet[alph_index]) == -1);
+  }
+};
+
+Alphabet.prototype.get_index = function(letter) {
+  "use strict";
+  var i;
+  for (i = 0; i < this.letter_count; i++) {
+    if (this.alphabet[i] == letter.toUpperCase()) {
+      return i;
+    }
+  }
+  throw new Error("UNKNOWN_LETTER");
+};
+
+Alphabet.prototype.is_nucleotide = function() {
+  "use strict";
+  //TODO basic method, make better
+  if (this.letter_count < 20) {
+    return true;
+  }
+  return false;
+};
+
+Alphabet.prototype.toString = function() {
+  "use strict";
+  return (this.is_nucleotide() ? "Nucleotide" : "Protein") + 
+    " Alphabet " + (this.alphabet.join(""));
+};
+
+//======================================================================
+// end Alphabet object
+//======================================================================
+
+//======================================================================
+// start Symbol object
+//======================================================================
+var Symbol = function(alph_index, scale, alphabet) {
+  "use strict";
+  //variable prototype
+  this.symbol = alphabet.get_letter(alph_index);
+  this.scale = scale;
+  this.colour = alphabet.get_colour(alph_index);
+};
+
+Symbol.prototype.get_symbol = function() {
+  "use strict";
+  return this.symbol;
+};
+
+Symbol.prototype.get_scale = function() {
+  "use strict";
+  return this.scale;
+};
+
+Symbol.prototype.get_colour = function() {
+  "use strict";
+  return this.colour;
+};
+
+Symbol.prototype.toString = function() {
+  "use strict";
+  return this.symbol + " " + (Math.round(this.scale*1000)/10) + "%";
+};
+
+function compare_symbol(sym1, sym2) {
+  "use strict";
+  if (sym1.get_scale() < sym2.get_scale()) {
+    return -1;
+  } else if (sym1.get_scale() > sym2.get_scale()) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+//======================================================================
+// end Symbol object
+//======================================================================
+
+//======================================================================
+// start Pspm object
+//======================================================================
+var Pspm = function(matrix, name, ltrim, rtrim, nsites, evalue) {
+  "use strict";
+  var row, col, data, row_sum, delta, evalue_re;
+  if (typeof name !== "string") {
+    name = "";
+  }
+  this.name = name;
+  //construct
+  if (matrix instanceof Pspm) {
+    // copy constructor
+    this.alph_length = matrix.alph_length;
+    this.motif_length = matrix.motif_length;
+    this.name = matrix.name;
+    this.nsites = matrix.nsites;
+    this.evalue = matrix.evalue;
+    this.ltrim = matrix.ltrim;
+    this.rtrim = matrix.rtrim;
+    this.pspm = [];
+    for (row = 0; row < matrix.motif_length; row++) {
+      this.pspm[row] = [];
+      for (col = 0; col < matrix.alph_length; col++) {
+        this.pspm[row][col] = matrix.pspm[row][col];
+      }
+    }
+  } else {
+    // check parameters
+    if (typeof ltrim === "undefined") {
+      ltrim = 0;
+    } else if (typeof ltrim !== "number" || ltrim % 1 !== 0 || ltrim < 0) {
+      throw new Error("ltrim must be a non-negative integer, got: " + ltrim);
+    }
+    if (typeof rtrim === "undefined") {
+      rtrim = 0;
+    } else if (typeof rtrim !== "number" || rtrim % 1 !== 0 || rtrim < 0) {
+      throw new Error("rtrim must be a non-negative integer, got: " + rtrim);
+    }
+    if (typeof nsites !== "undefined") {
+      if (typeof nsites !== "number" || nsites <= 0) {
+        throw new Error("nsites must be a positive number, got: " + nsites);
+      }
+    }
+    if (typeof evalue !== "undefined") {
+      if (typeof evalue === "number") {
+        if (evalue < 0) {
+          throw new Error("evalue must be a non-negative number, got: " + evalue);
+        }
+      } else if (typeof evalue === "string") {
+        evalue_re = /^((?:[+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)|inf)$/;
+        if (!evalue_re.test(evalue)) {
+          throw new Error("evalue must be a non-negative number, got: " + evalue);
+        }
+      } else {
+        throw new Error("evalue must be a non-negative number, got: " + evalue);
+      }
+    }
+    // set properties
+    this.name = name;
+    this.nsites = nsites;
+    this.evalue = evalue;
+    this.ltrim = ltrim;
+    this.rtrim = rtrim;
+    if (typeof matrix === "string") {
+      // string constructor
+      data = parse_pspm_string(matrix);
+      this.alph_length = data["alph_length"];
+      this.motif_length = data["motif_length"];
+      this.pspm = data["pspm"];
+      if (typeof this.evalue === "undefined") {
+        if (typeof data["evalue"] !== "undefined") {
+          this.evalue = data["evalue"];
+        } else {
+          this.evalue = 0;
+        }
+      }
+      if (typeof this.nsites === "undefined") {
+        if (typeof data["nsites"] === "number") {
+          this.nsites = data["nsites"];
+        } else {
+          this.nsites = 20;
+        }
+      }
+    } else {
+      // assume pspm is a nested array
+      this.motif_length = matrix.length;
+      this.alph_length = (matrix.length > 0 ? matrix[0].length : 0);
+      if (typeof this.nsites === "undefined") {
+        this.nsites = 20;
+      }
+      if (typeof this.evalue === "undefined") {
+        this.evalue = 0;
+      }
+      this.pspm = [];
+      // copy pspm and check
+      for (row = 0; row < this.motif_length; row++) {
+        if (this.alph_length != matrix[row].length) {
+          throw new Error("COLUMN_MISMATCH");
+        }
+        this.pspm[row] = [];
+        row_sum = 0;
+        for (col = 0; col < this.alph_length; col++) {
+          this.pspm[row][col] = matrix[row][col];
+          row_sum += this.pspm[row][col];
+        }
+        delta = 0.1;
+        if (isNaN(row_sum) || (row_sum > 1 && (row_sum - 1) > delta) || 
+            (row_sum < 1 && (1 - row_sum) > delta)) {
+          throw new Error("INVALID_SUM");
+        }
+      }
+    }
+  }
+};
+
+Pspm.prototype.copy = function() {
+  "use strict";
+  return new Pspm(this);
+};
+
+Pspm.prototype.reverse_complement = function(alphabet) {
+  "use strict";
+  var x, y, temp, a_index, c_index, g_index, t_index, i, row, temp_trim;
+  if (this.alph_length != alphabet.get_size()) {
+    throw new Error("ALPHABET_MISMATCH");
+  }
+  if (!alphabet.is_nucleotide()) {
+    throw new Error("NO_PROTEIN_RC");
+  }
+  //reverse
+  x = 0;
+  y = this.motif_length-1;
+  while (x < y) {
+    temp = this.pspm[x];
+    this.pspm[x] = this.pspm[y];
+    this.pspm[y] = temp;
+    x++;
+    y--;
+  }
+  //complement
+  a_index = alphabet.get_index("A");
+  c_index = alphabet.get_index("C");
+  g_index = alphabet.get_index("G");
+  t_index = alphabet.get_index("T");
+  for (i = 0; i < this.motif_length; i++) {
+    row = this.pspm[i];
+    //swap A and T
+    temp = row[a_index];
+    row[a_index] = row[t_index];
+    row[t_index] = temp;
+    //swap C and G
+    temp = row[c_index];
+    row[c_index] = row[g_index];
+    row[g_index] = temp;
+  }
+  //swap triming
+  temp_trim = this.ltrim;
+  this.ltrim = this.rtrim;
+  this.rtrim = temp_trim;
+  //note that ambigs are ignored because they don't effect motifs
+  return this; //allow function chaining...
+};
+
+Pspm.prototype.get_stack = function(position, alphabet) {
+  "use strict";
+  var row, stack_ic, alphabet_ic, stack, i, sym;
+  if (this.alph_length != alphabet.get_size()) {
+    throw new Error("ALPHABET_MISMATCH");
+  }
+  row = this.pspm[position];
+  stack_ic = this.get_stack_ic(position, alphabet);
+  alphabet_ic = alphabet.get_ic();
+  stack = [];
+  for (i = 0; i < this.alph_length; i++) {
+    if (alphabet.is_ambig(i)) {
+      continue;
+    }
+    sym = new Symbol(i, row[i]*stack_ic/alphabet_ic, alphabet);
+    if (sym.get_scale() <= 0) {
+      continue;
+    }
+    stack.push(sym);
+  }
+  stack.sort(compare_symbol);
+  return stack;
+};
+
+Pspm.prototype.get_stack_ic = function(position, alphabet) {
+  "use strict";
+  var row, H, i;
+  if (this.alph_length != alphabet.get_size()) {
+    throw new Error("ALPHABET_MISMATCH");
+  }
+  row = this.pspm[position];
+  H = 0;
+  for (i = 0; i < this.alph_length; i++) {
+    if (alphabet.is_ambig(i)) {
+      continue;
+    }
+    if (row[i] === 0) {
+      continue;
+    }
+    H -= (row[i] * (Math.log(row[i]) / Math.LN2));
+  }
+  return alphabet.get_ic() - H;
+};
+
+Pspm.prototype.get_error = function(alphabet) {
+  "use strict";
+  var asize;
+  if (this.nsites === 0) {
+    return 0;
+  }
+  if (alphabet.is_nucleotide()) {
+    asize = 4;
+  } else {
+    asize = 20;
+  }
+  return (asize-1) / (2 * Math.log(2)*this.nsites);
+};
+
+Pspm.prototype.get_motif_length = function() {
+  "use strict";
+  return this.motif_length;
+};
+
+Pspm.prototype.get_alph_length = function() {
+  "use strict";
+  return this.alph_length;
+};
+
+Pspm.prototype.get_left_trim = function() {
+  "use strict";
+  return this.ltrim;
+};
+
+Pspm.prototype.get_right_trim = function() {
+  "use strict";
+  return this.rtrim;
+};
+
+Pspm.prototype.as_pspm = function() {
+  "use strict";
+  var out, row, col;
+  out = "letter-probability matrix: alength= " + this.alph_length + 
+      " w= " + this.motif_length + " nsites= " + this.nsites + 
+      " E= " + (typeof this.evalue === "number" ? 
+          this.evalue.toExponential() : this.evalue) + "\n";
+  for (row = 0; row < this.motif_length; row++) {
+    for (col = 0; col < this.alph_length; col++) {
+      if (col !== 0) {
+        out += " ";
+      }
+      out += this.pspm[row][col].toFixed(6);
+    }
+    out += "\n";
+  }
+  return out;
+};
+
+Pspm.prototype.as_pssm = function(alphabet, pseudo) {
+  "use strict";
+  var out, log2, total, row, col, p, bg, p2, score;
+  if (typeof pseudo === "undefined") {
+    pseudo = 0.1;
+  } else if (typeof pseudo !== "number") {
+    throw new Error("Expected number for pseudocount");
+  }
+  out = "log-odds matrix: alength= " + this.alph_length + 
+      " w= " + this.motif_length + 
+      " E= " + (typeof this.evalue == "number" ? 
+          this.evalue.toExponential() : this.evalue) + "\n";
+  log2 = Math.log(2);
+  total = this.nsites + pseudo;
+  for (row = 0; row < this.motif_length; row++) {
+    for (col = 0; col < this.alph_length; col++) {
+      if (col !== 0) {
+        out += " ";
+      }
+      p = this.pspm[row][col];
+      // to avoid log of zero we add a pseudo count
+      bg = alphabet.get_bg_freq(col);
+      p2 = (p * this.nsites + bg * pseudo) / total;
+      // now calculate the score
+      score = -10000;
+      if (p2 > 0) {
+        score = Math.round((Math.log(p2 / bg) / log2) * 100);
+      }
+      out += score;
+    }
+    out += "\n";
+  }
+  return out;
+};
+
+Pspm.prototype.toString = function() {
+  "use strict";
+  var str, i, row;
+  str = "";
+  for (i = 0; i < this.pspm.length; i++) {
+    row = this.pspm[i];
+    str += row.join("\t") + "\n";
+  }
+  return str;
+};
+
+function parse_pspm_properties(str) {
+  "use strict";
+  var parts, i, eqpos, before, after, properties, prop, num, num_re;
+  num_re = /^((?:[+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)|inf)$/;
+  parts = trim(str).split(/\s+/);
+  // split up words containing =
+  for (i = 0; i < parts.length;) {
+    eqpos = parts[i].indexOf("=");
+    if (eqpos != -1) {
+      before = parts[i].substr(0, eqpos);
+      after = parts[i].substr(eqpos+1);
+      if (before.length > 0 && after.length > 0) {
+        parts.splice(i, 1, before, "=", after);
+        i += 3;
+      } else if (before.length > 0) {
+        parts.splice(i, 1, before, "=");
+        i += 2;
+      } else if (after.length > 0) {
+        parts.splice(i, 1, "=", after);
+        i += 2;
+      } else {
+        parts.splice(i, 1, "=");
+        i++;
+      }
+    } else {
+      i++;
+    }
+  }
+  properties = {};
+  for (i = 0; i < parts.length; i += 3) {
+    if (parts.length - i < 3) {
+      throw new Error("Expected PSPM property was incomplete. "+
+          "Remaing parts are: " + parts.slice(i).join(" "));
+    }
+    if (parts[i+1] !== "=") {
+      throw new Error("Expected '=' in PSPM property between key and " +
+          "value but got " + parts[i+1]); 
+    }
+    prop = parts[i].toLowerCase();
+    num = parts[i+2];
+    if (!num_re.test(num)) {
+      throw new Error("Expected numeric value for PSPM property '" + 
+          prop + "' but got '" + num + "'");
+    }
+    properties[prop] = num;
+  }
+  return properties;
+}
+
+function parse_pspm_string(pspm_string) {
+  "use strict";
+  var header_re, lines, first_line, line_num, col_num, alph_length, 
+      motif_length, nsites, evalue, pspm, i, line, match, props, parts,
+      j, prob;
+  header_re = /^letter-probability\s+matrix:(.*)$/i;
+  lines = pspm_string.split(/\n/);
+  first_line = true;
+  line_num = 0;
+  col_num = 0;
+  alph_length;
+  motif_length;
+  nsites;
+  evalue;
+  pspm = [];
+  for (i = 0; i < lines.length; i++) {
+    line = trim(lines[i]);
+    if (line.length === 0) { 
+      continue;
+    }
+    // check the first line for a header though allow matrices without it
+    if (first_line) {
+      first_line = false;
+      match = header_re.exec(line);
+      if (match !== null) {
+        props = parse_pspm_properties(match[1]);
+        if (props.hasOwnProperty("alength")) {
+          alph_length = parseFloat(props["alength"]);
+          if (alph_length != 4 && alph_length != 20) {
+            throw new Error("PSPM property alength should be 4 or 20" +
+                " but got " + alph_length);
+          }
+        }
+        if (props.hasOwnProperty("w")) {
+          motif_length = parseFloat(props["w"]);
+          if (motif_length % 1 !== 0 || motif_length < 1) {
+            throw new Error("PSPM property w should be an integer larger " +
+                "than zero but got " + motif_length);
+          }
+        }
+        if (props.hasOwnProperty("nsites")) {
+          nsites = parseFloat(props["nsites"]);
+          if (nsites <= 0) {
+            throw new Error("PSPM property nsites should be larger than " +
+                "zero but got " + nsites);
+          }
+        }
+        if (props.hasOwnProperty("e")) {
+          evalue = props["e"];
+          if (evalue < 0) {
+            throw new Error("PSPM property evalue should be " +
+                "non-negative but got " + evalue);
+          }
+        }
+        continue;
+      }
+    }
+    pspm[line_num] = [];
+    col_num = 0;
+    parts = line.split(/\s+/);
+    for (j = 0; j < parts.length; j++) {
+      prob = parseFloat(parts[j]);
+      if (prob != parts[j] || prob < 0 || prob > 1) {
+        throw new Error("Expected probability but got '" + parts[j] + "'"); 
+      }
+      pspm[line_num][col_num] = prob;
+      col_num++;
+    }
+    line_num++;
+  }
+  if (typeof motif_length === "number") {
+    if (pspm.length != motif_length) {
+      throw new Error("Expected PSPM to have a motif length of " + 
+          motif_length + " but it was actually " + pspm.length);
+    }
+  } else {
+    motif_length = pspm.length;
+  }
+  if (typeof alph_length !== "number") {
+    alph_length = pspm[0].length;
+    if (alph_length != 4 && alph_length != 20) {
+      throw new Error("Expected length of first row in the PSPM to be " +
+          "either 4 or 20 but got " + alph_length);
+    }
+  }
+  for (i = 0; i < pspm.length; i++) {
+    if (pspm[i].length != alph_length) {
+      throw new Error("Expected PSPM row " + i + " to have a length of " + 
+          alph_length + " but the length was " + pspm[i].length);
+    }
+  }
+  return {"pspm": pspm, "motif_length": motif_length, 
+    "alph_length": alph_length, "nsites": nsites, "evalue": evalue};
+}
+//======================================================================
+// end Pspm object
+//======================================================================
+
+//======================================================================
+// start Logo object
+//======================================================================
+
+var Logo = function(alphabet, fine_text) {
+  "use strict";
+  this.alphabet = alphabet;
+  this.fine_text = fine_text;
+  this.pspm_list = [];
+  this.pspm_column = [];
+  this.rows = 0;
+  this.columns = 0;
+};
+
+Logo.prototype.add_pspm = function(pspm, column) {
+  "use strict";
+  var col;
+  if (typeof column === "undefined") {
+    column = 0;
+  } else if (column < 0) {
+    throw new Error("Column index out of bounds.");
+  }
+  this.pspm_list[this.rows] = pspm;
+  this.pspm_column[this.rows] = column;
+  this.rows++;
+  col = column + pspm.get_motif_length();
+  if (col > this.columns) {
+    this.columns = col;
+  }
+};
+
+Logo.prototype.get_columns = function() {
+  "use strict";
+  return this.columns;
+};
+
+Logo.prototype.get_rows = function() {
+  "use strict";
+  return this.rows;
+};
+
+Logo.prototype.get_pspm = function(row_index) {
+  "use strict";
+  if (row_index < 0 || row_index >= this.rows) {
+    throw new Error("INDEX_OUT_OF_BOUNDS");
+  }
+  return this.pspm_list[row_index];
+};
+
+Logo.prototype.get_offset = function(row_index) {
+  "use strict";
+  if (row_index < 0 || row_index >= this.rows) {
+    throw new Error("INDEX_OUT_OF_BOUNDS");
+  }
+  return this.pspm_column[row_index];
+};
+
+//======================================================================
+// end Logo object
+//======================================================================
+
+//======================================================================
+// start RasterizedAlphabet
+//======================================================================
+
+// Rasterize Alphabet
+// 1) Measure width of text at default font for all symbols in alphabet
+// 2) sort in width ascending
+// 3) Drop the top and bottom 10% (designed to ignore outliers like 'W' and 'I')
+// 4) Calculate the average as the maximum scaling factor (designed to stop I becoming a rectangular blob).
+// 5) Assume scale of zero would result in width of zero, interpolate scale required to make perfect width font
+// 6) Draw text onto temp canvas at calculated scale
+// 7) Find bounds of drawn text
+// 8) Paint on to another canvas at the desired height (but only scaling width to fit if larger).
+var RasterizedAlphabet = function(alphabet, font, target_width) {
+  "use strict";
+  var default_size, safety_pad, canvas, ctx, middle, baseline, widths, count,
+      letters, i, letter, size, tenpercent, avg_width, scale, 
+      target_height, raster;
+  //variable prototypes
+  this.lookup = []; //a map of letter to index
+  this.rasters = []; //a list of rasters
+  this.dimensions = []; //a list of dimensions
+
+  //construct
+  default_size = 60; // size of square to assume as the default width
+  safety_pad = 20; // pixels to pad around so we don't miss the edges
+  // create a canvas to do our rasterizing on
+  canvas = document.createElement("canvas");
+  // assume the default font would fit in a canvas of 100 by 100
+  canvas.width = default_size + 2 * safety_pad;
+  canvas.height = default_size + 2 * safety_pad;
+  // check for canvas support before attempting anything
+  if (!canvas.getContext) {
+    throw new Error("NO_CANVAS_SUPPORT");
+  }
+  ctx = canvas.getContext('2d');
+  // check for html5 text drawing support
+  if (!supports_text(ctx)) {
+    throw new Error("NO_CANVAS_TEXT_SUPPORT");
+  }
+  // calculate the middle
+  middle = Math.round(canvas.width / 2);
+  // calculate the baseline
+  baseline = Math.round(canvas.height - safety_pad);
+  // list of widths
+  widths = [];
+  count = 0;
+  letters = [];
+  //now measure each letter in the alphabet
+  for (i = 0; i < alphabet.get_size(); ++i) {
+    if (alphabet.is_ambig(i)) {
+      continue; //skip ambigs as they're never rendered
+    }
+    letter = alphabet.get_letter(i);
+    letters.push(letter);
+    this.lookup[letter] = count;
+    //clear the canvas
+    canvas.width = canvas.width;
+    // get the context and prepare to draw our width test
+    ctx = canvas.getContext('2d');
+    ctx.font = font;
+    ctx.fillStyle = alphabet.get_colour(i);
+    ctx.textAlign = "center";
+    ctx.translate(middle, baseline);
+    // draw the test text
+    ctx.fillText(letter, 0, 0);
+    //measure
+    size = canvas_bounds(ctx, canvas.width, canvas.height);
+    if (size.width === 0) {
+      throw new Error("INVISIBLE_LETTER"); //maybe the fill was white on white?
+    }
+    widths.push(size.width);
+    this.dimensions[count] = size;
+    count++;
+  }
+  //sort the widths
+  widths.sort(function(a,b) {return a - b;});
+  //drop 10% of the items off each end
+  tenpercent = Math.floor(widths.length / 10);
+  for (i = 0; i < tenpercent; ++i) {
+    widths.pop();
+    widths.shift();
+  }
+  //calculate average width
+  avg_width = 0;
+  for (i = 0; i < widths.length; ++i) {
+    avg_width += widths[i];
+  }
+  avg_width /= widths.length;
+  // calculate scales
+  for (i = 0; i < this.dimensions.length; ++i) {
+    size = this.dimensions[i];
+    // calculate scale
+    scale = target_width / Math.max(avg_width, size.width);
+    // estimate scaled height
+    target_height = size.height * scale;
+    // create an approprately sized canvas
+    raster = document.createElement("canvas");
+    raster.width = target_width; // if it goes over the edge too bad...
+    raster.height = target_height + safety_pad * 2;
+    // calculate the middle
+    middle = Math.round(raster.width / 2);
+    // calculate the baseline
+    baseline = Math.round(raster.height - safety_pad);
+    // get the context and prepare to draw the rasterized text
+    ctx = raster.getContext('2d');
+    ctx.font = font;
+    ctx.fillStyle = alphabet.get_colour(i);
+    ctx.textAlign = "center";
+    ctx.translate(middle, baseline);
+    ctx.save();
+    ctx.scale(scale, scale);
+    // draw the rasterized text
+    ctx.fillText(letters[i], 0, 0);
+    ctx.restore();
+    this.rasters[i] = raster;
+    this.dimensions[i] = canvas_bounds(ctx, raster.width, raster.height);
+  }
+};
+
+function canvas_bounds(ctx, cwidth, cheight) {
+  "use strict";
+  var data, r, c, top_line, bottom_line, left_line, right_line, 
+      txt_width, txt_height;
+  data = ctx.getImageData(0, 0, cwidth, cheight).data;
+  r = 0; c = 0; // r: row, c: column
+  top_line = -1; bottom_line = -1; left_line = -1; right_line = -1;
+  txt_width = 0; txt_height = 0;
+  // Find the top-most line with a non-white pixel
+  for (r = 0; r < cheight; r++) {
+    for (c = 0; c < cwidth; c++) {
+      if (data[r * cwidth * 4 + c * 4 + 3]) {
+        top_line = r;
+        break;
+      }
+    }
+    if (top_line != -1) {
+      break;
+    }
+  }
+  
+  //find the last line with a non-white pixel
+  if (top_line != -1) {
+    for (r = cheight-1; r >= top_line; r--) {
+      for(c = 0; c < cwidth; c++) {
+        if(data[r * cwidth * 4 + c * 4 + 3]) {
+          bottom_line = r;
+          break;
+        }
+      }
+      if (bottom_line != -1) {
+        break;
+      }
+    }
+    txt_height = bottom_line - top_line + 1;
+  }
+
+  // Find the left-most line with a non-white pixel
+  for (c = 0; c < cwidth; c++) {
+    for (r = 0; r < cheight; r++) {
+      if (data[r * cwidth * 4 + c * 4 + 3]) {
+        left_line = c;
+        break;
+      }
+    }
+    if (left_line != -1) {
+      break;
+    }
+  }
+
+  //find the right most line with a non-white pixel
+  if (left_line != -1) {
+    for (c = cwidth-1; c >= left_line; c--) {
+      for(r = 0; r < cheight; r++) {
+        if(data[r * cwidth * 4 + c * 4 + 3]) {
+          right_line = c;
+          break;
+        }
+      }
+      if (right_line != -1) {
+        break;
+      }
+    }
+    txt_width = right_line - left_line + 1;
+  }
+
+  //return the bounds
+  return {bound_top: top_line, bound_bottom: bottom_line, 
+    bound_left: left_line, bound_right: right_line, width: txt_width, 
+    height: txt_height};
+}
+
+RasterizedAlphabet.prototype.draw = function(ctx, letter, dx, dy, dWidth, dHeight) {
+  "use strict";
+  var index, raster, size;
+  index = this.lookup[letter];
+  raster = this.rasters[index];
+  size = this.dimensions[index];
+  ctx.drawImage(raster, 0, size.bound_top -1, raster.width, size.height+1, dx, dy, dWidth, dHeight);
+};
+
+//======================================================================
+// end RasterizedAlphabet
+//======================================================================
+
+//======================================================================
+// start LogoMetrics object
+//======================================================================
+
+var LogoMetrics = function(ctx, logo_columns, logo_rows, allow_space_for_names) {
+  "use strict";
+  var i, row_height;
+  if (typeof allow_space_for_names === "undefined") {
+    allow_space_for_names = false;
+  }
+  //variable prototypes
+  this.pad_top = 5;
+  this.pad_left = 10;
+  this.pad_right = 5;
+  this.pad_bottom = 0;
+  this.pad_middle = 20;
+  this.name_height = 14;
+  this.name_font = "bold " + this.name_height + "px Times, sans-serif";
+  this.name_spacer = 0;
+  this.y_label = "bits";
+  this.y_label_height = 12;
+  this.y_label_font = "bold " + this.y_label_height + "px Helvetica, sans-serif";
+  this.y_label_spacer = 3;
+  this.y_num_height = 12;
+  this.y_num_width = 0;
+  this.y_num_font = "bold " + this.y_num_height + "px Helvetica, sans-serif";
+  this.y_tic_width = 5;
+  this.stack_pad_left = 0;
+  this.stack_font = "bold 25px Helvetica, sans-serif";
+  this.stack_height = 90;
+  this.stack_width = 26;
+  this.stacks_pad_right = 5;
+  this.x_num_above = 2;
+  this.x_num_height = 12;
+  this.x_num_width = 0;
+  this.x_num_font = "bold " + this.x_num_height + "px Helvetica, sans-serif";
+  this.fine_txt_height = 6;
+  this.fine_txt_above = 2;
+  this.fine_txt_font = "normal " + this.fine_txt_height + "px Helvetica, sans-serif";
+  this.letter_metrics = new Array();
+  this.summed_width = 0;
+  this.summed_height = 0;
+  //calculate the width of the y axis numbers
+  ctx.font = this.y_num_font;
+  for (i = 0; i <= 2; i++) {
+    this.y_num_width = Math.max(this.y_num_width, ctx.measureText("" + i).width);
+  }
+  //calculate the width of the x axis numbers (but they are rotated so it becomes height)
+  ctx.font = this.x_num_font;
+  for (i = 1; i <= logo_columns; i++) {
+    this.x_num_width = Math.max(this.x_num_width, ctx.measureText("" + i).width);
+  }
+  
+  //calculate how much vertical space we want to draw this
+  //first we add the padding at the top and bottom since that's always there
+  this.summed_height += this.pad_top + this.pad_bottom;
+  //all except the last row have the same amount of space allocated to them
+  if (logo_rows > 1) {
+    row_height = this.stack_height + this.pad_middle;
+    if (allow_space_for_names) {
+      row_height += this.name_height;
+      //the label is allowed to overlap into the spacer
+      row_height += Math.max(this.y_num_height/2, this.name_spacer); 
+      //the label is allowed to overlap the space used by the other label
+      row_height += Math.max(this.y_num_height/2, this.x_num_height + this.x_num_above); 
+    } else {
+      row_height += this.y_num_height/2; 
+      //the label is allowed to overlap the space used by the other label
+      row_height += Math.max(this.y_num_height/2, this.x_num_height + this.x_num_above); 
+    }
+    this.summed_height += row_height * (logo_rows - 1);
+  }
+  //the last row has the name and fine text below it but no padding
+  this.summed_height += this.stack_height + this.y_num_height/2;
+  if (allow_space_for_names) {
+    this.summed_height += this.fine_txt_height + this.fine_txt_above + this.name_height;
+    this.summed_height += Math.max(this.y_num_height/2, 
+        this.x_num_height + this.x_num_above + this.name_spacer);
+  } else {
+    this.summed_height += Math.max(this.y_num_height/2, 
+        this.x_num_height + this.x_num_above + this.fine_txt_height + this.fine_txt_above);
+  }
+
+  //calculate how much horizontal space we want to draw this
+  //first add the padding at the left and right since that's always there
+  this.summed_width += this.pad_left + this.pad_right;
+  //add on the space for the y-axis label
+  this.summed_width += this.y_label_height + this.y_label_spacer;
+  //add on the space for the y-axis
+  this.summed_width += this.y_num_width + this.y_tic_width;
+  //add on the space for the stacks
+  this.summed_width += (this.stack_pad_left + this.stack_width) * logo_columns;
+  //add on the padding after the stacks (an offset from the fine text)
+  this.summed_width += this.stacks_pad_right;
+
+};
+
+//======================================================================
+// end LogoMetrics object
+//======================================================================
+
+//found this trick at http://talideon.com/weblog/2005/02/detecting-broken-images-js.cfm
+function image_ok(img) {
+  "use strict";
+  // During the onload event, IE correctly identifies any images that
+  // weren't downloaded as not complete. Others should too. Gecko-based
+  // browsers act like NS4 in that they report this incorrectly.
+  if (!img.complete) {
+    return false;
+  }
+  // However, they do have two very useful properties: naturalWidth and
+  // naturalHeight. These give the true size of the image. If it failed
+  // to load, either of these should be zero.
+  if (typeof img.naturalWidth !== "undefined" && img.naturalWidth === 0) {
+    return false;
+  }
+  // No other way of checking: assume it's ok.
+  return true;
+}
+  
+function supports_text(ctx) {
+  "use strict";
+  if (!ctx.fillText) {
+    return false;
+  }
+  if (!ctx.measureText) {
+    return false;
+  }
+  return true;
+}
+
+//draws the scale, returns the width
+function draw_scale(ctx, metrics, alphabet_ic) {
+  "use strict";
+  var tic_height, i;
+  tic_height = metrics.stack_height / alphabet_ic;
+  ctx.save();
+  ctx.lineWidth = 1.5;
+  ctx.translate(metrics.y_label_height, metrics.y_num_height/2);
+  //draw the axis label
+  ctx.save();
+  ctx.font = metrics.y_label_font;
+  ctx.translate(0, metrics.stack_height/2);
+  ctx.save();
+  ctx.rotate(-(Math.PI / 2));
+  ctx.textAlign = "center";
+  ctx.fillText("bits", 0, 0);
+  ctx.restore();
+  ctx.restore();
+
+  ctx.translate(metrics.y_label_spacer + metrics.y_num_width, 0);
+
+  //draw the axis tics
+  ctx.save();
+  ctx.translate(0, metrics.stack_height);
+  ctx.font = metrics.y_num_font;
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  for (i = 0; i <= alphabet_ic; i++) {
+    //draw the number
+    ctx.fillText("" + i, 0, 0);
+    //draw the tic
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(metrics.y_tic_width, 0);
+    ctx.stroke();
+    //prepare for next tic
+    ctx.translate(0, -tic_height);
+  }
+  ctx.restore();
+
+  ctx.translate(metrics.y_tic_width, 0);
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(0, metrics.stack_height);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function draw_stack_num(ctx, metrics, row_index) {
+  "use strict";
+  ctx.save();
+  ctx.font = metrics.x_num_font;
+  ctx.translate(metrics.stack_width / 2, metrics.stack_height + metrics.x_num_above);
+  ctx.save();
+  ctx.rotate(-(Math.PI / 2));
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "right";
+  ctx.fillText("" + (row_index + 1), 0, 0);
+  ctx.restore();
+  ctx.restore();
+}
+
+function draw_stack(ctx, metrics, symbols, raster) {
+  "use strict";
+  var preferred_pad, sym_min, i, sym, sym_height, pad;
+  preferred_pad = 0;
+  sym_min = 5;
+
+  ctx.save();//1
+  ctx.translate(0, metrics.stack_height);
+  for (i = 0; i < symbols.length; i++) {
+    sym = symbols[i];
+    sym_height = metrics.stack_height * sym.get_scale();
+    
+    pad = preferred_pad;
+    if (sym_height - pad < sym_min) {
+      pad = Math.min(pad, Math.max(0, sym_height - sym_min));
+    }
+    sym_height -= pad;
+
+    //translate to the correct position
+    ctx.translate(0, -(pad/2 + sym_height));
+    //draw
+    raster.draw(ctx, sym.get_symbol(), 0, 0, metrics.stack_width, sym_height);
+    //translate past the padding
+    ctx.translate(0, -(pad/2));
+  }
+  ctx.restore();//1
+}
+
+function draw_dashed_line(ctx, pattern, start, x1, y1, x2, y2) {
+  "use strict";
+  var x, y, len, i, dx, dy, tlen, theta, mulx, muly, lx, ly;
+  dx = x2 - x1;
+  dy = y2 - y1;
+  tlen = Math.pow(dx*dx + dy*dy, 0.5);
+  theta = Math.atan2(dy,dx);
+  mulx = Math.cos(theta);
+  muly = Math.sin(theta);
+  lx = [];
+  ly = [];
+  for (i = 0; i < pattern; ++i) {
+    lx.push(pattern[i] * mulx);
+    ly.push(pattern[i] * muly);
+  }
+  i = start;
+  x = x1;
+  y = y1;
+  len = 0;
+  ctx.beginPath();
+  while (len + pattern[i] < tlen) {
+    ctx.moveTo(x, y);
+    x += lx[i];
+    y += ly[i];
+    ctx.lineTo(x, y);
+    len += pattern[i];
+    i = (i + 1) % pattern.length;
+    x += lx[i];
+    y += ly[i];
+    len += pattern[i];
+    i = (i + 1) % pattern.length;
+  }
+  if (len < tlen) {
+    ctx.moveTo(x, y);
+    x += mulx * (tlen - len);
+    y += muly * (tlen - len);
+    ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+}
+
+function draw_trim_background(ctx, metrics, pspm, offset) {
+  "use strict";
+  var lwidth, rwidth, mwidth, rstart;
+  lwidth = metrics.stack_width * pspm.get_left_trim();
+  rwidth = metrics.stack_width * pspm.get_right_trim();
+  mwidth = metrics.stack_width * pspm.get_motif_length();
+  rstart = mwidth - rwidth;
+  ctx.save();//s8
+  ctx.translate(offset * metrics.stack_width, 0);
+  ctx.fillStyle = "rgb(240, 240, 240)";
+  if (pspm.get_left_trim() > 0) {
+    ctx.fillRect(0, 0, lwidth, metrics.stack_height);
+  }
+  if (pspm.get_right_trim() > 0) {
+    ctx.fillRect(rstart, 0, rwidth, metrics.stack_height);
+  }
+  ctx.fillStyle = "rgb(51, 51, 51)";
+  if (pspm.get_left_trim() > 0) {
+    draw_dashed_line(ctx, [3], 0, lwidth-0.5, 0, lwidth-0.5,  metrics.stack_height);
+  }
+  if (pspm.get_right_trim() > 0) {
+    draw_dashed_line(ctx, [3], 0, rstart+0.5, 0, rstart+0.5,  metrics.stack_height);
+  }
+  ctx.restore();//s8
+}
+
+function size_logo_on_canvas(logo, canvas, show_names, scale) {
+  "use strict";
+  var draw_name, metrics;
+  draw_name = (typeof show_names === "boolean" ? show_names : (logo.get_rows() > 1));
+  if (canvas.width !== 0 && canvas.height !== 0) {
+    return;
+  }
+  metrics = new LogoMetrics(canvas.getContext('2d'), 
+      logo.get_columns(), logo.get_rows(), draw_name);
+  if (typeof scale == "number") {
+    //resize the canvas to fit the scaled logo
+    canvas.width = metrics.summed_width * scale;
+    canvas.height = metrics.summed_height * scale;
+  } else {
+    if (canvas.width === 0 && canvas.height === 0) {
+      canvas.width = metrics.summed_width;
+      canvas.height = metrics.summed_height;
+    } else if (canvas.width === 0) {
+      canvas.width = metrics.summed_width * (canvas.height / metrics.summed_height);
+    } else if (canvas.height === 0) {
+      canvas.height = metrics.summed_height * (canvas.width / metrics.summed_width);
+    }
+  }
+}
+
+function draw_logo_on_canvas(logo, canvas, show_names, scale) {
+  "use strict";
+  var draw_name, ctx, metrics, raster, pspm_i, pspm, 
+      offset, col_index, motif_position;
+  draw_name = (typeof show_names === "boolean" ? show_names : (logo.get_rows() > 1));
+  ctx = canvas.getContext('2d');
+  //assume that the user wants the canvas scaled equally so calculate what the best width for this image should be
+  metrics = new LogoMetrics(ctx, logo.get_columns(), logo.get_rows(), draw_name);
+  if (typeof scale == "number") {
+    //resize the canvas to fit the scaled logo
+    canvas.width = metrics.summed_width * scale;
+    canvas.height = metrics.summed_height * scale;
+  } else {
+    if (canvas.width === 0 && canvas.height === 0) {
+      scale = 1;
+      canvas.width = metrics.summed_width;
+      canvas.height = metrics.summed_height;
+    } else if (canvas.width === 0) {
+      scale = canvas.height / metrics.summed_height;
+      canvas.width = metrics.summed_width * scale;
+    } else if (canvas.height === 0) {
+      scale = canvas.width / metrics.summed_width;
+      canvas.height = metrics.summed_height * scale;
+    } else {
+      scale = Math.min(canvas.width / metrics.summed_width, canvas.height / metrics.summed_height);
+    }
+  }
+  // cache the raster based on the assumption that we will be drawing a lot
+  // of logos the same size
+  if (typeof draw_logo_on_canvas.raster_scale === "number" && 
+      Math.abs(draw_logo_on_canvas.raster_scale - scale) < 0.1) {
+    raster = draw_logo_on_canvas.raster_cache;
+  } else {
+    raster = new RasterizedAlphabet(logo.alphabet, metrics.stack_font, metrics.stack_width * scale * 2);
+    draw_logo_on_canvas.raster_cache = raster;
+    draw_logo_on_canvas.raster_scale = scale;
+  }
+  ctx = canvas.getContext('2d');
+  ctx.save();//s1
+  ctx.scale(scale, scale);
+  ctx.save();//s2
+  ctx.save();//s7
+  //create margin
+  ctx.translate(metrics.pad_left, metrics.pad_top);
+  for (pspm_i = 0; pspm_i < logo.get_rows(); ++pspm_i) {
+    pspm = logo.get_pspm(pspm_i);
+    offset = logo.get_offset(pspm_i);
+    //optionally draw name if this isn't the last row or is the only row 
+    if (draw_name && (logo.get_rows() == 1 || pspm_i != (logo.get_rows()-1))) {
+      ctx.save();//s4
+      ctx.translate(metrics.summed_width/2, metrics.name_height);
+      ctx.font = metrics.name_font;
+      ctx.textAlign = "center";
+      ctx.fillText(pspm.name, 0, 0);
+      ctx.restore();//s4
+      ctx.translate(0, metrics.name_height + 
+          Math.min(0, metrics.name_spacer - metrics.y_num_height/2));
+    }
+    //draw scale
+    draw_scale(ctx, metrics, logo.alphabet.get_ic());
+    ctx.save();//s5
+    //translate across past the scale
+    ctx.translate(metrics.y_label_height + metrics.y_label_spacer + 
+        metrics.y_num_width + metrics.y_tic_width, 0);
+    //draw the trimming background
+    if (pspm.get_left_trim() > 0 || pspm.get_right_trim() > 0) {
+      draw_trim_background(ctx, metrics, pspm, offset);
+    }
+    //draw letters
+    ctx.translate(0, metrics.y_num_height / 2);
+    for (col_index = 0; col_index < logo.get_columns(); col_index++) {
+      ctx.translate(metrics.stack_pad_left,0);
+      if (col_index >= offset && col_index < (offset + pspm.get_motif_length())) {
+        motif_position = col_index - offset;
+        draw_stack_num(ctx, metrics, motif_position);
+        draw_stack(ctx, metrics, pspm.get_stack(motif_position, logo.alphabet), raster);
+      }
+      ctx.translate(metrics.stack_width, 0);
+    }
+    ctx.restore();//s5
+    ////optionally draw name if this is the last row but isn't the only row 
+    if (draw_name && (logo.get_rows() != 1 && pspm_i == (logo.get_rows()-1))) {
+      //translate vertically past the stack and axis's        
+      ctx.translate(0, metrics.y_num_height/2 + metrics.stack_height + 
+          Math.max(metrics.y_num_height/2, metrics.x_num_above + metrics.x_num_width + metrics.name_spacer));
+
+      ctx.save();//s6
+      ctx.translate(metrics.summed_width/2, metrics.name_height);
+      ctx.font = metrics.name_font;
+      ctx.textAlign = "center";
+      ctx.fillText(pspm.name, 0, 0);
+      ctx.restore();//s6
+      ctx.translate(0, metrics.name_height);
+    } else {
+      //translate vertically past the stack and axis's        
+      ctx.translate(0, metrics.y_num_height/2 + metrics.stack_height + 
+          Math.max(metrics.y_num_height/2, metrics.x_num_above + metrics.x_num_width));
+    }
+    //if not the last row then add middle padding
+    if (pspm_i != (logo.get_rows() -1)) {
+      ctx.translate(0, metrics.pad_middle);
+    }
+  }
+  ctx.restore();//s7
+  ctx.translate(metrics.summed_width - metrics.pad_right, metrics.summed_height - metrics.pad_bottom);
+  ctx.font = metrics.fine_txt_font;
+  ctx.textAlign = "right";
+  ctx.fillText(logo.fine_text, 0,0);
+  ctx.restore();//s2
+  ctx.restore();//s1
+}
+
+function create_canvas(c_width, c_height, c_id, c_title, c_display) {
+  "use strict";
+  var canvas = document.createElement("canvas");
+  //check for canvas support before attempting anything
+  if (!canvas.getContext) {
+    return null;
+  }
+  var ctx = canvas.getContext('2d');
+  //check for html5 text drawing support
+  if (!supports_text(ctx)) {
+    return null;
+  }
+  //size the canvas
+  canvas.width = c_width;
+  canvas.height = c_height;
+  canvas.id = c_id;
+  canvas.title = c_title;
+  canvas.style.display = c_display;
+  return canvas;
+}
+
+function logo_1(alphabet, fine_text, pspm) {
+  "use strict";
+  var logo = new Logo(alphabet, fine_text);
+  logo.add_pspm(pspm);
+  return logo;
+}
+
+function logo_2(alphabet, fine_text, target, query, query_offset) {
+  "use strict";
+  var logo = new Logo(alphabet, fine_text);
+  if (query_offset < 0) {
+    logo.add_pspm(target, -query_offset);
+    logo.add_pspm(query);
+  } else {
+    logo.add_pspm(target);
+    logo.add_pspm(query, query_offset);
+  }      
+  return logo;
+}
+
+/*
+ * Specifies an alternate source for an image.
+ * If the image with the image_id specified has
+ * not loaded then a generated logo will be used 
+ * to replace it.
+ *
+ * Note that the image must either have dimensions
+ * or a scale must be set.
+ */
+function alternate_logo(logo, image_id, scale) {
+  "use strict";
+  var image = document.getElementById(image_id);
+  if (!image) {
+    alert("Can't find specified image id (" +  image_id + ")");
+    return;
+  }
+  //if the image has loaded then there is no reason to use the canvas
+  if (image_ok(image)) {
+    return;
+  }
+  //the image has failed to load so replace it with a canvas if we can.
+  var canvas = create_canvas(image.width, image.height, image_id, image.title, image.style.display);
+  if (canvas === null) {
+    return;
+  }
+  //draw the logo on the canvas
+  draw_logo_on_canvas(logo, canvas, null, scale);
+  //replace the image with the canvas
+  image.parentNode.replaceChild(canvas, image);
+}
+
+/*
+ * Specifes that the element with the specified id
+ * should be replaced with a generated logo.
+ */
+function replace_logo(logo, replace_id, scale, title_txt, display_style) {
+  "use strict";
+  var element = document.getElementById(replace_id);
+  if (!replace_id) {
+    alert("Can't find specified id (" + replace_id + ")");
+    return;
+  }
+  //found the element!
+  var canvas = create_canvas(50, 120, replace_id, title_txt, display_style);
+  if (canvas === null) {
+    return;
+  }
+  //draw the logo on the canvas
+  draw_logo_on_canvas(logo, canvas, null, scale);
+  //replace the element with the canvas
+  element.parentNode.replaceChild(canvas, element);
+}
+
+/*
+ * Fast string trimming implementation found at
+ * http://blog.stevenlevithan.com/archives/faster-trim-javascript
+ *
+ * Note that regex is good at removing leading space but
+ * bad at removing trailing space as it has to first go through
+ * the whole string.
+ */
+function trim (str) {
+  "use strict";
+  var ws, i;
+  str = str.replace(/^\s\s*/, '');
+  ws = /\s/; i = str.length;
+  while (ws.test(str.charAt(--i)));
+  return str.slice(0, i + 1);
+}
+    /* END INCLUDED FILE "motif_logo.js" */
+    
+  
+        function setup() {
+          var motif_count = 3;
+          //create canvas logos
+          var alphabet = new Alphabet(document.getElementById("alphabet").value, document.getElementById("bgfreq").value);
+          for (var i = 1; i <= motif_count; i++) {
+            var pspm = new Pspm(document.getElementById("pspm" + i).value);
+            var logo = logo_1(alphabet, "MEME", pspm);
+            alternate_logo(logo, "thumbnail_logo_" + i, 0.5);
+            alternate_logo(logo, "logo_img_" + i, 1);
+          
+            var logo_rc = logo_1(alphabet, "MEME", pspm.copy().reverse_complement(alphabet));
+            alternate_logo(logo_rc, "thumbnail_logo_rc_" + i, 0.5);
+            alternate_logo(logo_rc, "logo_rc_img_" + i, 1);
+          
+          }
+          
+          //ensure radio buttons have data generated for them by fireing events
+          var allInputs = document.getElementsByTagName("input");
+          for (var i = 0; i < allInputs.length; i++) {
+            var input = allInputs[i];
+            if (input.type == "radio" && input.checked) {
+              var evt = document.createEvent("MouseEvents");
+              evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+              input.dispatchEvent(evt);
+            }
+          }
+          
+          var tbl = document.getElementById("tbl_blocks_combined");
+          wireUpTable(tbl, true);
+          
+          for (var i = 1; i <= motif_count; i++) {
+            tbl = document.getElementById("tbl_sites_" + i);
+            wireUpTable(tbl, false);
+            tbl = document.getElementById("tbl_blocks_" + i);
+            wireUpTable(tbl, true);
+          }
+        }
+        function showDesc(source, targetid) {
+          document.getElementById(targetid).childNodes[0].nodeValue = source.title;
+        }
+        function hideDesc(targetid) {
+          document.getElementById(targetid).childNodes[0].nodeValue = "Mouse-over buttons for more information.";
+        }
+        function showEmbededFormat(motifnum, format) {
+          var source = document.getElementById(format + motifnum);
+          var txtarea = document.getElementById("format_display_area_" + motifnum);
+          txtarea.value = source.value;
+          txtarea.style.display = 'block';
+        }
+        function hideFormat(motifnum) {
+          var txtarea = document.getElementById("format_display_area_" + motifnum);
+          txtarea.style.display = 'none';
+        }
+        function block2raw(block) {
+          var raw = "";
+          var endpat = /\/\//;
+          var wordpat = /\S+/gi;
+          var lines = block.split("\n");
+          for (i = 2; i < lines.length; ++i) {
+            if (lines[i].match(endpat) != null) break;
+            var words = lines[i].match(wordpat);
+            raw += words[3] + "\n";
+          }
+          return raw;
+        }
+        function block2fasta(block) {
+          var fasta = "";
+          var endpat = /\/\//;
+          var wordpat = /\S+/gi;
+          var lines = block.split("\n");
+          for (i = 2; i < lines.length; ++i) {
+            if (lines[i].match(endpat) != null) break;
+            var words = lines[i].match(wordpat);
+            var start = words[2].substring(0, words[2].length - 1);
+            fasta += ">" + words[0] + " ( start= " + start + " )\n" + words[3] + "\n";
+          }
+          return fasta;
+        }
+        function showRaw(motifnum) {
+          var source = document.getElementById('blocks' + motifnum);
+          var txtarea = document.getElementById("format_display_area_" + motifnum);
+          txtarea.value = block2raw(source.value);
+          txtarea.style.display = 'block';
+        }
+        function showFasta(motifnum) {
+          var source = document.getElementById('blocks' + motifnum);
+          var txtarea = document.getElementById("format_display_area_" + motifnum);
+          txtarea.value = block2fasta(source.value);
+          txtarea.style.display = 'block';
+        }
+        function showHidden(prefix) {
+          document.getElementById(prefix + '_activator').style.display = 'none';
+          document.getElementById(prefix + '_deactivator').style.display = 'block';
+          document.getElementById(prefix + '_data').style.display = 'block';
+        }
+        function hideShown(prefix) {
+          document.getElementById(prefix + '_activator').style.display = 'block';
+          document.getElementById(prefix + '_deactivator').style.display = 'none';
+          document.getElementById(prefix + '_data').style.display = 'none';
+        }
+        function wireUpTable(table, skiplast) {
+          if (table && table.rows) {
+            var nRows = table.rows.length;
+            if (skiplast) {nRows--;}
+            for (var i = 1; i < nRows; i++) {
+              var row = table.rows[i];
+              row.style.cursor = 'pointer';
+              row.onclick = function()
+              {
+                processHighlight(this);
+              }
+            }
+          } else {
+            alert(table);
+          }
+        }
+        function processHighlight(sourceRow) {
+          var name = sourceRow.cells[0].firstChild.nodeValue;
+          
+          var tbl = document.getElementById("tbl_blocks_combined");
+          highlightTable(name, tbl);
+          
+          for (var i = 1; i <= 3; i++) {
+            tbl = document.getElementById("tbl_sites_" + i);
+            highlightTable(name, tbl);
+            tbl = document.getElementById("tbl_blocks_" + i);
+            highlightTable(name, tbl);
+          }
+        }
+        function highlightTable(name, table) {
+          if (table == null) return;
+          nRows = table.rows.length;
+          for (var i = 0; i < nRows; i++) {
+            var row = table.rows[i];
+            if(row.cells[0].firstChild.nodeValue == name) {
+              row.style.backgroundColor = "#aaffaa";
+            } else {
+              row.style.backgroundColor = "white";
+            }
+          }
+        }
+        function warnExternal() {
+          if (confirm("Using BLOCKS requires the data to be sent to an external webservice even if you have setup your own meme installation. Continue?")) {
+            return true;
+          }
+          return false;
+        }
+        function clickLogoTab(is_rc, num) {
+          var stdTab = document.getElementById("logo_tab_std_" + num);
+          var rcTab = document.getElementById("logo_tab_rc_" + num);
+          var logoImg = document.getElementById("logo_img_" + num);
+          var logoRcImg = document.getElementById("logo_rc_img_" + num);
+          if (is_rc) {
+            logoImg.style.display = 'none';
+            logoRcImg.style.display = 'block';
+            rcTab.setAttribute("class", "tab activeTab");
+            stdTab.setAttribute("class", "tab");
+          } else {
+            logoRcImg.style.display = 'none';
+            logoImg.style.display = 'block';
+            rcTab.setAttribute("class", "tab");
+            stdTab.setAttribute("class", "tab activeTab");
+          }
+        }
+      </script>
+</head>
+<body onload="javascript:setup()"><form enctype="application/x-www-form-urlencoded" method="post" target="_blank" action="http://meme.nbcr.net/meme/cgi-bin/meme_request.cgi">
+<!--+++++++++++++++++++++++START DATA+++++++++++++++++++++++++++++++++++++-->
+<input type="hidden" name="version" value="MEME version 4.9.1">
+<input type="hidden" name="alphabet" id="alphabet" value="ACGT">
+<input type="hidden" name="strands" value="both">
+<input type="hidden" name="bgfreq" id="bgfreq" value="A 0.304 C 0.196 G 0.196 T 0.304">
+<input type="hidden" name="name" value="crp0.s">
+<input type="hidden" name="combinedblock" value="
+ce1cg 7.53e-03 1 105 -1 64 7.54e-06 
+ara 9.02e-04 1 105 -1 58 2.51e-07 
+bglr1 2.01e-01 1 105 +1 75 8.30e-05 
+crp 3.77e-02 1 105 -1 66 9.89e-06 
+cya 6.49e-02 1 105 +1 49 1.81e-05 
+deop2 1.19e-02 1 105 +1 59 2.85e-06 
+gale 6.15e-02 1 105 -1 45 1.41e-05 
+ilv 4.50e-06 2 105 +2 4 2.18e-06 -1 42 1.69e-06 
+lac 1.93e-07 2 105 +1 8 5.35e-07 -3 32 7.89e-08 
+male 1.22e-04 2 105 +1 13 1.29e-05 +2 40 5.56e-06 
+malk 1.39e-02 1 105 +1 60 1.67e-05 
+malt 5.01e-03 1 105 +1 40 8.61e-07 
+ompa 3.94e-02 1 105 +1 47 9.04e-06 
+tnaa 2.80e-02 1 105 -1 74 1.41e-05 
+uxu1 1.70e-02 1 105 +1 16 5.17e-06 
+pbr322 6.62e-03 1 105 -1 56 2.85e-06 
+trn9cat 5.41e-06 2 105 +3 35 2.01e-07 +1 83 5.69e-06 
+tdc 6.53e-02 1 105 -1 81 1.53e-05 
+">
+<input type="hidden" name="nmotifs" value="3">
+<!--data for motif 1-->
+<input type="hidden" id="motifblock1" name="motifblock1" value="
+BL   MOTIF 1 width=18 seqs=18
+">
+<input type="hidden" id="pssm1" name="pssm1" value="
+log-odds matrix: alength= 4 w= 18 n= 18 bayes= 6.57872 E= 1.1e-006
+101 -1081 -182 13 
+87 -1081 -82 13 
+-45 -23 18 35 
+-1081 -82 -1081 155 
+-1081 -182 227 -1081 
+-145 -1081 -1081 155 
+-245 -1081 218 -245 
+145 -82 -182 -1081 
+-145 99 50 -45 
+13 -182 135 -145 
+-145 18 -82 87 
+-13 18 18 -13 
+-145 -182 188 -145 
+35 -23 -182 35 
+-245 -1081 -82 145 
+-245 199 -1081 -87 
+135 -1081 18 -1081 
+-13 164 -182 -245 
+
+">
+<input type="hidden" id="pspm1" name="pspm1" value="
+letter-probability matrix: alength= 4 w= 18 nsites= 18 E= 1.1e-006
+0.611111 0.000000 0.055556 0.333333 
+0.555556 0.000000 0.111111 0.333333 
+0.222222 0.166667 0.222222 0.388889 
+0.000000 0.111111 0.000000 0.888889 
+0.000000 0.055556 0.944444 0.000000 
+0.111111 0.000000 0.000000 0.888889 
+0.055556 0.000000 0.888889 0.055556 
+0.833333 0.111111 0.055556 0.000000 
+0.111111 0.388889 0.277778 0.222222 
+0.333333 0.055556 0.500000 0.111111 
+0.111111 0.222222 0.111111 0.555556 
+0.277778 0.222222 0.222222 0.277778 
+0.111111 0.055556 0.722222 0.111111 
+0.388889 0.166667 0.055556 0.388889 
+0.055556 0.000000 0.111111 0.833333 
+0.055556 0.777778 0.000000 0.166667 
+0.777778 0.000000 0.222222 0.000000 
+0.277778 0.611111 0.055556 0.055556 
+
+">
+<input type="hidden" id="blocks1" name="BLOCKS1" value="
+BL   MOTIF 1 width=18 seqs=18
+ara  ( 58) AAGTGTGACGCCGTGCAA 1
+lac  ( 8) TAATGTGAGTTAGCTCAC 1
+malt  ( 40) AATTGTGACACAGTGCAA 1
+ilv  ( 42) AATTGAGGGGTTGATCAC 1
+pbr322  ( 56) ATCTGTGCGGTATTTCAC 1
+deop2  ( 59) AATTGTGATGTGTATCGA 1
+uxu1  ( 16) TGTTGTGATGTGGTTAAC 1
+trn9cat  ( 83) AAATGAGACGTTGATCGG 1
+ce1cg  ( 64) TTTTGTGAAAACGATCAA 1
+ompa  ( 47) ATGCCTGACGGAGTTCAC 1
+crp  ( 66) TAATGTGACGTCCTTTGC 1
+male  ( 13) TTCTGTAACAGAGATCAC 1
+gale  ( 45) AAGTGTGACATGGAATAA 1
+tdc  ( 81) ATATGTGCGACCACTCAC 1
+malk  ( 60) TTTCGTGATGTTGCTTGC 1
+cya  ( 49) AGGTGTTAAATTGATCAC 1
+tnaa  ( 70) GATTGTGATTCGATTCAC 1
+bglr1  ( 75) AACTGTGAGCATGGTCAT 1
+//
+
+">
+<!--data for motif 2-->
+<input type="hidden" id="motifblock2" name="motifblock2" value="
+BL   MOTIF 2 width=8 seqs=2
+">
+<input type="hidden" id="pssm2" name="pssm2" value="
+log-odds matrix: alength= 4 w= 8 n= 2 bayes= 9.783 E= 1.5e+004
+-765 235 -765 -765 
+-765 -765 235 -765 
+-765 -765 235 -765 
+-765 135 -765 71 
+-765 -765 235 -765 
+-765 -765 235 -765 
+-765 -765 235 -765 
+-765 -765 235 -765 
+
+">
+<input type="hidden" id="pspm2" name="pspm2" value="
+letter-probability matrix: alength= 4 w= 8 nsites= 2 E= 1.5e+004
+0.000000 1.000000 0.000000 0.000000 
+0.000000 0.000000 1.000000 0.000000 
+0.000000 0.000000 1.000000 0.000000 
+0.000000 0.500000 0.000000 0.500000 
+0.000000 0.000000 1.000000 0.000000 
+0.000000 0.000000 1.000000 0.000000 
+0.000000 0.000000 1.000000 0.000000 
+0.000000 0.000000 1.000000 0.000000 
+
+">
+<input type="hidden" id="blocks2" name="BLOCKS2" value="
+BL   MOTIF 2 width=8 seqs=2
+ilv  ( 4) CGGCGGGG 1
+male  ( 40) CGGTGGGG 1
+//
+
+">
+<!--data for motif 3-->
+<input type="hidden" id="motifblock3" name="motifblock3" value="
+BL   MOTIF 3 width=11 seqs=2
+">
+<input type="hidden" id="pssm3" name="pssm3" value="
+log-odds matrix: alength= 4 w= 11 n= 2 bayes= 9.73809 E= 2.0e+004
+-765 235 -765 -765 
+-765 235 -765 -765 
+-765 -765 -765 171 
+-765 -765 235 -765 
+-765 -765 235 -765 
+-765 -765 135 71 
+-765 -765 235 -765 
+-765 -765 -765 171 
+-765 135 135 -765 
+-765 235 -765 -765 
+-765 235 -765 -765 
+
+">
+<input type="hidden" id="pspm3" name="pspm3" value="
+letter-probability matrix: alength= 4 w= 11 nsites= 2 E= 2.0e+004
+0.000000 1.000000 0.000000 0.000000 
+0.000000 1.000000 0.000000 0.000000 
+0.000000 0.000000 0.000000 1.000000 
+0.000000 0.000000 1.000000 0.000000 
+0.000000 0.000000 1.000000 0.000000 
+0.000000 0.000000 0.500000 0.500000 
+0.000000 0.000000 1.000000 0.000000 
+0.000000 0.000000 0.000000 1.000000 
+0.000000 0.500000 0.500000 0.000000 
+0.000000 1.000000 0.000000 0.000000 
+0.000000 1.000000 0.000000 0.000000 
+
+">
+<input type="hidden" id="blocks3" name="BLOCKS3" value="
+BL   MOTIF 3 width=11 seqs=2
+lac  ( 32) CCTGGGGTGCC 1
+trn9cat  ( 35) CCTGGTGTCCC 1
+//
+
+">
+<!--++++++++++++++++++++++++++++FINISHED DATA++++++++++++++++++++++++++++++++-->
+<a name="top_buttons"></a><div class="pad1">
+<h1><img src="http://meme.nbcr.net/meme/images/meme.png" alt="MEME"></h1>
+<p>
+        For further information on how to interpret these results or to get a 
+        copy of the MEME software please access 
+        <a href="http://meme.nbcr.net/">http://meme.nbcr.net</a>. 
+      </p>
+<p>If you use MEME in your research, please cite the following paper:<br><span class="citation">
+          Timothy L. Bailey and Charles Elkan,
+          "Fitting a mixture model by expectation maximization to discover motifs in biopolymers",
+          <em>Proceedings of the Second International Conference on Intelligent Systems
+          for Molecular Biology</em>, pp. 28-36, AAAI Press, Menlo Park, California, 1994.
+        </span></p>
+</div>
+<div class="pad2">
+<a class="jump" href="#overview">Discovered Motifs</a>
+        |  
+      <a class="jump" href="#combined">Block diagrams of Motifs</a>
+        |  
+      <a class="jump" href="#version">Program information</a>
+        |  
+      <a class="jump" href="#explanation">Explanation</a>
+</div>
+<a name="overview"></a><h2 class="mainh pad2">Discovered Motifs</h2>
+<div class="box">
+<h4>Motif Overview</h4>
+<div class="pad"><table>
+<col style="text-align: center">
+<col style="text-align: right">
+<col style="text-align: right">
+<col>
+<col>
+<tbody>
+<tr>
+<td><a href="#motif_1">Motif 1</a></td>
+<td style="padding-left:20px"><ul>
+<li>1.1e-006</li>
+<li>18 sites</li>
+</ul></td>
+<td style="padding-left:20px"></td>
+<td style="padding-left:20px;"><a href="#motif_1"><img style="display:block; height:75px" src="logo1.png" id="thumbnail_logo_1" alt="Motif 1 Logo"></a></td>
+<td style="padding-left:20px;"><a href="#motif_1"><img style="display:block; height:75px" src="logo_rc1.png" id="thumbnail_logo_rc_1" alt="Motif 1 Logo"></a></td>
+</tr>
+<tr>
+<td><a href="#motif_2">Motif 2</a></td>
+<td style="padding-left:20px"><ul>
+<li>1.5e+004</li>
+<li>2 sites</li>
+</ul></td>
+<td style="padding-left:20px"></td>
+<td style="padding-left:20px;"><a href="#motif_2"><img style="display:block; height:75px" src="logo2.png" id="thumbnail_logo_2" alt="Motif 2 Logo"></a></td>
+<td style="padding-left:20px;"><a href="#motif_2"><img style="display:block; height:75px" src="logo_rc2.png" id="thumbnail_logo_rc_2" alt="Motif 2 Logo"></a></td>
+</tr>
+<tr>
+<td><a href="#motif_3">Motif 3</a></td>
+<td style="padding-left:20px"><ul>
+<li>2.0e+004</li>
+<li>2 sites</li>
+</ul></td>
+<td style="padding-left:20px"></td>
+<td style="padding-left:20px;"><a href="#motif_3"><img style="display:block; height:75px" src="logo3.png" id="thumbnail_logo_3" alt="Motif 3 Logo"></a></td>
+<td style="padding-left:20px;"><a href="#motif_3"><img style="display:block; height:75px" src="logo_rc3.png" id="thumbnail_logo_rc_3" alt="Motif 3 Logo"></a></td>
+</tr>
+</tbody>
+</table></div>
+<h4>Further Analysis</h4>
+<div class="pad">
+        Submit all motifs to 
+        <input name="do_MAST_all" value="MAST" type="submit" title="Search sequence databases for the best combined matches with these motifs using MAST." onmouseover="javascript:showDesc(this, 'overview_action_desc')" onmouseout="javascript:hideDesc('overview_action_desc')"> 
+        <a href="#MAST_doc" title="Click for more information on MAST." class="help"><div class="help"></div></a>
+            
+        <input name="do_FIMO_all" value="FIMO" type="submit" title="Search sequence databases for all matches with these motifs using FIMO." onmouseover="javascript:showDesc(this, 'overview_action_desc')" onmouseout="javascript:hideDesc('overview_action_desc')"> 
+        <a href="#FIMO_doc" title="Click for more information on FIMO." class="help"><div class="help"></div></a>
+                
+            <input name="do_GOMO_all" value="GOMO" type="submit" title="Find Genome Ontology terms associated with upstream sequences matching these motifs using GOMO." onmouseover="javascript:showDesc(this, 'overview_action_desc')" onmouseout="javascript:hideDesc('overview_action_desc')"> 
+            <a href="#GOMO_doc" title="Click for more information on GOMO." class="help"><div class="help"></div></a>
+            
+        <input name="do_BLOCKS_all" value="BLOCKS" type="submit" title="Submit these motifs to BLOCKS multiple alignment processor." onclick="return warnExternal()" onmouseover="javascript:showDesc(this, 'overview_action_desc')" onmouseout="javascript:hideDesc('overview_action_desc')"> 
+        <a href="#BLOCKS_doc" title="Click for more information on BLOCKS." class="help"><div class="help"></div></a>
+         <span id="overview_action_desc">Mouse-over buttons for more information.</span>
+</div>
+</div>
+<a name="motif_1"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Motif 1</h2></td>
+<td align="right" valign="bottom">
+<a href="#motif_2">Next</a> <a href="#top_buttons">Top</a>
+</td>
+</tr></table>
+<div class="box">
+<table style="width:100%; background-color:#ddddff">
+<tr>
+<th class="majorth"><h4>Summary <a href="#summary_doc"><div class="help"></div></a>
+</h4></th>
+<th class="majorth"><h4>Sequence Logo <a href="#logo_doc"><div class="help"></div></a>
+</h4></th>
+</tr>
+<tr>
+<td style="width:15em; vertical-align:text-top;">
+<table style="width:100%; " cellspacing="0">
+<col>
+<col style="text-align:left;">
+<tr>
+<th class="minorth">E-value</th>
+<td>1.1e-006</td>
+</tr>
+<tr>
+<th class="minorth">Width</th>
+<td>18</td>
+</tr>
+<tr>
+<th class="minorth">Sites</th>
+<td>18</td>
+</tr>
+</table>
+<a href="javascript:showHidden('summary_extra_1')" id="summary_extra_1_activator">show more</a><div id="summary_extra_1_data" style="display:none"><table style="width:100%;" cellspacing="0">
+<tr><th colspan="2" class="minorth">Log Likelihood Ratio <a href="#llr_doc"><div class="help"></div></a>
+</th></tr>
+<tr>
+<td style="width:8em;"> </td>
+<td>180</td>
+</tr>
+<tr><th colspan="2" class="minorth">Information Content <a href="#ic_doc"><div class="help"></div></a>
+</th></tr>
+<tr>
+<td> </td>
+<td>14.7 (bits)</td>
+</tr>
+<tr><th colspan="2" class="minorth">Relative Entropy <a href="#re_doc"><div class="help"></div></a>
+</th></tr>
+<tr>
+<td> </td>
+<td>14.4 (bits)</td>
+</tr>
+</table></div>
+<a href="javascript:hideShown('summary_extra_1')" id="summary_extra_1_deactivator" style="display:none;">show less</a>
+</td>
+<td>
+<div class="tabMain">
+<img src="logo1.png" style="display:block;" id="logo_img_1" height="140" width="400" alt="PNG LOGOS require CONVERT from ImageMagick; see MEME installation guide"><img src="logo_rc1.png" style="display:none;" id="logo_rc_img_1" height="140" width="400" alt="PNG LOGOS require CONVERT from ImageMagick; see MEME installation guide">
+</div>
+<div class="tabArea base">
+<a id="logo_tab_std_1" href="javascript:clickLogoTab(false,1)" class="tab activeTab">Standard</a><a id="logo_tab_rc_1" href="javascript:clickLogoTab(true,1)" class="tab">Reverse Complement</a>
+</div>
+<br>
+          Download LOGO <a href="#download_doc" class="help"><div class="help"></div></a>
+            
+          Orientation:
+          <select name="logorc_1"><option value="false">standard</option>
+<option value="true">reverse complement</option></select>
+            
+          SSC:
+          <select name="logossc_1"><option value="false">off</option>
+<option value="true">on</option></select>
+            
+          Format:
+          <select name="logoformat_1"><option value="png">web (png)</option>
+<option value="eps">publication (eps)</option></select>
+            
+          Width: 
+          <input type="text" size="2" maxlength="5" value="18" title="Width of logo in cm." name="logowidth_1"> cm 
+            
+          Height: 
+          <input type="text" size="2" maxlength="5" value="7.5" title="Height of logo in cm." name="logoheight_1"> cm 
+            
+          <input type="submit" value="Download" title="Download a logo" name="do_LOGO_1">
+</td>
+</tr>
+</table>
+<h4>Regular expression <a href="#regular_expression_doc" class="help"><div class="help"></div></a>
+</h4>
+<p class="pad">
+[AT][AT][TAG]TGTGA[CGT][GA][TC][ATCG]G[AT]TC[AG][CA]
+</p>
+<h4>Further Analysis <a href="#further_analysis_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+      Submit this motif to
+      <input type="submit" name="do_MAST_1" value="MAST" title="Scan sequence databases for the best match in each sequence using MAST." onmouseover="javascript:showDesc(this, 'motif1_action_desc')" onmouseout="javascript:hideDesc('motif1_action_desc')"> 
+      <a href="#MAST_doc" title="Click for more information on MAST." class="help"><div class="help"></div></a>
+          
+      <input type="submit" name="do_FIMO_1" value="FIMO" title="Scan sequence databases for all matches with this motif using FIMO." onmouseover="javascript:showDesc(this, 'motif1_action_desc')" onmouseout="javascript:hideDesc('motif1_action_desc')"> 
+      <a href="#FIMO_doc" title="Click for more information on FIMO." class="help"><div class="help"></div></a>
+              
+          <input type="submit" name="do_TOMTOM_1" value="TOMTOM" title="Compare to known motifs in motif databases using TOMTOM." onmouseover="javascript:showDesc(this, 'motif1_action_desc')" onmouseout="javascript:hideDesc('motif1_action_desc')"> 
+          <a href="#TOMTOM_doc" title="Click for more information on TOMTOM." class="help"><div class="help"></div></a>
+              
+          <input type="submit" name="do_GOMO_1" value="GOMO" title="Find Genome Ontology terms associated with upstream regions matching this motif using GOMO." onmouseover="javascript:showDesc(this, 'motif1_action_desc')" onmouseout="javascript:hideDesc('motif1_action_desc')"> 
+          <a href="#GOMO_doc" title="Click for more information on GOMO." class="help"><div class="help"></div></a>
+          
+      <input type="submit" name="do_BLOCKS_1" value="BLOCKS" title="Submit this motif to BLOCKS multiple alignment processor." onclick="return warnExternal()" onmouseover="javascript:showDesc(this, 'motif1_action_desc')" onmouseout="javascript:hideDesc('motif1_action_desc')"> 
+      <a href="#BLOCKS_doc" title="Click for more information on BLOCKS." class="help"><div class="help"></div></a>
+       <span id="motif1_action_desc">Mouse-over buttons for more information.</span>
+</div>
+<h4>Data Formats <a href="#formats_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+      View the motif in 
+      <input name="format_display_1" type="radio" onclick="javascript:showEmbededFormat(1, 'pspm')">PSPM Format 
+      <a href="#format_PSPM_doc" title="Click for more information on PSPMs." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_1" type="radio" onclick="javascript:showEmbededFormat(1, 'pssm')">PSSM Format 
+      <a href="#format_PSSM_doc" title="Click for more information on PSSMs." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_1" type="radio" onclick="javascript:showEmbededFormat(1, 'blocks')">BLOCKS Format 
+      <a href="#format_BLOCKS_doc" title="Click for more information on BLOCKS format." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_1" type="radio" onclick="javascript:showFasta(1)">FASTA Format 
+      <a href="#format_FASTA_doc" title="Click for more information on FASTA format." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_1" type="radio" onclick="javascript:showRaw(1)">Raw Format 
+      <a href="#format_raw_doc" title="Click for more information on raw format." class="help"><div class="help"></div></a>
+          
+      or
+      <input name="format_display_1" type="radio" onclick="javascript:hideFormat(1)" checked>Hide<br><textarea id="format_display_area_1" rows="20" style="display:none; width:100%;" readonly></textarea><noscript>This feature requires javascript.</noscript>
+</div>
+<h4>Sites <a href="#sites_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>Click on any row to highlight sequence in all motifs.</p>
+<table id="tbl_sites_1" cellpadding="0.5cm">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<thead><tr>
+<th>Name <a name="sites1"></a>
+</th>
+<th>Strand</th>
+<th>Start</th>
+<th>
+<i>p</i>-value</th>
+<th colspan="3">Sites <a href="#sites_doc" class="help"><div class="help"></div></a>
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="strand_name">ara</td>
+<td class="strand_side">-</td>
+<td class="strand_start">59</td>
+<td class="strand_pvalue">2.51e-07</td>
+<td class="strand_lflank">TGGCATAGCA</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:red">A</span>
+</td>
+<td class="strand_rflank">ATAATCAATG</td>
+</tr>
+<tr>
+<td class="strand_name">lac</td>
+<td class="strand_side">+</td>
+<td class="strand_start">9</td>
+<td class="strand_pvalue">5.35e-07</td>
+<td class="strand_lflank">AACGCAAT</td>
+<td class="strand_seq">
+<span style="color:green">T</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">TCATTAGGCA</td>
+</tr>
+<tr>
+<td class="strand_name">malt</td>
+<td class="strand_side">+</td>
+<td class="strand_start">41</td>
+<td class="strand_pvalue">8.61e-07</td>
+<td class="strand_lflank">AAAGATTTGG</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:red">A</span>
+</td>
+<td class="strand_rflank">ATTCAGACAC</td>
+</tr>
+<tr>
+<td class="strand_name">ilv</td>
+<td class="strand_side">-</td>
+<td class="strand_start">43</td>
+<td class="strand_pvalue">1.69e-06</td>
+<td class="strand_lflank">GCAAAGGGAA</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">GTTTTGTACT</td>
+</tr>
+<tr>
+<td class="strand_name">pbr322</td>
+<td class="strand_side">-</td>
+<td class="strand_start">57</td>
+<td class="strand_pvalue">2.85e-06</td>
+<td class="strand_lflank">CTCCTTACGC</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">ACCGCATATG</td>
+</tr>
+<tr>
+<td class="strand_name">deop2</td>
+<td class="strand_side">+</td>
+<td class="strand_start">60</td>
+<td class="strand_pvalue">2.85e-06</td>
+<td class="strand_lflank">AGATTTCCTT</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:red">A</span>
+</td>
+<td class="strand_rflank">AGTGTGTTGC</td>
+</tr>
+<tr>
+<td class="strand_name">uxu1</td>
+<td class="strand_side">+</td>
+<td class="strand_start">17</td>
+<td class="strand_pvalue">5.17e-06</td>
+<td class="strand_lflank">AGAGTGAAAT</td>
+<td class="strand_seq">
+<span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">CCAATTAGAA</td>
+</tr>
+<tr>
+<td class="strand_name">trn9cat</td>
+<td class="strand_side">+</td>
+<td class="strand_start">84</td>
+<td class="strand_pvalue">5.69e-06</td>
+<td class="strand_lflank">CTTTTGGCGA</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:orange">G</span>
+</td>
+<td class="strand_rflank">CACG</td>
+</tr>
+<tr>
+<td class="strand_name">ce1cg</td>
+<td class="strand_side">-</td>
+<td class="strand_start">65</td>
+<td class="strand_pvalue">7.54e-06</td>
+<td class="strand_lflank">GGACTTCCAT</td>
+<td class="strand_seq">
+<span style="color:green">T</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:red">A</span>
+</td>
+<td class="strand_rflank">AAAAACAGTC</td>
+</tr>
+<tr>
+<td class="strand_name">ompa</td>
+<td class="strand_side">+</td>
+<td class="strand_start">48</td>
+<td class="strand_pvalue">9.04e-06</td>
+<td class="strand_lflank">TTTTTTTCAT</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">ACTTGTAAGT</td>
+</tr>
+<tr>
+<td class="strand_name">crp</td>
+<td class="strand_side">-</td>
+<td class="strand_start">67</td>
+<td class="strand_pvalue">9.89e-06</td>
+<td class="strand_lflank">TACTGCACGG</td>
+<td class="strand_seq">
+<span style="color:green">T</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">ATACATGCAG</td>
+</tr>
+<tr>
+<td class="strand_name">male</td>
+<td class="strand_side">+</td>
+<td class="strand_start">14</td>
+<td class="strand_pvalue">1.29e-05</td>
+<td class="strand_lflank">TTACCGCCAA</td>
+<td class="strand_seq">
+<span style="color:green">T</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">ACAAAGCGAC</td>
+</tr>
+<tr>
+<td class="strand_name">gale</td>
+<td class="strand_side">-</td>
+<td class="strand_start">46</td>
+<td class="strand_pvalue">1.41e-05</td>
+<td class="strand_lflank">AAGATGCGAA</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:red">A</span><span style="color:red">A</span>
+</td>
+<td class="strand_rflank">ATTAGTGGAA</td>
+</tr>
+<tr>
+<td class="strand_name">tdc</td>
+<td class="strand_side">-</td>
+<td class="strand_start">82</td>
+<td class="strand_pvalue">1.53e-05</td>
+<td class="strand_lflank">AACAGG</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:green">T</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">AAATTAACTT</td>
+</tr>
+<tr>
+<td class="strand_name">malk</td>
+<td class="strand_side">+</td>
+<td class="strand_start">61</td>
+<td class="strand_pvalue">1.67e-05</td>
+<td class="strand_lflank">ATGTAAGGAA</td>
+<td class="strand_seq">
+<span style="color:green">T</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">AAAAATCGTG</td>
+</tr>
+<tr>
+<td class="strand_name">cya</td>
+<td class="strand_side">+</td>
+<td class="strand_start">50</td>
+<td class="strand_pvalue">1.81e-05</td>
+<td class="strand_lflank">TCAATCAGCA</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">GTTTTAGACC</td>
+</tr>
+<tr>
+<td class="strand_name">tnaa</td>
+<td class="strand_side">+</td>
+<td class="strand_start">71</td>
+<td class="strand_pvalue">2.73e-05</td>
+<td class="strand_lflank">CTCCCCGAAC</td>
+<td class="strand_seq">
+<span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">ATTTAAACAA</td>
+</tr>
+<tr>
+<td class="strand_name">bglr1</td>
+<td class="strand_side">+</td>
+<td class="strand_start">76</td>
+<td class="strand_pvalue">8.30e-05</td>
+<td class="strand_lflank">CAAAGTTAAT</td>
+<td class="strand_seq">
+<span style="color:red">A</span><span style="color:red">A</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:red">A</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:red">A</span><span style="color:green">T</span>
+</td>
+<td class="strand_rflank">ATTTTTATCA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4>Block Diagrams <a href="#diagrams_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>
+        The height of the motif "block" is proportional to -log(p-value), truncated at the height for a motif with a p-value of 1e-10.<br>
+        Click on any row to highlight sequence in all motifs. Mouse over the center of the motif blocks to see more information.
+      </p>
+<table id="tbl_blocks_1" style="width:100%;" border="0">
+<col style="width:10em;">
+<col style="width:5em;">
+<col>
+<thead><tr>
+<th>Name</th>
+<th>Lowest <i>p</i>-value</th>
+<th>Motif Location</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>ce1cg</td>
+<td>7.54e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:60.952%; top:12px; width:17.143%; height:6.1px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 7.54e-06    starts: 65    ends: 82    "></div>
+</div></td>
+</tr>
+<tr>
+<td>ara</td>
+<td>2.51e-07</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:55.238%; top:12px; width:17.143%; height:7.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 2.51e-07    starts: 59    ends: 76    "></div>
+</div></td>
+</tr>
+<tr>
+<td>bglr1</td>
+<td>8.30e-05</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:71.429%; top:6.1px; width:17.143%; height:4.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 8.30e-05    starts: 76    ends: 93    "></div>
+</div></td>
+</tr>
+<tr>
+<td>crp</td>
+<td>9.89e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:62.857%; top:12px; width:17.143%; height:6px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 9.89e-06    starts: 67    ends: 84    "></div>
+</div></td>
+</tr>
+<tr>
+<td>cya</td>
+<td>1.81e-05</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:46.667%; top:5.3px; width:17.143%; height:5.7px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.81e-05    starts: 50    ends: 67    "></div>
+</div></td>
+</tr>
+<tr>
+<td>deop2</td>
+<td>2.85e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:56.19%; top:4.3px; width:17.143%; height:6.7px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 2.85e-06    starts: 60    ends: 77    "></div>
+</div></td>
+</tr>
+<tr>
+<td>gale</td>
+<td>1.41e-05</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:42.857%; top:12px; width:17.143%; height:5.8px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.41e-05    starts: 46    ends: 63    "></div>
+</div></td>
+</tr>
+<tr>
+<td>ilv</td>
+<td>1.69e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:40%; top:12px; width:17.143%; height:6.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.69e-06    starts: 43    ends: 60    "></div>
+</div></td>
+</tr>
+<tr>
+<td>lac</td>
+<td>5.35e-07</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:7.619%; top:3.5px; width:17.143%; height:7.5px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 5.35e-07    starts: 9    ends: 26    "></div>
+</div></td>
+</tr>
+<tr>
+<td>male</td>
+<td>1.29e-05</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:12.381%; top:5.1px; width:17.143%; height:5.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.29e-05    starts: 14    ends: 31    "></div>
+</div></td>
+</tr>
+<tr>
+<td>malk</td>
+<td>1.67e-05</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:57.143%; top:5.3px; width:17.143%; height:5.7px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.67e-05    starts: 61    ends: 78    "></div>
+</div></td>
+</tr>
+<tr>
+<td>malt</td>
+<td>8.61e-07</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:38.095%; top:3.7px; width:17.143%; height:7.3px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 8.61e-07    starts: 41    ends: 58    "></div>
+</div></td>
+</tr>
+<tr>
+<td>ompa</td>
+<td>9.04e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:44.762%; top:4.9px; width:17.143%; height:6.1px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 9.04e-06    starts: 48    ends: 65    "></div>
+</div></td>
+</tr>
+<tr>
+<td>tnaa</td>
+<td>2.73e-05</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:66.667%; top:5.5px; width:17.143%; height:5.5px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 2.73e-05    starts: 71    ends: 88    "></div>
+</div></td>
+</tr>
+<tr>
+<td>uxu1</td>
+<td>5.17e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:15.238%; top:4.7px; width:17.143%; height:6.3px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 5.17e-06    starts: 17    ends: 34    "></div>
+</div></td>
+</tr>
+<tr>
+<td>pbr322</td>
+<td>2.85e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:53.333%; top:12px; width:17.143%; height:6.7px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 2.85e-06    starts: 57    ends: 74    "></div>
+</div></td>
+</tr>
+<tr>
+<td>trn9cat</td>
+<td>5.69e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:79.048%; top:4.7px; width:17.143%; height:6.3px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 5.69e-06    starts: 84    ends: 101    "></div>
+</div></td>
+</tr>
+<tr>
+<td>tdc</td>
+<td>1.53e-05</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:77.143%; top:12px; width:17.143%; height:5.8px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.53e-05    starts: 82    ends: 99    "></div>
+</div></td>
+</tr>
+<tr>
+<td colspan="2"> </td>
+<td class="block_td" style="color: blue;"><div class="block_container">
+<div class="tic_major" style="left:0%"><div class="tic_label" style="left:-0.5em; width:1em;">0</div></div>
+<div class="tic_minor" style="left:3.81%;"></div>
+<div class="tic_minor" style="left:7.619%;"></div>
+<div class="tic_minor" style="left:11.429%;"></div>
+<div class="tic_minor" style="left:15.238%;"></div>
+<div class="tic_major" style="left:19.048%"><div class="tic_label" style="left:-1em; width:2em;">20</div></div>
+<div class="tic_minor" style="left:22.857%;"></div>
+<div class="tic_minor" style="left:26.667%;"></div>
+<div class="tic_minor" style="left:30.476%;"></div>
+<div class="tic_minor" style="left:34.286%;"></div>
+<div class="tic_major" style="left:38.095%"><div class="tic_label" style="left:-1em; width:2em;">40</div></div>
+<div class="tic_minor" style="left:41.905%;"></div>
+<div class="tic_minor" style="left:45.714%;"></div>
+<div class="tic_minor" style="left:49.524%;"></div>
+<div class="tic_minor" style="left:53.333%;"></div>
+<div class="tic_major" style="left:57.143%"><div class="tic_label" style="left:-1em; width:2em;">60</div></div>
+<div class="tic_minor" style="left:60.952%;"></div>
+<div class="tic_minor" style="left:64.762%;"></div>
+<div class="tic_minor" style="left:68.571%;"></div>
+<div class="tic_minor" style="left:72.381%;"></div>
+<div class="tic_major" style="left:76.19%"><div class="tic_label" style="left:-1em; width:2em;">80</div></div>
+<div class="tic_minor" style="left:80%;"></div>
+<div class="tic_minor" style="left:83.81%;"></div>
+<div class="tic_minor" style="left:87.619%;"></div>
+<div class="tic_minor" style="left:91.429%;"></div>
+<div class="tic_major" style="left:95.238%"><div class="tic_label" style="left:-1.5em; width:3em;">100</div></div>
+<div class="tic_minor" style="left:99.048%;"></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Time 0.8 secs.</p>
+</div>
+<a name="motif_2"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Motif 2</h2></td>
+<td align="right" valign="bottom">
+<a href="#motif_1">Previous</a> <a href="#motif_3">Next</a> <a href="#top_buttons">Top</a>
+</td>
+</tr></table>
+<div class="box">
+<table style="width:100%; background-color:#ddddff">
+<tr>
+<th class="majorth"><h4>Summary <a href="#summary_doc"><div class="help"></div></a>
+</h4></th>
+<th class="majorth"><h4>Sequence Logo <a href="#logo_doc"><div class="help"></div></a>
+</h4></th>
+</tr>
+<tr>
+<td style="width:15em; vertical-align:text-top;">
+<table style="width:100%; " cellspacing="0">
+<col>
+<col style="text-align:left;">
+<tr>
+<th class="minorth">E-value</th>
+<td>1.5e+004</td>
+</tr>
+<tr>
+<th class="minorth">Width</th>
+<td>8</td>
+</tr>
+<tr>
+<th class="minorth">Sites</th>
+<td>2</td>
+</tr>
+</table>
+<a href="javascript:showHidden('summary_extra_2')" id="summary_extra_2_activator">show more</a><div id="summary_extra_2_data" style="display:none"><table style="width:100%;" cellspacing="0">
+<tr><th colspan="2" class="minorth">Log Likelihood Ratio <a href="#llr_doc"><div class="help"></div></a>
+</th></tr>
+<tr>
+<td style="width:8em;"> </td>
+<td>24</td>
+</tr>
+<tr><th colspan="2" class="minorth">Information Content <a href="#ic_doc"><div class="help"></div></a>
+</th></tr>
+<tr>
+<td> </td>
+<td>15.0 (bits)</td>
+</tr>
+<tr><th colspan="2" class="minorth">Relative Entropy <a href="#re_doc"><div class="help"></div></a>
+</th></tr>
+<tr>
+<td> </td>
+<td>17.5 (bits)</td>
+</tr>
+</table></div>
+<a href="javascript:hideShown('summary_extra_2')" id="summary_extra_2_deactivator" style="display:none;">show less</a>
+</td>
+<td>
+<div class="tabMain">
+<img src="logo2.png" style="display:block;" id="logo_img_2" height="140" width="200" alt="PNG LOGOS require CONVERT from ImageMagick; see MEME installation guide"><img src="logo_rc2.png" style="display:none;" id="logo_rc_img_2" height="140" width="200" alt="PNG LOGOS require CONVERT from ImageMagick; see MEME installation guide">
+</div>
+<div class="tabArea base">
+<a id="logo_tab_std_2" href="javascript:clickLogoTab(false,2)" class="tab activeTab">Standard</a><a id="logo_tab_rc_2" href="javascript:clickLogoTab(true,2)" class="tab">Reverse Complement</a>
+</div>
+<br>
+          Download LOGO <a href="#download_doc" class="help"><div class="help"></div></a>
+            
+          Orientation:
+          <select name="logorc_2"><option value="false">standard</option>
+<option value="true">reverse complement</option></select>
+            
+          SSC:
+          <select name="logossc_2"><option value="false">off</option>
+<option value="true">on</option></select>
+            
+          Format:
+          <select name="logoformat_2"><option value="png">web (png)</option>
+<option value="eps">publication (eps)</option></select>
+            
+          Width: 
+          <input type="text" size="2" maxlength="5" value="8" title="Width of logo in cm." name="logowidth_2"> cm 
+            
+          Height: 
+          <input type="text" size="2" maxlength="5" value="7.5" title="Height of logo in cm." name="logoheight_2"> cm 
+            
+          <input type="submit" value="Download" title="Download a logo" name="do_LOGO_2">
+</td>
+</tr>
+</table>
+<h4>Regular expression <a href="#regular_expression_doc" class="help"><div class="help"></div></a>
+</h4>
+<p class="pad">
+CGG[CT]GGGG
+</p>
+<h4>Further Analysis <a href="#further_analysis_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+      Submit this motif to
+      <input type="submit" name="do_MAST_2" value="MAST" title="Scan sequence databases for the best match in each sequence using MAST." onmouseover="javascript:showDesc(this, 'motif2_action_desc')" onmouseout="javascript:hideDesc('motif2_action_desc')"> 
+      <a href="#MAST_doc" title="Click for more information on MAST." class="help"><div class="help"></div></a>
+          
+      <input type="submit" name="do_FIMO_2" value="FIMO" title="Scan sequence databases for all matches with this motif using FIMO." onmouseover="javascript:showDesc(this, 'motif2_action_desc')" onmouseout="javascript:hideDesc('motif2_action_desc')"> 
+      <a href="#FIMO_doc" title="Click for more information on FIMO." class="help"><div class="help"></div></a>
+              
+          <input type="submit" name="do_TOMTOM_2" value="TOMTOM" title="Compare to known motifs in motif databases using TOMTOM." onmouseover="javascript:showDesc(this, 'motif2_action_desc')" onmouseout="javascript:hideDesc('motif2_action_desc')"> 
+          <a href="#TOMTOM_doc" title="Click for more information on TOMTOM." class="help"><div class="help"></div></a>
+              
+          <input type="submit" name="do_GOMO_2" value="GOMO" title="Find Genome Ontology terms associated with upstream regions matching this motif using GOMO." onmouseover="javascript:showDesc(this, 'motif2_action_desc')" onmouseout="javascript:hideDesc('motif2_action_desc')"> 
+          <a href="#GOMO_doc" title="Click for more information on GOMO." class="help"><div class="help"></div></a>
+          
+      <input type="submit" name="do_BLOCKS_2" value="BLOCKS" title="Submit this motif to BLOCKS multiple alignment processor." onclick="return warnExternal()" onmouseover="javascript:showDesc(this, 'motif2_action_desc')" onmouseout="javascript:hideDesc('motif2_action_desc')"> 
+      <a href="#BLOCKS_doc" title="Click for more information on BLOCKS." class="help"><div class="help"></div></a>
+       <span id="motif2_action_desc">Mouse-over buttons for more information.</span>
+</div>
+<h4>Data Formats <a href="#formats_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+      View the motif in 
+      <input name="format_display_2" type="radio" onclick="javascript:showEmbededFormat(2, 'pspm')">PSPM Format 
+      <a href="#format_PSPM_doc" title="Click for more information on PSPMs." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_2" type="radio" onclick="javascript:showEmbededFormat(2, 'pssm')">PSSM Format 
+      <a href="#format_PSSM_doc" title="Click for more information on PSSMs." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_2" type="radio" onclick="javascript:showEmbededFormat(2, 'blocks')">BLOCKS Format 
+      <a href="#format_BLOCKS_doc" title="Click for more information on BLOCKS format." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_2" type="radio" onclick="javascript:showFasta(2)">FASTA Format 
+      <a href="#format_FASTA_doc" title="Click for more information on FASTA format." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_2" type="radio" onclick="javascript:showRaw(2)">Raw Format 
+      <a href="#format_raw_doc" title="Click for more information on raw format." class="help"><div class="help"></div></a>
+          
+      or
+      <input name="format_display_2" type="radio" onclick="javascript:hideFormat(2)" checked>Hide<br><textarea id="format_display_area_2" rows="20" style="display:none; width:100%;" readonly></textarea><noscript>This feature requires javascript.</noscript>
+</div>
+<h4>Sites <a href="#sites_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>Click on any row to highlight sequence in all motifs.</p>
+<table id="tbl_sites_2" cellpadding="0.5cm">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<thead><tr>
+<th>Name <a name="sites1"></a>
+</th>
+<th>Strand</th>
+<th>Start</th>
+<th>
+<i>p</i>-value</th>
+<th colspan="3">Sites <a href="#sites_doc" class="help"><div class="help"></div></a>
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="strand_name">ilv</td>
+<td class="strand_side">+</td>
+<td class="strand_start">5</td>
+<td class="strand_pvalue">2.18e-06</td>
+<td class="strand_lflank">GCTC</td>
+<td class="strand_seq">
+<span style="color:blue">C</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span>
+</td>
+<td class="strand_rflank">TTTTTTGTTA</td>
+</tr>
+<tr>
+<td class="strand_name">male</td>
+<td class="strand_side">+</td>
+<td class="strand_start">41</td>
+<td class="strand_pvalue">5.56e-06</td>
+<td class="strand_lflank">CACAAAGCGA</td>
+<td class="strand_seq">
+<span style="color:blue">C</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span>
+</td>
+<td class="strand_rflank">CGTAGGGGCA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4>Block Diagrams <a href="#diagrams_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>
+        The height of the motif "block" is proportional to -log(p-value), truncated at the height for a motif with a p-value of 1e-10.<br>
+        Click on any row to highlight sequence in all motifs. Mouse over the center of the motif blocks to see more information.
+      </p>
+<table id="tbl_blocks_2" style="width:100%;" border="0">
+<col style="width:10em;">
+<col style="width:5em;">
+<col>
+<thead><tr>
+<th>Name</th>
+<th>Lowest <i>p</i>-value</th>
+<th>Motif Location</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>ilv</td>
+<td>2.18e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:3.81%; top:4.2px; width:7.619%; height:6.8px; background-color:blue; border: 1px solid black;" title="Motif 2    p-value: 2.18e-06    starts: 5    ends: 12    "></div>
+</div></td>
+</tr>
+<tr>
+<td>male</td>
+<td>5.56e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:38.095%; top:4.7px; width:7.619%; height:6.3px; background-color:blue; border: 1px solid black;" title="Motif 2    p-value: 5.56e-06    starts: 41    ends: 48    "></div>
+</div></td>
+</tr>
+<tr>
+<td colspan="2"> </td>
+<td class="block_td" style="color: blue;"><div class="block_container">
+<div class="tic_major" style="left:0%"><div class="tic_label" style="left:-0.5em; width:1em;">0</div></div>
+<div class="tic_minor" style="left:3.81%;"></div>
+<div class="tic_minor" style="left:7.619%;"></div>
+<div class="tic_minor" style="left:11.429%;"></div>
+<div class="tic_minor" style="left:15.238%;"></div>
+<div class="tic_major" style="left:19.048%"><div class="tic_label" style="left:-1em; width:2em;">20</div></div>
+<div class="tic_minor" style="left:22.857%;"></div>
+<div class="tic_minor" style="left:26.667%;"></div>
+<div class="tic_minor" style="left:30.476%;"></div>
+<div class="tic_minor" style="left:34.286%;"></div>
+<div class="tic_major" style="left:38.095%"><div class="tic_label" style="left:-1em; width:2em;">40</div></div>
+<div class="tic_minor" style="left:41.905%;"></div>
+<div class="tic_minor" style="left:45.714%;"></div>
+<div class="tic_minor" style="left:49.524%;"></div>
+<div class="tic_minor" style="left:53.333%;"></div>
+<div class="tic_major" style="left:57.143%"><div class="tic_label" style="left:-1em; width:2em;">60</div></div>
+<div class="tic_minor" style="left:60.952%;"></div>
+<div class="tic_minor" style="left:64.762%;"></div>
+<div class="tic_minor" style="left:68.571%;"></div>
+<div class="tic_minor" style="left:72.381%;"></div>
+<div class="tic_major" style="left:76.19%"><div class="tic_label" style="left:-1em; width:2em;">80</div></div>
+<div class="tic_minor" style="left:80%;"></div>
+<div class="tic_minor" style="left:83.81%;"></div>
+<div class="tic_minor" style="left:87.619%;"></div>
+<div class="tic_minor" style="left:91.429%;"></div>
+<div class="tic_major" style="left:95.238%"><div class="tic_label" style="left:-1.5em; width:3em;">100</div></div>
+<div class="tic_minor" style="left:99.048%;"></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Time 1.3 secs.</p>
+</div>
+<a name="motif_3"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Motif 3</h2></td>
+<td align="right" valign="bottom">
+<a href="#motif_2">Previous</a> <a href="#top_buttons">Top</a>
+</td>
+</tr></table>
+<div class="box">
+<table style="width:100%; background-color:#ddddff">
+<tr>
+<th class="majorth"><h4>Summary <a href="#summary_doc"><div class="help"></div></a>
+</h4></th>
+<th class="majorth"><h4>Sequence Logo <a href="#logo_doc"><div class="help"></div></a>
+</h4></th>
+</tr>
+<tr>
+<td style="width:15em; vertical-align:text-top;">
+<table style="width:100%; " cellspacing="0">
+<col>
+<col style="text-align:left;">
+<tr>
+<th class="minorth">E-value</th>
+<td>2.0e+004</td>
+</tr>
+<tr>
+<th class="minorth">Width</th>
+<td>11</td>
+</tr>
+<tr>
+<th class="minorth">Sites</th>
+<td>2</td>
+</tr>
+</table>
+<a href="javascript:showHidden('summary_extra_3')" id="summary_extra_3_activator">show more</a><div id="summary_extra_3_data" style="display:none"><table style="width:100%;" cellspacing="0">
+<tr><th colspan="2" class="minorth">Log Likelihood Ratio <a href="#llr_doc"><div class="help"></div></a>
+</th></tr>
+<tr>
+<td style="width:8em;"> </td>
+<td>31</td>
+</tr>
+<tr><th colspan="2" class="minorth">Information Content <a href="#ic_doc"><div class="help"></div></a>
+</th></tr>
+<tr>
+<td> </td>
+<td>20.0 (bits)</td>
+</tr>
+<tr><th colspan="2" class="minorth">Relative Entropy <a href="#re_doc"><div class="help"></div></a>
+</th></tr>
+<tr>
+<td> </td>
+<td>22.3 (bits)</td>
+</tr>
+</table></div>
+<a href="javascript:hideShown('summary_extra_3')" id="summary_extra_3_deactivator" style="display:none;">show less</a>
+</td>
+<td>
+<div class="tabMain">
+<img src="logo3.png" style="display:block;" id="logo_img_3" height="140" width="260" alt="PNG LOGOS require CONVERT from ImageMagick; see MEME installation guide"><img src="logo_rc3.png" style="display:none;" id="logo_rc_img_3" height="140" width="260" alt="PNG LOGOS require CONVERT from ImageMagick; see MEME installation guide">
+</div>
+<div class="tabArea base">
+<a id="logo_tab_std_3" href="javascript:clickLogoTab(false,3)" class="tab activeTab">Standard</a><a id="logo_tab_rc_3" href="javascript:clickLogoTab(true,3)" class="tab">Reverse Complement</a>
+</div>
+<br>
+          Download LOGO <a href="#download_doc" class="help"><div class="help"></div></a>
+            
+          Orientation:
+          <select name="logorc_3"><option value="false">standard</option>
+<option value="true">reverse complement</option></select>
+            
+          SSC:
+          <select name="logossc_3"><option value="false">off</option>
+<option value="true">on</option></select>
+            
+          Format:
+          <select name="logoformat_3"><option value="png">web (png)</option>
+<option value="eps">publication (eps)</option></select>
+            
+          Width: 
+          <input type="text" size="2" maxlength="5" value="11" title="Width of logo in cm." name="logowidth_3"> cm 
+            
+          Height: 
+          <input type="text" size="2" maxlength="5" value="7.5" title="Height of logo in cm." name="logoheight_3"> cm 
+            
+          <input type="submit" value="Download" title="Download a logo" name="do_LOGO_3">
+</td>
+</tr>
+</table>
+<h4>Regular expression <a href="#regular_expression_doc" class="help"><div class="help"></div></a>
+</h4>
+<p class="pad">
+CCTGG[GT]GT[CG]CC
+</p>
+<h4>Further Analysis <a href="#further_analysis_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+      Submit this motif to
+      <input type="submit" name="do_MAST_3" value="MAST" title="Scan sequence databases for the best match in each sequence using MAST." onmouseover="javascript:showDesc(this, 'motif3_action_desc')" onmouseout="javascript:hideDesc('motif3_action_desc')"> 
+      <a href="#MAST_doc" title="Click for more information on MAST." class="help"><div class="help"></div></a>
+          
+      <input type="submit" name="do_FIMO_3" value="FIMO" title="Scan sequence databases for all matches with this motif using FIMO." onmouseover="javascript:showDesc(this, 'motif3_action_desc')" onmouseout="javascript:hideDesc('motif3_action_desc')"> 
+      <a href="#FIMO_doc" title="Click for more information on FIMO." class="help"><div class="help"></div></a>
+              
+          <input type="submit" name="do_TOMTOM_3" value="TOMTOM" title="Compare to known motifs in motif databases using TOMTOM." onmouseover="javascript:showDesc(this, 'motif3_action_desc')" onmouseout="javascript:hideDesc('motif3_action_desc')"> 
+          <a href="#TOMTOM_doc" title="Click for more information on TOMTOM." class="help"><div class="help"></div></a>
+              
+          <input type="submit" name="do_GOMO_3" value="GOMO" title="Find Genome Ontology terms associated with upstream regions matching this motif using GOMO." onmouseover="javascript:showDesc(this, 'motif3_action_desc')" onmouseout="javascript:hideDesc('motif3_action_desc')"> 
+          <a href="#GOMO_doc" title="Click for more information on GOMO." class="help"><div class="help"></div></a>
+          
+      <input type="submit" name="do_BLOCKS_3" value="BLOCKS" title="Submit this motif to BLOCKS multiple alignment processor." onclick="return warnExternal()" onmouseover="javascript:showDesc(this, 'motif3_action_desc')" onmouseout="javascript:hideDesc('motif3_action_desc')"> 
+      <a href="#BLOCKS_doc" title="Click for more information on BLOCKS." class="help"><div class="help"></div></a>
+       <span id="motif3_action_desc">Mouse-over buttons for more information.</span>
+</div>
+<h4>Data Formats <a href="#formats_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+      View the motif in 
+      <input name="format_display_3" type="radio" onclick="javascript:showEmbededFormat(3, 'pspm')">PSPM Format 
+      <a href="#format_PSPM_doc" title="Click for more information on PSPMs." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_3" type="radio" onclick="javascript:showEmbededFormat(3, 'pssm')">PSSM Format 
+      <a href="#format_PSSM_doc" title="Click for more information on PSSMs." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_3" type="radio" onclick="javascript:showEmbededFormat(3, 'blocks')">BLOCKS Format 
+      <a href="#format_BLOCKS_doc" title="Click for more information on BLOCKS format." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_3" type="radio" onclick="javascript:showFasta(3)">FASTA Format 
+      <a href="#format_FASTA_doc" title="Click for more information on FASTA format." class="help"><div class="help"></div></a>
+          
+      <input name="format_display_3" type="radio" onclick="javascript:showRaw(3)">Raw Format 
+      <a href="#format_raw_doc" title="Click for more information on raw format." class="help"><div class="help"></div></a>
+          
+      or
+      <input name="format_display_3" type="radio" onclick="javascript:hideFormat(3)" checked>Hide<br><textarea id="format_display_area_3" rows="20" style="display:none; width:100%;" readonly></textarea><noscript>This feature requires javascript.</noscript>
+</div>
+<h4>Sites <a href="#sites_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>Click on any row to highlight sequence in all motifs.</p>
+<table id="tbl_sites_3" cellpadding="0.5cm">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<col style="">
+<thead><tr>
+<th>Name <a name="sites1"></a>
+</th>
+<th>Strand</th>
+<th>Start</th>
+<th>
+<i>p</i>-value</th>
+<th colspan="3">Sites <a href="#sites_doc" class="help"><div class="help"></div></a>
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="strand_name">lac</td>
+<td class="strand_side">-</td>
+<td class="strand_start">33</td>
+<td class="strand_pvalue">7.89e-08</td>
+<td class="strand_lflank">AAGTGTAAAG</td>
+<td class="strand_seq">
+<span style="color:blue">C</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:blue">C</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">TAATGAGTGA</td>
+</tr>
+<tr>
+<td class="strand_name">trn9cat</td>
+<td class="strand_side">+</td>
+<td class="strand_start">36</td>
+<td class="strand_pvalue">2.01e-07</td>
+<td class="strand_lflank">ATAAATAAAT</td>
+<td class="strand_seq">
+<span style="color:blue">C</span><span style="color:blue">C</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:orange">G</span><span style="color:green">T</span><span style="color:blue">C</span><span style="color:blue">C</span><span style="color:blue">C</span>
+</td>
+<td class="strand_rflank">TGTTGATACC</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4>Block Diagrams <a href="#diagrams_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>
+        The height of the motif "block" is proportional to -log(p-value), truncated at the height for a motif with a p-value of 1e-10.<br>
+        Click on any row to highlight sequence in all motifs. Mouse over the center of the motif blocks to see more information.
+      </p>
+<table id="tbl_blocks_3" style="width:100%;" border="0">
+<col style="width:10em;">
+<col style="width:5em;">
+<col>
+<thead><tr>
+<th>Name</th>
+<th>Lowest <i>p</i>-value</th>
+<th>Motif Location</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>lac</td>
+<td>7.89e-08</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:30.476%; top:12px; width:10.476%; height:8.5px; background-color:red; border: 1px solid black;" title="Motif 3    p-value: 7.89e-08    starts: 33    ends: 43    "></div>
+</div></td>
+</tr>
+<tr>
+<td>trn9cat</td>
+<td>2.01e-07</td>
+<td class="block_td"><div class="block_container">
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_rule" style="width:100%"></div>
+<div class="block_motif" style="left:33.333%; top:3px; width:10.476%; height:8px; background-color:red; border: 1px solid black;" title="Motif 3    p-value: 2.01e-07    starts: 36    ends: 46    "></div>
+</div></td>
+</tr>
+<tr>
+<td colspan="2"> </td>
+<td class="block_td" style="color: blue;"><div class="block_container">
+<div class="tic_major" style="left:0%"><div class="tic_label" style="left:-0.5em; width:1em;">0</div></div>
+<div class="tic_minor" style="left:3.81%;"></div>
+<div class="tic_minor" style="left:7.619%;"></div>
+<div class="tic_minor" style="left:11.429%;"></div>
+<div class="tic_minor" style="left:15.238%;"></div>
+<div class="tic_major" style="left:19.048%"><div class="tic_label" style="left:-1em; width:2em;">20</div></div>
+<div class="tic_minor" style="left:22.857%;"></div>
+<div class="tic_minor" style="left:26.667%;"></div>
+<div class="tic_minor" style="left:30.476%;"></div>
+<div class="tic_minor" style="left:34.286%;"></div>
+<div class="tic_major" style="left:38.095%"><div class="tic_label" style="left:-1em; width:2em;">40</div></div>
+<div class="tic_minor" style="left:41.905%;"></div>
+<div class="tic_minor" style="left:45.714%;"></div>
+<div class="tic_minor" style="left:49.524%;"></div>
+<div class="tic_minor" style="left:53.333%;"></div>
+<div class="tic_major" style="left:57.143%"><div class="tic_label" style="left:-1em; width:2em;">60</div></div>
+<div class="tic_minor" style="left:60.952%;"></div>
+<div class="tic_minor" style="left:64.762%;"></div>
+<div class="tic_minor" style="left:68.571%;"></div>
+<div class="tic_minor" style="left:72.381%;"></div>
+<div class="tic_major" style="left:76.19%"><div class="tic_label" style="left:-1em; width:2em;">80</div></div>
+<div class="tic_minor" style="left:80%;"></div>
+<div class="tic_minor" style="left:83.81%;"></div>
+<div class="tic_minor" style="left:87.619%;"></div>
+<div class="tic_minor" style="left:91.429%;"></div>
+<div class="tic_major" style="left:95.238%"><div class="tic_label" style="left:-1.5em; width:3em;">100</div></div>
+<div class="tic_minor" style="left:99.048%;"></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Time 1.9 secs.</p>
+</div>
+<a name="combined"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">All Motifs</h2></td>
+<td align="right" valign="bottom"><a href="#top_buttons">Top</a></td>
+</tr></table>
+<div class="box">
+<h4>Combined Block Diagrams <a href="#combined_doc" class="help"><div class="help"></div></a>
+</h4>
+<div class="pad">
+<p>
+        Non-overlapping sites with a <i>p</i>-value better than 0.0001.<br>
+        The height of the motif "block" is proportional to -log(p-value), truncated at the height for a motif with a p-value of 1e-10.<br>
+        Click on any row to highlight sequence in all motifs. The motif blocks have tool tips with more information.
+      </p>
+<div style="text-align:right">
+<table style="display:inline-block; padding:5px;"><tr>
+<td><div style="width: 20px; height: 20px; background-color:aqua; border: 1px solid black"></div></td>
+<td>Motif 1</td>
+</tr></table>
+<table style="display:inline-block; padding:5px;"><tr>
+<td><div style="width: 20px; height: 20px; background-color:blue; border: 1px solid black"></div></td>
+<td>Motif 2</td>
+</tr></table>
+<table style="display:inline-block; padding:5px;"><tr>
+<td><div style="width: 20px; height: 20px; background-color:red; border: 1px solid black"></div></td>
+<td>Motif 3</td>
+</tr></table>
+</div>
+<table id="tbl_blocks_combined" style="width:100%;" border="0">
+<col style="width:10em;">
+<col style="width:5em;">
+<col>
+<thead><tr>
+<th>Name</th>
+<th>Combined <i>p</i>-value</th>
+<th>Motif Location</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>ce1cg</td>
+<td>7.53e-03</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:60.952%; top:12px; width:17.143%; height:6.1px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 7.54e-06    starts: 65    ends: 82    "></div>
+</div></td>
+</tr>
+<tr>
+<td>ara</td>
+<td>9.02e-04</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:55.238%; top:12px; width:17.143%; height:7.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 2.51e-07    starts: 59    ends: 76    "></div>
+</div></td>
+</tr>
+<tr>
+<td>bglr1</td>
+<td>2.01e-01</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:71.429%; top:6.1px; width:17.143%; height:4.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 8.30e-05    starts: 76    ends: 93    "></div>
+</div></td>
+</tr>
+<tr>
+<td>crp</td>
+<td>3.77e-02</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:62.857%; top:12px; width:17.143%; height:6px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 9.89e-06    starts: 67    ends: 84    "></div>
+</div></td>
+</tr>
+<tr>
+<td>cya</td>
+<td>6.49e-02</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:46.667%; top:5.3px; width:17.143%; height:5.7px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.81e-05    starts: 50    ends: 67    "></div>
+</div></td>
+</tr>
+<tr>
+<td>deop2</td>
+<td>1.19e-02</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:56.19%; top:4.3px; width:17.143%; height:6.7px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 2.85e-06    starts: 60    ends: 77    "></div>
+</div></td>
+</tr>
+<tr>
+<td>gale</td>
+<td>6.15e-02</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:42.857%; top:12px; width:17.143%; height:5.8px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.41e-05    starts: 46    ends: 63    "></div>
+</div></td>
+</tr>
+<tr>
+<td>ilv</td>
+<td>4.50e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:3.81%; top:4.2px; width:7.619%; height:6.8px; background-color:blue; border: 1px solid black;" title="Motif 2    p-value: 2.18e-06    starts: 5    ends: 12    "></div>
+<div class="block_motif" style="left:40%; top:12px; width:17.143%; height:6.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.69e-06    starts: 43    ends: 60    "></div>
+</div></td>
+</tr>
+<tr>
+<td>lac</td>
+<td>1.93e-07</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:7.619%; top:3.5px; width:17.143%; height:7.5px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 5.35e-07    starts: 9    ends: 26    "></div>
+<div class="block_motif" style="left:30.476%; top:12px; width:10.476%; height:8.5px; background-color:red; border: 1px solid black;" title="Motif 3    p-value: 7.89e-08    starts: 33    ends: 43    "></div>
+</div></td>
+</tr>
+<tr>
+<td>male</td>
+<td>1.22e-04</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:12.381%; top:5.1px; width:17.143%; height:5.9px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.29e-05    starts: 14    ends: 31    "></div>
+<div class="block_motif" style="left:38.095%; top:4.7px; width:7.619%; height:6.3px; background-color:blue; border: 1px solid black;" title="Motif 2    p-value: 5.56e-06    starts: 41    ends: 48    "></div>
+</div></td>
+</tr>
+<tr>
+<td>malk</td>
+<td>1.39e-02</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:57.143%; top:5.3px; width:17.143%; height:5.7px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.67e-05    starts: 61    ends: 78    "></div>
+</div></td>
+</tr>
+<tr>
+<td>malt</td>
+<td>5.01e-03</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:38.095%; top:3.7px; width:17.143%; height:7.3px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 8.61e-07    starts: 41    ends: 58    "></div>
+</div></td>
+</tr>
+<tr>
+<td>ompa</td>
+<td>3.94e-02</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:44.762%; top:4.9px; width:17.143%; height:6.1px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 9.04e-06    starts: 48    ends: 65    "></div>
+</div></td>
+</tr>
+<tr>
+<td>tnaa</td>
+<td>2.80e-02</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:70.476%; top:12px; width:17.143%; height:5.8px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.41e-05    starts: 75    ends: 92    "></div>
+</div></td>
+</tr>
+<tr>
+<td>uxu1</td>
+<td>1.70e-02</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:15.238%; top:4.7px; width:17.143%; height:6.3px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 5.17e-06    starts: 17    ends: 34    "></div>
+</div></td>
+</tr>
+<tr>
+<td>pbr322</td>
+<td>6.62e-03</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:53.333%; top:12px; width:17.143%; height:6.7px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 2.85e-06    starts: 57    ends: 74    "></div>
+</div></td>
+</tr>
+<tr>
+<td>trn9cat</td>
+<td>5.41e-06</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:33.333%; top:3px; width:10.476%; height:8px; background-color:red; border: 1px solid black;" title="Motif 3    p-value: 2.01e-07    starts: 36    ends: 46    "></div>
+<div class="block_motif" style="left:79.048%; top:4.7px; width:17.143%; height:6.3px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 5.69e-06    starts: 84    ends: 101    "></div>
+</div></td>
+</tr>
+<tr>
+<td>tdc</td>
+<td>6.53e-02</td>
+<td class="block_td"><div class="block_container">
+<div class="block_rule" style="width:100%"></div>
+<div class="block_plus_sym">+</div>
+<div class="block_minus_sym">-</div>
+<div class="block_motif" style="left:77.143%; top:12px; width:17.143%; height:5.8px; background-color:aqua; border: 1px solid black;" title="Motif 1    p-value: 1.53e-05    starts: 82    ends: 99    "></div>
+</div></td>
+</tr>
+<tr>
+<td colspan="2"> </td>
+<td class="block_td" style="color: blue;"><div class="block_container">
+<div class="tic_major" style="left:0%"><div class="tic_label" style="left:-0.5em; width:1em;">0</div></div>
+<div class="tic_minor" style="left:3.81%;"></div>
+<div class="tic_minor" style="left:7.619%;"></div>
+<div class="tic_minor" style="left:11.429%;"></div>
+<div class="tic_minor" style="left:15.238%;"></div>
+<div class="tic_major" style="left:19.048%"><div class="tic_label" style="left:-1em; width:2em;">20</div></div>
+<div class="tic_minor" style="left:22.857%;"></div>
+<div class="tic_minor" style="left:26.667%;"></div>
+<div class="tic_minor" style="left:30.476%;"></div>
+<div class="tic_minor" style="left:34.286%;"></div>
+<div class="tic_major" style="left:38.095%"><div class="tic_label" style="left:-1em; width:2em;">40</div></div>
+<div class="tic_minor" style="left:41.905%;"></div>
+<div class="tic_minor" style="left:45.714%;"></div>
+<div class="tic_minor" style="left:49.524%;"></div>
+<div class="tic_minor" style="left:53.333%;"></div>
+<div class="tic_major" style="left:57.143%"><div class="tic_label" style="left:-1em; width:2em;">60</div></div>
+<div class="tic_minor" style="left:60.952%;"></div>
+<div class="tic_minor" style="left:64.762%;"></div>
+<div class="tic_minor" style="left:68.571%;"></div>
+<div class="tic_minor" style="left:72.381%;"></div>
+<div class="tic_major" style="left:76.19%"><div class="tic_label" style="left:-1em; width:2em;">80</div></div>
+<div class="tic_minor" style="left:80%;"></div>
+<div class="tic_minor" style="left:83.81%;"></div>
+<div class="tic_minor" style="left:87.619%;"></div>
+<div class="tic_minor" style="left:91.429%;"></div>
+<div class="tic_major" style="left:95.238%"><div class="tic_label" style="left:-1.5em; width:3em;">100</div></div>
+<div class="tic_minor" style="left:99.048%;"></div>
+</div></td>
+</tr>
+</tbody>
+</table>
+<div style="text-align:right">
+<table style="display:inline-block; padding:5px;"><tr>
+<td><div style="width: 20px; height: 20px; background-color:aqua; border: 1px solid black"></div></td>
+<td>Motif 1</td>
+</tr></table>
+<table style="display:inline-block; padding:5px;"><tr>
+<td><div style="width: 20px; height: 20px; background-color:blue; border: 1px solid black"></div></td>
+<td>Motif 2</td>
+</tr></table>
+<table style="display:inline-block; padding:5px;"><tr>
+<td><div style="width: 20px; height: 20px; background-color:red; border: 1px solid black"></div></td>
+<td>Motif 3</td>
+</tr></table>
+</div>
+</div>
+</div>
+<div class="bar">
+<div style="text-align:right;"><a href="#top_buttons">Top</a></div>
+<div class="subsection">
+<a name="version"></a><h5>MEME version</h5>4.9.1 (Release date: Fri Aug 23 16:49:42 2013 +1000)
+      </div>
+<div class="subsection">
+<a name="reference"></a><h5>Reference</h5>
+<span class="citation">
+          Timothy L. Bailey and Charles Elkan,
+          "Fitting a mixture model by expectation maximization to discover motifs in biopolymers",
+          <em>Proceedings of the Second International Conference on Intelligent Systems
+          for Molecular Biology</em>, pp. 28-36, AAAI Press, Menlo Park, California, 1994.
+        </span>
+</div>
+<a name="sequences"></a><a href="javascript:showHidden('trainingseq')" id="trainingseq_activator">show training set...</a><div class="subsection" id="trainingseq_data" style="display:none;">
+<h5>Training set:</h5>
+        Datafile = crp0.s<br>
+        Alphabet = ACGT<br><table>
+<col>
+<col>
+<col>
+<tr style="vertical-align:top;">
+<td><table class="trainingset">
+<col>
+<col>
+<col>
+<tr>
+<th>Sequence name</th>
+<th>Weighting</th>
+<th>Length</th>
+</tr>
+<tr>
+<td>ce1cg</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>crp</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>gale</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>male</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>ompa</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>pbr322</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+</table></td>
+<td><table class="trainingset">
+<col>
+<col>
+<col>
+<tr>
+<th>Sequence name</th>
+<th>Weighting</th>
+<th>Length</th>
+</tr>
+<tr>
+<td>ara</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>cya</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>ilv</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>malk</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>tnaa</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>trn9cat</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+</table></td>
+<td><table class="trainingset">
+<col>
+<col>
+<col>
+<tr>
+<th>Sequence name</th>
+<th>Weighting</th>
+<th>Length</th>
+</tr>
+<tr>
+<td>bglr1</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>deop2</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>lac</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>malt</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>uxu1</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+<tr>
+<td>tdc</td>
+<td>1.000000</td>
+<td>105</td>
+</tr>
+</table></td>
+</tr>
+</table>
+</div>
+<a href="javascript:hideShown('trainingseq')" style="display:none;" id="trainingseq_deactivator">hide training set...</a><div class="subsection">
+<a name="command"></a><h5>Command line summary</h5>
+<textarea rows="1" style="width:100%;" readonly>meme crp0.s -oc meme_example_output_files -dna -mod zoops -nmotifs 3 -revcomp </textarea><br>
+        Letter frequencies in dataset<br><div style="margin-left:25px;">A: 0.304   C: 0.196   G: 0.196   T: 0.304</div>
+<br>
+        Background letter frequencies (from dataset with add-one prior applied):<br><div style="margin-left:25px;">A: 0.304   C: 0.196   G: 0.196   T: 0.304</div>
+<br>
+</div>
+<div class="subsection">
+<a name="stopped"></a><h5>Stopping Reason</h5>Stopped because nmotifs = 3 reached. Program ran on <i>tlb-takumi-lt.imb.uq.edu.au</i>.
+      </div>
+<a href="javascript:showHidden('model')" id="model_activator">show model parameters...</a><div class="subsection" id="model_data" style="display:none;">
+<h5>Model parameters</h5>
+<textarea style="width:100%;" rows="28" readonly>
+host                  = tlb-takumi-lt.imb.uq.edu.au
+type                  = zoops
+nmotifs               = 3
+evalue_threshold      = inf
+object_function       = E-value of product of p-values
+min_width             = 8
+max_width             = 50
+minic                 = 0.00
+wg                    = 11
+ws                    = 1
+endgaps               = yes
+minsites              = 2
+maxsites              = 18
+wnsites               = 0.8
+prob                  = 1
+spmap                 = uni
+spfuzz                = 0.5
+prior                 = dirichlet
+beta                  = 0.01
+maxiter               = 50
+distance              = 1e-05
+num_sequences         = 18
+num_positions         = 1890
+seed                  = 0
+seqfrac               = 1
+strands               = both
+priors_file           = 
+reason_for_stopping   = Stopped because nmotifs = 3 reached.
+</textarea>
+</div>
+<a href="javascript:hideShown('model')" style="display:none;" id="model_deactivator">hide model parameters...</a>
+</div>
+<span class="explain"><a name="explanation"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Explanation of MEME Results</h2></td>
+<td align="right" valign="bottom"><a href="#top_buttons">Top</a></td>
+</tr></table>
+<div class="box">
+<h4>The MEME results consist of</h4>
+<ul>
+<li>The <a href="#overview"><b>overview</b></a> of all discovered motifs.</li>
+<li>Information on each of the <a href="#motifs"><b>motifs</b></a> MEME discovered, including:
+            <ol>
+<li>
+                A <a href="#summary_doc"><b>summary table</b></a> showing the width, number of contributing sites, log likelihood ratio, 
+                statistical significance, information content and relative entropy of the motif.
+              </li>
+<li>A <a href="#logo_doc"><b>sequence LOGO</b></a>.</li>
+<li>Downloadable <a href="#download"><b>LOGO files</b></a> suitable for publication.</li>
+<li>A <a href="#regular_expression_doc"><b>regular expression</b></a> describing the motif.</li>
+<li>Some <a href="#further_analysis_doc"><b>further analysis</b></a> that can be performed on the motif.</li>
+<li>A list of <a href="#formats_doc"><b>data formats</b></a> describing the motif.</li>
+<li>The <a href="#sites_doc"><b>contributing sites</b></a> of the motif sorted by <i>p</i>-value and aligned with each other.</li>
+<li>
+                The <a href="#diagrams_doc"><b>block diagrams</b></a> of the contributing sites of the motif within each sequence in the training set.
+              </li>
+</ol>
+</li>
+<li>A <a href="#combined"><b>combined block diagram</b></a> showing an optimized (non-overlapping) 
+             tiling of all of the motifs onto each of the sequences in the training set.
+          </li>
+<li>The <a href="#version"><b>version</b></a> of MEME and the date it was released.</li>
+<li>The <a href="#reference"><b>reference</b></a> to cite if you use MEME in your research.</li>
+<li>
+            A description of the <a href="#sequences"><b>sequences</b></a> you submitted (the "training set") showing the name,
+            "weight" and length of each sequence.
+          </li>
+<li>The <a href="#command"><b>command line summary</b></a> detailing the parameters with which you ran MEME.</li>
+<li>The reason why MEME <a href="#stopped"><b>stopped</b></a> and the name of the CPU on which it ran.</li>
+<li>This <b>explanation</b> of how to interpret MEME results.</li>
+</ul>
+<a name="motifs"></a><h4>Motifs</h4>
+<p>
+          For each motif that it discovers in the training set,
+          MEME prints the following information:
+        </p>
+<a name="summary_doc"></a><h5>Summary Table</h5>
+<div class="doc">
+<p>
+            This summary table gives the main attributes of the motif.
+          </p>
+<dl>
+<dt>
+<i>E</i>-value</dt>
+<dd>
+              The statistical significance of the motif. MEME usually finds the most statistically significant (low <i>E</i>-value) motifs first.
+              The <i>E</i>-value of a motif is based on its log likelihood ratio, width, sites, the background letter frequencies (given in the 
+              <a href="#command">command line summary</a>), and the size of the training set. The <i>E</i>-value is an estimate of the expected 
+              number of motifs with the given log likelihood ratio (or higher), and with the same width and site count, that one would find in 
+              a similarly sized set of random sequences. (In random sequences each position is independent with letters chosen according to 
+              the background letter frequencies.)
+            </dd>
+<dt>Width</dt>
+<dd>The width of the motif. Each motif describes a pattern of a fixed with as no gaps are allowed in MEME motifs.</dd>
+<dt>Sites</dt>
+<dd>The number of sites contributing to the construction of the motif.</dd>
+<dt>
+<a name="llr_doc"></a>Log Likelihood Ratio</dt>
+<dd>
+              The log likelihood ratio of the motif.The log likelihood ratio is the logarithm of the ratio of the probability of the occurrences 
+              of the motif given the motif model (likelihood given the motif) versus their probability given the background model 
+              (likelihood given the null model). (Normally the background model is a 0-order Markov model using the background letter 
+              frequencies, but higher order Markov models may be specified via the <b>-bfile</b> option to MEME.)
+            </dd>
+<dt>
+<a name="ic_doc"></a>Information Content</dt>
+<dd>
+              The information content of the motif in bits. It is equal to the sum of the <b>uncorrected</b> information content, <tt>R()</tt>, 
+              in the columns of the <a href="#logo_doc">LOGO</a>. This is equal relative entropy of the motif relative to a uniform background frequency 
+              model.
+            </dd>
+<dt>
+<a name="re_doc"></a>Relative Entropy</dt>
+<dd>
+              The relative entropy of the motif, computed in bits and relative to the background letter frequencies given in the 
+              <a href="#command">command line summary</a>. It is equal to the log-likelihood ratio (llr) divided by the 
+              number of contributing sites of the motif times <tt>1/ln(2)</tt>,<br><br><tt>re = llr / (sites * ln(2))</tt>.
+            </dd>
+</dl>
+</div>
+<a name="logo_doc"></a><h5 class="doc">Sequence LOGO</h5>
+<div class="doc">
+<p>
+            MEME motifs are represented by position-specific probability matrices 
+            that specify the probability of each possible letter appearing at each
+            possible position in an occurrence of the motif.  These are displayed
+            as "sequence LOGOS", containing stacks of letters at each position
+            in the motif.  The total height of the stack is the "information
+            content" of that position in the motif in bits.  The height of the 
+            individual letters in a stack is the probability of the letter at that 
+            position multiplied by the total information content of the stack.
+          </p>
+<p>
+            Note: The MEME LOGO differs from those produced by the 
+            <a href="http://weblogo.berkeley.edu">Weblogo</a> program
+            because a <b>small-sample correction is NOT applied</b>.  
+            However, MEME LOGOs in PNG and encapsulated postscript (EPS) formats 
+            <b>with small-sample correction (SSC)</b> are available by clicking 
+            on the download button with "SSC" set to "on" under 
+            <a href="#download_doc">Download LOGO</a>.
+            The MEME LOGOs without small sample correction are similarly available.
+            Error bars are included in the LOGOs with small-sample correction.
+          </p>
+<p>
+            Modern web browsers supporting the canvas element and it's text manipulation functions as described in the 
+            html 5 standard, can render the sequence LOGOs without needing the images. The browsers which work with this
+            feature are:
+          </p>
+<ul>
+<li>Firefox 3.5 and above</li>
+<li>Safari 4 and above</li>
+<li>Google Chrome 4 and above</li>
+</ul>
+<p>
+            Unfortunately Internet Explorer 8 does not support any html 5 features.          
+          </p>
+<p>          
+            The information content of each motif position is computed as described in the paper by Schneider and Stephens, 
+            "Sequence Logos: A New Way to Display Consensus Sequences" but 
+            <b>the small-sample correction, <tt>e(n)</tt>, is set to zero for the LOGO displayed in the MEME output.</b>
+            The corrected information content of position <tt>i</tt> is given by
+          </p>
+<pre>
+            R(i) for amino acids   = log2(20) - (H(i) + e(n))   (1a) 
+            R(i) for nucleic acids =    2    - (H(i) + e(n))    (1b)
+          </pre>
+<p>where H(i) is the entropy of position <tt>i</tt>,</p>
+<pre>
+            H(l) = - (Sum f(a,i) * log2[ f(a,i) ]).             (2)
+          </pre>
+<p>
+            Here, f(a,i) is the frequency of base or amino acid <tt>a</tt> at position <tt>i</tt>, and <tt>e(n)</tt> is the small-sample correction 
+            for an alignment of <tt>n</tt> letters. The height of letter <tt>a</tt> in column <tt>i</tt> is given by
+          </p>
+<pre>
+            height = f(a,i) * R(i)                              (3)
+          </pre>
+<p>The approximation for the small-sample correction, <tt>e(n)</tt>, is given by:</p>
+<pre>
+            e(n) = (s-1) / (2 * ln(2) * n),                     (4)
+          </pre>
+<p>where <tt>s</tt> is 4 for nucleotides, 20 for amino acids, and <tt>n</tt> is the number of sequences in the alignment.</p>
+<p>
+            The letters in the logos are colored as follows.<br>
+            For DNA sequences, the letter categories contain one letter each.
+          </p>
+<table border="1">
+<thead><tr>
+<th>NUCLEIC ACIDS</th>
+<th>COLOR</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="color:red;">RED</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="color:blue;">BLUE</td>
+</tr>
+<tr>
+<td>G</td>
+<td style="color:orange;">ORANGE</td>
+</tr>
+<tr>
+<td>T</td>
+<td style="color:green;">GREEN</td>
+</tr>
+</tbody>
+</table>
+<p>For proteins, the categories are based on the biochemical properties of the various amino acids.</p>
+<table border="1">
+<thead><tr>
+<th>AMINO ACIDS</th>
+<th>COLOR</th>
+<th>PROPERTIES</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>A, C, F, I, L, V, W and M</td>
+<td style="color:blue;">BLUE</td>
+<td>Most hydrophobic[Kyte and Doolittle, 1982]</td>
+</tr>
+<tr>
+<td>NQST</td>
+<td style="color:green;">GREEN</td>
+<td>Polar, non-charged, non-aliphatic residues</td>
+</tr>
+<tr>
+<td>DE</td>
+<td style="color:magenta;">MAGENTA</td>
+<td>Acidic</td>
+</tr>
+<tr>
+<td>KR</td>
+<td style="color:red;">RED</td>
+<td>Positively charged</td>
+</tr>
+<tr>
+<td>H</td>
+<td style="color:pink;">PINK</td>
+<td> </td>
+</tr>
+<tr>
+<td>G</td>
+<td style="color:orange;">ORANGE</td>
+<td> </td>
+</tr>
+<tr>
+<td>P</td>
+<td style="color:yellow;">YELLOW</td>
+<td> </td>
+</tr>
+<tr>
+<td>Y</td>
+<td style="color:turquoise;">TURQUOISE</td>
+<td> </td>
+</tr>
+</tbody>
+</table>
+<p>
+            J. Kyte and R. Doolittle, 1982. "A Simple Method for Displaying the Hydropathic Character of a Protein",
+            J. Mol Biol. 157, 105-132.
+          </p>
+<p><b>Note:</b> the "text" output format of MEME preserves the historical MEME format where LOGOS are replaced by a simplified probability 
+            matrix, a relative entropy plot, and a multi-level consensus sequence.
+          </p>
+</div>
+<a name="download_doc"></a><h5 class="doc">Download LOGO</h5>
+<div class="doc"><p>
+            Logos can be generated on the fly by the meme webservice and you may specify a number of options to customize them to your needs.
+            The options are:
+            <dl>
+<dt>Orientation</dt>
+<dd>Only valid for nucleotide motifs. Generate the standard view or the reverse complemented view of the motif.</dd>
+<dt>SSC</dt>
+<dd>Use small sample correction and show errorbars on the image. 
+                Small sample correction is used by the <a href="http://weblogo.berkeley.edu">Weblogo</a> program.</dd>
+<dt>Format</dt>
+<dd>The format of the generated image. 
+                If the image is to be used on the web then png is recommend.
+                If the image is to be published then eps is recommended.
+              </dd>
+<dt>Width</dt>
+<dd>The width of the generated image in centimetres.</dd>
+<dt>Height</dt>
+<dd>The height of the generated image in centimetres.</dd>
+</dl></p></div>
+<a name="regular_expression_doc"></a><h5>Regular Expression</h5>
+<div class="doc"><p>
+            This is a regular expression (RE) describing the motif.  In each column, all letters with observed frequencies greater than 0.2 are shown;
+            less-frequent letters are not included in the RE. MEME regular expressions are interpreted as follows: single letters match that letter; 
+            groups of letters in square brackets match any of the letters in the group. Regular expressions can be used for searching for the motif 
+            in sequences (using, for example, <a href="http://nar.oxfordjournals.org/cgi/content/full/33/suppl_2/W262">PatMatch</a>) but the search 
+            accuracy will usually be better with the PSSM (using, for example <a href="http://meme.nbcr.net/meme/mast-intro.html">MAST</a>.)
+          </p></div>
+<a name="further_analysis_doc"></a><h5>Further Analysis</h5>
+<div class="doc">
+<p>Either as a group or individually the motifs have a number of options for further analysis.</p>
+<dl>
+<dt>
+<a name="MAST_doc"></a>MAST</dt>
+<dd>
+              Finds the best matching positions for a set of motifs in each sequence provided to it, ranked by the combined score of each sequence.
+              For more information about MAST please read the <a href="http://meme.nbcr.net/meme/mast-intro.html">introduction</a>.
+            </dd>
+<dt>
+<a name="FIMO_doc"></a>FIMO</dt>
+<dd>
+              Finds all matches for a motif.
+              For more information about FIMO please read the <a href="http://meme.nbcr.net/meme/fimo-intro.html">introduction</a>.
+            </dd>
+<dt>
+<a name="TOMTOM_doc"></a>TOMTOM</dt>
+<dd>
+              Compares a single motif to a database of motifs.
+              For more information about TOMTOM please read the <a href="http://meme.nbcr.net/meme/tomtom-intro.html">introduction</a>.
+            </dd>
+<dt>
+<a name="GOMO_doc"></a>GOMO</dt>
+<dd>
+              Identifies possible roles of DNA binding motifs.
+              For more information about GOMO please read the <a href="http://meme.nbcr.net/meme/gomo-intro.html">introduction</a>.
+            </dd>
+<dt>
+<a name="BLOCKS_doc"></a>BLOCKS</dt>
+<dd>
+              Submit to Blocks Multiple Alignment Processor where you can do several things like create phylogeny trees and search the blocks 
+              against a database of other blocks (protein only). For more information about BLOCKS Multiple Alignment Processor please visit the 
+              <a href="http://blocks.fhcrc.org/blocks/process_blocks.html">website</a>.
+            </dd>
+</dl>
+</div>
+<a name="formats_doc"></a><h5>Data Formats</h5>
+<div class="doc">
+<p>The extracted data is avaliable in the following formats.</p>
+<dl>
+<dt>
+<a name="format_PSPM_doc"></a>PSPM Format</dt>
+<dd>
+              The motif itself is a position-specific probability matrix giving, for each position in the pattern, the observed frequency ("probability") 
+              of each possible letter. The probability matrix is printed "sideways"--columns correspond to the letters in the alphabet (in the same order 
+              as shown in the simplified motif) and rows corresponding to the positions of the motif, position one first. The motif is preceded by a line 
+              starting with "letter-probability matrix:" and containing the length of the alphabet, width of the motif, number of occurrences of the motif,
+              and the <i>E</i>-value of the motif.<br><b>Note:</b> Earlier versions of MEME gave the posterior probabilities--the probability after applying a prior on letter frequencies--rather 
+              than the observed frequencies. These versions of MEME also gave the number of <i>possible</i> positions for the motif rather than the actual 
+              number of occurrences. The output from these earlier versions of MEME can be distinguished by "n=" rather than "nsites=" in the line 
+              preceding the matrix.
+            </dd>
+<dt>
+<a name="format_PSSM_doc"></a>PSSM Format</dt>
+<dd>
+              The position-specific scoring matrix corresponding to the motif is printed for use by database search programs such as MAST.
+              This matrix is a log-odds matrix calculated by taking 100 times the log (base 2) of the ratio <i>p/f</i> at each position in
+              the motif where <i>p</i> is the probability of a particular letter at that position in the motif, and <i>f</i> is the background 
+              frequency of the letter (given in the <a href="#command">command line summary</a> section.) This is the same matrix that is used 
+              above in computing the <i>p</i>-values of the occurrences of the motif in the <a href="#sites_doc">Sites</a>
+              and <a href="#diagrams_doc">Block Diagrams</a> sections. The scoring matrix is printed "sideways"--columns
+              correspond to the letters in the alphabet (in the same order as shown in the simplified motif) and rows corresponding to the 
+              positions of the motif, position one first. The scoring matrix is preceded by a line starting with "log-odds matrix:" and 
+              containing the length of the alphabet, width of the motif, number of characters in the training set, the scoring threshold 
+              (obsolete) and the motif <i>E</i>-value.<br><b>Note:</b> The probability <i>p</i> used to compute the PSSM is <i>not</i> exactly the same as the corresponding value in the 
+              Position Specific Probability Matrix (PSPM). The values of <i>p</i> used to compute the PSSM take into account the motif prior, 
+              whereas the values in the PSPM are just the <i>observed</i> frequencies of letters in the motif sites.
+            </dd>
+<dt>
+<a name="format_BLOCKS_doc"></a>BLOCKS Format</dt>
+<dd>
+              For use with <a href="http://blocks.fhcrc.org/blocks">BLOCKS tools</a>.
+            </dd>
+<dt>
+<a name="format_FASTA_doc"></a>FASTA Format</dt>
+<dd>
+              The FASTA format as described <a href="http://meme.nbcr.net/meme/doc/fasta-format.html">here</a>.
+            </dd>
+<dt>
+<a name="format_raw_doc"></a>Raw Format</dt>
+<dd>
+              Just the sites of the sequences that contributed to the motif. One site per line.
+            </dd>
+</dl>
+</div>
+<a name="sites_doc"></a><h5 class="doc">Sites</h5>
+<div class="doc"><p>
+            MEME displays the occurrences (sites) of the motif in the training set. The sites are shown aligned with each other, and the ten sequence
+            positions preceding and following each site are also shown. Each site is identified by the name of the sequence where it occurs,
+            the strand (if both strands of DNA sequences are being used), and the position in the sequence where the site begins.  When the DNA strand
+            is specified, '+' means the sequence in the training set, and '-' means the reverse complement of the training set sequence.
+            (For '-' strands, the 'start' position is actually the position on the <b>positive</b> strand where the site ends.) The sites are <b>listed 
+              in order of increasing statistical significance</b> (<i>p</i>-value).  The <i>p</i>-value of a site is computed from the the match score of 
+            the site with the <a href="#format_PSSM_doc">position specific scoring matrix</a> for the motif. The <i>p</i>-value gives the probability of a 
+            random string (generated from the background letter frequencies) having the same match score or higher. (This is referred to as the 
+            <b>position <i>p</i>-value</b> by the MAST algorithm.)
+          </p></div>
+<a name="diagrams_doc"></a><h5 class="doc">Block Diagrams</h5>
+<div class="doc"><p>
+            The occurrences of the motif in the training set sequences are shown as coloured blocks on a line. One diagram is printed for each
+            sequence showing all the sites contributating to that motif in that sequence. The sequences are <b>listed in the same order as in the input</b> 
+            to make it easier to compare multiple block diagrams. Additionally the best <i>p</i>-value for the sequence/motif combination is
+            listed though this may not be in ascending order as with the sites. The <i>p</i>-value of an occurrence is the probability of a single
+            random subsequence the length of the motif, generated according to the 0-order background model, having a score at least as high as 
+            the score of the occurrence. When the DNA strand is specified '+', it means the motif appears from left to right on the sequence, and '-' 
+            means the motif appears from right to left on the complementary strand. A sequence position scale is shown at the end of each table of 
+            block diagrams. 
+          </p></div>
+<a name="combined_doc"></a><h5>Combined Block Diagrams</h5>
+<div class="doc">
+<p>
+            The motif occurrences shown in the motif summary <b>may not be exactly the same as those reported in each motif section</b> because 
+            only motifs with a position <em>p</em>-value of 0.0001 that don't overlap other, more significant motif occurrences are shown. 
+          </p>
+<p>
+            See the documentation for <a href="http://meme.nbcr.net/meme/mast-output.html">MAST output</a> for the definition of position and
+            combined <em>p</em>-values.
+          </p>
+</div>
+</div></span><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</form></body>
+</html>

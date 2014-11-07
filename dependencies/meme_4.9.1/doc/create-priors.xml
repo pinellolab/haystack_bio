@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+>
+<html>
+  <head>
+    <title>create-priors</title>
+     <link href="./meme-suite.css" rel="styleSheet" type="text/css" />
+  </head>
+  <body>
+    <div id="main">
+      <script src="./meme-suite-logo.js" type="text/javascript">></script>
+      <h1>create-priors</h1>
+      <p><b>Usage:</b> <code>create-priors <i>&lt;wiggle file&gt;</i></code></p>
+      <p><b>Description:</b></p>
+      <p>
+      <code>create-priors </code> takes as input a series of numeric values defined
+      with respect to one or more DNA sequences.
+      The program converts the data into a probabilistic prior using the method 
+      described in:
+      <blockquote>
+        Gabriel Cuellar-Partida, Fabian A. Buske, Robert C. McLeay, Tom Whitington,
+        William Stafford Noble, and Timothy L. Bailey,
+        <br/>
+        &quot;Epigenetic priors for identifying active transcription 
+        factor binding sites&quot;,
+        <br/>
+        <em>Bioinformatics</em> 28(1): 56-62, 2012
+        <a href="http://bioinformatics.oxfordjournals.org/content/28/1/56.full.pdf">
+        [pdf]
+        </a>
+      </blockquote>
+      </p>
+      <p>
+      A binned distribution for the priors is also generated.
+      Examples of input data types include sequence tags counts from a
+      DNaseI hypersensitivity or histone modification ChIP-seq assay,
+      or sequence conservation scores.
+      </p>
+      <p><b>Input:</b></p> 
+      A file in 
+      <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">wiggle</a> or 
+      <a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig format</a>.
+      <p/>
+      <p><b>Output:</b></p>
+      <p>
+      <code>create-priors</code> will create a directory, 
+      named <code>create-priors_out</code> by default.
+      Any existing output files in the directory will be overwritten.
+      The directory will contain:
+      </p>
+      <ul>
+      <li>
+      A
+      <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">wiggle</a>
+      file named <code>create-priors.wig</code>.
+      This file will contain the position specific priors
+      computed from the input tag counts.
+      </li>
+      <li>
+      A text file named <code>priordist.txt</code>.
+      This file will contain a probability distribution for the priors
+      (<a href="examples/compute_prior_dist_example_output_files/prior.dist.txt">
+      sample file</a>).
+      The first two lines are the minimum and maximum priors.
+      Each succeeding line contains the probability that a prior 
+      is in the corresponding bin.
+      The value of the prior is calculated from the bin number using the formula
+      <pre>
+      prior = ((bin #) / (num bins) * (max prior - min prior)) + (min prior)
+      </pre>
+      </li>
+      </ul>
+      <p>
+      The default output directory can be overridden using the 
+      <code>--o</code> or <code>--oc</code>
+      options which are described below.
+      </p>
+      <p><b>Options:</b></p>
+      <ul>
+      <li><command-option name="alpha"/></li>
+      <li><command-option name="beta"/></li>
+      <li><command-option name="bigwig"/></li>
+      <li><command-option name="est-seq-size"/></li>
+      <li><command-option name="numbins"/></li>
+      <li><command-option name="o"/></li>
+      <li><command-option name="oc"/></li>
+      <li><command-option program="create-priors" name="psp"/></li>
+      </ul>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<hr/>
+<style type="text/css">
+  td.table_label {
+    width:20em;
+  }
+  h5.section_label {
+    margin-top:5px;
+    margin-bottom:5px;
+  }
+  table.info {
+    margin-bottom:20px;
+  }
+</style>
+<!-- TMPL_IF NAME=description -->
+<h5 class="section_label">Description</h5>
+<pre><!-- TMPL_VAR ESCAPE=HTML NAME=description --></pre>
+<!-- /TMPL_IF -->
+
+<h5 class="section_label">Settings</h5>
+<table class="info">
+  <tr><td class="table_label">Motifs File</td>
+  <td><!-- TMPL_VAR ESCAPE=HTML NAME=motifs_orig_name --></td></tr>
+  <!-- TMPL_IF NAME=upseqs_name -->
+  <tr><td class="table_label">Uploaded Sequence File</td>
+  <td><!-- TMPL_VAR ESCAPE=HTML NAME=upseqs_orig_name --></td></tr>
+  <!-- TMPL_ELSE -->
+  <tr><td class="table_label">Sequence Database</td>
+  <td><!-- TMPL_VAR NAME=dbseqs_name --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=bgweight -->
+  <tr><td class="table_label">Pseudocount Weight</td>
+  <td><!-- TMPL_VAR NAME=bgweight --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=motif_pvthresh -->
+  <tr><td class="table_label">Motif hit p-value threshold</td>
+  <td><!-- TMPL_VAR NAME=motif_pvthresh --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=max_gap -->
+  <tr><td class="table_label">Maximum distance between adjacent hits</td>
+  <td><!-- TMPL_VAR NAME=max_gap --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=output_evthresh -->
+  <tr><td class="table_label">Print matches with E-value less than</td>
+  <td>&lt;<!-- TMPL_VAR NAME=output_evthresh --></td></tr>
+  <!-- /TMPL_IF -->
+</table>
+<!--
+  $template->param(bgweight => $data->{BGWEIGHT});
+  $template->param(motif_pvthresh => $data->{MOTIF_PVTHRESH});
+  $template->param(max_gap => $data->{MAX_GAP});
+  $template->param(output_evthresh => $data->{OUTPUT_EVTHRESH});  
+-->
+<h5 class="section_label">Motifs Details</h5>
+<table class="info">
+  <!-- TMPL_IF NAME=motifs_safe_name -->
+  <tr><td class="table_label">Command-line Safe Name</td>
+  <td><!-- TMPL_VAR NAME=motifs_name --></td></tr>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Type of Motifs</td>
+  <td><!-- TMPL_VAR NAME=motifs_alpha --></td></tr>
+  <tr><td class="table_label">Count of Motifs</td>
+  <td><!-- TMPL_VAR NAME=motifs_count --></td></tr>
+  <tr><td class="table_label">Summed Motifs Lengths</td>
+  <td><!-- TMPL_VAR NAME=motifs_cols --></td></tr>
+</table>
+
+<!-- TMPL_IF NAME=upseqs_name -->
+<h5 class="section_label">Uploaded Sequences Details</h5>
+<table class="info">
+  <!-- TMPL_IF NAME=upseqs_safe_name -->
+  <tr><td class="table_label">Command-line Safe Name</td>
+  <td><!-- TMPL_VAR NAME=upseqs_name --></td></tr>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Type of Sequences</td>
+  <td><!-- TMPL_VAR NAME=upseqs_alpha --></td></tr>
+  <tr><td class="table_label">Count of Sequences</td>
+  <td><!-- TMPL_VAR NAME=upseqs_count --></td></tr>
+  <tr><td class="table_label">Shortest Sequence (residues)</td>
+  <td><!-- TMPL_VAR NAME=upseqs_min --></td></tr>
+  <tr><td class="table_label">Longest Sequence (residues)</td>
+  <td><!-- TMPL_VAR NAME=upseqs_max --></td></tr>
+  <tr><td class="table_label">Average Length (residues)</td>
+  <td><!-- TMPL_VAR NAME=upseqs_avg --></td></tr>
+  <tr><td class="table_label">Total Length (residues)</td>
+  <td><!-- TMPL_VAR NAME=upseqs_total --></td></tr>
+</table>
+<!-- /TMPL_IF -->
+

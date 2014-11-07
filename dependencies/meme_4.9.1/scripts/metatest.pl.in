@@ -1,0 +1,976 @@
+#!@WHICHPERL@ -w
+# FILE: metatest
+# AUTHOR: William Stafford Noble
+# CREATE DATE: 7-13-97
+# PROJECT: MHMM
+# COPYRIGHT: 2008, University of Washington
+# DESCRIPTION: Run a complete set of tests on the MEME Suite
+
+use strict;
+use warnings;
+
+use Cwd qw(abs_path);
+use Fcntl qw(SEEK_SET O_RDONLY);
+use File::Basename qw(fileparse);
+use File::Copy qw(copy);
+use File::Path qw(mkpath rmtree);
+use File::Spec::Functions qw(catfile catdir tmpdir);
+use File::Temp qw(tempfile);
+use Getopt::Long;
+use Pod::Usage;
+
+
+=head1 NAME
+
+metatest - Tests some MEME suite programs.
+
+=head1 SYNOPSIS
+
+metatest [options]
+
+  Options:
+    -update             update expected program output
+    -complete           test additional programs
+    -halt               stop after any failed tests
+    -nocleanup          leave behind tested files that failed
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<-update>
+
+Turns on update mode, replaces expected output files
+with observed output files when a difference occurs.
+Use in conjunction with -halt to avoid automatically
+updating all files.
+
+=item B<-complete>
+
+Test additional scaffolding programs:
+clustalw2fasta, fasta-io, meme-io, mhmm-io
+
+=back
+
+=head1 DESCRIPTION
+
+This script tests the programs ama, create-priors, dreme, fasta-dinucleotide-shuffle, 
+fasta-center, fimo, gomo, motiph, psp-gen, qvalue, rha, tomtom.
+
+=cut
+
+my $etc_dir;
+my $scripts_dir;
+my $src_dir;
+my $skip_xml = 0; #FALSE
+
+&main();
+
+sub main {
+  # Set defaults
+  my $complete = 0;
+  my $update = 0;
+  my $continue = 1;
+  my $cleanup = 1;
+
+  GetOptions(
+    "update" => \$update, "complete" => \$complete, 
+    "halt" => sub {$continue = 0; $cleanup = 0;}, 
+    "nocleanup" => sub {$cleanup = 0}
+  ) or pod2usage(2);
+
+  # find the location of the script
+  my $script_name;
+  ($script_name, $scripts_dir) = fileparse(__FILE__);
+  $scripts_dir = abs_path($scripts_dir);
+
+  # add script location to search path
+  unshift(@INC, $scripts_dir);
+
+  require ExecUtils;
+  ExecUtils->import('invoke');
+  eval {
+    require DiffXML;
+    DiffXML->import('diff_xml');
+  };
+  if ($@) {
+    print STDERR "Warning: Perl module XML::Parser::Expat is not installed so tests on XML will be skipped.\n";
+    $skip_xml = 1; #TRUE
+  }
+
+  # now assuming the script is in the scripts subdirectory
+  # the distribution directory should be just above it
+  my $dist_dir = abs_path(catdir($scripts_dir, '..'));
+
+  # change the current directory to the tests directory
+  chdir(catdir($dist_dir, 'tests'));
+
+  $src_dir = catdir($dist_dir, 'src');
+  $etc_dir = catdir($dist_dir, 'etc');
+
+  my $test_results = 0;
+
+  # Set the location of the stylesheets
+  $ENV{'MEME_ETC_DIR'} = $etc_dir;
+  $ENV{'MEME_BIN_DIR'} = $src_dir;
+
+  # Test AMA
+  $test_results += &test_ama($complete, $update, $continue, $cleanup);
+  # Test AME
+  $test_results += &test_ame($complete, $update, $continue, $cleanup);
+  # Test CentriMo
+  $test_results += &test_centrimo($complete, $update, $continue, $cleanup);
+  # Test create-priors
+  $test_results += &test_create_priors($complete, $update, $continue, $cleanup);
+  # Test DREME
+  $test_results += &test_dreme($complete, $update, $continue, $cleanup);
+  # Test fasta-center
+  $test_results += &test_fasta_center($complete, $update, $continue, $cleanup);
+  # Test fasta-dinucleotide-shuffle
+  $test_results += &test_fasta_dinucleotide_shuffle($complete, $update, $continue, $cleanup);
+  # Test FIMO
+  $test_results += &test_fimo($complete, $update, $continue, $cleanup);
+  # Test GOMO
+  $test_results += &test_gomo($complete, $update, $continue, $cleanup);
+  # Test MCAST
+  $test_results += &test_mcast($complete, $update, $continue, $cleanup);
+  # Test MHMMS
+  #$test_results += &test_mhmms($complete, $update, $continue, $cleanup);
+  # Test MHMMScan
+  #$test_results += &test_mhmmscan($complete, $update, $continue, $cleanup);
+  # Test Motiph
+  $test_results += &test_motiph($complete, $update, $continue, $cleanup);
+  # Test psp-gen
+  $test_results += &test_pspgen($complete, $update, $continue, $cleanup);
+  # Test qvalue
+  $test_results += &test_qvalue($complete, $update, $continue, $cleanup);
+  # Test Shadow
+  #$test_results += &test_shadow($complete, $update, $continue, $cleanup);
+  # Test SpaMo
+  $test_results += &test_spamo($complete, $update, $continue, $cleanup);
+  # Test Tomtom
+  $test_results += &test_tomtom($complete, $update, $continue, $cleanup);
+
+  # other tests
+  if ($complete) {
+    &test_scaffold($update, $continue, "crp0", 1);
+    &test_scaffold($update, $continue, "lipo", 0);
+  }
+  #&test_core($update, $continue, "crp0", 1);
+  #&test_core($update, $continue, "lipo", 0);
+
+  printf('*' x 79 . "\n");
+  print "Warning: XML tests were skipped due to missing Perl module XML::Parser::Expat!\n" if $skip_xml;
+  exit($test_results);
+}
+
+
+#
+# Test a program's outputs
+# This assumes that the outputs will
+# be written to a file in a directory
+# that can be deleted to cleanup.
+#
+# comparisons = [
+#   {
+#     output => "filename|-",
+#     reference => "filename",
+#     type => "text|xml",
+#     ignore => [
+#       "ignore_pattern",
+#       ...
+#     ]
+# ]
+#
+# If any of the outputs are - then it will
+# divert stdout to a file for comparison.
+# 
+# Error messages are cached unless the program
+# indicates an error or one of the comparisons
+# does not match.
+#
+sub smoke_test {
+  my (
+    $update, $continue, $cleanup, 
+    $program, $stdin, $arguments,
+    $comparisons,
+    $clean_dir, $program_dir
+  ) = @_;
+
+  my $failed = 1; #TRUE
+  my $updatable = 0; #FALSE
+  my $sep = '-' x 79 . "\n";
+  my $comparison;
+  my $separate_stdout = 0; #FALSE
+  my $comparison_count = scalar(@{$comparisons});
+
+  $program_dir = $src_dir unless $program_dir;
+
+  # Tell the user what's happening.
+  printf('*' x 79 . "\n");
+  printf("Testing $program . . . \n");
+
+  # check if any comparisons use stdout
+  for (my $i = 0; $i < $comparison_count; $i++) {
+    $comparison = @{$comparisons}[$i];
+    if ($comparison->{output} eq '-') {
+      $separate_stdout = 1; #TRUE
+      last;
+    }
+  }
+
+  # run the program, storing the messages
+  my ($status, $messages, $stdout_fh, $stdout_fn, $cmd);
+  my %with_stdin = ();
+  %with_stdin = (IN_FILE => $stdin) if (defined($stdin) && -e $stdin);
+  if ($separate_stdout) {
+    mkpath($clean_dir) unless (-e $clean_dir);
+    ($stdout_fh, $stdout_fn) = tempfile($program . '_stdout_XXXXX', DIR => $clean_dir, UNLINK => 0);
+    $status = &ExecUtils::invoke(PROG => $program, BIN => $program_dir, ARGS => $arguments, 
+        OUT_FILE => $stdout_fh, ERR_VAR => \$messages, CMD => \$cmd, %with_stdin);
+    close($stdout_fh);
+  } else {
+    $status = &ExecUtils::invoke(PROG => $program, BIN => $program_dir, ARGS => $arguments, 
+        ALL_VAR => \$messages, CMD => \$cmd, %with_stdin);
+  }
+
+  # Print out the command
+  print $cmd, "\n";
+
+  # check status
+  print $messages, $sep if $status; # print the messages in case it has clues
+  if ($status == -1) {
+    printf("Failed to run %s: %s\n", $program, $!);
+  } elsif ($status & 127) {
+    printf(
+      "%s died with signal %d, %s coredump.\n", 
+      $program, ($status & 127), ($status & 128) ? 'with' : 'without'
+    );
+  } elsif ($status != 0) {
+    printf("%s exited with value %d indicating failure.\n", $program, $? >> 8);
+  }
+  goto CLEANUP if $status;
+
+  $updatable = 1; #TRUE (assume)
+  $failed = 0; #FALSE
+  for (my $i = 0; $i < $comparison_count; $i++) {
+    $comparison = @{$comparisons}[$i];
+    my ($output, $reference, $type, $ignore);
+    $output = $comparison->{output};
+    $reference = $comparison->{reference};
+    $type = $comparison->{type};
+    $ignore = $comparison->{ignore};
+    $ignore = [] unless defined($ignore);
+
+    $output = $stdout_fn if ($output eq '-');
+
+    # check that the output we're expecting actually exists
+    unless (-e $output) {
+      print $messages, $sep unless $failed; # print the messages in case it has clues
+      printf("%s did not create the file \"%s\"\n", $program, $output);
+      $updatable = 0; #FALSE (no file to allow update)
+      $failed = 1; #TRUE
+      next;
+    }
+    # check that the reference xml exists
+    unless (-e $reference) {
+      print $messages, $sep unless $failed; # print the messages in case it has clues
+      printf("Could not find the reference file \"%s\"\n", $reference);
+      $failed = 1; #TRUE
+      next;
+    }
+
+    my $diff;
+    if ($type eq 'xml') {
+      unless ($skip_xml) {
+        $diff = &DiffXML::diff_xml($reference, $output, @{$ignore});
+      }
+    } else { # $type eq 'text'
+      # Build the string describing patterns to ignore in diff.
+      my $ignore_string = "";
+      foreach my $item (@{$ignore}) {
+        $ignore_string .= "-I \"$item\" ";
+      }
+      $diff = `diff $ignore_string $reference $output`;
+    }
+    # see if any differences were found
+    if ($diff) {
+      print $messages, $sep unless $failed; # print the messages in case it has clues
+      print $diff;
+      $failed = 1; #TRUE
+    }
+  }
+
+  # update
+  if ($failed && $update && $updatable) {
+    print("Updating reference files.\n");
+    for (my $i = 0; $i < $comparison_count; $i++) {
+      $comparison = @{$comparisons}[$i];
+      my $output = $comparison->{output};
+      $output = $stdout_fn if ($output eq '-');
+      copy($output, $comparison->{reference});
+    }
+  }
+CLEANUP:
+  # remove the result folder
+  if (-e $clean_dir && (!$failed || $cleanup)) {
+    rmtree($clean_dir);
+  }
+  # print the test result
+  if ($failed) {
+    printf("FAIL\n");
+    exit(1) unless $continue;
+  } else {
+    printf("SUCCESS\n");
+  }
+  return $failed;
+}
+
+##############################################################################
+#                      TEST PROGRAMS
+##############################################################################
+
+sub test_ama {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # Test ama with maxodds scoring
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'ama', '',
+    ['--verbosity', 1, '--scoring', 'max-odds', 'gomo/motif.meme', 
+      'gomo/seqs.fasta', 'gomo/seqs.bg'],
+    [{output => '-', reference => 'gomo/ama.withMaxodds.xml', type => 'text'}],
+    'results/gomo1');
+
+  # Test ama with redundant sequences
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'ama', '',
+    ['--pvalues', '--verbosity', 1, '--cs', 'gomo/motif.meme', 
+      'gomo/seqs_red.fasta', 'gomo/seqs.norc.bg'],
+    [{output => '-', reference => 'gomo/ama.redundant.xml', type => 'text'}],
+    'results/gomo2');
+
+  return $test_results;
+}
+
+sub test_ame {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  #FIXME test produces different results on different systems,
+  # suspected random number generation problem.
+  if (0) {
+    # combine dinuc output with sequences to make a background for AME:
+    # we should really slurp and dump to be non-UNIX-dependent
+    my $combined = "/var/tmp/sample-dna-Klf1-$$";
+    `cat Klf1-200-100.s Klf1-200-100-shuffled.s > $combined`;
+
+    # Test AME
+    $test_results += &smoke_test($update, $continue, $cleanup,
+      'ame', '',
+      ['--oc', 'results/ame1', '--silent', '--verbose', 1, 
+        '--fix-partition', 169, '--bgformat', 0, $combined, 'Jaspar-subset.meme'],
+      [{output => 'results/ame1/ame.txt', reference => 'ame/ame.txt', type => 'text'}],
+      'results/ame1');
+
+    unlink $combined;
+  }
+
+  return $test_results;
+}
+
+
+sub test_centrimo {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # centrimo smoke test
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'centrimo', '',
+    ['-verbosity', 1, '-oc', 'results/centrimo', '-flip', 
+      '../doc/examples/sample-dna-Klf1.fa', 'centrimo/dreme-Klf1.txt'],
+    [
+      {
+        output => 'results/centrimo/site_counts.txt', 
+        reference => 'centrimo/site_counts.txt', 
+        type => 'text', ignore => ['^#']
+      },
+      {
+        output => 'results/centrimo/centrimo.txt', 
+        reference => 'centrimo/centrimo.txt', 
+        type => 'text', ignore => ['^#']
+      }
+    ],
+    'results/centrimo');
+
+  return $test_results;
+}
+
+sub test_create_priors {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # Test wiggle output from create-priors
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'create-priors', '',
+    [ '-oc', 'results/create-priors_out', 'create-priors/DNaseHS_gm12878.wig'],
+    [
+      {
+        output => 'results/create-priors_out/priors.wig', 
+        reference => 'create-priors/priors.wig', 
+        type => 'text'
+      }
+    ],
+    'results/create-priors');
+  # Test prior dist output from create-priors
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'create-priors', '',
+    [ '-oc', 'results/create-priors_out', 'create-priors/DNaseHS_gm12878.wig'],
+    [
+      {
+        output => 'results/create-priors_out/priors.dist', 
+        reference => 'create-priors/priors.dist', 
+        type => 'text'
+      }
+    ],
+    'results/create-priors');
+  return $test_results;
+}
+
+sub test_dreme {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # xml parts to ignore in DREME output
+  my $dreme_xml_ignore = [
+      '^dreme@(release|version)$', '^dreme:model:command_line#value$', 
+      '^dreme:model:(positives|negatives)@(file|last_mod_date)$',
+      '^dreme:model:host#value$', '^dreme:model:when#value$',
+      '^dreme:run_time@.*$'
+    ];
+  # test DREME with both strands
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'dreme', '',
+    ['-oc', 'results/dreme', '-v', 1, '-noxslt', '-p', 'Klf1-200-100.s'],
+    [
+      {
+        output => 'results/dreme/dreme.xml', 
+        reference => 'dreme/basic.xml', 
+        type => 'xml', ignore => $dreme_xml_ignore
+      }
+    ], 
+    'results/dreme', $scripts_dir);
+  # test DREME with a single strand
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'dreme', '',
+    ['-norc', '-oc', 'results/dreme', '-v', 1, '-noxslt', '-p', 'Klf1-200-100.s'],
+    [
+      {
+        output => 'results/dreme/dreme.xml', 
+        reference => 'dreme/norc.xml', 
+        type => 'xml', ignore => $dreme_xml_ignore
+      }
+    ],
+    'results/dreme', $scripts_dir);
+  return $test_results;
+}
+
+sub test_fasta_center {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # Test fasta-center 
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'fasta-center', 'Klf1-200.s',
+    ['-len', 100],
+    [{output => '-', reference => 'Klf1-200-100.s', type => 'text'}],
+    'results/fasta-center1', $scripts_dir);
+
+  return $test_results;
+}
+
+sub test_fasta_dinucleotide_shuffle {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # Test dinuc shuffle
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'fasta-dinucleotide-shuffle', '',
+    ['-f', 'Klf1-200-100.s', '-t', '-dinuc'],
+    [{output => '-', reference => 'Klf1-200-100-shuffled.s', type => 'text'}],
+    'results/fasta-dinucleotide-shuffle1', $scripts_dir);
+
+  return $test_results;
+}
+
+sub test_fimo {
+  # The MEME_ETC_DIR contains the needed style sheets.
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # Test fimo
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'fimo', '',
+    ['--text', '--motif-pseudo', 0.01, 
+      'fimo/MCM1.meme.html', 'fimo/spiked.fasta'],
+    [{output => '-', reference => 'fimo/fimo.txt', type => 'text'}],
+    'results/fimo1');
+
+  # Test fimo with --motif option
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'fimo', '',
+    ['--text', '--motif', 2, '--motif', 3, '--thresh', 0.01, 
+      'common/crp0.meme.html', 'motiph/spiked.fasta'],
+    [{output => '-', reference => 'fimo/fimo-motif23.txt', type => 'text'}],
+    'results/fimo2');
+
+  # Test fimo with --psp and --prior-dist options
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'fimo', '',
+    ['--text', '--psp', 'fimo/GCN4_YPD.psp', '--prior-dist', 
+      'fimo/prior.dist.txt', 'fimo/GCN4.meme', 'fimo/GCN4_YPD.fasta'],
+    [{output => '-', reference => 'fimo/fimo-priors.txt', type => 'text'}],
+    'results/fimo3');
+
+  # Test fimo with --psp and --prior-dist options
+  # with genomic coordinates provied in PSP and fasta files.
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'fimo', '',
+    ['--text', '--parse-genomic-coord', '--psp', 'fimo/GCN4_YPD-genomic.psp', '--prior-dist', 
+      'fimo/prior.dist.txt', 'fimo/GCN4.meme', 'fimo/GCN4_YPD-genomic.fasta'],
+    [{output => '-', reference => 'fimo/fimo-priors-genomic.txt', type => 'text'}],
+    'results/fimo4');
+
+  return $test_results;
+}
+
+sub test_gomo {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # Test gomo on single species
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'gomo', '',
+    ['--nostatus', '--verbosity', 1, '--text', 
+      'gomo/GO2Gene.map.csv', 'gomo/ama.nozscoring.xml'],
+    [{output => '-', reference => 'gomo/gomo.smallthreshold.txt', 
+        type => 'text'}],
+    'results/gomo1');
+
+  # Test gomo on multiple species
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'gomo', '',
+    ['--nostatus', '--verbosity', 1, '--text', 'gomo/GO2Gene.map.csv', 
+      'gomo/ama.nozscoring.xml', 'gomo/ama.nozscoring.xml'],
+    [{output => '-', reference => 'gomo/gomo.multipeSpecies.txt', type => 'text'}],
+    'results/gomo2');
+
+  return $test_results;
+}
+
+sub test_mcast {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+
+  # Test mcast (basic)
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'mcast', '',
+    ['-oc', 'results/mcast1', 'meme/meme.lex0.zoops', 'common/lex0.s'],
+    [
+      {
+        output => 'results/mcast1/mcast.txt', 
+        reference => 'mcast/lex0.zoops.mcast', 
+        type => 'text', ignore => ['# Create date', 'microsec/character']
+      }
+    ],
+    'results/mcast1');
+
+  return $test_results;
+}
+
+sub test_mhmms {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # Test mhmms with --maxseqs option (r1635)
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'mhmms', '',
+    ['--maxseqs', 3, '--quiet', 'mhmm/crp0.linear.mhmm', 'common/crp0.fasta'],
+    [{output => '-', reference => 'mhmms/r1635.maxseqs.mhmms', type => 'text'}],
+    'results/mhmms1');
+
+  # Test mhmms with --global option (r1635)
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'mhmms', '',
+    ['--global', '--quiet', 'mhmm/lipo.linear.mhmm', 'common/lipo.fasta'],
+    [{output => '-', reference => 'mhmms/r1635.global.mhmms', type => 'text'}],
+    'results/mhmms2');
+
+  # Test mhmms for bug where runs of 
+  # spacer states are scored as matches (r1635).
+  # With theses input files mhmms should find no matches.
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'mhmms', '', 
+    ['--quiet', '--motif-scoring', 'mhmm/lipo.linear.mhmm', 'mhmms/r1635.fasta'],
+    [{output => '-', reference => 'mhmms/r1635.mhmms', type => 'text'}],
+    'results/mhmms3');
+
+  # Test mhmms for segmentation fault when --motif-scoring option 
+  # is used. (r1584)
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'mhmms', '',
+    ['--motif-scoring', '--quiet', 'mhmms/r1584.hmm', 'mhmms/r1584.fasta'],
+    [{output => '-', reference => 'mhmms/r1584.mhmms', type => 'text'}],
+    'results/mhmms4');
+
+  return $test_results;
+}
+
+sub test_mhmmscan {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # Test mhmmscan with text output
+  my $ignore = ['Create date', 'microsec', 'millisec', '# version', 
+    'Total time', '^CPU:', '^Overhead'];
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'mhmmscan', '', 
+    ['--text', 'mhmm/crp0.linear.mhmm', 'common/crp0.fasta'],
+    [{output => '-', reference => 'mhmmscan/mhmmscan.txt', type => 'text', ignore => $ignore}],
+    'results/mhmmscan1');
+
+  return $test_results;
+}
+
+sub test_motiph {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+
+  # Test motiph
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'motiph', '',
+    ['--seed', 0, '--bg', 2.0, '--pseudocount', 0.01, '--text', 
+      'motiph/spiked.aln', 'motiph/yeast.tree', 'motiph/MCM1.meme.html'],
+    [{output => '-', reference => 'motiph/motiph.gff', type => 'text'}],
+    'results/motiph1');
+
+  # Test motiph with --motif option
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'motiph', '',
+    ['--seed', 0, '--bg', 2.0, '--pseudocount', 0.01, '--text', 
+      '--output-pthresh', 1.0, '--motif', 2,  '--motif', 3, 'motiph/spiked.aln', 
+      'motiph/yeast.tree', 'common/crp0.meme.html'],
+    [{output => '-', reference => 'motiph/motiph-motif23.gff', type => 'text'}],
+    'results/motiph2');
+
+  return $test_results;
+}
+
+sub test_pspgen {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # Test psp-gen on DNA
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'psp-gen', '',
+    ['-revcomp', '-pos', 'psp-gen/one-peak-dna.fasta', '-neg', 'psp-gen/all-A.fasta'],
+    [{output => '-', reference => 'psp-gen/one-peak-dna-revcomp.psp', type => 'text'}],
+    'results/pspgen1', $scripts_dir);
+
+  # Test psp-gen on protein
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'psp-gen', '',
+    ['-alpha', 'prot', '-maxrange', '-triples', 
+      '-pos', 'psp-gen/one-peak-protein.fasta',
+      '-neg', 'psp-gen/all-A.fasta'],
+    [{output => '-', reference => 'psp-gen/one-peak-protein.psp', type => 'text'}],
+    'results/pspgen2', $scripts_dir);
+
+  return $test_results;
+}
+
+sub test_qvalue {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+
+  # qvalue test is failing on some platforms. Issue with platfrom variation
+  # in random number generators? FIXME
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'qvalue', '',
+    ['--header', 1, '--append', '--column', 2, '--seed', 7718, 'qvalue/uniform.txt'],
+    [{output => '-', reference => 'qvalue/uniform.out', type => 'text'}],
+    'results/qvalue1');
+
+  if (0) { # TLB; broken test
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'qvalue', '',
+    ['--null', 'qvalue/null.txt', 'qvalue/observed.txt'],
+    [{output => '-', reference => 'qvalue/observed.out', type => 'text'}],
+    'results/qvalue2');
+  }
+
+  return $test_results;
+}
+
+sub test_shadow {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+
+  # Test shadow 
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'shadow', '',
+    ['--output-pthresh', 0.1, '--bg', 2.0, '--text', 'motiph/spiked.aln', 
+      'motiph/yeast.tree'],
+    [{output => '-', reference => 'motiph/shadow.gff', type => 'text'}],
+    'results/shadow1');
+
+  return $test_results;
+}
+
+sub test_spamo {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+  # xml parts to ignore in SpaMo output
+  my $spamo_xml_ignore = [
+      '^spamo@(release|version)$', '^spamo:model:command_line#value$', 
+      '^spamo:model:host#value$', '^spamo:model:when#value$',
+      '^spamo:files:(sequence_db|motif_db)@(source|last_modified)$',
+      '^spamo:run_time@.*$'
+    ];
+  # test spamo with data at the limits of the scan
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'spamo', '',
+    ['-oc', 'results/spamo1', '-verbosity', 1, '-znoxslt', '-margin', 20, '-shared', 1, 
+      'spamo/limits.fasta', 'spamo/primary.meme', 'spamo/secondary.meme'],
+    [
+      {
+        output => 'results/spamo1/spamo.xml',
+        reference => 'spamo/limits.xml',
+        type => 'xml', ignore => $spamo_xml_ignore
+      }
+    ],
+    'results/spamo');
+  # test spamo with a random (but unambiguous test)
+  $test_results += &smoke_test($update, $continue, $cleanup,
+    'spamo', '',
+    ['-oc', 'results/spamo2', '-verbosity', 1, '-znoxslt', '-margin', 20, '-shared', 1, 
+      'spamo/random.fasta', 'spamo/primary.meme', 'spamo/secondary.meme'],
+    [
+      {
+        output => 'results/spamo2/spamo.xml',
+        reference => 'spamo/random.xml',
+        type => 'xml', ignore => $spamo_xml_ignore
+      }
+    ],
+    'results/spamo');
+  return $test_results;
+}
+
+sub test_tomtom {
+  my ($complete, $update, $continue, $cleanup) = @_;
+  my $test_results = 0;
+
+  my @mode = ("allr", "ed", "kullback",
+    #"pearson",
+    "sandelin", "blic1", "blic5");
+
+  # tomtom test is failing on some platforms. Issue with platfrom variation
+  # in random number generators? FIXME
+  # Test tomtom (7 distance measures, 2 scoring modes)
+  for (my $complete = 0; $complete <= 1; $complete++) {
+    my $com = ($complete ? 'complete.' : '');
+    my @incom = ($complete ? () : ('-incomplete-scores'));
+    foreach my $score (@mode) {
+      my $dir = 'tomtom.'. $com . 'out.' . $score;
+      my @args = ('-verbosity', 1, '-seed', 1, 
+        '-dist', $score, '-text', @incom, 
+        'common/sample.meme', 'common/sample.meme');
+      # test this combination of score and complete scoring
+      $test_results += &smoke_test($update, $continue, $cleanup,
+        'tomtom', '', \@args, 
+        [{output => '-', reference => 'tomtom/' . $dir, type => 'text'}],
+        'results/' . $dir);
+    }
+  }
+  return $test_results;
+}
+
+
+###########################################################################
+sub test_scaffold {
+  my($update, $continue, $fileroot, $is_dna) = @_;
+
+  # Create input filenames.
+  my $train_file = "common/$fileroot.fasta";
+  my $meme_file = "common/$fileroot.meme.html";
+  my $test_file = "common/$fileroot-test.fasta";
+  my $linear_model = "mhmm/$fileroot.linear.mhmm";
+  my $complete_model = "mhmm/$fileroot.complete.mhmm";
+  my $test_aln = "common/test.aln";
+  my $test_aln_out = "clustalw2fasta/test.fasta";
+  my $test_aln_nogap_out = "clustalw2fasta/test.nogap.fasta";
+  my $test_aln_consensus_out = "clustalw2fasta/test.consensus.fasta";
+
+  # All files are in the scaffold directory.
+  my $scaffold_root = "scaffold/$fileroot";
+
+  my $dna_switch;
+  if ($is_dna == 1) {
+    $dna_switch = "--dna";
+  } else {
+    $dna_switch = "";
+  }
+
+  # Run a test on each program in succession.
+  &test_program($update, $continue, "fasta-io",
+    " --verbosity 1 $dna_switch $train_file ", $train_file);
+  &test_program($update, $continue, "fasta-io", 
+    " --verbosity 1  --many $dna_switch $train_file", $train_file);
+  &test_program($update, $continue, "fasta-io", 
+    " --verbosity 1 --blocksize 100 $train_file", "$scaffold_root.fasta");
+
+  # Test model I/O.
+  &test_program($update, $continue, "mhmm-io", " --verbosity 1 $linear_model", 
+    "$linear_model", undef, undef, undef, undef, ["MHMM v"]);
+  &test_program($update, $continue, "mhmm-io", " --verbosity 1 $complete_model",
+    "$complete_model", undef, undef, undef, undef, ["MHMM v"]);
+
+  # Test clustalw2fasta
+  &test_program($update, $continue, "clustalw2fasta", " $test_aln", 
+    $test_aln_out);
+  &test_program($update, $continue, "clustalw2fasta", " -nogap $test_aln", 
+    $test_aln_nogap_out);
+  &test_program($update, $continue, "clustalw2fasta", 
+    " -consensus 100 $test_aln", $test_aln_consensus_out); 
+}
+
+###########################################################################
+sub test_core {
+  my($update, $continue, $fileroot, $is_dna) = @_;
+
+  # Create input filenames.
+  my $train_file = "common/$fileroot.fasta";
+  my $meme_file = "common/$fileroot.meme.html";
+  my $test_file = "common/$fileroot-test.fasta";
+
+  # Check different topologies.
+  foreach my $topology ("linear", "complete", "star") {
+
+    # Create various types of spacer models.
+    foreach my $spacer ("1", "3", "fim") {
+
+      # FIXME: There is a bug with star topology plus fims.
+      if (($spacer eq "fim") && ($topology eq "star")) {
+        next;
+      }
+
+      my $model = "$fileroot.$topology";
+      my $mhmm_params = " --noheader --noparams --type $topology ";
+
+      if ($spacer eq "fim") {
+        $model .= ".fim";
+        $mhmm_params .= "--fim ";
+      } elsif ($spacer eq "3") {
+        $model .= ".spacer";
+        $mhmm_params .= "--nspacer 3";
+      }
+      $mhmm_params .= " --verbosity 1 $meme_file";
+      
+      # Create the model.
+      &test_program($update, $continue, "mhmm", $mhmm_params, 
+        "mhmm/$model.mhmm");
+
+      # Draw the model.
+      &test_program($update, $continue, "draw-mhmm",
+        " --verbosity 1 --consensus mhmm/$model.mhmm ", 
+        "draw-mhmm/$model.gvz");
+
+      # Set parameters for search routines.
+      my $search_params = "--ethresh 99999 --quiet --width 79 ";
+
+      # Use different scoring schemes.
+      foreach my $paths ("all", "single") {
+
+        # Search with the model.      
+        my $search_file = "$model.$paths";
+        if ($paths ne "all") {
+          $search_params .= "--fancy ";
+        }
+        &test_program($update, $continue, "mhmms", 
+          " --verbosity 1 --paths $paths $search_params mhmm/$model.mhmm $test_file",
+          "mhmms/$search_file.mhmms");
+      }
+    }
+  }
+}
+
+############################################################################
+#
+# programs that are run from src/ need not specify $bindir
+# and $out_dir if undefined default respectively to
+# the src folder and no output directory
+# if $output is defined, this name is used to redirect stdout
+#
+############################################################################
+
+sub test_program {
+  my($update, $continue, $program, $arguments, $good_file, $bindir, $output,
+    $out_dir, $dir_param, $ignore) = @_;
+  my $result = 1;
+  $output = "/var/tmp/$program.$$.tmp" unless defined($output) || defined ($out_dir);
+  $out_dir = "" unless defined($out_dir); # exact same semantics as before changing to argument
+  $dir_param = '--oc' unless defined($dir_param);
+  
+  $bindir = $src_dir unless $bindir;
+  # Tell the user what's happening.
+  printf('*' x 79 . "\n");
+  printf("Testing $program . . . \n");
+
+  $output = "$program.txt" unless $output;
+  $output = $out_dir."/".$output;
+
+  # Run the program and collect the error level.
+  if ($out_dir) {
+    printf("$bindir/$program $dir_param $out_dir $arguments \n");
+    system("$bindir/$program $dir_param $out_dir $arguments");
+    $result = $? >> 8;
+  } else {
+    printf("$bindir/$program $out_dir $arguments \n");
+    system("$bindir/$program $arguments > $output");
+    $result = $? >> 8;
+  }
+
+  # Diff the results with the desired results.
+  # Build the string describing patterns to ignore in diff.
+  my $ignore_string = "";
+  if (defined $ignore) {
+    foreach my $item (@$ignore) {
+      $ignore_string .= "-I \"$item\" ";
+    }
+  }
+  my $diff = `diff $ignore_string $good_file $output`;
+
+  # Check for problems and die if any happened.
+  if (($diff ne "") || ($result != 0) || ($? >> 8 != 0)) {
+    printf("FAIL\n");
+    if ($result != 0) {
+      printf("$program had a non-zero exit status ($result)\n");
+    } else {
+      print("$good_file\n");
+      print($diff);
+      if ($update) {
+        print(STDERR "Updating $good_file.\n");
+        `cp $output.sed $good_file`;
+      }
+    }
+    if (!$continue) {
+      exit(1);
+    }
+    $result = 1;
+  } else {
+    # Return success.
+    printf("SUCCESS\n");
+    $result = 0;
+  }
+
+  # Delete temporary file(s).
+  my $cleanup = 0;
+  if (!$result || $cleanup) {
+    if ($out_dir) {
+      system("rm -rf $out_dir");
+    } else {
+      unlink($output);
+    }
+    unlink("$output.sed");
+  }
+
+  return $result;
+}

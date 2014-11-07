@@ -1,0 +1,3584 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>TOMTOM</title>
+<style type="text/css">
+    
+    /* START INCLUDED FILE "meme.css" */
+        /* The following is the content of meme.css */
+        body { background-color:white; font-size: 12px; font-family: Verdana, Arial, Helvetica, sans-serif;}
+
+        div.help {
+          display: inline-block;
+          margin: 0px;
+          padding: 0px;
+          width: 12px;
+          height: 13px;
+          cursor: pointer;
+          background-image: url("help.gif");
+          background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAANAQMAAACn5x0BAAAAAXNSR0IArs4c6QAAAAZQTFRFAAAAnp6eqp814gAAAAF0Uk5TAEDm2GYAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH2gMJBQgGYqhNZQAAACZJREFUCNdj+P+BoUGAoV+AYeYEEGoWYGgTYGgRAAm2gRGQ8f8DAOnhC2lYnqs6AAAAAElFTkSuQmCC");
+        }
+
+        div.help2 {
+          color: #999;
+          display: inline-block;
+          width: 12px;
+          height: 12px;
+          border: 1px solid #999;
+          font-size: 13px;
+          line-height:12px;
+          font-family: Helvetica, sans-serif;
+          font-weight: bold;
+          font-style: normal;
+          cursor: pointer;
+        }
+        div.help2:hover {
+          color: #000;
+          border-color: #000;
+        }
+        
+        p.spaced { line-height: 1.8em;}
+        
+        span.citation { font-family: "Book Antiqua", "Palatino Linotype", serif; color: #004a4d;}
+
+        p.pad { padding-left: 30px; padding-top: 5px; padding-bottom: 10px;}
+
+        td.jump { font-size: 13px; color: #ffffff; background-color: #00666a;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        a.jump { margin: 15px 0 0; font-style: normal; font-variant: small-caps;
+          font-weight: bolder; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h2.mainh {font-size: 1.5em; font-style: normal; margin: 15px 0 0;
+          font-variant: small-caps; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h2.line {border-bottom: 1px solid #CCCCCC; font-size: 1.5em; font-style: normal;
+          margin: 15px 0 0; padding-bottom: 3px; font-variant: small-caps;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h4 {border-bottom: 1px solid #CCCCCC; font-size: 1.2em; font-style: normal;
+          margin: 10px 0 0; padding-bottom: 3px; font-family: Georgia, "Times New Roman", Times, serif;}
+
+        h5 {margin: 0px}
+
+        a.help { font-size: 9px; font-style: normal; text-transform: uppercase;
+          font-family: Georgia, "Times New Roman", Times, serif;}
+
+        div.pad { padding-left: 30px; padding-top: 5px; padding-bottom: 10px;}
+        
+        div.pad1 { margin: 10px 5px;}
+
+        div.pad2 { margin: 25px 5px 5px;}
+        h2.pad2 { padding: 25px 5px 5px;}
+
+        div.pad3 { padding: 5px 0px 10px 30px;}
+
+        div.box { border: 2px solid #CCCCCC; padding:10px;}
+
+        div.bar { border-left: 7px solid #00666a; padding:5px; margin-top:25px; }
+
+        div.subsection {margin:25px 0px;}
+
+        img {border:0px none;}
+
+        th.majorth {text-align:left;}
+        th.minorth {font-weight:normal; text-align:left; width:8em; padding: 3px 0px;}
+        th.actionth {font-weight:normal; text-align:left;}
+
+        .strand_name {text-align:left;}
+        .strand_side {padding:0px 10px;}
+        .strand_start {padding:0px 10px;}
+        .strand_pvalue {text-align:center; padding:0px 10px;}
+        .strand_lflank {text-align:right; padding-right:5px; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace; color:gray;}
+        .strand_seq {text-align:center; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace;}
+        .strand_rflank {text-align:left; padding-left:5px; font-weight:bold; font-size:large; font-family: 'Courier New', Courier, monospace; color:gray;}
+
+        .block_td {height:25px;}
+        .block_container {position:relative; width:98%; height:25px; padding:0px; margin: 0px 0px 0px 1em;}
+        .block_motif {position:absolute; z-index:3; height:12px; top:0px; text-align:center; vertical-align:middle; background-color:cyan;}
+        .block_rule {position:absolute; z-index:2; width:100%; height:1px; top:12px; left:0px; background-color:gray;}
+        .block_plus_sym {position:absolute; z-index:4; line-height:12px; top:0px; left:-1em;}
+        .block_minus_sym {position:absolute; z-index:4; line-height:12px; top:13px; left:-1em;}
+
+        .tic_major {position:absolute; border-left:2px solid blue; height:0.5em; top:0em;}
+        .tic_minor {position:absolute; border-left:1px solid blue; height:0.2em; top:0em;}
+        .tic_label {position:absolute; top:0.5em;  height: 1em; text-align:center; vertical-align:middle}
+
+        .explain h5 {font-size:1em; margin-left: 1em;}
+
+        div.doc {margin-left: 2em; margin-bottom: 3em;}
+        
+        div.tabArea {
+          font-size: 80%;
+          font-weight: bold;
+        }
+
+        a.tab {
+          background-color: #ddddff;
+          border: 1px solid #000000;
+          padding: 2px 1em 2px 1em;
+          text-decoration: none;
+        }
+        div.tabArea.base a.tab {
+          border-top-width: 0px;
+        }
+        div.tabArea.top a.tab {
+          border-bottom-width: 0px;
+        }
+
+        a.tab, a.tab:visited {
+          color: #808080;
+        }
+
+        a.tab:hover {
+          background-color: #d0d0d0;
+          color: #606060;
+        }
+        a.tab.activeTab, a.tab.activeTab:hover, a.tab.activeTab:visited {
+          background-color: #f0f0f0;
+          color: #000000;
+        }
+        div.tabMain {
+          border: 1px solid #000000;
+          background-color: #ffffff;
+          padding: 5px;
+          margin-right: 5px;
+        }
+        th.trainingset {
+          border-bottom: thin dashed black; 
+          font-weight:normal; 
+          padding:0px 10px;
+        }
+        .dnaseq {
+          font-weight: bold; 
+          font-size: large; 
+          font-family: 'Courier New', Courier, monospace;
+        }
+        .dna_A {
+          color: rgb(204,0,0);
+        }
+        .dna_C {
+          color: rgb(0,0,204);
+        }
+        .dna_G {
+          color: rgb(255,179,0);
+        }
+        .dna_T {
+          color: rgb(0,128,0);
+        }
+    /* END INCLUDED FILE "meme.css" */
+    
+  
+      span.A {font-size:20px; color:red}
+      span.C {font-size:20px; color:blue}
+      span.G {font-size:20px; color:orange}
+      span.T {font-size:20px; color:green}
+      table.targets td {padding: 0 10px;}
+      table.preview td {padding: 0 10px;}
+      table.preview tbody td {padding-bottom: 10px;}
+      .ac {text-align: center;}
+      .downloadTd {padding-left:20px;}
+      div.logo_container {position:relative; width:99%; height:285px; padding:0px; margin:0px;}
+      img.logo {position:absolute; z-index:2; max-width:100%; max-height:285px;}
+      tr.tspace th, tr.tspace td {padding-top: 20px;}
+      /* motif list link, first style */
+      a.ml1 {
+       background-color: #FFF; 
+      }
+      a.ml2 {
+        background-color: #FFF;
+      }
+      td.ml {
+        line-height: 1.8em;
+      }
+    </style>
+<script type="text/javascript">
+      var show_opts_link;
+      var task_queue = new Array();
+      var task_delay = 100;
+      var my_alphabet;
+      var query_pspm;
+      
+    
+    /* START INCLUDED FILE "motif_logo.js" */
+//======================================================================
+// start Alphabet object
+//======================================================================
+var Alphabet = function (alphabet, bg) {
+  "use strict";
+  var is_letter, is_prob, pos, letter, parts, i, freq;
+  //variable prototype
+  this.freqs = new Array();
+  this.alphabet = new Array();
+  this.letter_count = 0;
+  //construct
+  is_letter = /^\w$/;
+  is_prob = /^((1(\.0+)?)|(0(\.\d+)?))$/;
+  for (pos = 0; pos < alphabet.length; pos++) {
+    letter = alphabet.charAt(pos);
+    if (is_letter.test(letter)) {
+      this.alphabet[this.letter_count] = letter.toUpperCase();
+      this.freqs[this.letter_count] = -1;
+      this.letter_count++;
+    }
+  }
+  if (typeof bg !== "undefined") {
+    parts = bg.split(/\s+/);
+    for (i = 0, pos = 0; (i + 1) < parts.length; i += 2) {
+      letter = parts[i];
+      freq = parts[i+1];
+      if (is_letter.test(letter) && is_prob.test(freq)) {
+        letter = letter.toUpperCase();          //find the letter it matches
+        for (;pos < this.letter_count; pos++) {
+          if (this.alphabet[pos] == letter) {
+            break;
+          }
+        }
+        if (pos >= this.letter_count) {
+          throw new Error("NOT_IN_ALPHABET");
+        }
+        this.freqs[pos] = (+freq);
+      }
+    }
+  } else {
+    //assume uniform background
+    freq = 1.0 / this.letter_count;
+    for (pos = 0; pos < this.letter_count; pos++) {
+      this.freqs[pos] = freq;
+    }
+  }
+};
+
+
+Alphabet.prototype.get_ic = function() {
+  "use strict";
+  if (this.is_nucleotide()) {
+    return 2;
+  } else {
+    return Math.log(20) / Math.LN2;
+  }
+};
+
+Alphabet.prototype.get_size = function() {
+  "use strict";
+  return this.letter_count;
+};
+
+Alphabet.prototype.get_letter = function(alph_index) {
+  "use strict";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  return this.alphabet[alph_index];
+};
+
+Alphabet.prototype.get_bg_freq = function(alph_index) {
+  "use strict";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  if (this.freqs[alph_index] == -1) {
+    throw new Error("BG_FREQ_NOT_SET");
+  }
+  return this.freqs[alph_index];
+};
+
+Alphabet.prototype.get_colour = function(alph_index) {
+  "use strict";
+  var red, blue, orange, green, yellow, purple, magenta, pink, turquoise;
+  red = "rgb(204,0,0)";
+  blue = "rgb(0,0,204)";
+  orange = "rgb(255,179,0)";
+  green = "rgb(0,128,0)";
+  yellow = "rgb(255,255,0)";
+  purple = "rgb(204,0,204)";
+  magenta = "rgb(255,0,255)";
+  pink = "rgb(255,204,204)";
+  turquoise = "rgb(51,230,204)";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  if (this.is_nucleotide()) {
+    switch (this.alphabet[alph_index]) {
+      case "A":
+        return red;
+      case "C":
+        return blue;
+      case "G":
+        return orange;
+      case "T":
+        return green;
+      default:
+        throw new Error("Invalid nucleotide letter");
+    }
+  } else {
+    switch (this.alphabet[alph_index]) {
+      case "A":
+      case "C":
+      case "F":
+      case "I":
+      case "L":
+      case "V":
+      case "W":
+      case "M":
+        return blue;
+      case "N":
+      case "Q":
+      case "S":
+      case "T":
+        return green;
+      case "D":
+      case "E":
+        return magenta;
+      case "K":
+      case "R":
+        return red;
+      case "H":
+        return pink;
+      case "G":
+        return orange;
+      case "P":
+        return yellow;
+      case "Y":
+        return turquoise;
+      default:
+        throw new Error("Invalid protein letter");
+    }
+  }
+  return "black";
+};
+
+Alphabet.prototype.is_ambig = function(alph_index) {
+  "use strict";
+  if (alph_index < 0 || alph_index >= this.letter_count) {
+    throw new Error("BAD_ALPHABET_INDEX");
+  }
+  if (this.is_nucleotide()) {
+    return ("ACGT".indexOf(this.alphabet[alph_index]) == -1);
+  } else {
+    return ("ACDEFGHIKLMNPQRSTVWY".indexOf(this.alphabet[alph_index]) == -1);
+  }
+};
+
+Alphabet.prototype.get_index = function(letter) {
+  "use strict";
+  var i;
+  for (i = 0; i < this.letter_count; i++) {
+    if (this.alphabet[i] == letter.toUpperCase()) {
+      return i;
+    }
+  }
+  throw new Error("UNKNOWN_LETTER");
+};
+
+Alphabet.prototype.is_nucleotide = function() {
+  "use strict";
+  //TODO basic method, make better
+  if (this.letter_count < 20) {
+    return true;
+  }
+  return false;
+};
+
+Alphabet.prototype.toString = function() {
+  "use strict";
+  return (this.is_nucleotide() ? "Nucleotide" : "Protein") + 
+    " Alphabet " + (this.alphabet.join(""));
+};
+
+//======================================================================
+// end Alphabet object
+//======================================================================
+
+//======================================================================
+// start Symbol object
+//======================================================================
+var Symbol = function(alph_index, scale, alphabet) {
+  "use strict";
+  //variable prototype
+  this.symbol = alphabet.get_letter(alph_index);
+  this.scale = scale;
+  this.colour = alphabet.get_colour(alph_index);
+};
+
+Symbol.prototype.get_symbol = function() {
+  "use strict";
+  return this.symbol;
+};
+
+Symbol.prototype.get_scale = function() {
+  "use strict";
+  return this.scale;
+};
+
+Symbol.prototype.get_colour = function() {
+  "use strict";
+  return this.colour;
+};
+
+Symbol.prototype.toString = function() {
+  "use strict";
+  return this.symbol + " " + (Math.round(this.scale*1000)/10) + "%";
+};
+
+function compare_symbol(sym1, sym2) {
+  "use strict";
+  if (sym1.get_scale() < sym2.get_scale()) {
+    return -1;
+  } else if (sym1.get_scale() > sym2.get_scale()) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+//======================================================================
+// end Symbol object
+//======================================================================
+
+//======================================================================
+// start Pspm object
+//======================================================================
+var Pspm = function(matrix, name, ltrim, rtrim, nsites, evalue) {
+  "use strict";
+  var row, col, data, row_sum, delta, evalue_re;
+  if (typeof name !== "string") {
+    name = "";
+  }
+  this.name = name;
+  //construct
+  if (matrix instanceof Pspm) {
+    // copy constructor
+    this.alph_length = matrix.alph_length;
+    this.motif_length = matrix.motif_length;
+    this.name = matrix.name;
+    this.nsites = matrix.nsites;
+    this.evalue = matrix.evalue;
+    this.ltrim = matrix.ltrim;
+    this.rtrim = matrix.rtrim;
+    this.pspm = [];
+    for (row = 0; row < matrix.motif_length; row++) {
+      this.pspm[row] = [];
+      for (col = 0; col < matrix.alph_length; col++) {
+        this.pspm[row][col] = matrix.pspm[row][col];
+      }
+    }
+  } else {
+    // check parameters
+    if (typeof ltrim === "undefined") {
+      ltrim = 0;
+    } else if (typeof ltrim !== "number" || ltrim % 1 !== 0 || ltrim < 0) {
+      throw new Error("ltrim must be a non-negative integer, got: " + ltrim);
+    }
+    if (typeof rtrim === "undefined") {
+      rtrim = 0;
+    } else if (typeof rtrim !== "number" || rtrim % 1 !== 0 || rtrim < 0) {
+      throw new Error("rtrim must be a non-negative integer, got: " + rtrim);
+    }
+    if (typeof nsites !== "undefined") {
+      if (typeof nsites !== "number" || nsites <= 0) {
+        throw new Error("nsites must be a positive number, got: " + nsites);
+      }
+    }
+    if (typeof evalue !== "undefined") {
+      if (typeof evalue === "number") {
+        if (evalue < 0) {
+          throw new Error("evalue must be a non-negative number, got: " + evalue);
+        }
+      } else if (typeof evalue === "string") {
+        evalue_re = /^((?:[+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)|inf)$/;
+        if (!evalue_re.test(evalue)) {
+          throw new Error("evalue must be a non-negative number, got: " + evalue);
+        }
+      } else {
+        throw new Error("evalue must be a non-negative number, got: " + evalue);
+      }
+    }
+    // set properties
+    this.name = name;
+    this.nsites = nsites;
+    this.evalue = evalue;
+    this.ltrim = ltrim;
+    this.rtrim = rtrim;
+    if (typeof matrix === "string") {
+      // string constructor
+      data = parse_pspm_string(matrix);
+      this.alph_length = data["alph_length"];
+      this.motif_length = data["motif_length"];
+      this.pspm = data["pspm"];
+      if (typeof this.evalue === "undefined") {
+        if (typeof data["evalue"] !== "undefined") {
+          this.evalue = data["evalue"];
+        } else {
+          this.evalue = 0;
+        }
+      }
+      if (typeof this.nsites === "undefined") {
+        if (typeof data["nsites"] === "number") {
+          this.nsites = data["nsites"];
+        } else {
+          this.nsites = 20;
+        }
+      }
+    } else {
+      // assume pspm is a nested array
+      this.motif_length = matrix.length;
+      this.alph_length = (matrix.length > 0 ? matrix[0].length : 0);
+      if (typeof this.nsites === "undefined") {
+        this.nsites = 20;
+      }
+      if (typeof this.evalue === "undefined") {
+        this.evalue = 0;
+      }
+      this.pspm = [];
+      // copy pspm and check
+      for (row = 0; row < this.motif_length; row++) {
+        if (this.alph_length != matrix[row].length) {
+          throw new Error("COLUMN_MISMATCH");
+        }
+        this.pspm[row] = [];
+        row_sum = 0;
+        for (col = 0; col < this.alph_length; col++) {
+          this.pspm[row][col] = matrix[row][col];
+          row_sum += this.pspm[row][col];
+        }
+        delta = 0.1;
+        if (isNaN(row_sum) || (row_sum > 1 && (row_sum - 1) > delta) || 
+            (row_sum < 1 && (1 - row_sum) > delta)) {
+          throw new Error("INVALID_SUM");
+        }
+      }
+    }
+  }
+};
+
+Pspm.prototype.copy = function() {
+  "use strict";
+  return new Pspm(this);
+};
+
+Pspm.prototype.reverse_complement = function(alphabet) {
+  "use strict";
+  var x, y, temp, a_index, c_index, g_index, t_index, i, row, temp_trim;
+  if (this.alph_length != alphabet.get_size()) {
+    throw new Error("ALPHABET_MISMATCH");
+  }
+  if (!alphabet.is_nucleotide()) {
+    throw new Error("NO_PROTEIN_RC");
+  }
+  //reverse
+  x = 0;
+  y = this.motif_length-1;
+  while (x < y) {
+    temp = this.pspm[x];
+    this.pspm[x] = this.pspm[y];
+    this.pspm[y] = temp;
+    x++;
+    y--;
+  }
+  //complement
+  a_index = alphabet.get_index("A");
+  c_index = alphabet.get_index("C");
+  g_index = alphabet.get_index("G");
+  t_index = alphabet.get_index("T");
+  for (i = 0; i < this.motif_length; i++) {
+    row = this.pspm[i];
+    //swap A and T
+    temp = row[a_index];
+    row[a_index] = row[t_index];
+    row[t_index] = temp;
+    //swap C and G
+    temp = row[c_index];
+    row[c_index] = row[g_index];
+    row[g_index] = temp;
+  }
+  //swap triming
+  temp_trim = this.ltrim;
+  this.ltrim = this.rtrim;
+  this.rtrim = temp_trim;
+  //note that ambigs are ignored because they don't effect motifs
+  return this; //allow function chaining...
+};
+
+Pspm.prototype.get_stack = function(position, alphabet) {
+  "use strict";
+  var row, stack_ic, alphabet_ic, stack, i, sym;
+  if (this.alph_length != alphabet.get_size()) {
+    throw new Error("ALPHABET_MISMATCH");
+  }
+  row = this.pspm[position];
+  stack_ic = this.get_stack_ic(position, alphabet);
+  alphabet_ic = alphabet.get_ic();
+  stack = [];
+  for (i = 0; i < this.alph_length; i++) {
+    if (alphabet.is_ambig(i)) {
+      continue;
+    }
+    sym = new Symbol(i, row[i]*stack_ic/alphabet_ic, alphabet);
+    if (sym.get_scale() <= 0) {
+      continue;
+    }
+    stack.push(sym);
+  }
+  stack.sort(compare_symbol);
+  return stack;
+};
+
+Pspm.prototype.get_stack_ic = function(position, alphabet) {
+  "use strict";
+  var row, H, i;
+  if (this.alph_length != alphabet.get_size()) {
+    throw new Error("ALPHABET_MISMATCH");
+  }
+  row = this.pspm[position];
+  H = 0;
+  for (i = 0; i < this.alph_length; i++) {
+    if (alphabet.is_ambig(i)) {
+      continue;
+    }
+    if (row[i] === 0) {
+      continue;
+    }
+    H -= (row[i] * (Math.log(row[i]) / Math.LN2));
+  }
+  return alphabet.get_ic() - H;
+};
+
+Pspm.prototype.get_error = function(alphabet) {
+  "use strict";
+  var asize;
+  if (this.nsites === 0) {
+    return 0;
+  }
+  if (alphabet.is_nucleotide()) {
+    asize = 4;
+  } else {
+    asize = 20;
+  }
+  return (asize-1) / (2 * Math.log(2)*this.nsites);
+};
+
+Pspm.prototype.get_motif_length = function() {
+  "use strict";
+  return this.motif_length;
+};
+
+Pspm.prototype.get_alph_length = function() {
+  "use strict";
+  return this.alph_length;
+};
+
+Pspm.prototype.get_left_trim = function() {
+  "use strict";
+  return this.ltrim;
+};
+
+Pspm.prototype.get_right_trim = function() {
+  "use strict";
+  return this.rtrim;
+};
+
+Pspm.prototype.as_pspm = function() {
+  "use strict";
+  var out, row, col;
+  out = "letter-probability matrix: alength= " + this.alph_length + 
+      " w= " + this.motif_length + " nsites= " + this.nsites + 
+      " E= " + (typeof this.evalue === "number" ? 
+          this.evalue.toExponential() : this.evalue) + "\n";
+  for (row = 0; row < this.motif_length; row++) {
+    for (col = 0; col < this.alph_length; col++) {
+      if (col !== 0) {
+        out += " ";
+      }
+      out += this.pspm[row][col].toFixed(6);
+    }
+    out += "\n";
+  }
+  return out;
+};
+
+Pspm.prototype.as_pssm = function(alphabet, pseudo) {
+  "use strict";
+  var out, log2, total, row, col, p, bg, p2, score;
+  if (typeof pseudo === "undefined") {
+    pseudo = 0.1;
+  } else if (typeof pseudo !== "number") {
+    throw new Error("Expected number for pseudocount");
+  }
+  out = "log-odds matrix: alength= " + this.alph_length + 
+      " w= " + this.motif_length + 
+      " E= " + (typeof this.evalue == "number" ? 
+          this.evalue.toExponential() : this.evalue) + "\n";
+  log2 = Math.log(2);
+  total = this.nsites + pseudo;
+  for (row = 0; row < this.motif_length; row++) {
+    for (col = 0; col < this.alph_length; col++) {
+      if (col !== 0) {
+        out += " ";
+      }
+      p = this.pspm[row][col];
+      // to avoid log of zero we add a pseudo count
+      bg = alphabet.get_bg_freq(col);
+      p2 = (p * this.nsites + bg * pseudo) / total;
+      // now calculate the score
+      score = -10000;
+      if (p2 > 0) {
+        score = Math.round((Math.log(p2 / bg) / log2) * 100);
+      }
+      out += score;
+    }
+    out += "\n";
+  }
+  return out;
+};
+
+Pspm.prototype.toString = function() {
+  "use strict";
+  var str, i, row;
+  str = "";
+  for (i = 0; i < this.pspm.length; i++) {
+    row = this.pspm[i];
+    str += row.join("\t") + "\n";
+  }
+  return str;
+};
+
+function parse_pspm_properties(str) {
+  "use strict";
+  var parts, i, eqpos, before, after, properties, prop, num, num_re;
+  num_re = /^((?:[+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)|inf)$/;
+  parts = trim(str).split(/\s+/);
+  // split up words containing =
+  for (i = 0; i < parts.length;) {
+    eqpos = parts[i].indexOf("=");
+    if (eqpos != -1) {
+      before = parts[i].substr(0, eqpos);
+      after = parts[i].substr(eqpos+1);
+      if (before.length > 0 && after.length > 0) {
+        parts.splice(i, 1, before, "=", after);
+        i += 3;
+      } else if (before.length > 0) {
+        parts.splice(i, 1, before, "=");
+        i += 2;
+      } else if (after.length > 0) {
+        parts.splice(i, 1, "=", after);
+        i += 2;
+      } else {
+        parts.splice(i, 1, "=");
+        i++;
+      }
+    } else {
+      i++;
+    }
+  }
+  properties = {};
+  for (i = 0; i < parts.length; i += 3) {
+    if (parts.length - i < 3) {
+      throw new Error("Expected PSPM property was incomplete. "+
+          "Remaing parts are: " + parts.slice(i).join(" "));
+    }
+    if (parts[i+1] !== "=") {
+      throw new Error("Expected '=' in PSPM property between key and " +
+          "value but got " + parts[i+1]); 
+    }
+    prop = parts[i].toLowerCase();
+    num = parts[i+2];
+    if (!num_re.test(num)) {
+      throw new Error("Expected numeric value for PSPM property '" + 
+          prop + "' but got '" + num + "'");
+    }
+    properties[prop] = num;
+  }
+  return properties;
+}
+
+function parse_pspm_string(pspm_string) {
+  "use strict";
+  var header_re, lines, first_line, line_num, col_num, alph_length, 
+      motif_length, nsites, evalue, pspm, i, line, match, props, parts,
+      j, prob;
+  header_re = /^letter-probability\s+matrix:(.*)$/i;
+  lines = pspm_string.split(/\n/);
+  first_line = true;
+  line_num = 0;
+  col_num = 0;
+  alph_length;
+  motif_length;
+  nsites;
+  evalue;
+  pspm = [];
+  for (i = 0; i < lines.length; i++) {
+    line = trim(lines[i]);
+    if (line.length === 0) { 
+      continue;
+    }
+    // check the first line for a header though allow matrices without it
+    if (first_line) {
+      first_line = false;
+      match = header_re.exec(line);
+      if (match !== null) {
+        props = parse_pspm_properties(match[1]);
+        if (props.hasOwnProperty("alength")) {
+          alph_length = parseFloat(props["alength"]);
+          if (alph_length != 4 && alph_length != 20) {
+            throw new Error("PSPM property alength should be 4 or 20" +
+                " but got " + alph_length);
+          }
+        }
+        if (props.hasOwnProperty("w")) {
+          motif_length = parseFloat(props["w"]);
+          if (motif_length % 1 !== 0 || motif_length < 1) {
+            throw new Error("PSPM property w should be an integer larger " +
+                "than zero but got " + motif_length);
+          }
+        }
+        if (props.hasOwnProperty("nsites")) {
+          nsites = parseFloat(props["nsites"]);
+          if (nsites <= 0) {
+            throw new Error("PSPM property nsites should be larger than " +
+                "zero but got " + nsites);
+          }
+        }
+        if (props.hasOwnProperty("e")) {
+          evalue = props["e"];
+          if (evalue < 0) {
+            throw new Error("PSPM property evalue should be " +
+                "non-negative but got " + evalue);
+          }
+        }
+        continue;
+      }
+    }
+    pspm[line_num] = [];
+    col_num = 0;
+    parts = line.split(/\s+/);
+    for (j = 0; j < parts.length; j++) {
+      prob = parseFloat(parts[j]);
+      if (prob != parts[j] || prob < 0 || prob > 1) {
+        throw new Error("Expected probability but got '" + parts[j] + "'"); 
+      }
+      pspm[line_num][col_num] = prob;
+      col_num++;
+    }
+    line_num++;
+  }
+  if (typeof motif_length === "number") {
+    if (pspm.length != motif_length) {
+      throw new Error("Expected PSPM to have a motif length of " + 
+          motif_length + " but it was actually " + pspm.length);
+    }
+  } else {
+    motif_length = pspm.length;
+  }
+  if (typeof alph_length !== "number") {
+    alph_length = pspm[0].length;
+    if (alph_length != 4 && alph_length != 20) {
+      throw new Error("Expected length of first row in the PSPM to be " +
+          "either 4 or 20 but got " + alph_length);
+    }
+  }
+  for (i = 0; i < pspm.length; i++) {
+    if (pspm[i].length != alph_length) {
+      throw new Error("Expected PSPM row " + i + " to have a length of " + 
+          alph_length + " but the length was " + pspm[i].length);
+    }
+  }
+  return {"pspm": pspm, "motif_length": motif_length, 
+    "alph_length": alph_length, "nsites": nsites, "evalue": evalue};
+}
+//======================================================================
+// end Pspm object
+//======================================================================
+
+//======================================================================
+// start Logo object
+//======================================================================
+
+var Logo = function(alphabet, fine_text) {
+  "use strict";
+  this.alphabet = alphabet;
+  this.fine_text = fine_text;
+  this.pspm_list = [];
+  this.pspm_column = [];
+  this.rows = 0;
+  this.columns = 0;
+};
+
+Logo.prototype.add_pspm = function(pspm, column) {
+  "use strict";
+  var col;
+  if (typeof column === "undefined") {
+    column = 0;
+  } else if (column < 0) {
+    throw new Error("Column index out of bounds.");
+  }
+  this.pspm_list[this.rows] = pspm;
+  this.pspm_column[this.rows] = column;
+  this.rows++;
+  col = column + pspm.get_motif_length();
+  if (col > this.columns) {
+    this.columns = col;
+  }
+};
+
+Logo.prototype.get_columns = function() {
+  "use strict";
+  return this.columns;
+};
+
+Logo.prototype.get_rows = function() {
+  "use strict";
+  return this.rows;
+};
+
+Logo.prototype.get_pspm = function(row_index) {
+  "use strict";
+  if (row_index < 0 || row_index >= this.rows) {
+    throw new Error("INDEX_OUT_OF_BOUNDS");
+  }
+  return this.pspm_list[row_index];
+};
+
+Logo.prototype.get_offset = function(row_index) {
+  "use strict";
+  if (row_index < 0 || row_index >= this.rows) {
+    throw new Error("INDEX_OUT_OF_BOUNDS");
+  }
+  return this.pspm_column[row_index];
+};
+
+//======================================================================
+// end Logo object
+//======================================================================
+
+//======================================================================
+// start RasterizedAlphabet
+//======================================================================
+
+// Rasterize Alphabet
+// 1) Measure width of text at default font for all symbols in alphabet
+// 2) sort in width ascending
+// 3) Drop the top and bottom 10% (designed to ignore outliers like 'W' and 'I')
+// 4) Calculate the average as the maximum scaling factor (designed to stop I becoming a rectangular blob).
+// 5) Assume scale of zero would result in width of zero, interpolate scale required to make perfect width font
+// 6) Draw text onto temp canvas at calculated scale
+// 7) Find bounds of drawn text
+// 8) Paint on to another canvas at the desired height (but only scaling width to fit if larger).
+var RasterizedAlphabet = function(alphabet, font, target_width) {
+  "use strict";
+  var default_size, safety_pad, canvas, ctx, middle, baseline, widths, count,
+      letters, i, letter, size, tenpercent, avg_width, scale, 
+      target_height, raster;
+  //variable prototypes
+  this.lookup = []; //a map of letter to index
+  this.rasters = []; //a list of rasters
+  this.dimensions = []; //a list of dimensions
+
+  //construct
+  default_size = 60; // size of square to assume as the default width
+  safety_pad = 20; // pixels to pad around so we don't miss the edges
+  // create a canvas to do our rasterizing on
+  canvas = document.createElement("canvas");
+  // assume the default font would fit in a canvas of 100 by 100
+  canvas.width = default_size + 2 * safety_pad;
+  canvas.height = default_size + 2 * safety_pad;
+  // check for canvas support before attempting anything
+  if (!canvas.getContext) {
+    throw new Error("NO_CANVAS_SUPPORT");
+  }
+  ctx = canvas.getContext('2d');
+  // check for html5 text drawing support
+  if (!supports_text(ctx)) {
+    throw new Error("NO_CANVAS_TEXT_SUPPORT");
+  }
+  // calculate the middle
+  middle = Math.round(canvas.width / 2);
+  // calculate the baseline
+  baseline = Math.round(canvas.height - safety_pad);
+  // list of widths
+  widths = [];
+  count = 0;
+  letters = [];
+  //now measure each letter in the alphabet
+  for (i = 0; i < alphabet.get_size(); ++i) {
+    if (alphabet.is_ambig(i)) {
+      continue; //skip ambigs as they're never rendered
+    }
+    letter = alphabet.get_letter(i);
+    letters.push(letter);
+    this.lookup[letter] = count;
+    //clear the canvas
+    canvas.width = canvas.width;
+    // get the context and prepare to draw our width test
+    ctx = canvas.getContext('2d');
+    ctx.font = font;
+    ctx.fillStyle = alphabet.get_colour(i);
+    ctx.textAlign = "center";
+    ctx.translate(middle, baseline);
+    // draw the test text
+    ctx.fillText(letter, 0, 0);
+    //measure
+    size = canvas_bounds(ctx, canvas.width, canvas.height);
+    if (size.width === 0) {
+      throw new Error("INVISIBLE_LETTER"); //maybe the fill was white on white?
+    }
+    widths.push(size.width);
+    this.dimensions[count] = size;
+    count++;
+  }
+  //sort the widths
+  widths.sort(function(a,b) {return a - b;});
+  //drop 10% of the items off each end
+  tenpercent = Math.floor(widths.length / 10);
+  for (i = 0; i < tenpercent; ++i) {
+    widths.pop();
+    widths.shift();
+  }
+  //calculate average width
+  avg_width = 0;
+  for (i = 0; i < widths.length; ++i) {
+    avg_width += widths[i];
+  }
+  avg_width /= widths.length;
+  // calculate scales
+  for (i = 0; i < this.dimensions.length; ++i) {
+    size = this.dimensions[i];
+    // calculate scale
+    scale = target_width / Math.max(avg_width, size.width);
+    // estimate scaled height
+    target_height = size.height * scale;
+    // create an approprately sized canvas
+    raster = document.createElement("canvas");
+    raster.width = target_width; // if it goes over the edge too bad...
+    raster.height = target_height + safety_pad * 2;
+    // calculate the middle
+    middle = Math.round(raster.width / 2);
+    // calculate the baseline
+    baseline = Math.round(raster.height - safety_pad);
+    // get the context and prepare to draw the rasterized text
+    ctx = raster.getContext('2d');
+    ctx.font = font;
+    ctx.fillStyle = alphabet.get_colour(i);
+    ctx.textAlign = "center";
+    ctx.translate(middle, baseline);
+    ctx.save();
+    ctx.scale(scale, scale);
+    // draw the rasterized text
+    ctx.fillText(letters[i], 0, 0);
+    ctx.restore();
+    this.rasters[i] = raster;
+    this.dimensions[i] = canvas_bounds(ctx, raster.width, raster.height);
+  }
+};
+
+function canvas_bounds(ctx, cwidth, cheight) {
+  "use strict";
+  var data, r, c, top_line, bottom_line, left_line, right_line, 
+      txt_width, txt_height;
+  data = ctx.getImageData(0, 0, cwidth, cheight).data;
+  r = 0; c = 0; // r: row, c: column
+  top_line = -1; bottom_line = -1; left_line = -1; right_line = -1;
+  txt_width = 0; txt_height = 0;
+  // Find the top-most line with a non-white pixel
+  for (r = 0; r < cheight; r++) {
+    for (c = 0; c < cwidth; c++) {
+      if (data[r * cwidth * 4 + c * 4 + 3]) {
+        top_line = r;
+        break;
+      }
+    }
+    if (top_line != -1) {
+      break;
+    }
+  }
+  
+  //find the last line with a non-white pixel
+  if (top_line != -1) {
+    for (r = cheight-1; r >= top_line; r--) {
+      for(c = 0; c < cwidth; c++) {
+        if(data[r * cwidth * 4 + c * 4 + 3]) {
+          bottom_line = r;
+          break;
+        }
+      }
+      if (bottom_line != -1) {
+        break;
+      }
+    }
+    txt_height = bottom_line - top_line + 1;
+  }
+
+  // Find the left-most line with a non-white pixel
+  for (c = 0; c < cwidth; c++) {
+    for (r = 0; r < cheight; r++) {
+      if (data[r * cwidth * 4 + c * 4 + 3]) {
+        left_line = c;
+        break;
+      }
+    }
+    if (left_line != -1) {
+      break;
+    }
+  }
+
+  //find the right most line with a non-white pixel
+  if (left_line != -1) {
+    for (c = cwidth-1; c >= left_line; c--) {
+      for(r = 0; r < cheight; r++) {
+        if(data[r * cwidth * 4 + c * 4 + 3]) {
+          right_line = c;
+          break;
+        }
+      }
+      if (right_line != -1) {
+        break;
+      }
+    }
+    txt_width = right_line - left_line + 1;
+  }
+
+  //return the bounds
+  return {bound_top: top_line, bound_bottom: bottom_line, 
+    bound_left: left_line, bound_right: right_line, width: txt_width, 
+    height: txt_height};
+}
+
+RasterizedAlphabet.prototype.draw = function(ctx, letter, dx, dy, dWidth, dHeight) {
+  "use strict";
+  var index, raster, size;
+  index = this.lookup[letter];
+  raster = this.rasters[index];
+  size = this.dimensions[index];
+  ctx.drawImage(raster, 0, size.bound_top -1, raster.width, size.height+1, dx, dy, dWidth, dHeight);
+};
+
+//======================================================================
+// end RasterizedAlphabet
+//======================================================================
+
+//======================================================================
+// start LogoMetrics object
+//======================================================================
+
+var LogoMetrics = function(ctx, logo_columns, logo_rows, allow_space_for_names) {
+  "use strict";
+  var i, row_height;
+  if (typeof allow_space_for_names === "undefined") {
+    allow_space_for_names = false;
+  }
+  //variable prototypes
+  this.pad_top = 5;
+  this.pad_left = 10;
+  this.pad_right = 5;
+  this.pad_bottom = 0;
+  this.pad_middle = 20;
+  this.name_height = 14;
+  this.name_font = "bold " + this.name_height + "px Times, sans-serif";
+  this.name_spacer = 0;
+  this.y_label = "bits";
+  this.y_label_height = 12;
+  this.y_label_font = "bold " + this.y_label_height + "px Helvetica, sans-serif";
+  this.y_label_spacer = 3;
+  this.y_num_height = 12;
+  this.y_num_width = 0;
+  this.y_num_font = "bold " + this.y_num_height + "px Helvetica, sans-serif";
+  this.y_tic_width = 5;
+  this.stack_pad_left = 0;
+  this.stack_font = "bold 25px Helvetica, sans-serif";
+  this.stack_height = 90;
+  this.stack_width = 26;
+  this.stacks_pad_right = 5;
+  this.x_num_above = 2;
+  this.x_num_height = 12;
+  this.x_num_width = 0;
+  this.x_num_font = "bold " + this.x_num_height + "px Helvetica, sans-serif";
+  this.fine_txt_height = 6;
+  this.fine_txt_above = 2;
+  this.fine_txt_font = "normal " + this.fine_txt_height + "px Helvetica, sans-serif";
+  this.letter_metrics = new Array();
+  this.summed_width = 0;
+  this.summed_height = 0;
+  //calculate the width of the y axis numbers
+  ctx.font = this.y_num_font;
+  for (i = 0; i <= 2; i++) {
+    this.y_num_width = Math.max(this.y_num_width, ctx.measureText("" + i).width);
+  }
+  //calculate the width of the x axis numbers (but they are rotated so it becomes height)
+  ctx.font = this.x_num_font;
+  for (i = 1; i <= logo_columns; i++) {
+    this.x_num_width = Math.max(this.x_num_width, ctx.measureText("" + i).width);
+  }
+  
+  //calculate how much vertical space we want to draw this
+  //first we add the padding at the top and bottom since that's always there
+  this.summed_height += this.pad_top + this.pad_bottom;
+  //all except the last row have the same amount of space allocated to them
+  if (logo_rows > 1) {
+    row_height = this.stack_height + this.pad_middle;
+    if (allow_space_for_names) {
+      row_height += this.name_height;
+      //the label is allowed to overlap into the spacer
+      row_height += Math.max(this.y_num_height/2, this.name_spacer); 
+      //the label is allowed to overlap the space used by the other label
+      row_height += Math.max(this.y_num_height/2, this.x_num_height + this.x_num_above); 
+    } else {
+      row_height += this.y_num_height/2; 
+      //the label is allowed to overlap the space used by the other label
+      row_height += Math.max(this.y_num_height/2, this.x_num_height + this.x_num_above); 
+    }
+    this.summed_height += row_height * (logo_rows - 1);
+  }
+  //the last row has the name and fine text below it but no padding
+  this.summed_height += this.stack_height + this.y_num_height/2;
+  if (allow_space_for_names) {
+    this.summed_height += this.fine_txt_height + this.fine_txt_above + this.name_height;
+    this.summed_height += Math.max(this.y_num_height/2, 
+        this.x_num_height + this.x_num_above + this.name_spacer);
+  } else {
+    this.summed_height += Math.max(this.y_num_height/2, 
+        this.x_num_height + this.x_num_above + this.fine_txt_height + this.fine_txt_above);
+  }
+
+  //calculate how much horizontal space we want to draw this
+  //first add the padding at the left and right since that's always there
+  this.summed_width += this.pad_left + this.pad_right;
+  //add on the space for the y-axis label
+  this.summed_width += this.y_label_height + this.y_label_spacer;
+  //add on the space for the y-axis
+  this.summed_width += this.y_num_width + this.y_tic_width;
+  //add on the space for the stacks
+  this.summed_width += (this.stack_pad_left + this.stack_width) * logo_columns;
+  //add on the padding after the stacks (an offset from the fine text)
+  this.summed_width += this.stacks_pad_right;
+
+};
+
+//======================================================================
+// end LogoMetrics object
+//======================================================================
+
+//found this trick at http://talideon.com/weblog/2005/02/detecting-broken-images-js.cfm
+function image_ok(img) {
+  "use strict";
+  // During the onload event, IE correctly identifies any images that
+  // weren't downloaded as not complete. Others should too. Gecko-based
+  // browsers act like NS4 in that they report this incorrectly.
+  if (!img.complete) {
+    return false;
+  }
+  // However, they do have two very useful properties: naturalWidth and
+  // naturalHeight. These give the true size of the image. If it failed
+  // to load, either of these should be zero.
+  if (typeof img.naturalWidth !== "undefined" && img.naturalWidth === 0) {
+    return false;
+  }
+  // No other way of checking: assume it's ok.
+  return true;
+}
+  
+function supports_text(ctx) {
+  "use strict";
+  if (!ctx.fillText) {
+    return false;
+  }
+  if (!ctx.measureText) {
+    return false;
+  }
+  return true;
+}
+
+//draws the scale, returns the width
+function draw_scale(ctx, metrics, alphabet_ic) {
+  "use strict";
+  var tic_height, i;
+  tic_height = metrics.stack_height / alphabet_ic;
+  ctx.save();
+  ctx.lineWidth = 1.5;
+  ctx.translate(metrics.y_label_height, metrics.y_num_height/2);
+  //draw the axis label
+  ctx.save();
+  ctx.font = metrics.y_label_font;
+  ctx.translate(0, metrics.stack_height/2);
+  ctx.save();
+  ctx.rotate(-(Math.PI / 2));
+  ctx.textAlign = "center";
+  ctx.fillText("bits", 0, 0);
+  ctx.restore();
+  ctx.restore();
+
+  ctx.translate(metrics.y_label_spacer + metrics.y_num_width, 0);
+
+  //draw the axis tics
+  ctx.save();
+  ctx.translate(0, metrics.stack_height);
+  ctx.font = metrics.y_num_font;
+  ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
+  for (i = 0; i <= alphabet_ic; i++) {
+    //draw the number
+    ctx.fillText("" + i, 0, 0);
+    //draw the tic
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(metrics.y_tic_width, 0);
+    ctx.stroke();
+    //prepare for next tic
+    ctx.translate(0, -tic_height);
+  }
+  ctx.restore();
+
+  ctx.translate(metrics.y_tic_width, 0);
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(0, metrics.stack_height);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function draw_stack_num(ctx, metrics, row_index) {
+  "use strict";
+  ctx.save();
+  ctx.font = metrics.x_num_font;
+  ctx.translate(metrics.stack_width / 2, metrics.stack_height + metrics.x_num_above);
+  ctx.save();
+  ctx.rotate(-(Math.PI / 2));
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "right";
+  ctx.fillText("" + (row_index + 1), 0, 0);
+  ctx.restore();
+  ctx.restore();
+}
+
+function draw_stack(ctx, metrics, symbols, raster) {
+  "use strict";
+  var preferred_pad, sym_min, i, sym, sym_height, pad;
+  preferred_pad = 0;
+  sym_min = 5;
+
+  ctx.save();//1
+  ctx.translate(0, metrics.stack_height);
+  for (i = 0; i < symbols.length; i++) {
+    sym = symbols[i];
+    sym_height = metrics.stack_height * sym.get_scale();
+    
+    pad = preferred_pad;
+    if (sym_height - pad < sym_min) {
+      pad = Math.min(pad, Math.max(0, sym_height - sym_min));
+    }
+    sym_height -= pad;
+
+    //translate to the correct position
+    ctx.translate(0, -(pad/2 + sym_height));
+    //draw
+    raster.draw(ctx, sym.get_symbol(), 0, 0, metrics.stack_width, sym_height);
+    //translate past the padding
+    ctx.translate(0, -(pad/2));
+  }
+  ctx.restore();//1
+}
+
+function draw_dashed_line(ctx, pattern, start, x1, y1, x2, y2) {
+  "use strict";
+  var x, y, len, i, dx, dy, tlen, theta, mulx, muly, lx, ly;
+  dx = x2 - x1;
+  dy = y2 - y1;
+  tlen = Math.pow(dx*dx + dy*dy, 0.5);
+  theta = Math.atan2(dy,dx);
+  mulx = Math.cos(theta);
+  muly = Math.sin(theta);
+  lx = [];
+  ly = [];
+  for (i = 0; i < pattern; ++i) {
+    lx.push(pattern[i] * mulx);
+    ly.push(pattern[i] * muly);
+  }
+  i = start;
+  x = x1;
+  y = y1;
+  len = 0;
+  ctx.beginPath();
+  while (len + pattern[i] < tlen) {
+    ctx.moveTo(x, y);
+    x += lx[i];
+    y += ly[i];
+    ctx.lineTo(x, y);
+    len += pattern[i];
+    i = (i + 1) % pattern.length;
+    x += lx[i];
+    y += ly[i];
+    len += pattern[i];
+    i = (i + 1) % pattern.length;
+  }
+  if (len < tlen) {
+    ctx.moveTo(x, y);
+    x += mulx * (tlen - len);
+    y += muly * (tlen - len);
+    ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+}
+
+function draw_trim_background(ctx, metrics, pspm, offset) {
+  "use strict";
+  var lwidth, rwidth, mwidth, rstart;
+  lwidth = metrics.stack_width * pspm.get_left_trim();
+  rwidth = metrics.stack_width * pspm.get_right_trim();
+  mwidth = metrics.stack_width * pspm.get_motif_length();
+  rstart = mwidth - rwidth;
+  ctx.save();//s8
+  ctx.translate(offset * metrics.stack_width, 0);
+  ctx.fillStyle = "rgb(240, 240, 240)";
+  if (pspm.get_left_trim() > 0) {
+    ctx.fillRect(0, 0, lwidth, metrics.stack_height);
+  }
+  if (pspm.get_right_trim() > 0) {
+    ctx.fillRect(rstart, 0, rwidth, metrics.stack_height);
+  }
+  ctx.fillStyle = "rgb(51, 51, 51)";
+  if (pspm.get_left_trim() > 0) {
+    draw_dashed_line(ctx, [3], 0, lwidth-0.5, 0, lwidth-0.5,  metrics.stack_height);
+  }
+  if (pspm.get_right_trim() > 0) {
+    draw_dashed_line(ctx, [3], 0, rstart+0.5, 0, rstart+0.5,  metrics.stack_height);
+  }
+  ctx.restore();//s8
+}
+
+function size_logo_on_canvas(logo, canvas, show_names, scale) {
+  "use strict";
+  var draw_name, metrics;
+  draw_name = (typeof show_names === "boolean" ? show_names : (logo.get_rows() > 1));
+  if (canvas.width !== 0 && canvas.height !== 0) {
+    return;
+  }
+  metrics = new LogoMetrics(canvas.getContext('2d'), 
+      logo.get_columns(), logo.get_rows(), draw_name);
+  if (typeof scale == "number") {
+    //resize the canvas to fit the scaled logo
+    canvas.width = metrics.summed_width * scale;
+    canvas.height = metrics.summed_height * scale;
+  } else {
+    if (canvas.width === 0 && canvas.height === 0) {
+      canvas.width = metrics.summed_width;
+      canvas.height = metrics.summed_height;
+    } else if (canvas.width === 0) {
+      canvas.width = metrics.summed_width * (canvas.height / metrics.summed_height);
+    } else if (canvas.height === 0) {
+      canvas.height = metrics.summed_height * (canvas.width / metrics.summed_width);
+    }
+  }
+}
+
+function draw_logo_on_canvas(logo, canvas, show_names, scale) {
+  "use strict";
+  var draw_name, ctx, metrics, raster, pspm_i, pspm, 
+      offset, col_index, motif_position;
+  draw_name = (typeof show_names === "boolean" ? show_names : (logo.get_rows() > 1));
+  ctx = canvas.getContext('2d');
+  //assume that the user wants the canvas scaled equally so calculate what the best width for this image should be
+  metrics = new LogoMetrics(ctx, logo.get_columns(), logo.get_rows(), draw_name);
+  if (typeof scale == "number") {
+    //resize the canvas to fit the scaled logo
+    canvas.width = metrics.summed_width * scale;
+    canvas.height = metrics.summed_height * scale;
+  } else {
+    if (canvas.width === 0 && canvas.height === 0) {
+      scale = 1;
+      canvas.width = metrics.summed_width;
+      canvas.height = metrics.summed_height;
+    } else if (canvas.width === 0) {
+      scale = canvas.height / metrics.summed_height;
+      canvas.width = metrics.summed_width * scale;
+    } else if (canvas.height === 0) {
+      scale = canvas.width / metrics.summed_width;
+      canvas.height = metrics.summed_height * scale;
+    } else {
+      scale = Math.min(canvas.width / metrics.summed_width, canvas.height / metrics.summed_height);
+    }
+  }
+  // cache the raster based on the assumption that we will be drawing a lot
+  // of logos the same size
+  if (typeof draw_logo_on_canvas.raster_scale === "number" && 
+      Math.abs(draw_logo_on_canvas.raster_scale - scale) < 0.1) {
+    raster = draw_logo_on_canvas.raster_cache;
+  } else {
+    raster = new RasterizedAlphabet(logo.alphabet, metrics.stack_font, metrics.stack_width * scale * 2);
+    draw_logo_on_canvas.raster_cache = raster;
+    draw_logo_on_canvas.raster_scale = scale;
+  }
+  ctx = canvas.getContext('2d');
+  ctx.save();//s1
+  ctx.scale(scale, scale);
+  ctx.save();//s2
+  ctx.save();//s7
+  //create margin
+  ctx.translate(metrics.pad_left, metrics.pad_top);
+  for (pspm_i = 0; pspm_i < logo.get_rows(); ++pspm_i) {
+    pspm = logo.get_pspm(pspm_i);
+    offset = logo.get_offset(pspm_i);
+    //optionally draw name if this isn't the last row or is the only row 
+    if (draw_name && (logo.get_rows() == 1 || pspm_i != (logo.get_rows()-1))) {
+      ctx.save();//s4
+      ctx.translate(metrics.summed_width/2, metrics.name_height);
+      ctx.font = metrics.name_font;
+      ctx.textAlign = "center";
+      ctx.fillText(pspm.name, 0, 0);
+      ctx.restore();//s4
+      ctx.translate(0, metrics.name_height + 
+          Math.min(0, metrics.name_spacer - metrics.y_num_height/2));
+    }
+    //draw scale
+    draw_scale(ctx, metrics, logo.alphabet.get_ic());
+    ctx.save();//s5
+    //translate across past the scale
+    ctx.translate(metrics.y_label_height + metrics.y_label_spacer + 
+        metrics.y_num_width + metrics.y_tic_width, 0);
+    //draw the trimming background
+    if (pspm.get_left_trim() > 0 || pspm.get_right_trim() > 0) {
+      draw_trim_background(ctx, metrics, pspm, offset);
+    }
+    //draw letters
+    ctx.translate(0, metrics.y_num_height / 2);
+    for (col_index = 0; col_index < logo.get_columns(); col_index++) {
+      ctx.translate(metrics.stack_pad_left,0);
+      if (col_index >= offset && col_index < (offset + pspm.get_motif_length())) {
+        motif_position = col_index - offset;
+        draw_stack_num(ctx, metrics, motif_position);
+        draw_stack(ctx, metrics, pspm.get_stack(motif_position, logo.alphabet), raster);
+      }
+      ctx.translate(metrics.stack_width, 0);
+    }
+    ctx.restore();//s5
+    ////optionally draw name if this is the last row but isn't the only row 
+    if (draw_name && (logo.get_rows() != 1 && pspm_i == (logo.get_rows()-1))) {
+      //translate vertically past the stack and axis's        
+      ctx.translate(0, metrics.y_num_height/2 + metrics.stack_height + 
+          Math.max(metrics.y_num_height/2, metrics.x_num_above + metrics.x_num_width + metrics.name_spacer));
+
+      ctx.save();//s6
+      ctx.translate(metrics.summed_width/2, metrics.name_height);
+      ctx.font = metrics.name_font;
+      ctx.textAlign = "center";
+      ctx.fillText(pspm.name, 0, 0);
+      ctx.restore();//s6
+      ctx.translate(0, metrics.name_height);
+    } else {
+      //translate vertically past the stack and axis's        
+      ctx.translate(0, metrics.y_num_height/2 + metrics.stack_height + 
+          Math.max(metrics.y_num_height/2, metrics.x_num_above + metrics.x_num_width));
+    }
+    //if not the last row then add middle padding
+    if (pspm_i != (logo.get_rows() -1)) {
+      ctx.translate(0, metrics.pad_middle);
+    }
+  }
+  ctx.restore();//s7
+  ctx.translate(metrics.summed_width - metrics.pad_right, metrics.summed_height - metrics.pad_bottom);
+  ctx.font = metrics.fine_txt_font;
+  ctx.textAlign = "right";
+  ctx.fillText(logo.fine_text, 0,0);
+  ctx.restore();//s2
+  ctx.restore();//s1
+}
+
+function create_canvas(c_width, c_height, c_id, c_title, c_display) {
+  "use strict";
+  var canvas = document.createElement("canvas");
+  //check for canvas support before attempting anything
+  if (!canvas.getContext) {
+    return null;
+  }
+  var ctx = canvas.getContext('2d');
+  //check for html5 text drawing support
+  if (!supports_text(ctx)) {
+    return null;
+  }
+  //size the canvas
+  canvas.width = c_width;
+  canvas.height = c_height;
+  canvas.id = c_id;
+  canvas.title = c_title;
+  canvas.style.display = c_display;
+  return canvas;
+}
+
+function logo_1(alphabet, fine_text, pspm) {
+  "use strict";
+  var logo = new Logo(alphabet, fine_text);
+  logo.add_pspm(pspm);
+  return logo;
+}
+
+function logo_2(alphabet, fine_text, target, query, query_offset) {
+  "use strict";
+  var logo = new Logo(alphabet, fine_text);
+  if (query_offset < 0) {
+    logo.add_pspm(target, -query_offset);
+    logo.add_pspm(query);
+  } else {
+    logo.add_pspm(target);
+    logo.add_pspm(query, query_offset);
+  }      
+  return logo;
+}
+
+/*
+ * Specifies an alternate source for an image.
+ * If the image with the image_id specified has
+ * not loaded then a generated logo will be used 
+ * to replace it.
+ *
+ * Note that the image must either have dimensions
+ * or a scale must be set.
+ */
+function alternate_logo(logo, image_id, scale) {
+  "use strict";
+  var image = document.getElementById(image_id);
+  if (!image) {
+    alert("Can't find specified image id (" +  image_id + ")");
+    return;
+  }
+  //if the image has loaded then there is no reason to use the canvas
+  if (image_ok(image)) {
+    return;
+  }
+  //the image has failed to load so replace it with a canvas if we can.
+  var canvas = create_canvas(image.width, image.height, image_id, image.title, image.style.display);
+  if (canvas === null) {
+    return;
+  }
+  //draw the logo on the canvas
+  draw_logo_on_canvas(logo, canvas, null, scale);
+  //replace the image with the canvas
+  image.parentNode.replaceChild(canvas, image);
+}
+
+/*
+ * Specifes that the element with the specified id
+ * should be replaced with a generated logo.
+ */
+function replace_logo(logo, replace_id, scale, title_txt, display_style) {
+  "use strict";
+  var element = document.getElementById(replace_id);
+  if (!replace_id) {
+    alert("Can't find specified id (" + replace_id + ")");
+    return;
+  }
+  //found the element!
+  var canvas = create_canvas(50, 120, replace_id, title_txt, display_style);
+  if (canvas === null) {
+    return;
+  }
+  //draw the logo on the canvas
+  draw_logo_on_canvas(logo, canvas, null, scale);
+  //replace the element with the canvas
+  element.parentNode.replaceChild(canvas, element);
+}
+
+/*
+ * Fast string trimming implementation found at
+ * http://blog.stevenlevithan.com/archives/faster-trim-javascript
+ *
+ * Note that regex is good at removing leading space but
+ * bad at removing trailing space as it has to first go through
+ * the whole string.
+ */
+function trim (str) {
+  "use strict";
+  var ws, i;
+  str = str.replace(/^\s\s*/, '');
+  ws = /\s/; i = str.length;
+  while (ws.test(str.charAt(--i)));
+  return str.slice(0, i + 1);
+}
+    /* END INCLUDED FILE "motif_logo.js" */
+    
+  
+      function LoadQueryTask(target_id, query_name) {
+        this.target_id = target_id;
+        this.query_name = query_name;
+        this.run = LoadQueryTask_run;
+      }
+      function LoadQueryTask_run() {
+        var alpha = new Alphabet("ACGT");
+        var query_pspm = new Pspm(document.getElementById('q_' + this.query_name).value, this.query_name);
+        replace_logo(logo_1(alpha, "Tomtom", query_pspm), this.target_id, 0.5, "Preview of " + this.query_name, "block");
+      }
+      function FixLogoTask(image_id, query_name, target_db_id, target_name, target_rc, target_offset) {
+        this.image_id = image_id;
+        this.query_name = query_name;
+        this.target_db_id = target_db_id;
+        this.target_name = target_name;
+        this.target_rc = target_rc;
+        this.target_offset = target_offset;
+        this.run = FixLogoTask_run;
+      }
+      function FixLogoTask_run() {
+        var image = document.getElementById(this.image_id);
+        var canvas = create_canvas(image.width, image.height, image.id, image.title, image.style.display);
+        if (canvas == null) return;
+        var alpha = new Alphabet("ACGT");
+        var query_pspm = new Pspm(document.getElementById('q_' + this.query_name).value, this.query_name);
+        var target_pspm = new Pspm(document.getElementById('t_' + this.target_db_id + '_' + this.target_name).value, this.target_name);
+        if (this.target_rc) target_pspm.reverse_complement(alpha);
+        var logo = logo_2(alpha, "Tomtom", target_pspm, query_pspm, this.target_offset);
+        draw_logo_on_canvas(logo, canvas, true, 1);
+        image.parentNode.replaceChild(canvas, image);
+      }
+      function push_task(task) {
+        task_queue.push(task);
+        if (task_queue.length == 1) {
+          window.setTimeout("process_tasks()", task_delay);
+        }
+      }
+      function process_tasks() {
+        if (task_queue.length == 0) return; //no more tasks
+        //get next task
+        var task = task_queue.shift();
+        task.run();
+        //allow UI updates between tasks
+        window.setTimeout("process_tasks()", task_delay);
+      }
+      function showHidden(prefix) {
+        document.getElementById(prefix + '_activator').style.display = 'none';
+        document.getElementById(prefix + '_deactivator').style.display = 'block';
+        document.getElementById(prefix + '_data').style.display = 'block';
+      }
+      function hideShown(prefix) {
+        document.getElementById(prefix + '_activator').style.display = 'block';
+        document.getElementById(prefix + '_deactivator').style.display = 'none';
+        document.getElementById(prefix + '_data').style.display = 'none';
+      }
+      function show_more(query_index, match_index, query_id, target_id, offset, rc) {
+        var link = document.getElementById("show_" + query_index + "_" + match_index);
+        var match_table = document.getElementById("table_" + query_index);
+        var match_row = document.getElementById("tr_" + query_index + "_" + match_index);
+        var query_pspm = document.getElementById(query_id).value;
+        var query_length = (new Pspm(query_pspm)).get_motif_length();
+        var target_pspm = document.getElementById(target_id).value;
+        var target_length = (new Pspm(target_pspm)).get_motif_length();
+        var total_length = (offset < 0 ? Math.max(query_length, target_length - offset) : Math.max(query_length + offset, target_length));
+        var download_row = document.getElementById("tr_download");
+        if (download_row) {
+          //remove existing
+          match_table.deleteRow(download_row.rowIndex);
+          show_opts_link.style.visibility = "visible";
+        }
+        show_opts_link = link;
+        show_opts_link.style.visibility = "hidden";
+        download_row = match_table.insertRow(match_row.rowIndex + 1);
+        download_row.id = "tr_download";
+        var cell = download_row.insertCell(0);
+        cell.colSpan = 2;
+        cell.style.verticalAlign = "top";
+        //create the download options
+        var box = document.createElement("div");
+        box.appendChild(create_title("Create custom LOGO", "#download_logo_doc"));
+        var form = create_form("http://meme.nbcr.net/meme/cgi-bin/tomtom_request.cgi", "post");
+        add_hfield(form, "mode", "logo");
+        add_hfield(form, "version", "4.9.1");
+        add_hfield(form, "background", "0.25 0.25 0.25 0.25");
+        add_hfield(form, "target_id", target_id);
+        add_hfield(form, "target_length", target_length);
+        add_hfield(form, "target_pspm", target_pspm);
+        add_hfield(form, "target_rc", rc);
+        add_hfield(form, "query_id", query_id);
+        add_hfield(form, "query_length", query_length);
+        add_hfield(form, "query_pspm", query_pspm);
+        add_hfield(form, "query_offset", offset);
+        var tbl = document.createElement("table");
+        var row = tbl.insertRow(tbl.rows.length);
+        add_label(row.insertCell(-1),"Image Type");
+        add_label(row.insertCell(-1), "Error bars");
+        add_label(row.insertCell(-1), "SSC");
+        add_label(row.insertCell(-1), "Flip");
+        add_label(row.insertCell(-1), "Width");
+        add_label(row.insertCell(-1), "Height");
+        row.insertCell(-1).appendChild(document.createTextNode(" "));
+        row = tbl.insertRow(tbl.rows.length);
+        add_combo(row.insertCell(-1), "image_type", {"png" : "PNG (for web)", "eps" : "EPS (for publication)"}, "png");
+        add_combo(row.insertCell(-1), "error_bars", {"1" : "yes", "0" : "no"}, "1");
+        add_combo(row.insertCell(-1), "small_sample_correction", {"0" : "no", "1" : "yes"}, "0");
+        add_combo(row.insertCell(-1), "flip", {"0" : "no", "1" : "yes"}, "0");
+        add_tfield(row.insertCell(-1), "image_width", total_length, 2);
+        add_tfield(row.insertCell(-1), "image_height", 10, 2);
+        add_submit(row.insertCell(-1), "Download");
+        form.appendChild(tbl);
+        box.appendChild(form);
+        cell.appendChild(box);
+      }
+      function create_title(title, help_link) {
+        var title_ele = document.createElement("h4");
+        var words = document.createTextNode(title + " ");
+        title_ele.appendChild(words);
+        if (help_link) {
+          var link = document.createElement("a");
+          link.className = "help"
+          link.href = help_link;
+          var helpdiv = document.createElement("div");
+          helpdiv.className = "help";
+          link.appendChild(helpdiv);
+          title_ele.appendChild(link);
+        }
+        return title_ele;
+      }
+      function add_hfield(form, name, value) {
+        var hidden = document.createElement("input");
+        hidden.type = "hidden";
+        hidden.name = name;
+        hidden.value = value;
+        form.appendChild(hidden);
+      }
+      function add_label(ele,label) {
+        ele.className = "downloadTd";
+        var label_b = document.createElement("b");
+        label_b.appendChild(document.createTextNode(label));
+        ele.appendChild(label_b);
+      }
+      function add_tfield(ele, name, value, size) {
+        ele.className = "downloadTd";
+        var field = document.createElement("input");
+        field.type = "text";
+        field.style.marginLeft = "5px";
+        field.name = name;
+        field.value = value;
+        field.size = size;
+        ele.appendChild(field);
+      }
+      function add_combo(ele, name, options, selected) {
+        ele.className = "downloadTd";
+        var combo = document.createElement("select");
+        combo.name = name;
+        for (var value in options) {
+          combo.style.marginLeft = "5px";
+          //exclude inherited properties and undefined properties
+          if (!options.hasOwnProperty(value) || options[value] === undefined) continue;
+          var display = options[value];
+          var option = document.createElement("option");
+          option.value = value;
+          if (value == selected) option.selected = true;
+          option.appendChild(document.createTextNode(display));
+          combo.appendChild(option);
+        }
+        ele.appendChild(combo);
+      }
+      function add_submit(ele, value) {
+        ele.className = "downloadTd";
+        var submit = document.createElement("input");
+        submit.type = "submit";
+        submit.value = value;
+        ele.appendChild(submit);
+      }
+      function create_form(path,method) {
+        method = method || "post";
+
+        var form = document.createElement("form");
+        form.method = method;
+        form.action = path;
+        return form;
+      }
+    </script>
+</head>
+<body>
+<form>
+<input type="hidden" id="q_STRGGTCAN" value="
+letter-probability matrix: alength= 4 w= 9 nsites= 28 E= 0.0e+000 
+0.112069 0.284483 0.491379 0.112069
+0.112069 0.008621 0.008621 0.87069
+0.663793 0.008621 0.318966 0.008621
+0.008621 0.043103 0.939655 0.008621
+0.043103 0.008621 0.905172 0.043103
+0.008621 0.043103 0.146552 0.801724
+0.077586 0.801724 0.112069 0.008621
+0.905172 0.043103 0.008621 0.043103
+0.181034 0.525862 0.146552 0.146552
+">
+<input type="hidden" id="t_1_MA0016.1" value="
+letter-probability matrix: alength= 4 w= 10 nsites= 38 E= 0.0e+000 
+0 0.026316 0.973684 0
+0.026316 0 0.947368 0.026316
+0 0 1 0
+0 0 1 0
+0 0 0 1
+0 0.947368 0.026316 0.026316
+0.921053 0 0.078947 0
+0.131579 0.657895 0.078947 0.131579
+0.131579 0.210526 0.578947 0.078947
+0.157895 0.263158 0.421053 0.157895
+">
+<input type="hidden" id="t_1_MA0018.1" value="
+letter-probability matrix: alength= 4 w= 12 nsites= 16 E= 0.0e+000 
+0 0.4375 0.3125 0.25
+0.1875 0.3125 0.25 0.25
+0 0.1875 0.375 0.4375
+0.125 0.1875 0.6875 0
+0.3125 0.0625 0.4375 0.1875
+0 0 0 1
+0 0 0.9375 0.0625
+1 0 0 0
+0 1 0 0
+0 0 1 0
+0.0625 0.3125 0 0.625
+0.3125 0.375 0.1875 0.125
+">
+<input type="hidden" id="t_1_MA0065.2" value="
+letter-probability matrix: alength= 4 w= 15 nsites= 862 E= 0.0e+000 
+0.109685 0.369895 0.373396 0.147025
+0.117716 0.193473 0.148019 0.540793
+0.453488 0.026744 0.427907 0.09186
+0.116144 0.003484 0.779326 0.101045
+0.161253 0.017401 0.781903 0.039443
+0.168213 0.149652 0.458237 0.223898
+0.082271 0.633835 0.207416 0.076477
+0.949015 0.024334 0.017381 0.00927
+0.604867 0.05562 0.312862 0.026651
+0.825231 0.005787 0.158565 0.010417
+0.095017 0.002317 0.88876 0.013905
+0.047509 0.010429 0.803013 0.13905
+0.025492 0.114716 0.304751 0.555041
+0.062645 0.643852 0.167053 0.12645
+0.784223 0.067285 0.054524 0.093968
+">
+<input type="hidden" id="t_1_MA0066.1" value="
+letter-probability matrix: alength= 4 w= 20 nsites= 28 E= 0.0e+000 
+0.107143 0.285714 0.5 0.107143
+0.107143 0 0 0.892857
+0.678571 0 0.321429 0
+0 0.035714 0.964286 0
+0.035714 0 0.928571 0.035714
+0 0.035714 0.142857 0.821429
+0.071429 0.821429 0.107143 0
+0.928571 0.035714 0 0.035714
+0.178571 0.535714 0.142857 0.142857
+0.178571 0.25 0.357143 0.214286
+0.142857 0.071429 0.642857 0.142857
+0.035714 0 0.071429 0.892857
+0.071429 0.178571 0.714286 0.035714
+0.785714 0.178571 0 0.035714
+0.035714 0.964286 0 0
+0 0.892857 0 0.107143
+0.107143 0.428571 0 0.464286
+0.785714 0.178571 0 0.035714
+0.178571 0.428571 0.214286 0.178571
+0.25 0 0.035714 0.714286
+">
+<input type="hidden" id="t_1_MA0071.1" value="
+letter-probability matrix: alength= 4 w= 10 nsites= 25 E= 0.0e+000 
+0.6 0.04 0.08 0.28
+0.36 0.04 0 0.6
+0.24 0.48 0.16 0.12
+0.44 0.08 0.2 0.28
+0.84 0 0.16 0
+0 0 1 0
+0 0 1 0
+0 0 0 1
+0 1 0 0
+1 0 0 0
+">
+<input type="hidden" id="t_1_MA0072.1" value="
+letter-probability matrix: alength= 4 w= 14 nsites= 36 E= 0.0e+000 
+0.25 0.222222 0.222222 0.305556
+0.472222 0.055556 0.194444 0.277778
+0.416667 0 0.083333 0.5
+0.972222 0.027778 0 0
+0.638889 0 0 0.361111
+0.055556 0.333333 0.361111 0.25
+0 0 0 1
+0.777778 0 0.222222 0
+0 0 1 0
+0 0 1 0
+0 0 0 1
+0 1 0 0
+1 0 0 0
+0.416667 0.166667 0.277778 0.138889
+">
+<input type="hidden" id="t_1_MA0099.1" value="
+letter-probability matrix: alength= 4 w= 8 nsites= 19 E= 0.0e+000 
+0.263158 0.105263 0.631579 0
+0 0 0 1
+0 0.052632 0.947368 0
+0.947368 0.052632 0 0
+0.052632 0.315789 0.473684 0.157895
+0.052632 0.052632 0 0.894737
+0.315789 0.684211 0 0
+0.947368 0 0 0.052632
+">
+<input type="hidden" id="t_1_MA0112.1" value="
+letter-probability matrix: alength= 4 w= 18 nsites= 9 E= 0.0e+000 
+0.111111 0.555556 0.111111 0.222222
+0.111111 0.555556 0.111111 0.222222
+0.777778 0.111111 0.111111 0
+0.222222 0 0.777778 0
+0 0 1 0
+0 0 0 1
+0 0.777778 0.222222 0
+0.666667 0 0.222222 0.111111
+0.111111 0.777778 0.111111 0
+0.222222 0.555556 0.111111 0.111111
+0.333333 0.222222 0.444444 0
+0.111111 0.111111 0.111111 0.666667
+0.111111 0 0.888889 0
+0.555556 0.111111 0.333333 0
+0 0.888889 0 0.111111
+0 1 0 0
+0.222222 0.444444 0 0.333333
+0.333333 0.444444 0.111111 0.111111
+">
+<input type="hidden" id="t_1_MA0112.2" value="
+letter-probability matrix: alength= 4 w= 20 nsites= 473 E= 0.0e+000 
+0.261242 0.256959 0.329764 0.152034
+0.228632 0.17094 0.350427 0.25
+0.136752 0.369658 0.318376 0.175214
+0.176596 0.487234 0.138298 0.197872
+0.285106 0.493617 0.1 0.121277
+0.651163 0.059197 0.188161 0.10148
+0.075949 0.016878 0.816456 0.090717
+0.04 0.037895 0.884211 0.037895
+0.069474 0.086316 0.191579 0.652632
+0.008421 0.829474 0.111579 0.050526
+0.837895 0.027368 0.056842 0.077895
+0.122105 0.526316 0.225263 0.126316
+0.132632 0.581053 0.111579 0.174737
+0.134737 0.543158 0.204211 0.117895
+0.067368 0.04 0.016842 0.875789
+0.044211 0.046316 0.896842 0.012632
+0.642105 0.223158 0.065263 0.069474
+0.021053 0.917895 0.025263 0.035789
+0.124211 0.743158 0.004211 0.128421
+0.054737 0.347368 0.046316 0.551579
+">
+<input type="hidden" id="t_1_MA0129.1" value="
+letter-probability matrix: alength= 4 w= 7 nsites= 15 E= 0.0e+000 
+0.266667 0.266667 0 0.466667
+0.866667 0 0.066667 0.066667
+0 0.933333 0 0.066667
+0.133333 0 0.866667 0
+0.066667 0 0 0.933333
+0 1 0 0
+0.866667 0 0.066667 0.066667
+">
+<input type="hidden" id="t_1_MA0141.1" value="
+letter-probability matrix: alength= 4 w= 12 nsites= 3647 E= 0.0e+000 
+0.290198 0.220264 0.2712 0.218337
+0.184941 0.22781 0.376477 0.210772
+0.115226 0.332236 0.331687 0.22085
+0.070959 0.342466 0.12274 0.463836
+0.084862 0.729264 0.17164 0.014235
+0.909737 0.008753 0.067834 0.013676
+0.975656 0.000547 0.016411 0.007385
+0.008758 0.001368 0.98139 0.008484
+0.00575 0.003286 0.986309 0.004655
+0.049904 0.012613 0.066904 0.870579
+0.002473 0.927473 0.046703 0.023352
+0.951569 0.005504 0.035498 0.00743
+">
+<input type="hidden" id="t_1_MA0150.1" value="
+letter-probability matrix: alength= 4 w= 11 nsites= 20 E= 0.0e+000 
+0.5 0.05 0.45 0
+0 0 0 1
+0 0 0.95 0.05
+1 0 0 0
+0 0.85 0.05 0.1
+0.3 0.1 0.05 0.55
+0.25 0.5 0.05 0.2
+0.8 0 0.1 0.1
+0 0 1 0
+0 1 0 0
+0.75 0.1 0.1 0.05
+">
+<input type="hidden" id="t_1_MA0159.1" value="
+letter-probability matrix: alength= 4 w= 17 nsites= 23 E= 0.0e+000 
+0.521739 0 0.478261 0
+0 0 1 0
+0.043478 0 0.565217 0.391304
+0 0 0.043478 0.956522
+0 0.782609 0.130435 0.086957
+0.956522 0 0.043478 0
+0.173913 0.304348 0.217391 0.304348
+0.217391 0.347826 0.391304 0.043478
+0.217391 0.173913 0.478261 0.130435
+0.565217 0.043478 0.304348 0.086957
+0.217391 0.26087 0.521739 0
+0.73913 0.130435 0.130435 0
+0.043478 0.043478 0.869565 0.043478
+0 0.043478 0.695652 0.26087
+0.086957 0.043478 0.130435 0.73913
+0.043478 0.73913 0.130435 0.086957
+0.913043 0 0.043478 0.043478
+">
+<input type="hidden" id="t_1_MA0160.1" value="
+letter-probability matrix: alength= 4 w= 8 nsites= 14 E= 0.0e+000 
+0.615385 0.076923 0.230769 0.076923
+0.928571 0 0.071429 0
+0 0 0.928571 0.071429
+0.214286 0 0.785714 0
+0.142857 0.142857 0 0.714286
+0 0.928571 0 0.071429
+1 0 0 0
+0.230769 0.615385 0.153846 0
+">
+<input type="hidden" id="t_1_MA0258.1" value="
+letter-probability matrix: alength= 4 w= 18 nsites= 357 E= 0.0e+000 
+0.218487 0.45098 0.176471 0.154062
+0.442577 0.142857 0.114846 0.29972
+0.521008 0.042017 0.431373 0.005602
+0.07563 0 0.770308 0.154062
+0.05042 0.056022 0.893557 0
+0.036415 0.053221 0.092437 0.817927
+0 1 0 0
+0.943978 0.002801 0 0.053221
+0.137255 0.344538 0.316527 0.201681
+0.179272 0.176471 0.417367 0.226891
+0.145658 0.170868 0.411765 0.271709
+0.058824 0.092437 0.067227 0.781513
+0.176471 0.070028 0.742297 0.011204
+0.498599 0.277311 0.053221 0.170868
+0.095238 0.7507 0.005602 0.148459
+0.128852 0.809524 0 0.061625
+0.07563 0.252101 0 0.672269
+0.168067 0.263305 0.380952 0.187675
+">
+<input type="hidden" id="t_1_MA0272.1" value="
+letter-probability matrix: alength= 4 w= 8 nsites= 212 E= 0.0e+000 
+0.29798 0.060606 0.419192 0.222222
+0.036585 0 0.02439 0.939024
+0.07722 0 0.92278 0
+1 0 0 0
+0 0.996324 0 0.003676
+0.006061 0 0 0.993939
+0 1 0 0
+0.317204 0.317204 0.021505 0.344086
+">
+<input type="hidden" id="t_1_MA0286.1" value="
+letter-probability matrix: alength= 4 w= 9 nsites= 100 E= 0.0e+000 
+0.465347 0.108911 0.316832 0.108911
+0.010101 0.010101 0.010101 0.969697
+0.01 0.01 0.91 0.07
+1 0 0 0
+0 1 0 0
+0.05 0 0.95 0
+0 0 0 1
+0.454545 0.282828 0.080808 0.181818
+0.46 0.14 0.2 0.2
+">
+<input type="hidden" id="t_1_MA0389.1" value="
+letter-probability matrix: alength= 4 w= 8 nsites= 100 E= 0.0e+000 
+0.66 0.09 0.19 0.06
+0.06 0.02 0.9 0.02
+0.97 0 0 0.03
+0.13 0 0.02 0.85
+0 1 0 0
+0.04 0.19 0.03 0.74
+0.46 0.3 0.13 0.11
+0.24 0.42 0.18 0.16
+">
+<input type="hidden" id="t_1_MA0434.1" value="
+letter-probability matrix: alength= 4 w= 9 nsites= 100 E= 0.0e+000 
+0.111111 0.363636 0.111111 0.414141
+0 0 1 0
+0.09 0.26 0 0.65
+0.63 0.26 0 0.11
+0.4 0 0.6 0
+1 0 0 0
+0 0 0 1
+0 1 0 0
+0.36 0.3 0.17 0.17
+">
+<input type="hidden" id="t_1_MA0451.1" value="
+letter-probability matrix: alength= 4 w= 12 nsites= 26 E= 0.0e+000 
+0.730769 0.038462 0.076923 0.153846
+0.961538 0.038462 0 0
+0.615385 0 0 0.384615
+0.192308 0.346154 0.230769 0.230769
+0 0.153846 0.038462 0.807692
+0.807692 0 0.192308 0
+0 0 1 0
+0.653846 0 0.307692 0.038462
+0.038462 0.115385 0.692308 0.153846
+0 1 0 0
+0.961538 0 0.038462 0
+0.192308 0.461538 0.269231 0.076923
+">
+</form>
+<a name="top"></a><div class="pad1">
+<h1><img src="http://meme.nbcr.net/meme/doc/images/tomtom_logo.png" alt="TOol for Motif TO Motif comparison (TOMTOM)"></h1>
+<p>
+        For further information on how to interpret these results or to get a 
+        copy of the MEME software please access 
+        <a href="http://meme.nbcr.net/">http://meme.nbcr.net</a>. 
+      </p>
+<p>If you use TOMTOM in your research, please cite the following paper:<br><span class="citation">
+          Shobhit Gupta, JA Stamatoyannopolous, Timothy Bailey and William Stafford Noble,
+          "Quantifying similarity between motifs",
+          <i>Genome Biology</i>, <b>8</b>(2):R24, 2007.
+        </span></p>
+</div>
+<div class="pad2">
+<a class="jump" href="#query_motifs">Query Motifs</a>  |  <a class="jump" href="#target_dbs">Target Databases</a>  |  <a class="jump" href="#query_q_STRGGTCAN">Matches</a>  |  <a class="jump" href="#program">Program information</a>  |  <a class="jump" href="#doc">Explanation</a>
+</div>
+<a name="query_motifs"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Query Motifs</h2></td>
+<td align="right" valign="bottom">
+<a href="#target_dbs">Next</a> <a href="#top">Top</a>
+</td>
+</tr></table>
+<div class="box"><table class="preview">
+<thead><tr>
+<td style="min-width:5em;"><h4>Name <a href="#qm_name_doc" class="help"><div class="help"></div></a>
+</h4></td>
+<td style="min-width:9em;"><h4>Preview <a href="#qm_preview_doc" class="help"><div class="help"></div></a>
+</h4></td>
+<td style="min-width:9em;"><h4>Matches <a href="#qm_matches_doc" class="help"><div class="help"></div></a>
+</h4></td>
+<td style="min-width:6em;"><h4>List <a href="#qm_list_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr></thead>
+<tbody><tr>
+<td><a href="#query_q_STRGGTCAN">STRGGTCAN</a></td>
+<td><a href="#query_q_STRGGTCAN" style="color: inherit; text-decoration:none;"><span><div id="preview_1">
+<script type="text/javascript">push_task(new LoadQueryTask("preview_" + 1, "STRGGTCAN"));</script><span class="G">G</span><span class="T">T</span><span class="A">A</span><span class="G">G</span><span class="G">G</span><span class="T">T</span><span class="C">C</span><span class="A">A</span><span class="C">C</span>
+</div></span></a></td>
+<td class="ac"><a href="#query_q_STRGGTCAN">20</a></td>
+<td class="ml">
+<a href="#match_q_STRGGTCAN_t_1_MA0066.1" class="ml1">MA0066.1 (PPARG)</a>,  <a href="#match_q_STRGGTCAN_t_1_MA0072.1" class="ml2">MA0072.1 (RORA_2)</a>,  <a href="#match_q_STRGGTCAN_t_1_MA0160.1" class="ml1">MA0160.1 (NR4A2)</a>,  <a href="#match_q_STRGGTCAN_t_1_MA0258.1" class="ml2">MA0258.1 (ESR2)</a>,  <a href="#match_q_STRGGTCAN_t_1_MA0071.1" class="ml1">MA0071.1 (RORA_1)</a>,  <a href="#match_q_STRGGTCAN_t_1_MA0112.1" class="ml2">MA0112.1 (ESR1)</a>,  <a href="#match_q_STRGGTCAN_t_1_MA0451.1" class="ml1">MA0451.1 (kni)</a>,  <a href="#match_q_STRGGTCAN_t_1_MA0065.2" class="ml2">MA0065.2 (PPARG::RXRA)</a>,  <a href="#match_q_STRGGTCAN_t_1_MA0129.1" class="ml1">MA0129.1 (TGA1A)</a>,  <a href="#match_q_STRGGTCAN_t_1_MA0112.2" class="ml2">MA0112.2 (ESR1)</a>
+</td>
+</tr></tbody>
+</table></div>
+<a name="target_dbs"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Target Databases</h2></td>
+<td align="right" valign="bottom">
+<a href="#query_motifs">Previous</a> <a href="#query_q_STRGGTCAN">Next</a> <a href="#top">Top</a>
+</td>
+</tr></table>
+<div class="box"><table class="targets">
+<thead><tr>
+<td style="min-width:8em;"><h4>Database <a href="#tdb_database_doc" class="help"><div class="help"></div></a>
+</h4></td>
+<td style="min-width:8em;"><h4>Number of Motifs <a href="#tdb_contains_doc" class="help"><div class="help"></div></a>
+</h4></td>
+<td style="min-width:8em;"><h4>Motifs Matched <a href="#tdb_matched_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr></thead>
+<tbody><tr>
+<td>JASPAR_CORE_2009.meme</td>
+<td class="ac">476</td>
+<td class="ac">20</td>
+</tr></tbody>
+</table></div>
+<a name="query_q_STRGGTCAN"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Matches to Query: STRGGTCAN</h2></td>
+<td align="right" valign="bottom">
+<a href="#target_dbs">Previous</a> <a href="#program">Next</a> <a href="#top">Top</a>
+</td>
+</tr></table>
+<div class="box"><table id="table_1" style="width:100%">
+<col style="width:20%;">
+<col>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0066.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_1">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0066.1&amp;rm=present&amp;collection=CORE">MA0066.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>PPARG</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>9.00728e-10</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>4.28746e-07</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>8.50939e-07</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>9</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>0</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_1" src="align_STRGGTCAN_1_+MA0066.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0066.1", false, 0));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_1" href="javascript:show_more(1,%201,%20'q_STRGGTCAN',%20't_1_MA0066.1',%200,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right"> [<a href="#match_q_STRGGTCAN_t_1_MA0072.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0072.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_2">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0072.1&amp;rm=present&amp;collection=CORE">MA0072.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>RORA_2</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.000225683</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>0.107425</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.0710692</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>9</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>5</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_2" src="align_STRGGTCAN_1_+MA0072.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0072.1", false, 5));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_2" href="javascript:show_more(1,%202,%20'q_STRGGTCAN',%20't_1_MA0072.1',%205,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0066.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0160.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0160.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_3">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0160.1&amp;rm=present&amp;collection=CORE">MA0160.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>NR4A2</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.000425494</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>0.202535</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.100493</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>8</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>-1</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_3" src="align_STRGGTCAN_1_+MA0160.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0160.1", false, -1));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_3" href="javascript:show_more(1,%203,%20'q_STRGGTCAN',%20't_1_MA0160.1',%20-1,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0072.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0258.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0258.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_4">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0258.1&amp;rm=present&amp;collection=CORE">MA0258.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>ESR2</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.0012322</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>0.586525</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.232817</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>9</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>0</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_4" src="align_STRGGTCAN_1_+MA0258.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0258.1", false, 0));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_4" href="javascript:show_more(1,%204,%20'q_STRGGTCAN',%20't_1_MA0258.1',%200,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0160.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0071.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0071.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_5">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0071.1&amp;rm=present&amp;collection=CORE">MA0071.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>RORA_1</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.00241632</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>1.15017</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.325291</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>8</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>2</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_5" src="align_STRGGTCAN_1_+MA0071.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0071.1", false, 2));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_5" href="javascript:show_more(1,%205,%20'q_STRGGTCAN',%20't_1_MA0071.1',%202,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0258.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0112.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0112.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_6">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0112.1&amp;rm=present&amp;collection=CORE">MA0112.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>ESR1</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.0024236</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>1.15363</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.325291</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>9</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>0</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_6" src="align_STRGGTCAN_1_+MA0112.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0112.1", false, 0));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_6" href="javascript:show_more(1,%206,%20'q_STRGGTCAN',%20't_1_MA0112.1',%200,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0071.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0451.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0451.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_7">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0451.1&amp;rm=present&amp;collection=CORE">MA0451.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>kni</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.00275791</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>1.31276</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.325291</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>9</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>3</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_7" src="align_STRGGTCAN_1_+MA0451.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0451.1", false, 3));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_7" href="javascript:show_more(1,%207,%20'q_STRGGTCAN',%20't_1_MA0451.1',%203,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0112.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0065.2">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0065.2"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_8">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0065.2&amp;rm=present&amp;collection=CORE">MA0065.2</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>PPARG::RXRA</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.00309891</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>1.47508</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.325291</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>9</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>0</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_8" src="align_STRGGTCAN_1_+MA0065.2.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0065.2", false, 0));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_8" href="javascript:show_more(1,%208,%20'q_STRGGTCAN',%20't_1_MA0065.2',%200,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0451.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0129.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0129.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_9">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0129.1&amp;rm=present&amp;collection=CORE">MA0129.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>TGA1A</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.00358711</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>1.70747</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.338883</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>7</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>-1</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_9" src="align_STRGGTCAN_1_+MA0129.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0129.1", false, -1));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_9" href="javascript:show_more(1,%209,%20'q_STRGGTCAN',%20't_1_MA0129.1',%20-1,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0065.2">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0112.2">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0112.2"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_10">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0112.2&amp;rm=present&amp;collection=CORE">MA0112.2</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>ESR1</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.00450089</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>2.14243</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.366079</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>9</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>3</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_10" src="align_STRGGTCAN_1_+MA0112.2.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0112.2", false, 3));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_10" href="javascript:show_more(1,%2010,%20'q_STRGGTCAN',%20't_1_MA0112.2',%203,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0129.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0434.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0434.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_11">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0434.1&amp;rm=present&amp;collection=CORE">MA0434.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>YPR013C</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.00464999</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>2.21339</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.366079</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>8</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>1</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_11" src="align_STRGGTCAN_1_+MA0434.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0434.1", false, 1));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_11" href="javascript:show_more(1,%2011,%20'q_STRGGTCAN',%20't_1_MA0434.1',%201,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0112.2">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0099.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0099.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_12">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0099.1&amp;rm=present&amp;collection=CORE">MA0099.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>Fos</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.00623632</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>2.96849</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.4532</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>8</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>0</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_12" src="align_STRGGTCAN_1_+MA0099.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0099.1", false, 0));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_12" href="javascript:show_more(1,%2012,%20'q_STRGGTCAN',%20't_1_MA0099.1',%200,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0434.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0016.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0016.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_13">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0016.1&amp;rm=present&amp;collection=CORE">MA0016.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>usp</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.00726528</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>3.45827</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.490263</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>8</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>-1</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_13" src="align_STRGGTCAN_1_+MA0016.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0016.1", false, -1));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_13" href="javascript:show_more(1,%2013,%20'q_STRGGTCAN',%20't_1_MA0016.1',%20-1,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0099.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0141.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0141.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_14">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0141.1&amp;rm=present&amp;collection=CORE">MA0141.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>Esrrb</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.00848823</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>4.0404</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.518083</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>8</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>4</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_14" src="align_STRGGTCAN_1_+MA0141.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0141.1", false, 4));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_14" href="javascript:show_more(1,%2014,%20'q_STRGGTCAN',%20't_1_MA0141.1',%204,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0016.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0286.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0286.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_15">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0286.1&amp;rm=present&amp;collection=CORE">MA0286.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>CST6</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.011501</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>5.47447</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.613296</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>9</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>0</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Reverse Complement</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_15" src="align_STRGGTCAN_1_-MA0286.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0286.1", true, 0));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_15" href="javascript:show_more(1,%2015,%20'q_STRGGTCAN',%20't_1_MA0286.1',%200,%201)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0141.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0150.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0150.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_16">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0150.1&amp;rm=present&amp;collection=CORE">MA0150.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>NFE2L2</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.0116852</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>5.56218</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.613296</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>9</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>2</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Reverse Complement</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_16" src="align_STRGGTCAN_1_-MA0150.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0150.1", true, 2));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_16" href="javascript:show_more(1,%2016,%20'q_STRGGTCAN',%20't_1_MA0150.1',%202,%201)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0286.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0018.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0018.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_17">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0018.1&amp;rm=present&amp;collection=CORE">MA0018.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>CREB1</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.0124753</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>5.93822</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.614505</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>8</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>-1</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Reverse Complement</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_17" src="align_STRGGTCAN_1_-MA0018.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0018.1", true, -1));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_17" href="javascript:show_more(1,%2017,%20'q_STRGGTCAN',%20't_1_MA0018.1',%20-1,%201)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0150.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0272.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0272.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_18">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0272.1&amp;rm=present&amp;collection=CORE">MA0272.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>ARG81</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.0130092</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>6.19238</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.614505</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>8</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>-1</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Reverse Complement</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_18" src="align_STRGGTCAN_1_-MA0272.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0272.1", true, -1));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_18" href="javascript:show_more(1,%2018,%20'q_STRGGTCAN',%20't_1_MA0272.1',%20-1,%201)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0018.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0389.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0389.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_19">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0389.1&amp;rm=present&amp;collection=CORE">MA0389.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>SRD1</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.0156012</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>7.42615</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.669944</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>8</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>0</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Reverse Complement</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_19" src="align_STRGGTCAN_1_-MA0389.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0389.1", true, 0));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_19" href="javascript:show_more(1,%2019,%20'q_STRGGTCAN',%20't_1_MA0389.1',%200,%201)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0272.1">Previous Match</a>] [<a href="#match_q_STRGGTCAN_t_1_MA0159.1">Next Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+<tr>
+<td style="min-width:9em;">
+<a name="match_q_STRGGTCAN_t_1_MA0159.1"></a><h4>Summary <a href="#summary_doc" class="help"><div class="help"></div></a>
+</h4>
+</td>
+<td style="min-width:11em;"><h4>Alignment <a href="#alignment_doc" class="help"><div class="help"></div></a>
+</h4></td>
+</tr>
+<tr id="tr_1_20">
+<td style="vertical-align:top"><table style="width:100%">
+<colgroup></colgroup>
+<colgroup align="left"></colgroup>
+<tr>
+<th>Name</th>
+<td><a href="http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0159.1&amp;rm=present&amp;collection=CORE">MA0159.1</a></td>
+</tr>
+<tr>
+<th>Alt. Name</th>
+<td>RXR::RAR_DR5</td>
+</tr>
+<tr>
+<th>Database</th>
+<td>JASPAR_CORE_2009.meme</td>
+</tr>
+<tr class="tspace">
+<th>
+<i>p</i>-value</th>
+<td>0.0166394</td>
+</tr>
+<tr>
+<th>
+<i>E</i>-value</th>
+<td>7.92038</td>
+</tr>
+<tr>
+<th>
+<i>q</i>-value</th>
+<td>0.683464</td>
+</tr>
+<tr class="tspace">
+<th>Overlap</th>
+<td>7</td>
+</tr>
+<tr>
+<th>Offset</th>
+<td>-2</td>
+</tr>
+<tr>
+<th>Orientation</th>
+<td>Normal</td>
+</tr>
+</table></td>
+<td><div class="logo_container"><img id="m_1_20" src="align_STRGGTCAN_1_+MA0159.1.png" class="logo" onerror='push_task(new FixLogoTask(this.id, "STRGGTCAN", 1, "MA0159.1", false, -2));'></div></td>
+</tr>
+<tr>
+<td style="text-align:center;"><a id="show_1_20" href="javascript:show_more(1,%2020,%20'q_STRGGTCAN',%20't_1_MA0159.1',%20-2,%200)">Create custom LOGO ↧</a></td>
+<td style="text-align:right">[<a href="#match_q_STRGGTCAN_t_1_MA0389.1">Previous Match</a>] [<a href="#query_q_STRGGTCAN">Query Top</a>]</td>
+</tr>
+</table></div>
+<a name="program"></a><div class="bar">
+<div style="text-align:right;">
+<a href="#query_q_STRGGTCAN">Previous</a> <a href="#doc">Next</a> <a href="#top">Top</a>
+</div>
+<div class="subsection">
+<a name="version"></a><h5>TOMTOM version</h5>4.9.1 (Release date: Fri Aug 23 16:49:42 2013 +1000)
+      </div>
+<div class="subsection">
+<a name="reference"></a><h5>Reference</h5>
+<span class="citation">
+          Shobhit Gupta, JA Stamatoyannopolous, Timothy Bailey and William Stafford Noble,
+          "Quantifying similarity between motifs",
+          <i>Genome Biology</i>, <b>8</b>(2):R24, 2007.
+        </span>
+</div>
+<div class="subsection">
+<a name="command"></a><h5>Command line summary</h5>
+<textarea rows="1" style="width:100%;" readonly>tomtom -oc tomtom_example_output_files -min-overlap 5 -dist pearson -evalue -thresh 10 -no-ssc STRGGTCAN.meme JASPAR_CORE_2009.meme</textarea><br>Background letter frequencies (from first motif database):<br><div style="margin-left:25px;">A: 0.250   C: 0.250   G: 0.250   T: 0.250</div>
+<br>Result calculation took 3.849 seconds<br>
+</div>
+<a href="javascript:showHidden('model')" id="model_activator">show model parameters...</a><div class="subsection" id="model_data" style="display:none;">
+<h5>Model parameters</h5>
+<textarea style="width:100%;" rows="5" readonly>
+distance_measure      = value: "pearson"
+threshold             = type: "evalue"
+background            = from: "first_target", A: "0.25", C: "0.25", G: "0.25", T: "0.25"
+host                  = tlb-takumi-lt.imb.uq.edu.au
+when                  = Fri Aug 23 17:28:08 2013
+</textarea>
+</div>
+<a href="javascript:hideShown('model')" style="display:none;" id="model_deactivator">hide model parameters...</a>
+</div>
+<span class="explain"><a name="doc"></a><table width="100%" border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF"><tr>
+<td><h2 class="mainh">Explanation of TOMTOM Results</h2></td>
+<td align="right" valign="bottom">
+<a href="#program">Previous</a> <a href="#top">Top</a>
+</td>
+</tr></table>
+<div class="box">
+<h4>The TOMTOM results consist of</h4>
+<ul>
+<li>The <a href="#query_doc">query motifs</a> with links to further information on matches. [<a href="#query_motifs">View</a>]</li>
+<li>The <a href="#target_doc">target databases</a> with information on the number of matches. [<a href="#target_dbs">View</a>]</li>
+<li>The <b>matches</b> between query motifs and target motifs.  [<a href="#query_q_STRGGTCAN">View</a>]
+            <ul>
+<li>The <a href="#summary_doc">summary</a> of match information.</li>
+<li>An <a href="#alignment_doc">alignment</a> of the two motifs.</li>
+</ul>
+</li>
+<li>The <b>program</b> details including:
+            <ol>
+<li>The <b>version</b> of TOMTOM and the date it was released. [<a href="#version">View</a>]</li>
+<li>The <b>reference</b> to cite if you use TOMTOM in your research. [<a href="#reference">View</a>]</li>
+<li>The <b>command line summary</b> detailing the parameters with which you ran TOMTOM. [<a href="#command">View</a>]</li>
+</ol>
+</li>
+<li>This <b>explanation</b> of how to interpret TOMTOM results.</li>
+</ul>
+<h4>Inputs</h4>
+<p>The important inputs to TOMTOM.</p>
+<a name="query_doc"></a><h5>Query Motifs</h5>
+<div class="doc">
+<p>The query motifs section lists the motifs that were searched for in the target databases as well as links to matches found.</p>
+<dl>
+<a name="qm_name_doc"></a><dt>Name</dt>
+<dd>The motif name.</dd>
+<a name="qm_alt_doc"></a><dt>Alt. Name</dt>
+<dd>The alternative motif name. This column may be hidden if no query motifs have an alternate name.</dd>
+<a name="qm_web_doc"></a><dt>Website</dt>
+<dd>A link to a website which has more information on the motif. This column may be hidden if no query motifs have website information.</dd>
+<a name="qm_preview_doc"></a><dt>Preview</dt>
+<dd>The motif preview. On supporting browsers this will display as a motif logo, otherwise the consensus sequence will be displayed.</dd>
+<a name="qm_matches_doc"></a><dt>Matches</dt>
+<dd>The number of significant matches.</dd>
+<a name="qm_list_doc"></a><dt>List</dt>
+<dd>Links to the first 20 matches</dd>
+</dl>
+</div>
+<a name="target_doc"></a><h5>Target Databases</h5>
+<div class="doc">
+<p>The target motifs section lists details on the motif databases that were specifed to search.</p>
+<dl>
+<a name="tdb_database_doc"></a><dt>Database</dt>
+<dd>The database name.</dd>
+<a name="tdb_contains_doc"></a><dt>Number of Motifs</dt>
+<dd>The number of motifs read from the motif database minus the number that had to be discarded due to conflicting ids.</dd>
+<a name="tdb_matched_doc"></a><dt>Motifs Matched</dt>
+<dd>The number of motifs that had a match with at least one of the query motifs.</dd>
+</dl>
+</div>
+<h4>Matches</h4>
+<p>The matches section list the group of motifs that match each query motif. For each query-target match the following information is given:</p>
+<a name="summary_doc"></a><h5>Summary Table</h5>
+<div class="doc">
+<p>The summary gives the important statistics about the motif match.</p>
+<dl>
+<dt>Name</dt>
+<dd>The name of the matched motif.</dd>
+<dt>Alt. Name</dt>
+<dd>The alternative name of the matched motif.</dd>
+<dt>
+<i>p</i>-value</dt>
+<dd>The probability that the match occurred by random chance according to the null model.</dd>
+<dt>
+<i>E</i>-value</dt>
+<dd>The expected number of false positives in the matches up to this point.</dd>
+<dt>
+<i>q</i>-value</dt>
+<dd>The minimum <b>F</b>alse <b>D</b>iscovery <b>R</b>ate required to include the match.</dd>
+<dt>Overlap</dt>
+<dd>The number of letters that overlaped in the optimal alignment.</dd>
+<dt>Offset</dt>
+<dd>The offset of the query motif to the matched motif in the optimal alignment.</dd>
+<dt>Orientation</dt>
+<dd>The orientation of the matched motif that gave the optimal alignment.
+              A value of "normal" means that the matched motif is as it appears in 
+              the database otherwise the matched motif has been reverse complemented.</dd>
+</dl>
+</div>
+<a name="alignment_doc"></a><h5>Alignment</h5>
+<div class="doc"><p>The image shows the alignment of the two motifs. The matched motif is shown on the top and the query motif is shown on the bottom.</p></div>
+<a name="download_logo_doc"></a><h5>Create custom LOGO</h5>
+<div class="doc">
+<p>By clicking the link "Create custom LOGO ↧" a form to make custom logos 
+            will be displayed. The download button can then be clicked to generate a motif
+            matching the selected specifications.</p>
+<dl>
+<dt>Image Type</dt>
+<dd>Two image formats, png and eps, are avaliable. The pixel based portable network graphic (png) format is commonly used on the Internet 
+              and the Encapsulated PostScript (eps) format is more suitable for publications that might require scaling.</dd>
+<dt>Error bars</dt>
+<dd>Toggle error bars indicating the confidence of a motif based on the number of sites used in its creation.</dd>
+<dt>SSC</dt>
+<dd>Toggle adding pseudocounts for <b>S</b>mall <b>S</b>ample <b>C</b>orrection.</dd>
+<dt>Flip</dt>
+<dd>Toggle a full reverse complement of the alignment.</dd>
+<dt>Width</dt>
+<dd>Specify the width of the generated motif.</dd>
+<dt>Height</dt>
+<dd>Specify the height of the generated motif.</dd>
+</dl>
+</div>
+</div></span><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

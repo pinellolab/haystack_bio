@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>MEME Suite Motif File Formats</title>
+    <link href="./meme-suite.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+    <style>
+      div.indent {
+        margin-left: 10px;
+      }
+      div.meme_line {
+        font-family: monospace;
+        border: 1px solid black;
+        padding: 3px;
+      }
+      span.meme_var {
+        display: inline-block;
+        padding: 2px;
+        border: 1px solid green;
+        background-color: #EEF3E2;
+      }
+      span.meme_note {
+        display: inline-block;
+        padding: 2px;
+        border: 1px solid green;
+        background-color: #CAE1FF;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <script src="./meme-suite-logo.js" type="text/javascript"></script>
+      <h1>MEME Suite Motif File Formats</h1>
+      <div class="indent">
+      <h2>MEME Output Formats</h2>
+      <div class="indent">
+      <p>MEME results are recorded in three file formats:</p>
+      <ul>
+        <li><a href="examples/meme_example_output_files/meme.html">HTML</a> and</li>
+        <li><a href="examples/meme_example_output_files/meme.txt">plain text</a>,</li>
+        <li><a href="examples/meme_example_output_files/meme.xml">XML</a>.</li>
+      </ul>
+      <h3>MEME HTML format</h3>
+      <p>The MEME HTML format is meant to be easy to read and provide useful
+      visualizations and tools for continuing to work with the discovered 
+      motifs. The HTML output is generated from the XML output by the use
+      of a XML stylesheet transformation.</p>
+      <h3>MEME XML format</h3>
+      <p>The MEME XML format is completely specified by the 
+      <a href="./meme.dtd">Document Type Definition (DTD)</a>
+      found at the start of the MEME XML output. The XML format is intended
+      for machine reading as it is just the data without any explanatory text
+      or visualizations. The XML format was added for MEME 4.0.</p>
+      <h3>MEME plain text format</h3>
+      <p>The MEME plain text format was the original output from MEME and
+      like the HTML contains explanatory text making it self-documenting.
+      The minimal MEME format is essentially the MEME text format without
+      the documentation.</p>
+      </div>
+
+      <h2>GLAM2 Output Formats</h2>
+      <div class="indent">
+      <p>GLAM2 results are recorded in two file formats:</p>
+      <ul>
+        <li><a href ="examples/glam2_example_output_files/glam2.html">HTML</a> and</li>
+        <li><a href="examples/glam2_example_output_files/glam2.txt">plain text</a>.</li>
+      </ul>
+      <p>The GLAM2 format is described in the
+      <a href="glam2_tut.html#output_format">Output format</a> section of
+      the <a href="./glam2_tut.html">GLAM2 Tutorial</a>.
+      GLAM2 also provides a <a href="#min_format">MEME minimal motif format</a>
+      approximation of the motif.</p>
+      </div>
+
+      <h2>MEME Suite Motif Input Formats</h2>
+      <div class="indent">
+      <p>Most MEME Suite programs, which accept motifs, can use the outputs
+      of MEME and DREME (plain text, HTML and XML) as well as the 
+      <a href="#min_format">MEME minimal motif format</a>.</p>
+      <p>The major programs which accept MEME and DREME output are:</p>
+      <ul>
+        <li>MAST,</li>
+        <li>Tomtom,</li>
+        <li>GOMO,</li>
+        <li>FIMO,</li>
+        <li>MCAST,</li>
+        <li>SpaMo and</li>
+        <li>CentriMo.</li>
+      </ul>
+
+      <p>GLAM2SCAN will only accept the plain text and HTML forms of GLAM2 
+      output.</p>
+      </div>
+
+      <h2 id="min_format">MEME Minimal Motif Format</h2>
+      <div class="indent">
+      <p>
+      Users may create motif files in a simplified format for use by the MEME 
+      Suite programs (excluding GLAM2SCAN).</p>
+      <ul>
+        <li><a href="../examples/sample-dna-motif.meme-io">sample DNA motif</a> and</li>
+        <li><a href="../examples/sample-protein-motif.meme-io">sample protein motif</a>.</li>
+      </ul>
+      <h3 id="matrix_convert">Log-odds conversion for MAST now automatic</h3>
+      <p>Prior to release 4.7.0 of the MEME Suite MAST required a log-odds 
+      matrix section to be specified, however the current version 
+      of the MEME Suite is capable of translating the letter-probability matrix 
+      into the log-odds matrix and vice-versa.</p>
+
+      <h3>Specification</h3>
+      <p>The Minimal MEME format contains following sections:</p>
+      <ol>
+        <li><a href="#min_ver">Version (required)</a></li>
+        <li><a href="#min_alph">Alphabet (recommended)</a></li>
+        <li><a href="#min_strands">Strands (optional)</a></li>
+        <li><a href="#min_bg">Background frequencies (recommended)</a></li>
+        <li><a href="#min_motif_name">Motifs (required)</a></li>
+      </ol>
+      <p>For each motif in the motifs section there are the sub-sections:</p>
+      <ol>
+        <li><a href="#min_motif_name">Motif name (required)</a></li>
+        <li><a href="#min_motif_pspm">Motif letter-probability matrix (recommended*)</a></li>
+        <li><a href="#min_motif_pssm">Motif log-odds matrix (optional*)</a></li>
+        <li><a href="#min_motif_url">Motif URL (optional)</a></li>
+      </ol>
+      <p>*Note that at least one of the two starred sections is required.</p>
+
+      <h4 id="min_ver">MEME version line (required)</h4>
+      <p>MEME requires this line to be certain that it really is reading a MEME
+      motif file and not just something that looks slightly like it. This line
+      must appear before any other sections in the file.</p>
+      <div class="meme_line">MEME version <span class="meme_var">version number</span></div>
+      <p>The <span class="meme_var">version number</span> should be the MEME
+      Suite version you are targeting.</p> 
+      <p>For example to target MEME Suite version 4 and above:</p> 
+      <div class="meme_line">MEME version 4</div>
+
+      <h4 id="min_alph">Alphabet line (recommended)</h4>
+      <p>The alphabet line tells the MEME Suite what alphabet to expect the
+      motifs to be in. If this line is not present then the MEME Suite can 
+      attempt to detect this from the background or the motifs themselves.</p>
+      <div class="meme_line">ALPHABET= <span class="meme_var">alphabet</span></div>
+      <p>The <span class="meme_var">alphabet</span> can be ACGT for DNA or 
+      ACDEFGHIKLMNPQRSTVWY for protein.</p>
+      <p>For example using a DNA alphabet:</p>
+      <div class="meme_line">ALPHABET= ACGT</div>
+
+      <h4 id="min_strands">Strands line (optional)</h4>
+      <p>The strands line only has meaning for DNA motifs and indicates if
+      motifs were created from sites on both the given and the reverse complement
+      strands of the DNA sequences. If this line is not supplied then the MEME
+      Suite will assume that DNA motifs were created from both strands.</p>
+      <div class="meme_line">strands: <span class="meme_var">which strands</span></div>
+      <p>The <span class="meme_var">which strands</span> can be replaced with + 
+      to indicate only the given strand and + - to indicate both strands.</p>
+      <p>For example to indicate only the given strand was used:</p>
+      <div class="meme_line">strands: +</div>
+
+      <h4 id="min_bg">Background frequencies lines (recommended)</h4>
+      <p>The background frequencies tell the MEME Suite how prevalent each
+      letter of the motif alphabet was in the source sequences which were used
+      to create the motifs. If the background frequencies are not supplied then
+      the MEME Suite will assume uniform background frequencies. The MEME Suite
+      uses this background to <a href="#matrix_convert">convert</a> between 
+      motif letter-probability matrices and log-odds matrices.</p>
+      <div class="meme_line">
+        Background letter frequencies (from <span class="meme_var">source</span>):<br>
+        <span class="meme_var">letter 1</span> <span class="meme_var">frequency 1</span>
+        <span class="meme_var">letter 2</span> <span class="meme_var">frequency 2</span>
+        <span class="meme_note">... (repeated) ...</span>
+        <span class="meme_var">letter n-1</span> <span class="meme_var">frequency n-1</span>
+        <span class="meme_var">letter n</span> <span class="meme_var">frequency n</span>
+      </div>
+      <p>The <span class="meme_var">source</span> is not required and if you
+      wish you can leave off then end of the first line after &quot;Background 
+      letter frequencies&quot;. On the next line is listed each letter in the
+      alphabet followed by its frequency. The letters must be listed in the same
+      order as in the alphabet line and the frequencies should sum to 1.</p>
+      <p>An example of uniform DNA frequencies:</p>
+      <div class="meme_line">
+        Background letter frequencies<br>
+        A 0.25 C 0.25 G 0.25 T 0.25
+      </div>
+      <p>An example of protein frequencies with a source listed:</p>
+      <div class="meme_line">
+        Background letter frequencies (from lipocalin.s):<br>
+        A 0.071 C 0.029 D 0.069 E 0.077 F 0.043 G 0.057 H 0.026 I 0.048 K 0.085 <br>
+        L 0.087 M 0.018 N 0.053 P 0.032 Q 0.029 R 0.031 S 0.058 T 0.048 V 0.069 <br>
+        W 0.017 Y 0.050         
+      </div>
+
+      <h4 id="min_motif_name">Motif name line (required)</h4>
+      <p>The motif name line indicates the start of a new motif and designates
+      an identifier for it which much be unique to the file. It also allows for
+      an alternate name which does not have to be unique.</p>
+      <div class="meme_line">MOTIF <span class="meme_var">identifier</span> <span class="meme_var">alternate name</span></div>
+      <p>For example:</p>
+      <div class="meme_line">MOTIF MA0002.1 RUNX1</div>
+
+      <h4 id="min_motif_pspm">Motif letter-probability matrix lines (recommended)</h4>
+      <p>The letter probability matrix is a table of probabilities where the
+      rows are positions in the motif and the columns are letters in the 
+      alphabet. The columns are ordered alphabetically so for DNA the first 
+      column is A, the second is C, the third is G and the last is T. For 
+      protein motifs the columns come in the order A, C, D, E, F, G, H, I, K, 
+      L, M, N, P, Q, R, S, T, V, W and Y. As each row contains the probability 
+      of each letter in the alphabet the probabilities in the row must sum to 1.
+      <b>If this section is not specified then the log-odds matrix must be 
+        specified</b>.</p>
+      <div class="meme_line">
+        letter-probability matrix: 
+        alength= <span class="meme_var">alphabet length</span> 
+        w= <span class="meme_var">motif length</span> 
+        nsites= <span class="meme_var">source sites</span> 
+        E= <span class="meme_var">source <i>E</i>-value</span><br>
+        <span class="meme_note">... (letter-probability matrix goes here) ...</span>
+      </div>
+      <p>All the &quot;key= value&quot; pairs after the &quot;letter-probability
+      matrix:&quot; text are optional. The &quot;alength= 
+      <span class="meme_var">alphabet length</span>&quot; and
+      &quot;w= <span class="meme_var">motif length</span>&quot; can be derived 
+      from the matrix if they are not specified, provided there is an empty line
+      following the letter probability matrix. The &quot;nsites= 
+      <span class="meme_var">source sites</span>&quot; will default to 20 if it 
+      is not provided and the &quot;E= 
+      <span class="meme_var">source <i>E</i>-value</span>&quot; will default to 
+      zero. The <span class="meme_var">source sites</span> is used to apply 
+      pseudocounts to the motif and the 
+      <span class="meme_var">source <i>E</i>-value</span> is used for filtering
+      the motifs input to some MEME Suite programs (see MAST's -mev option).</p>
+      <p>An example of a DNA motif's letter-probability matrix:</p>
+      <div class="meme_line">
+        letter-probability matrix: alength= 4 w= 18 nsites= 18 E= 1.1e-006<br> 
+        0.611111  0.000000  0.055556  0.333333<br> 
+        0.555556  0.000000  0.111111  0.333333<br>
+        0.222222  0.166667  0.222222  0.388889<br>
+        0.000000  0.111111  0.000000  0.888889<br>
+        0.000000  0.055556  0.944444  0.000000<br>
+        0.111111  0.000000  0.000000  0.888889<br>
+        0.055556  0.000000  0.888889  0.055556<br>
+        0.833333  0.111111  0.055556  0.000000<br>
+        0.111111  0.388889  0.277778  0.222222<br>
+        0.333333  0.055556  0.500000  0.111111<br>
+        0.111111  0.222222  0.111111  0.555556<br>
+        0.277778  0.222222  0.222222  0.277778<br>
+        0.111111  0.055556  0.722222  0.111111<br>
+        0.388889  0.166667  0.055556  0.388889<br>
+        0.055556  0.000000  0.111111  0.833333<br>
+        0.055556  0.777778  0.000000  0.166667<br>
+        0.777778  0.000000  0.222222  0.000000<br>
+        0.277778  0.611111  0.055556  0.055556
+      </div>
+
+      <h4 id="min_motif_pssm">Motif log-odds matrix lines (optional)</h4>
+      <p>If you've included the letter-probability matrix then unless you want
+      MAST to use a specific log-odds matrix then <b>there is no reason to 
+      include this section</b>. The original version of MEME only output motifs 
+      with a log-odds matrix. Later on the letter-probability matrix was added 
+      and MEME and MAST were merged with Meta-MEME to become the MEME Suite. 
+      Since then all new programs have been written to use the 
+      letter-probability matrix leaving MAST as the only program which uses it. 
+      In the output from MEME the log-odds matrix has some additional tweaks 
+      (especially in protein motifs) which are impossible to perform with just 
+      the letter-probability matrix and the 0-order background so it has been 
+      kept around.</p>
+      <p>The log-odds matrix is a table of scores where the rows are positions
+      in the motif and the columns are letters in the alphabet.</p>
+      <p>The scores are calculated as follows:</p>
+      <code>
+        let bL be the background probability for letter L<br>
+        let pLi be the probability for the letter L at position i in the motif<br>
+        let sLi be the score for the letter L at position i in the motif<br>
+        sLi = round((log(pLi / bL) / log(2)) * 100)
+      </code>
+      <p>As the log of 0 is negative infinity then pseudocounts should be added
+      to the probabilities first.</p>
+
+      <div class="meme_line">
+        log-odds matrix:
+        alength= <span class="meme_var">alphabet length</span> 
+        w= <span class="meme_var">motif length</span> 
+        E= <span class="meme_var">source <i>E</i>-value</span><br>
+        <span class="meme_note">... (log-odds matrix goes here) ...</span>
+      </div>
+      <p>As in the letter-probability matrix the &quot;key= value&quot; sections
+      are optional and have the same defaults</p>
+      <p>An example of a DNA motif's log-odds matrix:</p>
+      <div class="meme_line">
+        log-odds matrix: alength= 4 w= 18 E= 1.1e-006<br> 
+        &nbsp;&nbsp;101&nbsp;&nbsp;-1081&nbsp;&nbsp;&nbsp;-182&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13<br>
+        &nbsp;&nbsp;&nbsp;87&nbsp;&nbsp;-1081&nbsp;&nbsp;&nbsp;&nbsp;-82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13<br>
+        &nbsp;&nbsp;-45&nbsp;&nbsp;&nbsp;&nbsp;-23&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;35<br>
+        -1081&nbsp;&nbsp;&nbsp;&nbsp;-82&nbsp;&nbsp;-1081&nbsp;&nbsp;&nbsp;&nbsp;155<br>
+        -1081&nbsp;&nbsp;&nbsp;-182&nbsp;&nbsp;&nbsp;&nbsp;227&nbsp;&nbsp;-1081<br>
+        &nbsp;-145&nbsp;&nbsp;-1081&nbsp;&nbsp;-1081&nbsp;&nbsp;&nbsp;&nbsp;155<br>
+        &nbsp;-245&nbsp;&nbsp;-1081&nbsp;&nbsp;&nbsp;&nbsp;218&nbsp;&nbsp;&nbsp;-245<br>
+        &nbsp;&nbsp;145&nbsp;&nbsp;&nbsp;&nbsp;-82&nbsp;&nbsp;&nbsp;-182&nbsp;&nbsp;-1081<br>
+        &nbsp;-145&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;99&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50&nbsp;&nbsp;&nbsp;&nbsp;-45<br>
+        &nbsp;&nbsp;&nbsp;13&nbsp;&nbsp;&nbsp;-182&nbsp;&nbsp;&nbsp;&nbsp;135&nbsp;&nbsp;&nbsp;-145<br>
+        &nbsp;-145&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18&nbsp;&nbsp;&nbsp;&nbsp;-82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;87<br>
+        &nbsp;&nbsp;-13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18&nbsp;&nbsp;&nbsp;&nbsp;-13<br>
+        &nbsp;-145&nbsp;&nbsp;&nbsp;-182&nbsp;&nbsp;&nbsp;&nbsp;188&nbsp;&nbsp;&nbsp;-145<br>
+        &nbsp;&nbsp;&nbsp;35&nbsp;&nbsp;&nbsp;&nbsp;-23&nbsp;&nbsp;&nbsp;-182&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;35<br>
+        &nbsp;-245&nbsp;&nbsp;-1081&nbsp;&nbsp;&nbsp;&nbsp;-82&nbsp;&nbsp;&nbsp;&nbsp;145<br>
+        &nbsp;-245&nbsp;&nbsp;&nbsp;&nbsp;199&nbsp;&nbsp;-1081&nbsp;&nbsp;&nbsp;&nbsp;-87<br>
+        &nbsp;&nbsp;135&nbsp;&nbsp;-1081&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18&nbsp;&nbsp;-1081<br>
+        &nbsp;&nbsp;-13&nbsp;&nbsp;&nbsp;&nbsp;164&nbsp;&nbsp;&nbsp;-182&nbsp;&nbsp;&nbsp;-245
+      </div>
+
+      <h4 id="min_motif_url">Motif URL line (optional)</h4>
+      <p>The URL line specifies a web-page to link to when mentioning the motif
+      in results.
+      <div class="meme_line">URL <span class="meme_var">web page URL</span></div>
+      <p>For example:</p>
+      <div class="meme_line">URL http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.1&amp;rm=present&amp;collection=CORE</div>
+      </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,831 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Centrimo</title>
+    <script src="centrimo_data.js"></script>
+    <script src="constants.js"></script>
+    <script src="utilities.js"></script>
+    <script src="eps_context.js"></script>
+    <script src="motif_logo.js"></script>
+    <script src="centrimo_graph.js"></script>
+    <script src="centrimo_template.js"></script>
+    <link rel="stylesheet" type="text/css" href="centrimo_template.css">
+    <link rel="stylesheet" type="text/css" href="meme.css">
+  </head>
+  <body onload="page_loaded()" onpageshow="page_shown(event)">
+    <!-- Popups -->
+    <div id="logo_popup" class="pop_logo">
+      <canvas id="logo_popup_canvas" width="200" height="50"></canvas>
+      <canvas id="logo_popup_canvas_rc" width="200" height="50"></canvas>
+    </div>
+    <!-- Help popups -->
+    <div class="pop_content" style="width:400px" id="pop_prob_graph">
+      <p>Each "match-probability curve" shows the probability of the
+      <b>best</b> match to a given motif occuring at a given position in the
+      input sequences.  This probability is based only on sequences that
+      contain at least one match with score greater than the minimum score defined
+      for this motif.</p>
+      <p>Points (X,Y) on the plot are:<br>
+      &nbsp;&nbsp;Y = Pr(best match occurs at position X | sequence contains a match)</p>
+      <p><b>Note:</b> The plots are smoothed according to the function 
+      selected from the "Smoothing" menu on the right. Setting the smoothing
+      window size to 1 turns off smoothing.</p>
+      <p>If a negative dataset has been supplied then two lines are drawn for
+      each motif representing both datasets. The normal dataset is plotted with
+      a single unbroken line whereas the negative dataset is plotted with a
+      dashed line.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_plotting">
+      <p>This shows a listing of all motifs currently plotted on the graph.</p>
+      <p>The color used to plot a motif can be changed by clicking on the
+      color swatch next to the motif you want to change, followed by clicking
+      on the color swatch you wish to swap it with.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_unused_colours">
+      <p>These are extra colors you may use for plotting motifs.</p>  
+      <p>Click on the color swatch next to one of the above motifs, then click 
+      on one of these "unused color" swatches to change the color of the 
+      motif's plot.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" style="width: 500px" id="pop_graph">
+      <p>These options change the display of the graph.</p>
+      <dl>
+        <dt>Smoothing:</dt>
+        <dd><p>Allows selection of the smoothing function applied to the graph.</p>
+        <p>The weighted moving average option uses weights shaped as an isosceles 
+        triangle where the central point (or points in an even sized window) 
+        get the maximum weight.</p>
+        <p>The moving average simply weights all points in the smoothing window 
+        equally.</p> 
+        <p><b>Note:</b> Setting the smoothing window size to 1 turns off 
+        smoothing.</dd></p>
+        <dt>Window</dt>
+        <dd><p>The window size used to smooth the graph. The larger the smoothing
+        window size, the smoother the graph, at the cost of hiding detail.</p> 
+        <p>Below a smoothing window size of 10, thinner lines are used on the 
+        graph to allow more detail to be visible.</p>
+        <p><b>Note:</b> Remember to press "return" or "enter" after changing 
+        the number in the input box in order to see the effect of the new 
+        smoothing window size.</p></dd>
+        <dt>Legend</dt>
+        <dd><p>Choose to display/disable the on-graph legend. The legend can be 
+        moved by clicking on the graph.</p></dd>
+        <dt>Negative Sequences</dt>
+        <dd><p>Choose whether to plot the motif probability curve(s) for the
+        negative sequences (if provided). The curve(s) are plotted as dashed
+        lines, using the same color as the corresponding curve for the positive
+        sequences.</p></dd>
+        <dt>Zoom</dt>
+        <dd>Drag a range on the graph to zoom into that section. Clicking
+        "Undo Zoom" will return the view to the preiously displayed part of the
+        graph and clicking "Center on 0" will move the view so 0 is in the
+        center.</dd>
+        <dt>Download EPS</dt>
+        <dd><p>Download the graph that you are currently viewing as an 
+        encapsulated postscript (EPS) image. EPS images are scalable making them
+        suitable for publication.</p></dd>
+      </dl>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_filtering">
+      <p>List only enriched motifs that meet the selected filter criteria below.</p>
+      <p><b>Selected motifs are always listed</b>; deselect all motifs first by clicking on
+      the "X" above the color swatches if you wish to filter all motifs.</p>
+      <p>To filter on "ID" or "Name", you can enter any Javascript regular
+      expression pattern.  See <a href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">here</a>
+      for documentation on Javascript regular expression patterns.</p>
+      <div style="float:right; bottom:0px;">[
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_sorting">
+      <p>Sorting is applied after filtering where possible (the exception being
+      the "Top" filter) so the filters applied will affect the sort.  You can
+      choose the motif sorting feature using the "Motifs:" menu.</p> 
+      <p>If CentriMo is searching for locally enriched regions (not just centrally
+      enriched regions), then multiple regions may be found per motif, and
+      the "Regions:" menu will also be displayed.  In this case, 
+      CentriMo first sorts all regions using the feature
+      shown in the "Regions:" menu, and then it sorts the highest-ranked
+      region of each motif according to the feature shown in the "Motifs:" menu.
+      </p>
+      <p>
+      Unless you check the box next to the "Regions:" menu, it will automatically 
+      show the same feature as the "Motifs:"
+      menu (or "<i>E</i>-value" if a motif-only feature is chosen in the "Motifs:" menu). 
+      </p>
+      <p>
+      <b>Note:</b>The motif <i>p</i>-value shown in the plot legend will always be for
+      the region with the lowest <i>p</i>-value, and therefore may not match the value
+      shown in the table "<i>p</i>-value" column 
+      when the "Regions:" menu is not set to "<i>p</i>-value".
+      </p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_db">
+      <p>The name of the database (file name) that contains the motif.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_id">
+      <p>A name for the motif that is unique in the motif database file.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_name">
+      <p>An alternate name of the motif that may be provided in the motif database file.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_fisherpv">
+      <p>The expected number motifs that would have least one 
+        region as <b>comparatively</b> enriched for 
+        best matches to the motif as the reported region in the
+        <b>positive</b> sequences compared with the <b>negative</b>
+        sequences.  
+      </p>
+      <p>
+        The Fisher <i>E</i>-value is the (one-sided) <i>p</i>-value of 
+	the Fisher exact test that <b>at least</b> as many best matches 
+	in the region in the positive sequences that contain at least 
+	one match, multiplied by the number of motifs in the input database(s).
+        The Fisher exact test <i>p</i>-value is corrected for the number
+	of regions and score thresholds tested ("Multiple Tests").
+      </p>
+      <p>
+        The Fisher exact test assumes that the probability that the best match 
+	(if any) falls into a given region is the same for all 
+	positive and negative sequences.
+      </p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_pvalue">
+      <p>The probability that any tested region would be as enriched for 
+      best matches to this motif as the reported region is.</p>
+      <p>By default the <i>p</i>-value is calculated by using the one-tailed
+      binomial test on the number of sequences with a match to the
+      motif ("Total Matches") that have their best match in the reported region ("Region Matches"),
+      corrected for the number of regions and score thresholds tested ("Multiple Tests"). 
+      The test assumes that the probability that the best match in a sequence falls
+      in the region is the region width divided by the number of
+      places a motif can align in the sequence (sequence length minus motif
+      width plus 1).</p>
+      <p>When CentriMo is run in discriminative mode with a negative set of sequences, the
+      <i>p</i>-value of a region is calculated using the Fisher exact test
+      on the enrichment of best matches in the positive sequences ("Region Matches")
+      relative to the negative sequences ("Negative Region Matches"), 
+      corrected for the number of regions and score thresholds tested ("Multiple Tests").  
+      The test assumes that the probability that the best match 
+      (if any) falls into a given region is the same for all 
+      positive and negative sequences.
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_evalue">
+      <p>The expected number motifs that would have least one region as enriched for 
+      best matches to the motif as the reported region.  
+      The <i>E</i>-value is the <i>p</i>-value
+      multiplied by the number of motifs in the input database(s).</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_MCC">
+      <p>The Matthew's Correlation Coefficient (MCC) gives a measure of the ability
+      of the motif to discriminate the positive sequences from the negative sequences:
+      <dl>
+        <dt> MCC = [TP*TN - FP*FN] / [(TP + FP) * (TP + FN) * (TN + FP) * (TN + FN)]</dt>
+      </dl>
+      where 
+      <dl>
+        <dd>TP is the number of positive sequences with a best match in the reported region,</dd>
+        <dd>FP is the number of negative sequences with a best match in the reported region,</dd>
+        <dd>TN is the number of negative sequences without a best match in the reported region, and</dd>
+        <dd>FN is the number of positive sequences without a best match in the reported region.</dd>
+      </dl>
+      <p>MCC ranges from -1 to +1, where a +1 result indicates that the occurrence
+      of the best match to the motif in the reported region perfectly discriminates positive
+      sequences from negative sequences.
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_score">
+      <p>This is the score threshold (in bits) for determining if a sequence contains a match to this motif.</p>
+      <p>When score optimization is enabled, this column lists the score
+      threshold that gives the best <i>p</i>-value. Otherwise it
+      shows the smallest score found that was above the minimum score threshold
+      specified to CentriMo.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_binw">
+      <p>The width (in sequence positions) of the most enriched region.
+      A best match to the motif is counted as being in the region if
+      the center of the motif falls in the region.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_bin_sites">
+      <p>The number of (positive) sequences whose <b>best</b> match to the motif 
+      falls in the reported region.</p>
+      <p><b>Note:</b> This number may be less than the number of (positive) sequences that
+      have a best match in the region. The reason for this is that a sequence may
+      have many matches that score equally best. If <i>n</i> matches have the
+      best score in a sequence, 1/<i>n</i> is added to the appropriate bin
+      for each match.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_neg_bin_sites">
+      <p>The number of <b>negative</b> sequences where the <b>best</b> match to
+      the motif falls in the reported region. This value is rounded but the
+      underlying value may contain fractional counts.</p>
+      <p><b>Note:</b> This number may be less than the number of <b>negative</b>
+      have a best match in the region. The reason for this is that a sequence may
+      have many matches that score equally best. If <i>n</i> matches have the
+      best score in a sequence, 1/<i>n</i> is added to the appropriate bin
+      for each match.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_total_sites">
+      <p>The number of sequences containing a match to the motif above the
+      score threshold ("Score Threshold").</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_neg_total_sites">
+      <p>The number of <b>negative</b> sequences containing a match to the motif
+      above the minimum score threshold. When score optimization is enabled the
+      score threshold may be raised higher than the minimum.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_negative_binomial">
+      <p>The probability that any tested region in the <b>negative</b>
+      sequences would be as enriched for best matches to this motif according
+      to the Binomial test.</p> 
+      <p>Use the filter to display only motifs differentially enriched in both
+      datasets (low <i>p</i>-value and high negative <i>p</i>-value).</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_prob">
+      <p>The maximum probability that the best match occurs at any single sequence position.
+      If the smoothing window size ("Window:", to right of graph) is set to "1", then this is value is
+      the maximum value of the match-probability curve.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_nbinstested">
+      <p>This is the number of multiple tests (<i>n</i>) done for this motif.  It was
+      used to correct the original <i>p</i>-value of a region for multiple tests
+      using the formula </p>
+      <dl>
+        <dd>p' = 1 - (1-p)^n</dd>
+      </dl>
+      <p>where <i>p</i> is the uncorrected <i>p</i>-value.
+      The number of multiple tests is the number of regions considered times the
+      number of score thresholds considered.  It depends on the motif length, sequence length, 
+      and the type of optimizations being done (central enrichment, local enrichement, score
+      optimization).</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_bin_location">
+      <p>Location of the center of the most enriched region.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_SMmotifs">
+      <p>The text box lists the sequence identifiers for sequences which have at
+      least one of their best matches in the most significant region of <b>all</b> the
+      selected motifs.</p>
+      <p>The "Intersection" subheading gives the number of identifiers in the
+      text box and their percentage out of the total number of input sequences.</p>
+      <p>The "Union" subheading lists the number and percentage of
+      sequences that have at least one of their best matches in the most
+      significant region of <b>any</b> of the selected motifs and their 
+      percentage out of the total number of input sequences.</p>
+
+      <p>Note that the number of sequences with a match to a given motif in
+      its best region may be larger than the value of "Region Matches". This is because
+      a sequence may have multiple equally best matches and in that case a
+      fractional match count is assigned to each of them when "Region Matches" is computed.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_OEbins">
+      <p>When more than one significant, non-overlapping region is found,
+      they can be shown (and hidden again) by clicking the arrow.</p>
+      <p>By default the regions are sorted by <i>E</i>-value, but this can be
+      changed by the menu on the right of the page.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <div class="pop_content" id="pop_problocation">
+      <p>Sequence position where the (unsmoothed) match-probability curve for this motif 
+      attains its maximum.  Set the smoothing window size ("Window:", to right of graph) to
+      "1" to see the unsmoothed match probability curve.</p>
+      <div style="float:right; bottom:0px;">[ 
+        <a href="javascript:help_popup()">close</a> ]</div>
+    </div>
+    <!-- Page starts here -->
+    <div id="top" class="pad1">
+      <h1><img id="title_img" src="" alt="CentriMo" /></h1>
+      <script>$("title_img").src = site_url + "/doc/images/centrimo_logo.png"</script>
+      <p>
+        For further information on how to interpret these results or to get a 
+        copy of the MEME software please access 
+        <a href="http://meme.nbcr.net/">http://meme.nbcr.net</a>. 
+      </p>
+      <p>If you use CentriMo in your research, please cite the following paper:<br />
+        <span class="citation">
+          Timothy L. Bailey and Philip Machanick, 
+          &quot;Inferring direct DNA binding from ChIP-seq&quot;, submitted.
+        </span>
+      </p>
+    </div>
+    <!-- navigation -->
+    <div class="pad2">
+      <a class="jump" href="#graph_sec">Motif Probability Graph</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a class="jump" href="#data_sec">Enriched Motifs</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a class="jump" href="#inputs">Input Files</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a class="jump" href="#info_sec">Program information</a>
+    </div>
+    <!-- alert the user when their browser is not up to the task -->
+    <noscript><h1 style="color:red">Javascript is required to view these results!</h1></noscript>
+    <h1 id="html5_warning" style="color:red; display:none;">Your browser does not support canvas!</h1>
+    <script>
+      if (!window.HTMLCanvasElement) $("html5_warning").style.display = "block";
+    </script>
+    <h2 class="mainh pad2">Results</h2>
+    <div class="box">
+      <span id="ins_desc"></span>
+      <!-- write out the job description -->
+      <script>
+        if (data['job_description']) {
+          var node = $("ins_desc");
+          while (node.firstChild) node.removeChild(node.firstChild);
+          var header = document.createElement("h4");
+          header.id = "description";
+          header.appendChild(document.createTextNode("Description"));
+          node.appendChild(header);
+          var paragraphs = data['job_description'].split("\n\n");
+          for (var i = 0; i < paragraphs.length; i++) {
+            var p = document.createElement("p");
+            var lines = paragraphs[i].split("\n");
+            for (var j = 0; j < lines.length; j++) {
+              if (j != 0) p.appendChild(document.createElement('br'));
+              p.appendChild(document.createTextNode(lines[j]));
+            }
+            node.appendChild(p);
+          }
+        }
+      </script>
+      <div>
+        <div style="float:left; width:70%">
+          <h4 id="graph_sec">Motif Probability Graph (score &ge; <span 
+              id="ins_score2"></span>)&nbsp;<div class="help" 
+              onclick="help_popup(this, 'pop_prob_graph')"></div></h4>
+          <script>
+            $("ins_score2").innerHTML = (data['options']['optimize_score']) ? 
+            "optimal score threshold (bits) for given motif" : data['options']['score'] + " bits";
+          </script>
+          <div class="graph_box">
+            <div id="pop_peak" class="pop_graph_peak"></div>
+            <canvas id="graph" width="700" height="400"></canvas>
+          </div>
+        </div>
+        <div class="graph_options_section">
+          <h4 id="graph_sec">Options</h4>
+          <h5>Plotting&nbsp;<div class="help" onclick="help_popup(this, 'pop_plotting')"></div></h5>
+          <div style="max-height:200px; min-height:100px; overflow-y: auto;">
+            <table class="graph_list" id="graph_list"><tbody></tbody></table>
+          </div>
+          <div id="unused_colours_section">
+            <h5>Unused Colours&nbsp;<div class="help" onclick="help_popup(this, 'pop_unused_colours')"></div></h5>
+            <span id="unused_colours"></span>
+          </div>
+          <h5>Graph&nbsp;<div class="help" onclick="help_popup(this, 'pop_graph')"></div></h5>
+          <div>
+            <label for="plot_type">Smoothing:</label>
+            <select id="plot_type" onchange="recreate_table=true; make_MP_graph(); recreate_table=false">
+              <option value="0">Moving Average</option>
+              <option value="1" selected>Weighted Moving Average</option>
+            </select>
+          </div>
+          <div>
+            <label for="windo">Window:</label>
+            <input type="number" style="min-width:40px;" id="windo" 
+            onkeypress="num_keys(event)"
+            onchange="recreate_table=true; make_MP_graph(); recreate_table=false" value="20" size="2" step="1" min="1">
+          </div>
+          <div>
+            <label for="legend">Legend:</label>
+            <select id="legend" onchange="make_MP_graph()">
+              <option value="0">Disabled</option>
+              <option value="1" selected>Enabled (click on graph to move)</option>
+            </select>
+          </div>
+          <div id="CB_show_plot_negative">
+            <label for="plot_negative">Negative sequences:</label>
+            <select id="plot_negative" onchange="make_MP_graph()">
+              <option value="0">Not plotted</option>
+              <option value="1" selected>Plotted as dashed line</option>
+            </select>
+          </div>
+          <div>
+            <label>Zoom:</label>
+            <input type="button" id="zoom_out" value="Undo Zoom"/>
+            <input type="button" id="zoom_center" value="Center on 0"/>
+          </div>
+          <div style="margin-top:10px;"> 
+            <form id="eps_form" method="post" action="">
+              <script>$("eps_form").action = site_url + "/cgi-bin/echo.cgi";</script>
+              <input type="hidden" name="name" value="centrimo.eps">
+              <input type="hidden" name="mime_type" value="application/postscript">
+              <input type="hidden" id="eps_content" name="content" value="">
+              <input type="submit" onclick="download_eps()" value="Download EPS (for publication)">
+            </form>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="float:left; width:70%">
+          <h4 id="data_sec">Enriched motifs (<i>E</i>-value &le; 
+            <span id="ins_ethresh"></span> using the 
+            <span id="ins_test"></span> test)
+          </h4>
+          <script>
+            $("ins_ethresh").innerHTML = data['options']["ethresh"];
+            $("ins_test").innerHTML = ((data['options']['disc']) ? "Fisher exact" : "Binomial");
+          </script>
+          <table class="motifs hide_db hide_maxprob hide_tsites" id="motifs">
+            <thead>
+            <tr align="center">
+              <th class="deselect" onclick="clear_selection()" 
+                title="clear selection">&#x2612;</th>
+              <th class="col_db">Database&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_db')"></div></th>
+              <th class='col_id'>ID&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_id')"></div></th>
+              <th class="col_name">Name&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_name')"></div></th>
+              <th class='col_evalue'><i>E</i>-value&nbsp;<div class="help" 
+                    onclick="help_popup(this, 'pop_evalue')"></div></th>
+              <th class='col_fisherpv'>Fisher <i>E</i>-value&nbsp;<div class="help" 
+                    onclick="help_popup(this, 'pop_fisherpv')"></div></th>
+              <th class="col_pvalue"><i>p</i>-value&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_pvalue')"></div></th>
+              <th class="col_negative_binomial">Negative <i>p</i>-value&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_negative_binomial')"></div></th>
+              <th class="col_MCC">MCC&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_MCC')"></div></th>
+              <th class="col_blocation">Region Center&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_bin_location')"></div></th>
+              <th class='col_bwidth'>Region Width&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_binw')"></div></th>
+              <th class="col_bsites">Region Matches&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_bin_sites')"></div></th>
+              <th class="col_tsites">Total Matches&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_total_sites')"></div></th>
+              <th class="col_negbsites">Negative Region Matches&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_neg_bin_sites')"></div></th>
+              <th class="col_negtsites">Negative Total Matches&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_neg_total_sites')"></div></th>
+              <th class="col_maxprob">Max Probability&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_prob')"></div></th>
+              <th class="col_problocation">Max Probability Location&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_problocation')"></div></th>
+              <th class="col_nbinstested">Multiple Tests&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_nbinstested')"></div></th>
+              <th class="col_score">Score Threshold&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_score')"></div></th>
+              <th class="col_OEbins">Other Regions&nbsp;<div class="help" 
+                  onclick="help_popup(this, 'pop_OEbins')"></div></th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div style="float:right; width:30%">
+          <div id="seq_area">
+            <h4>Matching sequences (out of <span id="ins_seqN"></span>) 
+              <div class="help" onclick="help_popup(this, 'pop_SMmotifs')"></div></h4>
+            <script>$("ins_seqN").innerHTML = data['sequence_db']['count'];</script>
+            <h5>Union: <span id="matching_union_number">0</span> sequences 
+              (<span id="matching_union_percentage">0</span>%).</h5>
+            <h5>Intersection: <span id="matching_intersection_number">0</span>
+              sequences (<span id="matching_intersection_percentage">0</span>%).</h5>
+                    <textarea id="matching_intersection_sequences" rows="10" cols="50" readonly></textarea>
+                    </div>
+          <h4>Filter &amp; Sort</h4>
+          <h5>Filters&nbsp;<div style="margin-top:5px;" class="help" 
+              onclick="help_popup(this, 'pop_filtering')" ></div></h5>
+          <div id="filters">
+            <div >
+              <input type="checkbox" id="filter_on_top" value="1" 
+              onclick="toggle_filter(this, 'filter_top')">
+              <label for="filter_top" 
+                onclick="enable_filter('filter_on_top', 'filter_top')">Top</label>
+              <input type="number" id="filter_top" value="10" size="4" min="1" step="1"
+              onkeypress="num_keys(event); update_filter(event)" disabled>
+            </div>
+            <div >
+              <input type="checkbox" id="filter_on_db" value="1" 
+              onclick="toggle_filter(this, 'filter_db')">
+              <label for="filter_db" 
+                onclick="enable_filter('filter_on_db', 'filter_db')"
+                >Database is</label>
+              <select id="filter_db" disabled>
+                <script>
+                  var filter_db = $("filter_db");
+                  filter_db.options.length = 0;
+                  for (var i = 0; i < data['motif_dbs'].length; i++) {
+                    var db = data['motif_dbs'][i];
+                    filter_db.add(new Option(db['name'], i));
+                  }
+                </script> 
+              </select>
+            </div>
+            <div >
+              <input type="checkbox" id="filter_on_id" value="1" 
+              onclick="toggle_filter(this, 'filter_id')">
+              <label for="filter_id" 
+                onclick="enable_filter('filter_on_id', 'filter_id')"
+                >ID matches</label>
+              <input type="text" id="filter_id" value=".*" size="12" 
+              onkeypress="update_filter(event)" disabled>
+            </div>
+            <div >
+              <input type="checkbox" id="filter_on_alt" value="1" 
+              onclick="toggle_filter(this, 'filter_alt')">
+              <label for="filter_alt"
+                onclick="enable_filter('filter_on_alt', 'filter_alt')"
+                >Name matches</label>
+              <input type="text" id="filter_alt" value=".*" size="12" 
+              onkeypress="update_filter(event)" disabled>
+            </div>
+            <div >
+              <input type="checkbox" id="filter_on_evalue" value="1" 
+              onclick="toggle_filter(this, 'filter_evalue')">
+              <label for="filter_evalue"
+                onclick="enable_filter('filter_on_evalue', 'filter_evalue')"
+                ><i>E</i>-value &le;</label>
+              <input type="text" id="filter_evalue" value="1" size="7" 
+              onkeypress="update_filter(event)" disabled>
+            </div>
+            <div id='cb_filter_on_fisherpv' >
+              <input type="checkbox" id="filter_on_fisherpv" value="1" 
+              onclick="toggle_filter(this, 'filter_fisherpv')">
+              <label for="filter_fisherpv"
+                onclick="enable_filter('filter_on_fisherpv', 'filter_fisherpv')"
+                >Fisher <i>E</i>-value&le;</label>
+              <input type="text" id="filter_fisherpv" value="1" size="7" 
+              onkeypress="update_filter(event)" disabled>
+            </div>
+            <div >
+              <input type="checkbox" id="filter_on_binwidth" value="1" 
+              onclick="toggle_filter(this, 'filter_binwidth')">
+              <label for="filter_binwidth"
+                onclick="enable_filter('filter_on_binwidth', 'filter_binwidth')"
+                >Region Width &le;</label>
+              <input type="number" id="filter_binwidth" value="200" size="7" 
+              min="1" onkeypress="num_keys(event); update_filter(event)" disabled>
+            </div>
+            <div id='CB_filter_on_negbintest'>
+              <input type="checkbox" id="filter_on_negbintest" value="1" 
+              onclick="toggle_filter(this, 'filter_negbintest')">
+              <label for="filter_negbintest"
+                onclick="enable_filter('filter_on_negbintest', 'filter_negbintest')"
+                >Negative set <i>E</i>-value &ge;</label>
+              <input type="text" id="filter_negbintest" value="1" size="7" 
+              onkeypress="update_filter(event)" disabled>
+            </div>
+          </div>
+          <div style="margin: 5px 0;">
+            <h5>Sort&nbsp;<div class="help"
+                onclick="help_popup(this, 'pop_sorting')"></div></h5>
+            <div>
+              <label for="motif_sort">Motifs:&nbsp;&nbsp; </label>
+              <select id="motif_sort"></select>
+            </div>
+            <div id="box_peak_sort">
+              <input type="checkbox" id="allow_peak_sort" value="1" 
+              onclick="toggle_filter(this, 'peak_sort')">
+              <label for="peak_sort" 
+                onclick="enable_filter('allow_peak_sort', 'peak_sort')"
+                >Regions: </label>
+		          <select id="peak_sort" disabled></select>
+            </div>
+            <script>populate_sort_lists();</script>
+          </div>
+          <div>
+            <input type="button" value="Update" onclick="make_CEM_table()">
+          </div>
+          <h4>Columns to display</h4>
+          <div >
+            <input type="checkbox" id="show_db" value="1" 
+            onclick="toggle_column('hide_db')">
+            <label for="show_db">Show Database</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_id" value="1" 
+            onclick="toggle_column('hide_id')" checked>
+            <label for="show_id">Show ID</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_name" value="1" 
+            onclick="toggle_column('hide_name')" checked>
+            <label for="show_name">Show Name</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_evalue" value="1" 
+            onclick="toggle_column('hide_evalue')" checked>
+            <label for="show_evalue">Show <i>E</i>-value</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_pvalue" value="1" 
+            onclick="toggle_column('hide_pvalue')">
+            <label for="show_pvalue">Show <i>p</i>-value</label>
+          </div>
+          <div id='cb_show_fisherpv'>
+            <input type="checkbox" id="show_fisherpv" value="1" 
+            onclick="toggle_column('hide_fisherpv')" checked>
+            <label for="show_fisherpv">Show Fisher <i>E</i>-value</label>
+          </div>
+          <div id='CB_show_MCC'>
+            <input type="checkbox" id="show_MCC" value="1" 
+            onclick="toggle_column('hide_MCC')">
+            <label for="show_MCC">Show Matthew's Correlation Coefficient</label>
+          </div>
+          <div id='CB_show_blocation'>
+            <input type="checkbox" id="show_blocation" value="1" 
+            onclick="toggle_column('hide_blocation')" checked>
+            <label for="show_blocation">Show Region Center</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_bwidth" value="1" 
+            onclick="toggle_column('hide_bwidth')" checked>
+            <label for="show_bwidth">Show Region Width</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_bsites" value="1" 
+            onclick="toggle_column('hide_bsites')" checked>
+            <label for="show_bsites">Show Region Matches</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_tsites" value="1" 
+            onclick="toggle_column('hide_tsites')">
+            <label for="show_tsites">Show Total Matches</label>
+          </div>
+          <div id='CB_show_negative_binomial'>
+            <input type="checkbox" id="show_negative_binomial" value="1" 
+            onclick="toggle_column('hide_negative_binomial')">
+            <label for="show_negative_binomial">Show Negative <i>p</i>-value</label>
+          </div>
+          <div id='CB_show_negbsites'>
+            <input type="checkbox" id="show_negbsites" value="1" 
+            onclick="toggle_column('hide_negbsites')" checked>
+            <label for="show_negbsites">Show Negative Region Matches</label>
+          </div>
+          <div id='CB_show_negtsites'>
+            <input type="checkbox" id="show_negtsites" value="1" 
+            onclick="toggle_column('hide_negtsites')">
+            <label for="show_negtsites">Show Negative Total Matches</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_maxprob" value="1" 
+            onclick="toggle_column('hide_maxprob')">
+            <label for="show_maxprob">Show Max Probability</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_hpeak" value="1" 
+            onclick="toggle_column('hide_hpeak')">
+            <label for="show_hpeak">Show Max Probability Location</label>
+          </div>
+          <div >
+            <input type="checkbox" id="show_nbinstested" value="1" 
+            onclick="toggle_column('hide_nbinstested')">
+            <label for="show_nbinstested">Show Multiple Tests</label>
+          </div>
+          <div>
+            <input type="checkbox" id="show_score" value="1" 
+            onclick="toggle_column('hide_score')">
+            <label for="show_score">Show Score Threshold</label>
+          </div>
+        </div>
+        <div style="clear:both"></div>
+      </div>
+    </div>
+    <h2 id="inputs" class="mainh pad2">Input Files</h2>
+    <div class="box">
+      <h4>Sequences</h4>
+      <table class="inputs">
+        <tr><th>Database</th><th>Source</th><th>Sequence Count</th></tr>
+        <tr>
+          <td id="ins_seq_name"></td>
+          <td id="ins_seq_source"></td>
+          <td id="ins_seq_count"></td>
+        </tr>
+      </table>
+      <script>
+      {
+        var db = data['sequence_db'];
+        $("ins_seq_name").innerHTML = db['name'];
+        $("ins_seq_source").innerHTML = db['source'];
+        $("ins_seq_count").innerHTML = db['count'];
+      }
+      </script>
+      <div id='neg_seq_input'>
+      <h4>Negative sequences</h4>
+      <table class="inputs">
+        <tr><th>Database</th><th>Source</th><th>Sequence Count</th></tr>
+        <tr>
+          <td id="ins_negseq_name"></td>
+          <td id="ins_negseq_source"></td>
+          <td id="ins_negseq_count"></td>
+        </tr>
+      </table>
+      </div>
+      <script>
+      {
+        if (data['options']['neg_sequences']) {
+          var db = data['negative_sequence_db'];
+          if (!db['name']) db['name'] = name_from_source(db['source']);
+          $("ins_negseq_name").innerHTML = db['name'];
+          $("ins_negseq_source").innerHTML = db['source'];
+          $("ins_negseq_count").innerHTML = db['count'];
+        }
+        else {
+          $('neg_seq_input').style.display='none';
+        }
+      }
+      </script>
+      <h4>Motifs</h4>
+      <table id="motif_dbs" class="inputs">
+        <thead>
+          <tr><th>Database</th><th>Source</th><th>Motif Count</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <script>
+      {
+        var tbl = $('motif_dbs');
+        var tbody = tbl.tBodies[0];
+        while (tbody.rows.length > 0) {
+          tbody.deleteRow(0);
+        }
+        var motif_dbs = data['motif_dbs'];
+        for (var i = 0; i < motif_dbs.length; i++) {
+          var db = motif_dbs[i];
+          var row = tbody.insertRow(tbody.rows.length);
+          add_text_cell(row, db['name']);
+          add_text_cell(row, db['source']);
+          add_text_cell(row, db['count']);
+        }
+      }
+      </script>
+    </div>
+    <div id="info_sec" class="bar">
+      <div class="subsection">
+        <a name="version"/>
+        <h5>CentriMo version</h5>
+        <span id="ins_version"></span>
+        (Release date: <span id="ins_release"></span>)
+        <script>
+          $("ins_version").innerHTML = data["version"];
+          $("ins_release").innerHTML = data["release"];
+        </script> 
+      </div>
+      <div class="subsection">
+        <a name="reference"/>
+        <h5>Reference</h5>
+        <span class="citation">
+          Timothy L. Bailey and Philip Machanick, 
+          &quot;Inferring direct DNA binding from ChIP-seq&quot;, <i>Nucleic Acids Research</i>, <b>40</b>:e128, 2012.
+        </span>
+        <div class="subsection">
+          <a name="command" />
+          <h5>Command line summary</h5>
+          <textarea id="cmd" rows="1" style="width:100%;" readonly="readonly">
+          </textarea>
+          <script>$("cmd").value = data["cmd"].join(" ");</script>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

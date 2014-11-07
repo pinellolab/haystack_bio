@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="mhmmscan-to-html.xsl"?>
+<!-- Begin document body -->
+<cis-element-search
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://zlab.bu.edu/schema/cisml cisml.xsd"
+  xmlns="http://zlab.bu.edu/schema/cisml"
+  xmlns:mem="http://noble.gs.washington.edu/meme"
+>
+<program-name>mcast</program-name>
+<parameters>
+<pattern-file>crp0.meme.html</pattern-file>
+<sequence-file>crp0.s</sequence-file>
+<pattern-pvalue-cutoff>0.0005</pattern-pvalue-cutoff>
+<sequence-pvalue-cutoff>1</sequence-pvalue-cutoff>
+</parameters>
+<multi-pattern-scan score="18.8955" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="lac" name="lac">
+<matched-element start="10" stop="27" pvalue="4.57e-07">
+<sequence>TAATGTGAGTTAGCTCAC</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<pattern accession="3" name="3">
+<scanned-sequence accession="lac" name="lac">
+<matched-element start="44" stop="34" pvalue="1.18e-07">
+<sequence>GGCACCCCAGG</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-8" seq-name="lac" start="9" stop="44" evalue="nan" qvalue="nan">TTAATGTGAGTTAGCTCACTCATTAGGCACCCCAGG
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="11.5776" pvalue="nan">
+<pattern accession="3" name="3">
+<scanned-sequence accession="trn9cat" name="trn9cat">
+<matched-element start="37" stop="47" pvalue="3.38e-07">
+<sequence>CCTGGTGTCCC</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<pattern accession="1" name="1">
+<scanned-sequence accession="trn9cat" name="trn9cat">
+<matched-element start="85" stop="102" pvalue="7.25e-06">
+<sequence>AAATGAGACGTTGATCGG</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-16" seq-name="trn9cat" start="36" stop="102" evalue="nan" qvalue="nan">TCCTGGTGTCCCTGTTGATACCGGGAAGCCCTGGGCCAACTTTTGGCGAAAATGAGACGTTGATCGG
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="9.7855" pvalue="nan">
+<pattern accession="2" name="2">
+<scanned-sequence accession="ilv" name="ilv">
+<matched-element start="6" stop="13" pvalue="7.09e-06">
+<sequence>CGGCGGGG</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<pattern accession="1" name="1">
+<scanned-sequence accession="ilv" name="ilv">
+<matched-element start="61" stop="44" pvalue="1.59e-06">
+<sequence>GTGATCAACCCCTCAATT</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-7" seq-name="ilv" start="5" stop="61" evalue="nan" qvalue="nan">CCGGCGGGGTTTTTTGTTATCTGCAATTCAGTACAAAACGTGATCAACCCCTCAATT
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="7.19173" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="ara" name="ara">
+<matched-element start="77" stop="60" pvalue="4.56e-07">
+<sequence>TTGCACGGCGTCACACTT</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-2" seq-name="ara" start="59" stop="77" evalue="nan" qvalue="nan">TTTGCACGGCGTCACACTT
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="6.95215" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="male" name="male">
+<matched-element start="15" stop="32" pvalue="1.2e-05">
+<sequence>TTCTGTAACAGAGATCAC</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<pattern accession="2" name="2">
+<scanned-sequence accession="male" name="male">
+<matched-element start="42" stop="49" pvalue="1.56e-05">
+<sequence>CGGTGGGG</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-9" seq-name="male" start="14" stop="49" evalue="nan" qvalue="nan">ATTCTGTAACAGAGATCACACAAAGCGACGGTGGGG
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="6.60034" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="malt" name="malt">
+<matched-element start="42" stop="59" pvalue="6.87e-07">
+<sequence>AATTGTGACACAGTGCAA</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-11" seq-name="malt" start="41" stop="59" evalue="nan" qvalue="nan">GAATTGTGACACAGTGCAA
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="5.32909" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="deop2" name="deop2">
+<matched-element start="61" stop="78" pvalue="1.66e-06">
+<sequence>AATTGTGATGTGTATCGA</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-5" seq-name="deop2" start="60" stop="78" evalue="nan" qvalue="nan">TAATTGTGATGTGTATCGA
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="4.30747" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="pbr322" name="pbr322">
+<matched-element start="75" stop="58" pvalue="3.37e-06">
+<sequence>GTGAAATACCGCACAGAT</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-15" seq-name="pbr322" start="57" stop="75" evalue="nan" qvalue="nan">TGTGAAATACCGCACAGAT
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="4.19386" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="uxu1" name="uxu1">
+<matched-element start="18" stop="35" pvalue="3.64e-06">
+<sequence>TGTTGTGATGTGGTTAAC</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-14" seq-name="uxu1" start="17" stop="35" evalue="nan" qvalue="nan">TTGTTGTGATGTGGTTAAC
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="3.94007" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="ce1cg" name="ce1cg">
+<matched-element start="18" stop="35" pvalue="0.000149">
+<sequence>TTTTGTGGCATCGGGCGA</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<pattern accession="1" name="1">
+<scanned-sequence accession="ce1cg" name="ce1cg">
+<matched-element start="83" stop="66" pvalue="4.35e-06">
+<sequence>TTGATCGTTTTCACAAAA</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-1" seq-name="ce1cg" start="17" stop="83" evalue="nan" qvalue="nan">TTTTTGTGGCATCGGGCGAGAATAGCGCGTGGTGTGAAAGACTGTTTTTTTGATCGTTTTCACAAAA
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="3.17246" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="gale" name="gale">
+<matched-element start="64" stop="47" pvalue="7.39e-06">
+<sequence>TTATTCCATGTCACACTT</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-6" seq-name="gale" start="46" stop="64" evalue="nan" qvalue="nan">TTTATTCCATGTCACACTT
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="2.9616" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="tnaa" name="tnaa">
+<matched-element start="93" stop="76" pvalue="8.56e-06">
+<sequence>GTGATTCGATTCACATTT</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-13" seq-name="tnaa" start="75" stop="93" evalue="nan" qvalue="nan">TGTGATTCGATTCACATTT
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="2.60145" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="crp" name="crp">
+<matched-element start="85" stop="68" pvalue="1.1e-05">
+<sequence>GCAAAGGACGTCACATTA</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-3" seq-name="crp" start="67" stop="85" evalue="nan" qvalue="nan">TGCAAAGGACGTCACATTA
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="2.37508" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="cya" name="cya">
+<matched-element start="51" stop="68" pvalue="1.28e-05">
+<sequence>AGGTGTTAAATTGATCAC</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-4" seq-name="cya" start="50" stop="68" evalue="nan" qvalue="nan">AAGGTGTTAAATTGATCAC
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="2.12883" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="ompa" name="ompa">
+<matched-element start="49" stop="66" pvalue="1.52e-05">
+<sequence>ATGCCTGACGGAGTTCAC</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-12" seq-name="ompa" start="48" stop="66" evalue="nan" qvalue="nan">TATGCCTGACGGAGTTCAC
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="2.0797" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="malk" name="malk">
+<matched-element start="62" stop="79" pvalue="1.58e-05">
+<sequence>TTTCGTGATGTTGCTTGC</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-10" seq-name="malk" start="61" stop="79" evalue="nan" qvalue="nan">ATTTCGTGATGTTGCTTGC
+</mem:match>
+</multi-pattern-scan>
+<multi-pattern-scan score="1.69784" pvalue="nan">
+<pattern accession="1" name="1">
+<scanned-sequence accession="tdc" name="tdc">
+<matched-element start="100" stop="83" pvalue="2.05e-05">
+<sequence>GTGAGTGGTCGCACATAT</sequence>
+</matched-element>
+</scanned-sequence>
+</pattern>
+<mem:match cluster-id="cluster-17" seq-name="tdc" start="82" stop="100" evalue="nan" qvalue="nan">TGTGAGTGGTCGCACATAT
+</mem:match>
+</multi-pattern-scan>
+</cis-element-search>

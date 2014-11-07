@@ -1,0 +1,288 @@
+#!@WHICHPERL@
+=head1 NAME
+
+spamo_webservice - Run spamo in a restricted mode and create an index webpage.
+
+=head1 SYNOPSIS
+
+spamo_webservice [options] <sequences file> <primary motif> <secondary db patterns>
+
+  Options:
+    -uploaded <file>  file containing uploaded secondary motif database
+    -margin <margin>  margin parameter passed to spamo
+    -dumpseqs         dump the sequence matches to a file for each significant primary/secondary
+    -help             brief help message
+
+=cut
+
+use strict;
+use warnings;
+
+use Cwd qw(getcwd abs_path);
+use Fcntl qw(SEEK_SET);
+use File::Basename qw(fileparse);
+use File::Copy qw(move);
+use File::Path qw(rmtree);
+use File::Spec::Functions qw(tmpdir catfile);
+use File::Temp qw(tempfile);
+use Getopt::Long;
+use Pod::Usage;
+use Time::HiRes qw(gettimeofday tv_interval);
+
+use lib qw(@PERLLIBDIR@);
+
+use ExecUtils qw(stringify_args invoke);
+use MemeWebUtils qw(add_status_msg update_status loggable_date write_invocation_log);
+use Globals;
+
+# Globals
+my $t0 = [&gettimeofday()];
+# constants
+my $dump_seqs_dir = 'dumpseqs';
+my $dump_seqs_tar = 'dumpseqs.tar.gz';
+my $dump_seqs_pattern = 'seqs_*.txt';
+my $tmpdir = '@TMP_DIR@';
+# use the perl default if none is supplied or the replace fails
+$tmpdir = &tmpdir() if ($tmpdir eq '' || $tmpdir =~ m/^\@TMP[_]DIR\@$/);
+
+# variables for the service invocation log
+my $log_args = stringify_args(@ARGV);
+my $log_date = loggable_date();
+my $log_file = 'spamo-log';
+
+# timeout vars
+my $timeout = $Globals::MAXTIME; # updated just before use
+my $oot = 0; #FALSE
+
+#status page
+my $file_list;
+my @arg_errors = ();
+my $msg_list = [];
+my $program = 'SpaMo';
+my $page = 'index.html';
+my $refresh = 60;
+
+# paths
+my $db_dir = '@MEMEDB@/motif_databases';
+my $work_dir = getcwd;
+
+# letters allowed in names
+my $SAFE_FILENAME = qr/^[a-zA-Z0-9:_\.][a-zA-Z0-9:_\.-]*$/;
+
+# error files
+my $messages = "messages.txt";
+my $other = "stderr.txt";
+
+# get the parameters
+
+# required parameters
+my $sequences;
+my $primary_motif;
+my @db_patterns;
+my @secondaries = ();
+# option defaults
+my $help = 0; # FALSE
+my $dumpseqs = 0; # FALSE
+my $margin = undef;
+my $uploaded_db = undef;
+
+# redirect stderr so we can get the error message from GetOpts
+my ($err_old, $err_tmp, $opts_ok, $opts_msg);
+open($err_old, ">&STDERR") or die("Can't dup STDERR: $!");
+$err_tmp = tempfile('GetOptions_XXXXXXXXXX', DIR => $tmpdir, UNLINK => 1); # make a temporary file
+open(STDERR, '>&', $err_tmp) or die("Can't redirect STDERR: $!");
+# parse the options
+$opts_ok = GetOptions(
+  'margin=i' => \$margin, 
+  'uploaded=s' => \$uploaded_db,
+  'dumpseqs' => \$dumpseqs,
+  'help|?' => \$help
+);
+($sequences, $primary_motif, @db_patterns) = @ARGV;
+# display help
+pod2usage(1) if $help;
+# reset stderr and get the error message if any
+open(STDERR, ">&", $err_old) or die("Can't reset STDERR: $!");
+seek($err_tmp, 0, SEEK_SET);
+while ($opts_msg = <$err_tmp>) {
+  chomp($opts_msg);
+  push(@arg_errors, $opts_msg);
+}
+close($err_tmp);
+
+# check the parameters
+if (defined $margin) {
+  unless ($margin > 0) {
+    push(@arg_errors, "Margin must be larger than zero.");
+  }
+}
+unless (defined $sequences) {
+  push(@arg_errors, "Sequences file must be passed.");
+} else {
+  $sequences = fileparse($sequences);
+  unless ($sequences =~ $SAFE_FILENAME) {
+    push(@arg_errors, "Sequences filename contains unaccepted characters.");
+  } else {
+    unless (-e $sequences) {
+      push(@arg_errors, "Can't find sequences file \"$sequences\" specified.");
+    }
+  }
+}
+unless (defined $primary_motif) {
+  push(@arg_errors, "Primary motif file must be passed.");
+} else {
+  $primary_motif = fileparse($primary_motif);
+  unless ($primary_motif =~ $SAFE_FILENAME) {
+    push(@arg_errors, "Primary motif filename contains unaccepted characters.");
+  } else {
+    unless (-e $primary_motif) {
+      push(@arg_errors, "Can't find primary motif file \"$primary_motif\" specified.");
+    }
+  }
+}
+if (defined $uploaded_db) {
+  $uploaded_db = fileparse($uploaded_db); 
+  unless ($uploaded_db =~ $SAFE_FILENAME) {
+    push(@arg_errors, "Uploaded database filename contains unaccepted characters.");
+  } else {
+    unless (-e $uploaded_db) {
+      push(@arg_errors, "Can't find uploaded database file \"$uploaded_db\" specified.");
+    } else {
+      push(@secondaries, $uploaded_db);
+    }
+  }
+} else {
+  $uploaded_db = '';
+}
+if (@db_patterns) {
+  # look in the database directory
+  chdir($db_dir);
+  my @db_paths = glob(join(" ", @db_patterns));
+  for (my $i = 0; $i < scalar(@db_paths); $i++) {
+    my $file = fileparse($db_paths[$i]);
+    next unless (-e $file);
+    push(@secondaries, "db/$file"); 
+  }
+  chdir($work_dir);
+}
+unless (@secondaries) {
+  push(@arg_errors, "Secondaries pattern does not match any databases.");
+}
+
+$opts_ok = 0 if (scalar(@arg_errors) > 0);
+foreach my $arg_error (@arg_errors) {
+  print STDERR $arg_error, "\n";
+  add_status_msg($arg_error, $msg_list);
+}
+
+#create a job status for the user
+$file_list = [{file => 'spamo.html', desc => 'Spamo html output'},
+    {file => 'spamo.xml', desc => 'Spamo xml output'}, 
+    {file => $dump_seqs_tar, desc => 'Spamo dumped sequences'},
+    {file => $sequences, desc => 'Input sequences'}, 
+    {file => $primary_motif, desc => 'Input primary motif'}, 
+    {file => $uploaded_db, desc => 'Input secondary motifs (uploaded)'}, 
+    {file => $other, desc => 'Script Errors'},
+];
+
+if ($opts_ok) {
+  add_status_msg('Arguments ok', $msg_list);
+} else {
+  add_status_msg("Error parsing arguments", $msg_list);
+}
+
+update_status($page, $program, ($opts_ok ? $refresh : 0), $file_list, 
+    $msg_list, ($opts_ok ? "Starting" : "Error"));
+
+# exit if there was an error reading the arguments
+unless ($opts_ok) {
+  write_invocation_log($log_file, $log_date, $log_args);
+  pod2usage(2);
+}
+
+# create a link to the databases
+symlink($db_dir, "db");
+
+#build the command that needs to run
+my @spamo_args = ('-verbosity', 1, '-oc', '.', '-png', '-numgen', 1);
+push(@spamo_args, ('-margin', $margin)) if $margin;
+push(@spamo_args, '-dumpseqs') if $dumpseqs;
+push(@spamo_args, ($sequences, $primary_motif));
+push(@spamo_args, @secondaries);
+
+add_status_msg('Starting ' . stringify_args('spamo', @spamo_args), $msg_list);
+
+update_status($page, $program, $refresh, $file_list, $msg_list, "Starting");
+
+# run the program
+my $time = 0;
+$timeout = $Globals::MAXTIME - int(&tv_interval($t0, [&gettimeofday()]) + 0.5);
+my $status_code = invoke(
+  PROG => 'spamo', 
+  ARGS => \@spamo_args,
+  BIN => '@BINDIR@', 
+  ALL_FILE => $messages, 
+  TIME => \$time,
+  TIMEOUT => $timeout,
+  OOT => \$oot
+);
+my $elapsed = int($time * 100 + 0.5) / 100;
+
+# delete the link
+unlink "db";
+
+# package up any dumped sequences
+if ($dumpseqs) {
+  my @dseqs = glob($dump_seqs_pattern);
+  my $count = 0;
+  if (@dseqs) {
+    mkdir $dump_seqs_dir;
+    for (my $i = 0; $i < scalar(@dseqs); $i++) {
+      my $file = fileparse($dseqs[$i]);
+      next if ($file eq $sequences 
+        || $file eq $primary_motif 
+        || $file eq $uploaded_db
+      );
+      move($file, catfile($dump_seqs_dir, $file));
+      $count++;
+    }
+    if ($count) {
+      system('tar', '-czf', $dump_seqs_tar, $dump_seqs_dir);
+    }
+    rmtree($dump_seqs_dir);
+  }
+}
+
+# check the result for errors
+my $error_msg = '';
+if ($oot) {
+    $error_msg = "Ran out of time! Stopping spamo.";
+    add_status_msg($error_msg, $msg_list);
+    print STDERR $error_msg;
+}
+if ($status_code != 0 || $oot) {
+  if ($status_code == -1) {
+    $error_msg = "Spamo failed to run";
+  } elsif ($status_code & 127) {
+    $error_msg = "Spamo process died with signal ".($status_code & 127).", ".
+    (($status_code & 128) ? 'with' : 'without')." coredump";
+  } else {
+    if (($status_code >> 8) == 1) {
+      $error_msg = "Spamo exited abnormally. Check error messages for cause."
+    } else {
+      $error_msg = "Spamo exited abnormally with error code ".($status_code >> 8);
+    }
+  }
+  add_status_msg($error_msg, $msg_list);
+  push(@{$file_list}, {file => $messages, desc => 'Error Messages'});
+} else {
+  add_status_msg("Spamo ran successfully in $elapsed seconds", $msg_list);
+  push(@{$file_list}, {file => $messages, desc => 'Warning Messages'});
+}
+update_status($page, $program, 0, $file_list, $msg_list, ($status_code ? "Error" : "Done"));
+
+write_invocation_log($log_file, $log_date, $log_args);
+# exit if there was an error running spamo
+exit(1) if ($status_code || $oot);
+
+1;

@@ -1,0 +1,288 @@
+#!@WHICHPERL@
+=head1 NAME
+
+gomo_webservice - Run gomo in a restricted mode and create an index webpage.
+
+=head1 SYNOPSIS
+
+gomo_webservice [options] <motif> <databases>
+
+  Options:
+    -shuffle_scores <times> shuffle scores
+    -t <threshold>          q-value threshold
+    -help                   brief help message
+
+=cut
+
+use strict;
+use warnings;
+
+use Cwd qw(getcwd);
+use Fcntl qw(SEEK_SET);
+use File::Basename qw(fileparse);
+use File::Path qw(rmtree);
+use File::Spec::Functions qw(catfile tmpdir);
+use File::Temp qw(tempfile);
+use Getopt::Long;
+use Pod::Usage;
+use Time::HiRes qw(gettimeofday tv_interval);
+
+use lib qw(@PERLLIBDIR@);
+
+use ExecUtils qw(stringify_args invoke);
+use MemeWebUtils qw(is_safe_name add_status_msg update_status loggable_date write_invocation_log);
+use Globals;
+
+# Globals
+my $t0 = [&gettimeofday()];
+# constants
+my $tmpdir = '@TMP_DIR@';
+# use the perl default if none is supplied or the replace fails
+$tmpdir = &tmpdir() if ($tmpdir eq '' || $tmpdir =~ m/^\@TMP[_]DIR\@$/);
+my $dbdir = '@MEMEDB@/gomo_databases';
+my $workdir = getcwd;
+
+# variables for the service invocation log
+my $log_args = stringify_args(@ARGV);
+my $log_date = loggable_date();
+my $log_file = 'gomo-log';
+
+# error files
+my $messages = "messages.txt";
+
+#status page
+my $file_list;
+my @arg_errors = ();
+my $msg_list = [];
+my $program = 'GOMO';
+my $page = 'index.html';
+my $refresh = 10;
+
+# required parameters
+my $motifs;
+my @dbs;
+# option defaults
+my $t = undef;
+my $shuffle_scores = undef;
+my $help = 0; #FALSE
+# derived defaults
+my $gomap = undef;
+my $godag = undef;
+
+add_status_msg('Parsing arguments', $msg_list);
+
+# redirect stderr so we can get the error message from GetOpts
+my ($err_old, $err_tmp, $opts_ok, $opts_msg);
+open($err_old, ">&STDERR") or die("Can't dup STDERR: $!");
+$err_tmp = tempfile('GetOptions_XXXXXXXXXX', DIR => $tmpdir, UNLINK => 1); # make a temporary file
+open(STDERR, '>&', $err_tmp) or die("Can't redirect STDERR: $!");
+# parse options
+$opts_ok = GetOptions(
+  't=f' => \$t,
+  'shuffle_scores=i' => \$shuffle_scores,
+  'help|?' => \$help
+);
+($motifs, @dbs) = @ARGV;
+# display help
+pod2usage(1) if $help;
+# reset stderr and get the error message if any
+open(STDERR, ">&", $err_old) or die("Can't reset STDERR: $!");
+seek($err_tmp, 0, SEEK_SET);
+while ($opts_msg = <$err_tmp>) {
+  chomp($opts_msg);
+  push(@arg_errors, $opts_msg);
+}
+close($err_tmp);
+
+if (-e catfile($dbdir, 'go.dag')) {
+  $godag = catfile('db', 'go.dag');
+}
+
+# check args
+if (defined($t)) {
+  if ($t <= 0 || $t > 0.5) {
+    push(@arg_errors, "Value \"$t\" invalid for option t (must be between 0 and 0.5)");
+  }
+}
+if (defined($shuffle_scores)) {
+  if ($shuffle_scores < 0) {
+    push(@arg_errors, "Value \"$shuffle_scores\" invalid for option shuffle_scores (must be positive)")
+  }
+}
+unless (defined($motifs)) {
+  push(@arg_errors, "No motifs provided");
+} elsif (not is_safe_name($motifs)) {
+  push(@arg_errors, "Motifs file \"$motifs\" does not fit allowed file name pattern.");
+} elsif (not -e $motifs) {
+  push(@arg_errors, "Motifs file \"$motifs\" does not exist");
+}
+for (my $i = 0; $i < scalar(@dbs); $i++) {
+  $dbs[$i] = fileparse($dbs[$i]);
+  my $db = $dbs[$i];
+  if (not is_safe_name($db)) {
+    push(@arg_errors, "Database \"$db\" does not fit allowed file name pattern.");
+  } else {
+    my $db_seqs = catfile($dbdir, $db);
+    my $db_bfile = $db_seqs . '.bfile';
+    if (not -e $db_seqs) {
+      push(@arg_errors, "Database sequences file \"$db_seqs\" does not exist.");
+    } 
+    if (not -e $db_bfile) {
+      push(@arg_errors, "Database background file \"$db_bfile\" does not exist.");
+    }
+  }
+}
+unless (@dbs) {
+  push(@arg_errors, "No database provided");
+} else {
+  my $db_map = catfile($dbdir, $dbs[0]) . '.csv';
+  if (not -e $db_map) {
+    push(@arg_errors, "The GO mapping file \"$db_map\" does not exist.");
+  } else {
+    $gomap = catfile('db', $dbs[0]) . '.csv';
+  }
+}
+$opts_ok = 0 if (scalar(@arg_errors) > 0);
+foreach my $arg_error (@arg_errors) {
+  print STDERR $arg_error, "\n";
+  add_status_msg($arg_error, $msg_list);
+}
+
+# setup status page
+$file_list = [
+    {file => 'gomo.html', desc => 'GOMO html output'},
+    {file => 'gomo.xml', desc => 'GOMO xml output'}, 
+    {file => 'gomo.txt', desc => 'GOMO txt output'},
+    {file => $motifs, desc => 'Input Motifs'}
+];
+
+if ($opts_ok) {
+  add_status_msg('Arguments ok', $msg_list);
+} else {
+  add_status_msg("Error parsing arguments", $msg_list);
+}
+
+update_status($page, $program, ($opts_ok ? $refresh : 0), $file_list, 
+    $msg_list, ($opts_ok ? "Starting" : "Error"));
+
+# exit if there was an error reading the arguments
+unless ($opts_ok) {
+  write_invocation_log($log_file, $log_date, $log_args);
+  pod2usage(2);
+}
+
+symlink($dbdir, 'db');
+
+# Run AMA
+my @cismls = ();
+for (my $i = 0; $i < scalar(@dbs); $i++) {
+  my $db = $dbs[$i];
+  my $seqs = catfile('db', $db);
+  my $bfile = $seqs . '.bfile';
+  my $cisml = $db . '.cisml';
+  run_prog(
+    PROG => 'ama', 
+    ARGS => ['--pvalues', '--verbosity', 1, $motifs, $seqs, $bfile],
+    BIN => '@BINDIR@', 
+    OUT_FILE => $cisml,
+    ERR_FILE => $messages
+  );
+  push(@cismls, $cisml);
+}
+
+# Run meme2images
+run_prog(
+  PROG => 'meme2images',
+  ARGS => ['-png', $motifs, 'logos'],
+  BIN => '@BINDIR@',
+  ALL_FILE => $messages
+);
+
+# Run gomo on output of AMA
+my @gomo_args = ('--nostatus', '--verbosity', 1, '--oc', '.', 
+  '--images', 'logos');
+push(@gomo_args, '--dag', $godag) if (defined($godag));
+push(@gomo_args, '--t', $t) if (defined($t));
+push(@gomo_args, '--shuffle_scores', $shuffle_scores) if (defined($shuffle_scores));
+push(@gomo_args, $gomap, @cismls);
+run_prog(
+  PROG => 'gomo',
+  ARGS => \@gomo_args,
+  BIN => '@BINDIR@',
+  ALL_FILE => $messages
+);
+
+# GZIP CISML files
+add_status_msg('Running gzip on CISML files', $msg_list);
+update_status($page, $program, $refresh, $file_list, $msg_list, "Working");
+for (my $i = 0; $i < scalar(@cismls); $i++) {
+  my $db = $dbs[$i];
+  if (-s $cismls[$i]) { #note: gzip removes the original file
+    invoke(
+      PROG => 'gzip',
+      ARGS => [$cismls[$i]],
+      ALL_FILE => $messages
+    );
+    push(@{$file_list}, {file => $cismls[$i] . '.gz', 
+        desc => "AMA output for $db as XML (gzip compressed)"});
+  }
+}
+# Finish up
+unlink('db');
+rmtree('logos');
+push(@{$file_list}, {file => $messages, desc => 'Warning Messages'});
+update_status($page, $program, 0, $file_list, $msg_list, "Done");
+write_invocation_log($log_file, $log_date, $log_args);
+
+exit(0);
+
+# Run the program and record if it succeeded to the status messages
+sub run_prog {
+  my (%options) = @_;
+
+  my $prog = $options{PROG};
+  my @args = @{$options{ARGS}};
+  my ($timeout, $oot);
+
+  add_status_msg('Starting '.$prog.'<br><code>' . stringify_args($prog, @args) . '</code>', $msg_list);
+
+  update_status($page, $program, $refresh, $file_list, $msg_list, "Working");
+
+  my ($time, $status_code);
+  # run the program
+  $timeout = $Globals::MAXTIME - int(&tv_interval($t0, [&gettimeofday()]) + 0.5);
+  $status_code = invoke(@_, TIME => \$time, TIMEOUT => $timeout, OOT => \$oot);
+  my $status_msg;
+  if ($oot) {
+    $status_msg = "Ran out of time! Stopping ". $prog .".";
+    add_status_msg($status_msg, $msg_list);
+    print STDERR $status_msg;
+  }
+  if ($status_code != 0) {
+    if ($status_code == -1) {
+      $status_msg = $prog . " failed to run";
+    } elsif ($status_code & 127) {
+      $status_msg = $prog . " process died with signal " . 
+          ($status_code & 127) . ", " . 
+          (($status_code & 128) ? 'with' : 'without') . " coredump";
+    } else {
+      $status_msg = $prog . " exited with error code " . ($status_code >> 8);
+    }
+    print STDERR $status_msg;
+    push(@{$file_list}, {file => $messages, desc => 'Error Messages'});
+  } else {
+    $status_msg = $prog . ' ran successfully in ' . 
+        (int($time * 100 + 0.5) / 100) . ' seconds';
+  }
+  add_status_msg($status_msg, $msg_list);
+
+  update_status($page, $program, ($status_code ? 0 : $refresh), $file_list, 
+    $msg_list, ($status_code ? "Error" : "Working"));
+
+  if ($status_code) {
+    unlink('db');
+    rmtree('logos') if (-e 'logos');
+    write_invocation_log($log_file, $log_date, $log_args);
+    exit(1);
+  }
+}

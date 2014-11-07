@@ -1,0 +1,388 @@
+#!@WHICHPERL@
+=head1 NAME
+
+meme-chip_webservice - Run meme-chip in a restricted mode.
+
+=head1 SYNOPSIS
+
+meme-chip_webservice [options] <sequences file> <motif databases>
+
+  Options:
+    -upmotif <file>             uploaded motifs
+    -bfile <bg file>            specifiy a background file
+    -norc                       search the given strand only.
+    -help                       brief help message
+
+  MEME Specific Options:
+    -meme-mod [oops|zoops|anr]  sites used in a single sequence
+    -meme-minw <num>            minimum motif width
+    -meme-maxw <num>            maximum motif width
+    -meme-nmotifs <num>         maximum number of motifs to find
+    -meme-minsites <num>        minimum number of sites per motif
+    -meme-maxsites <num>        maximum number of sites per motif
+    -meme-pal                   look for palindromes only
+
+  DREME Specific Options:
+    -dreme-e <num>              maximum motif E-value
+    -dreme-m <num>              maximum number of motifs to find
+
+  CentriMo Specific Options:
+    -centrimo-local             compute enrichment of all regions (not only central)
+    -centrimo-score <num>       minimum match score
+    -centrimo-maxreg <num>      maximum central enrichment region
+    -centrimo-ethresh <num>     threshold for reporting enrichment
+    -centrimo-noseq             don't store sequence ids in output
+
+  Motif Databases
+    The motif databases may be specified as a pattern using * as a wildcard.
+=cut
+
+use strict;
+use warnings;
+
+use Cwd qw(getcwd abs_path);
+use Fcntl qw(SEEK_SET SEEK_CUR O_RDWR);
+use File::Basename qw(fileparse);
+use File::Spec::Functions qw(abs2rel catfile splitdir tmpdir);
+use File::Temp qw(tempfile);
+use Getopt::Long;
+use Pod::Usage;
+
+
+use lib qw(@PERLLIBDIR@);
+
+use ExecUtils qw(stringify_args invoke);
+use MemeWebUtils qw(is_safe_name add_status_msg update_status loggable_date write_invocation_log);
+use Globals;
+
+# Setup logging
+my $logger = undef;
+eval {
+  require Log::Log4perl;
+  Log::Log4perl->import();
+};
+unless ($@) {
+  Log::Log4perl::init('@APPCONFIGDIR@/logging.conf');
+  $logger = Log::Log4perl->get_logger('meme.service.memechip');
+  $SIG{__DIE__} = sub {
+    return if ($^S);
+    $logger->fatal(@_);
+    die @_;
+  };
+}
+$logger->trace("Starting meme-chip service") if $logger;
+
+# constants
+my $tempdir = '@TMP_DIR@';
+# use the perl default if none is supplied or the replace fails
+$tempdir = tmpdir() if ($tempdir eq '' || $tempdir =~ m/^\@TMP[_]DIR\@$/);
+my $dbdir = '@MEMEDB@/motif_databases';
+my $workdir = getcwd;
+
+# variables for the service invocation log
+my $log_args = stringify_args(@ARGV);
+my $log_date = loggable_date();
+my $log_file = 'memechip-log';
+
+# error files
+my $messages = "messages.txt";
+my $progress = "progress_log.txt";
+
+#error page
+my $file_list;
+my @arg_errors = ();
+my $msg_list = [];
+my $program = 'MEME-ChIP';
+my $page = 'index.html';
+my $refresh = 10;
+
+# option defaults
+my ($upmotif, $bfile, $norc, $meme_mod, $meme_minw, $meme_maxw, $meme_nmotifs, 
+  $meme_minsites, $meme_maxsites, $meme_pal, $dreme_e, $dreme_m, 
+  $centrimo_score, $centrimo_maxreg, $centrimo_ethresh, $centrimo_noseq,
+  $centrimo_local, $help);
+my $sequences;
+my @dbmotifs;
+my @motifs;
+$norc = 0; #FALSE
+$meme_mod = 'zoops';
+$meme_pal = 0; #FALSE
+$centrimo_noseq = 0; # FALSE
+$help = 0; #FALSE
+
+# redirect stderr so we can get the error message from GetOpts
+my ($err_old, $err_tmp, $opts_ok, $opts_msg);
+open($err_old, ">&STDERR") or die("Can't dup STDERR: $!");
+$err_tmp = tempfile('GetOptions_XXXXXXXXXX', DIR => $tempdir, UNLINK => 1);
+open(STDERR, '>&', $err_tmp) or die("Can't redirect STDERR: $!");
+# parse options
+$opts_ok = GetOptions(
+  'upmotif=s'       => \$upmotif,
+  'bfile=s'         => \$bfile,
+  'norc'            => \$norc,
+  'meme-mod=s'      => \$meme_mod,
+  'meme-minw=i'     => \$meme_minw,
+  'meme-maxw=i'     => \$meme_maxw,
+  'meme-nmotifs=i'  => \$meme_nmotifs,
+  'meme-minsites=i' => \$meme_minsites,
+  'meme-maxsites=i' => \$meme_maxsites,
+  'meme-pal'        => \$meme_pal,
+  'dreme-e=f'         => \$dreme_e,
+  'dreme-m=i'         => \$dreme_m,
+  'centrimo-score=f'  => \$centrimo_score,
+  'centrimo-maxreg=i' => \$centrimo_maxreg,
+  'centrimo-ethresh=f'=> \$centrimo_ethresh,
+  'centrimo-local'    => \$centrimo_local,
+  'centrimo-noseq'    => \$centrimo_noseq,
+  'help|?'          => \$help
+);
+($sequences, @dbmotifs) = @ARGV;
+# display help
+pod2usage(1) if $help;
+# reset stderr and get the error message if any
+open(STDERR, ">&", $err_old) or die("Can't reset STDERR: $!");
+seek($err_tmp, 0, SEEK_SET);
+while ($opts_msg = <$err_tmp>) {
+  chomp($opts_msg);
+  push(@arg_errors, $opts_msg);
+}
+close($err_tmp);
+
+# remove any path from the files to ensure they are in this directory
+unless (defined($sequences)) {
+  push(@arg_errors, "No sequences provided.");
+} else {
+  $sequences = fileparse($sequences);
+  if (not is_safe_name($sequences)) {
+    push(@arg_errors, "Sequences \"$sequences\" does not fit allowed file name pattern.");
+  } elsif (not -e $sequences) {
+    push(@arg_errors, "Sequences \"$sequences\" does not exist.");
+  } 
+}
+
+if (defined($upmotif)) {
+  $upmotif = fileparse($upmotif);
+  if (not is_safe_name($upmotif)) {
+    push(@arg_errors, "Value \"$upmotif\" invalid for option upmotif (does not fit allowed file name pattern)");
+  } elsif (not -e $upmotif) {
+    push(@arg_errors, "Value \"$upmotif\" invalid for option upmotif (file does not exist)");
+  } else {
+    push(@motifs, $upmotif);
+  }
+} 
+
+if (@dbmotifs) {
+  # The expansion must be evaluated in the database directory
+  chdir($dbdir);
+  my @expanded_motifs = glob(join(' ', @dbmotifs));
+  chdir($workdir);
+  # check that the expanded files really are in the db dir
+  for (my $i = 0; $i < scalar(@expanded_motifs); $i++) {
+    $expanded_motifs[$i] = fileparse($expanded_motifs[$i]);
+    if (-e catfile($dbdir, $expanded_motifs[$i])) {
+      push(@motifs, catfile('db',$expanded_motifs[$i]));
+    }
+  }
+}
+
+unless (@motifs) {
+  push(@arg_errors, "No motifs provided.");
+}
+if (defined($bfile)) {
+  $bfile = fileparse($bfile);
+  if (not is_safe_name($bfile)) {
+    push(@arg_errors, "Value \"$bfile\" invalid for option bfile (does not fit allowed file name pattern)");
+  } elsif (not -e $bfile) {
+    push(@arg_errors, "Value \"$bfile\" invalid for option bfile (file does not exist)");
+  }
+}
+
+$opts_ok = 0 if (scalar(@arg_errors) > 0);
+foreach my $arg_error (@arg_errors) {
+  print STDERR $arg_error, "\n";
+  add_status_msg($arg_error, $msg_list);
+}
+
+# setup error page
+$file_list = [
+    {file => $sequences, desc => 'Uploaded Sequences'},
+    {file => $bfile, desc => 'Uploaded Background'},
+    {file => $upmotif, desc => 'Uploaded Motifs'},
+    {file => $progress, desc => 'Progress Messages'},
+    {file => $messages, desc => 'Error Messages'}
+];
+
+if ($opts_ok) {
+  add_status_msg('Arguments ok', $msg_list);
+} else {
+  # exit if there was an error reading the arguments
+  add_status_msg("Error parsing arguments", $msg_list);
+  update_status($page, $program, ($opts_ok ? $refresh : 0), $file_list, 
+      $msg_list, ($opts_ok ? "Starting" : "Error"));
+  write_invocation_log($log_file, $log_date, $log_args);
+  pod2usage(2);
+}
+
+# make a symbolic link to the motif databases
+symlink($dbdir, 'db');
+
+# take a listing of all the files in the current directory
+my $before = &dir_listing_set($workdir);
+
+# prepare meme-chip arguments
+# nb. MAXTIME is in seconds but -time is minutes
+my @args = ('-noecho', '-oc', '.', 
+  '-index-name', $page, '-time', int($MAXTIME / 60));
+push(@args, '-fdesc', 'description') if (-e 'description');
+push(@args, '-bfile', $bfile) if $bfile;
+push(@args, '-norc') if $norc;
+foreach my $db (@motifs) {
+  push(@args, '-db', $db);
+}
+push(@args, '-meme-mod', $meme_mod) if $meme_mod;
+push(@args, '-meme-minw', $meme_minw) if $meme_minw;
+push(@args, '-meme-maxw', $meme_maxw) if $meme_maxw;
+push(@args, '-meme-nmotifs', $meme_nmotifs) if $meme_nmotifs;
+push(@args, '-meme-minsites', $meme_minsites) if $meme_minsites;
+push(@args, '-meme-maxsites', $meme_maxsites) if $meme_maxsites;
+push(@args, '-meme-pal') if $meme_pal;
+push(@args, '-dreme-e', $dreme_e) if defined($dreme_e);
+push(@args, '-dreme-m', $dreme_m) if defined($dreme_m);
+push(@args, '-centrimo-local') if $centrimo_local;
+push(@args, '-centrimo-score', $centrimo_score) if defined($centrimo_score);
+push(@args, '-centrimo-maxreg', $centrimo_maxreg) if defined($centrimo_maxreg);
+push(@args, '-centrimo-ethresh', $centrimo_ethresh) if defined($centrimo_ethresh);
+push(@args, '-centrimo-noseq') if $centrimo_noseq;
+push(@args, $sequences);
+
+# run the program
+my $error = invoke(
+  PROG => 'meme-chip', 
+  ARGS => \@args, 
+  BIN => '@BINDIR@', 
+  ALL_FILE => $messages);
+
+# remove the simlink
+unlink('db') if (-e 'db');
+
+if ($error) { #ERROR!
+  my $error_msg;
+  if ($error == -1) {
+    $error_msg = "meme-chip failed to run";
+  } elsif ($error & 127) {
+    $error_msg = "meme-chip process died with signal " . 
+        ($error & 127) . ", " . 
+        (($error & 128) ? 'with' : 'without') . " coredump";
+  } else {
+    $error_msg = "meme-chip exited with error code " . ($error >> 8);
+  }
+  add_status_msg($error_msg, $msg_list);
+  update_status($page, $program, 0, $file_list, $msg_list, "Error");
+} else { # success
+  eval {
+    # determine all files added
+    my @tar_files = &added_files($before, &dir_listing_set($workdir));
+    # readd inputs
+    push(@tar_files, $sequences);
+    push(@tar_files, $bfile) if (defined($bfile));
+    push(@tar_files, $upmotif) if (defined($upmotif));
+    # create tar with all new files plus the input files
+    my $tar = &create_tar(@tar_files);
+    # rewrite index.html to point to tar file
+    &replace_tar_link($page, $tar);
+  };
+  # we can't create the tar file but it's not worth destroying the output
+  # to tell the user that.
+  warn $@ if $@;
+}
+
+write_invocation_log($log_file, $log_date, $log_args);
+exit(1) if $error;
+1;
+
+sub create_tar {
+  my @tar_files = @_;
+  # we want to tar including the containing directory
+  # find the real name of the containing directory
+  my $folder = (splitdir(abs_path()))[-1];
+  my $folder_dir = abs_path('..');
+  # append the folder to the tar_files
+  for (my $i = 0; $i < scalar(@tar_files); $i++) {
+    $tar_files[$i] = abs2rel(abs_path($tar_files[$i]), $folder_dir);
+  }
+  my $tarname = $folder . ".tar.gz";
+  # run tar
+  my $error = system('tar', '-czf', $tarname, '-C', $folder_dir, @tar_files);
+  my $errmsg = '';
+  if ($error == -1) {
+    $errmsg = "Failed to execute tar: $!";
+  } elsif ($error & 127) {
+    $errmsg = sprintf("tar died with signal %d, %s coredump.",
+        ($error & 127), ($error & 128) ? 'with' : 'without');
+  } elsif ($error != 0) {
+    $errmsg = sprintf("tar exited with value %d indicating failure.", $error >> 8);
+  }
+  die($errmsg) if $error;
+  return $tarname;
+}
+
+sub replace_tar_link {
+  my ($file, $link) = @_;
+  # check that the link will fit in the provided space
+  die("link too long") if (length($link) > 50);
+  # pad the link with whitespace up to 50 characters
+  $link .= ' ' x (50 - length($link));
+  # open the file and look for the tar file link to rewrite
+  my $fh;
+  sysopen($fh, $file, O_RDWR) or die("Can't open $file for tar link rewrite.");
+  while (my $line = <$fh>) {
+    my $pos = index($line, 'TAR_FILE');
+    if ($pos >= 0) {
+      seek($fh, $pos - length($line), SEEK_CUR);
+      print($fh $link);
+      last;
+    }
+  }
+  close($fh);
+}
+
+sub added_files {
+  my ($before, $after) = @_;
+  my @list = ();
+  foreach my $file (keys %{$after}) {
+    push(@list, $file) unless ($before->{$file});
+  }
+  return @list;
+}
+
+sub dir_listing_set {
+  my ($dir) = @_;
+  my @list = &dir_listing($dir);
+  my %set = ();
+  foreach my $file (@list) {
+    $set{$file} = 1;
+  }
+  return \%set;
+}
+
+sub dir_listing {
+  my ($dir) = @_;
+  my @list = ();
+  my $dirh;
+  opendir($dirh, $dir);
+  while (1) {
+    my $fname = readdir($dirh);
+    last unless defined($fname);
+    next if ($fname eq '.' || $fname eq '..');
+    my $file = catfile($dir, $fname);
+    if (-d $file) {
+      unless (-l $file) { # skip symlinks
+        push(@list, &dir_listing($file));
+      }
+    } else {
+      push(@list, $file);
+    }
+  }
+  closedir($dirh);
+  return @list;
+}

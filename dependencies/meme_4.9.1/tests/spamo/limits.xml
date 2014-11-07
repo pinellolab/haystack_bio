@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<!DOCTYPE spamo[
+<!ELEMENT spamo (model, files, primary_motif, run_time)>
+<!ATTLIST spamo version CDATA #REQUIRED release CDATA #REQUIRED>
+<!ELEMENT model (command_line, seed, margin, bin_size,
+  bin_pvalue_calc_range, bin_pvalue_cutoff, seq_max_shared_fract,
+  seq_min_hit_score, redundant_overlap, redundant_joint,
+  motif_pseudocount, motif_trim, bin_max, host, when)>
+<!ELEMENT command_line (#PCDATA)>
+<!ELEMENT seed (#PCDATA)>
+<!ELEMENT margin (#PCDATA)>
+<!ELEMENT bin_size (#PCDATA)>
+<!ELEMENT bin_pvalue_calc_range (#PCDATA)>
+<!ELEMENT bin_pvalue_cutoff (#PCDATA)>
+<!ELEMENT seq_max_shared_fract (#PCDATA)>
+<!ELEMENT seq_min_hit_score (#PCDATA)>
+<!ELEMENT redundant_overlap (#PCDATA)>
+<!ELEMENT redundant_joint (#PCDATA)>
+<!ELEMENT motif_pseudocount (#PCDATA)>
+<!ELEMENT motif_trim (#PCDATA)>
+<!ELEMENT bin_max (#PCDATA)>
+<!ELEMENT host (#PCDATA)>
+<!ELEMENT when (#PCDATA)>
+<!ELEMENT files (sequence_db, motif_db*)>
+<!ELEMENT sequence_db EMPTY>
+<!ATTLIST sequence_db name CDATA #REQUIRED loaded CDATA #REQUIRED
+  excluded_too_short CDATA #REQUIRED excluded_no_match CDATA #REQUIRED
+  excluded_similar CDATA #REQUIRED last_modified CDATA #REQUIRED
+  source CDATA #REQUIRED>
+<!ELEMENT motif_db EMPTY>
+<!ATTLIST motif_db id ID #REQUIRED name CDATA #REQUIRED
+  loaded CDATA #REQUIRED excluded CDATA #REQUIRED
+  last_modified CDATA #REQUIRED source CDATA #REQUIRED
+  cisml CDATA #IMPLIED>
+<!ELEMENT primary_motif (motif, secondary_motif*)>
+<!ELEMENT secondary_motif (spacing*, motif, histogram, redundant?)>
+<!ATTLIST secondary_motif evalue CDATA #REQUIRED>
+<!ELEMENT spacing EMPTY>
+<!ATTLIST spacing strand (same|opposite) #REQUIRED
+  side (left|right) #REQUIRED bin CDATA #REQUIRED num CDATA #REQUIRED
+  pvalue CDATA #REQUIRED>
+<!ELEMENT histogram (same_strand, opposite_strand)>
+<!ATTLIST histogram total CDATA #REQUIRED max CDATA #REQUIRED>
+<!ELEMENT same_strand (left_side, right_side)>
+<!ELEMENT opposite_strand (left_side, right_side)>
+<!ELEMENT left_side (bin*)>
+<!ELEMENT right_side (bin*)>
+<!ELEMENT bin EMPTY>
+<!-- i: index, n: number in bin, p: pvalue (only supplied when bin
+  is tested) -->
+<!ATTLIST bin i CDATA #REQUIRED n CDATA #REQUIRED p CDATA #IMPLIED>
+<!ELEMENT redundant (secondary_motif*)>
+<!-- motif contains the probability of each of the nucleotide bases at each
+  position; i starts at 1; A, C, G and T are probabilities that sum to 1 -->
+<!ELEMENT motif (pos*)>
+<!ATTLIST motif db IDREF #REQUIRED name CDATA #REQUIRED alt CDATA #IMPLIED 
+  length CDATA #REQUIRED nsites CDATA #IMPLIED evalue CDATA #IMPLIED
+  ltrim CDATA #IMPLIED rtrim CDATA #IMPLIED url CDATA #IMPLIED>
+<!ELEMENT pos EMPTY>
+<!ATTLIST pos i CDATA #REQUIRED A CDATA #REQUIRED C CDATA #REQUIRED
+  G CDATA #REQUIRED T CDATA #REQUIRED>
+<!-- run time is measured in real time and cpu time -->
+<!ELEMENT run_time EMPTY>
+<!ATTLIST run_time cpu CDATA #REQUIRED real CDATA #REQUIRED>
+]>
+<spamo version="4.9.0" release="Wed Oct 03 10:59:07 2012 +1000">
+  <model>
+    <command_line>spamo  -oc results/spamo -v 1 -znoxslt -margin 20 -shared 1 spamo/limits.fasta spamo/primary.meme spamo/secondary.meme</command_line>
+    <seed>1</seed>
+    <margin>20</margin>
+    <bin_size>1</bin_size>
+    <bin_pvalue_calc_range>150</bin_pvalue_calc_range>
+    <bin_pvalue_cutoff>0.05</bin_pvalue_cutoff>
+    <motif_evalue_cutoff>10</motif_evalue_cutoff>
+    <seq_max_shared_fract>1</seq_max_shared_fract>
+    <seq_min_hit_score>7</seq_min_hit_score>
+    <redundant_overlap>2</redundant_overlap>
+    <redundant_joint>0.5</redundant_joint>
+    <motif_pseudocount>0.1</motif_pseudocount>
+    <motif_trim>0.25</motif_trim>
+    <bin_max>10</bin_max>
+    <host>d-69-91-147-143.dhcp4.washington.edu</host>
+    <when>Thu Aug 15 13:47:41 2013</when>
+  </model>
+  <files>
+    <sequence_db name="limits" loaded="80" excluded_too_short="0"
+        excluded_no_match="0" excluded_similar="0" last_modified="Thu Aug 15 10:57:24 2013"
+        source="spamo/limits.fasta"/>
+    <motif_db id="primary_file" name="primary" loaded="1" excluded="0" last_modified="Thu Aug 15 10:57:23 2013"
+        source="spamo/primary.meme"/>
+    <motif_db id="db1" name="secondary" loaded="1" excluded="0" last_modified="Thu Aug 15 10:57:23 2013"
+        source="spamo/secondary.meme"/>
+  </files>
+  <primary_motif>
+    <motif db="primary_file" name="GATATATG" length="8" nsites="20" evalue="0" ltrim="0" rtrim="0" >
+      <pos i="1" A="0.00155369" C="0.00096393" G="0.996049" T="0.00143346"/>
+      <pos i="2" A="0.996579" C="0.00096393" G="0.00102405" T="0.00143346"/>
+      <pos i="3" A="0.00155369" C="0.00096393" G="0.00102405" T="0.996458"/>
+      <pos i="4" A="0.996579" C="0.00096393" G="0.00102405" T="0.00143346"/>
+      <pos i="5" A="0.00155369" C="0.00096393" G="0.00102405" T="0.996458"/>
+      <pos i="6" A="0.996579" C="0.00096393" G="0.00102405" T="0.00143346"/>
+      <pos i="7" A="0.00155369" C="0.00096393" G="0.00102405" T="0.996458"/>
+      <pos i="8" A="0.00155369" C="0.00096393" G="0.996049" T="0.00143346"/>
+    </motif>
+    <secondary_motif evalue="0.00017">
+            <spacing strand="same" side="left" bin="1" num="10" pvalue="0.00017"/>
+      <spacing strand="same" side="left" bin="13" num="10" pvalue="0.00017"/>
+      <spacing strand="opposite" side="left" bin="1" num="10" pvalue="0.00017"/>
+      <spacing strand="opposite" side="left" bin="13" num="10" pvalue="0.00017"/>
+      <spacing strand="same" side="right" bin="1" num="10" pvalue="0.00017"/>
+      <spacing strand="same" side="right" bin="13" num="10" pvalue="0.00017"/>
+      <spacing strand="opposite" side="right" bin="1" num="10" pvalue="0.00017"/>
+      <spacing strand="opposite" side="right" bin="13" num="10" pvalue="0.00017"/>
+      <motif db="db1" name="CAAATTTC" length="8" nsites="20" evalue="0" ltrim="0" rtrim="0" >
+        <pos i="1" A="0.00155369" C="0.995989" G="0.00102405" T="0.00143346"/>
+        <pos i="2" A="0.996579" C="0.00096393" G="0.00102405" T="0.00143346"/>
+        <pos i="3" A="0.996579" C="0.00096393" G="0.00102405" T="0.00143346"/>
+        <pos i="4" A="0.996579" C="0.00096393" G="0.00102405" T="0.00143346"/>
+        <pos i="5" A="0.00155369" C="0.00096393" G="0.00102405" T="0.996458"/>
+        <pos i="6" A="0.00155369" C="0.00096393" G="0.00102405" T="0.996458"/>
+        <pos i="7" A="0.00155369" C="0.00096393" G="0.00102405" T="0.996458"/>
+        <pos i="8" A="0.00155369" C="0.995989" G="0.00102405" T="0.00143346"/>
+      </motif>
+      <histogram total="80" max="10">
+        <same_strand>
+          <left_side>
+            <bin i="1" n="10" p="0.00017"/>
+            <bin i="2" n="0"/>
+            <bin i="3" n="0"/>
+            <bin i="4" n="0"/>
+            <bin i="5" n="0"/>
+            <bin i="6" n="0"/>
+            <bin i="7" n="0"/>
+            <bin i="8" n="0"/>
+            <bin i="9" n="0"/>
+            <bin i="10" n="0"/>
+            <bin i="11" n="0"/>
+            <bin i="12" n="0"/>
+            <bin i="13" n="10" p="0.00017"/>
+          </left_side>
+          <right_side>
+            <bin i="1" n="10" p="0.00017"/>
+            <bin i="2" n="0"/>
+            <bin i="3" n="0"/>
+            <bin i="4" n="0"/>
+            <bin i="5" n="0"/>
+            <bin i="6" n="0"/>
+            <bin i="7" n="0"/>
+            <bin i="8" n="0"/>
+            <bin i="9" n="0"/>
+            <bin i="10" n="0"/>
+            <bin i="11" n="0"/>
+            <bin i="12" n="0"/>
+            <bin i="13" n="10" p="0.00017"/>
+          </right_side>
+        </same_strand>
+        <opposite_strand>
+          <left_side>
+            <bin i="1" n="10" p="0.00017"/>
+            <bin i="2" n="0"/>
+            <bin i="3" n="0"/>
+            <bin i="4" n="0"/>
+            <bin i="5" n="0"/>
+            <bin i="6" n="0"/>
+            <bin i="7" n="0"/>
+            <bin i="8" n="0"/>
+            <bin i="9" n="0"/>
+            <bin i="10" n="0"/>
+            <bin i="11" n="0"/>
+            <bin i="12" n="0"/>
+            <bin i="13" n="10" p="0.00017"/>
+          </left_side>
+          <right_side>
+            <bin i="1" n="10" p="0.00017"/>
+            <bin i="2" n="0"/>
+            <bin i="3" n="0"/>
+            <bin i="4" n="0"/>
+            <bin i="5" n="0"/>
+            <bin i="6" n="0"/>
+            <bin i="7" n="0"/>
+            <bin i="8" n="0"/>
+            <bin i="9" n="0"/>
+            <bin i="10" n="0"/>
+            <bin i="11" n="0"/>
+            <bin i="12" n="0"/>
+            <bin i="13" n="10" p="0.00017"/>
+          </right_side>
+        </opposite_strand>
+      </histogram>
+    </secondary_motif>
+  </primary_motif>
+  <run_time cpu="0.0" real="0.0"/>
+</spamo>

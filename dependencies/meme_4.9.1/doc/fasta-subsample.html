@@ -1,0 +1,43 @@
+<!--
+FILE: fasta-subsample.html
+AUTHOR: J Johnson
+CREATE DATE: 1 September 2010
+PROJECT: MEME Suite
+-->
+<head>
+<title>fasta-subsample</title>
+<link href="./meme-suite.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="../images/memesuite_icon.png">
+</head>
+<body>
+<div id="main">
+<script src="./meme-suite-logo.js" type="text/javascript">></script>
+<h1>fasta-subsample</h1>
+<p><b>Usage:</b> <code>fasta-subsample &lt;fasta&gt; &lt;n&gt; [options]</code></p>
+<p><b>Description:</b></p>
+<p>
+Create a random subset of the sequences in a FASTA formatted file. The random seed is fixed
+so the same subset will be ouput in every run of the program unless it is explicitly set.
+</p>
+<p><b>Input:</b></p>
+<p>Takes a FASTA file &lt;fasta&gt; and the count of sequences to randomly select &lt;n&gt;.</p>
+<p><b>Options:</b></p>
+<dl>
+  <dt>-seed &lt;random seed&gt;</dt>
+  <dd>seed the random number generator uses to select the sequences; default: 1</dd>
+  <dt>-rest &lt;file&gt;</dt>
+  <dd>name of the file to send the sequences not selected in the output; default: none</dd>
+  <dt>-off &lt;offset&gt;</dt>
+  <dd>the offset within each sequence to print; default: 1 (no offset)</dd>
+  <dt>-len &lt;len&gt;</dt>
+  <dd>the maxiumum length that printed sequences are constrained to; default: print entire sequence</dd>
+</dl>
+<p><b>Output:</b></p>
+<p>
+Writes a FASTA formatted file to standard out containing the specified subsample of the original file.
+If -rest &lt;file&gt; is specifed then any left over sequences are written to &lt;file&gt;, which is useful
+for cross-validation.
+</p>
+</div>
+</body>
+</html>

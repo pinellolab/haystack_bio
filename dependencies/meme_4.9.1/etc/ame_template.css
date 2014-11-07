@@ -1,0 +1,53 @@
+table.inputs {
+  margin-top: 20px;
+  border-collapse:collapse;
+}
+table.inputs * td, table.inputs * th {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+table.results {
+  border-collapse:collapse;
+}
+table.results * td, table.results * th {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+table.results * td.logo {
+  height: 20px;
+}
+
+table.fixed .col_split,
+table.spearman .col_pvalue, 
+table.spearman .col_corrected_pvalue, 
+table.spearman .col_mean_square_error, 
+table.spearman .col_m, 
+table.spearman .col_b,
+table.linreg .col_pvalue,
+table.linreg .col_corrected_pvalue,
+table.linreg .col_spearmans_rho,
+table.pvalue .col_spearmans_rho,
+table.pvalue .col_mean_square_error, 
+table.pvalue .col_m, 
+table.pvalue .col_b {
+  display: none;
+}
+
+div.pop_content {
+  position:absolute;
+  z-index:1;
+  width:300px;
+  padding: 5px;
+  background: #E4ECEC;
+  font-size: 12px;
+  font-family: Arial;
+  border-style: double;
+  border-width: 3px;
+  border-color: #AA2244;
+  display:none;
+}

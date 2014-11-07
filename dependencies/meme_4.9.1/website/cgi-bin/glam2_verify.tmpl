@@ -1,0 +1,91 @@
+<hr/>
+<style type="text/css">
+  td.table_label {
+    width:20em;
+  }
+  h5.section_label {
+    margin-top:5px;
+    margin-bottom:5px;
+  }
+  table.info {
+    margin-bottom:20px;
+  }
+</style>
+<!-- TMPL_IF NAME=description -->
+<h5 class="section_label">Description</h5>
+<pre><!-- TMPL_VAR ESCAPE=HTML NAME=description --></pre>
+<!-- /TMPL_IF -->
+
+<h5 class="section_label">Settings</h5>
+<table class="info">
+  <tr><td class="table_label">Sequence File</td>
+  <td><!-- TMPL_VAR ESCAPE=HTML NAME=seqs_orig_name --></td></tr>
+  <!-- TMPL_IF NAME=min_seqs -->
+  <tr><td class="table_label">Minimum aligned sequences</td>
+  <td><!-- TMPL_VAR NAME=min_seqs --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=min_cols -->
+  <tr><td class="table_label">Minimum aligned columns</td>
+  <td><!-- TMPL_VAR NAME=min_cols --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=max_cols -->
+  <tr><td class="table_label">Maximum aligned columns</td>
+  <td><!-- TMPL_VAR NAME=max_cols --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=initial_cols -->
+  <tr><td class="table_label">Initial aligned columns</td>
+  <td><!-- TMPL_VAR NAME=initial_cols --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=runs -->
+  <tr><td class="table_label">Number of alignment replicates</td>
+  <td><!-- TMPL_VAR NAME=runs --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=run_no_impr -->
+  <tr><td class="table_label">Maximum iterations without improvement</td>
+  <td><!-- TMPL_VAR NAME=run_no_impr --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=del_pseudo -->
+  <tr><td class="table_label">Deletion pseudocount</td>
+  <td><!-- TMPL_VAR NAME=del_pseudo --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=no_del_pseudo -->
+  <tr><td class="table_label">No-deletion pseudocount</td>
+  <td><!-- TMPL_VAR NAME=no_del_pseudo --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=ins_pseudo -->
+  <tr><td class="table_label">Insertion pseudocount</td>
+  <td><!-- TMPL_VAR NAME=ins_pseudo --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=no_ins_pseudo -->
+  <tr><td class="table_label">No-insertion pseudocount</td>
+  <td><!-- TMPL_VAR NAME=no_ins_pseudo --></td></tr>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME=dna -->
+  <tr><td class="table_label">Examine both strands</td>
+  <td><!-- TMPL_IF NAME=rev_comp -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td></tr>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Shuffle sequence letters</td>
+  <td><!-- TMPL_IF NAME=shuffle -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td></tr>
+  <tr><td class="table_label">Embed sequences</td>
+  <td><!-- TMPL_IF NAME=embed -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td></tr>
+</table>
+
+<h5 class="section_label">Sequences Details</h5>
+<table class="info">
+  <!-- TMPL_IF NAME=seqs_safe_name -->
+  <tr><td class="table_label">Command-line Safe Name</td>
+  <td><!-- TMPL_VAR NAME=seqs_name --></td></tr>
+  <!-- /TMPL_IF -->
+  <tr><td class="table_label">Type of Sequences</td>
+  <td><!-- TMPL_VAR NAME=seqs_alpha --></td></tr>
+  <tr><td class="table_label">Count of Sequences</td>
+  <td><!-- TMPL_VAR NAME=seqs_count --></td></tr>
+  <tr><td class="table_label">Shortest Sequence (residues)</td>
+  <td><!-- TMPL_VAR NAME=seqs_min --></td></tr>
+  <tr><td class="table_label">Longest Sequence (residues)</td>
+  <td><!-- TMPL_VAR NAME=seqs_max --></td></tr>
+  <tr><td class="table_label">Average Length (residues)</td>
+  <td><!-- TMPL_VAR NAME=seqs_avg --></td></tr>
+  <tr><td class="table_label">Total Length (residues)</td>
+  <td><!-- TMPL_VAR NAME=seqs_total --></td></tr>
+</table>
