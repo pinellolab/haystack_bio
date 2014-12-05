@@ -160,6 +160,7 @@ for sample_name in df_gene_mapping.index:
     gene_values.append(pd.read_table(df_gene_mapping.ix[sample_name,'Sample_file'],index_col=0,names=['Gene_Symbol',sample_name]))
     
 gene_values=pd.concat(gene_values,axis=1)
+#make names to uppercase! TODO
 gene_ranking=gene_values.rank(ascending=True)    
 
 #create output folder
@@ -174,7 +175,7 @@ for motif_gene_filename in glob.glob(os.path.join(haystack_motifs_output_folder,
     info('Analyzing %s from:%s' %(current_motif_id, motif_gene_filename))
     
     #genes closeby the motif sites
-    mapped_genes=list(pd.read_table(motif_gene_filename)['Symbol'].values)
+    mapped_genes=map(str.upper,list(pd.read_table(motif_gene_filename)['Symbol'].values))
     
     #target genes average activity
     if USE_ZSCORE:

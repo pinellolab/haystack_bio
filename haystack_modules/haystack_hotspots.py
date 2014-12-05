@@ -136,6 +136,7 @@ parser.add_argument('genome_name', type=str,  help='Genome assembly to use from 
 #optional
 parser.add_argument('--bin_size', type=int,help='bin size to use(default: 500bp)',default=500)
 parser.add_argument('--disable_quantile_normalization',help='Disable quantile normalization (default: False)',action='store_true')
+parser.add_argument('--th_rpm',type=float,help='Percentile on the signal intensity to consider for the hotspots (default: 99)', default=99)
 parser.add_argument('--transformation',type=str,help='Variance stabilizing transformation among: none, log2, angle (default: angle)',default='angle',choices=['angle', 'log2', 'none'])
 parser.add_argument('--recompute_all',help='Ignore any file previously precalculated',action='store_true')
 parser.add_argument('--z_score_high', type=float,help='z-score value to select the specific regions(default: 1.5)',default=1.5)
@@ -147,9 +148,9 @@ parser.add_argument('--max_regions_percentage', type=float , help='Upper bound o
 parser.add_argument('--depleted', help='Look for cell type specific regions with depletion of signal instead of enrichment',action='store_true')
 parser.add_argument('--input_is_bigwig', help='Use the bigwig format instead of the bam format for the input. Note: The files must have extension .bw',action='store_true')
 parser.add_argument('--version',help='Print version and exit.',action='version', version='Version %.1f' % HAYSTACK_VERSION)
-
-
 args = parser.parse_args()
+
+
 args_dict=vars(args)
 for key,value in args_dict.items():
         exec('%s=%s' %(key,repr(value)))
@@ -371,7 +372,7 @@ else:
         info('Sorry I cannot creat the bigwig file.\nPlease download and install bedGraphToBigWig from here: http://hgdownload.cse.ucsc.edu/admin/exe/ and add to your PATH')
      
         
-th_rpm=np.min(df_chip.apply(lambda x: np.percentile(x,99)))
+th_rpm=np.min(df_chip.apply(lambda x: np.percentile(x,th_rpm)))
 info('Estimated th_rpm:%s' % th_rpm)
 
 df_chip_not_empty=df_chip.ix[(df_chip>th_rpm).any(1),:]
