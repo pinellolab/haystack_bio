@@ -75,6 +75,7 @@ parser.add_argument('--transformation',type=str,help='Variance stabilizing trans
 parser.add_argument('--version',help='Print version and exit.',action='version', version='Version %.1f' % HAYSTACK_VERSION)
 parser.add_argument('--z_score_high', type=float,help='z-score value to select the specific regions(default: 1.5)',default=1.5)
 parser.add_argument('--z_score_low', type=float,help='z-score value to select the not specific regions(default: 0.25)',default=0.25)
+parser.add_argument('--th_rpm',type=float,help='Percentile on the signal intensity to consider for the hotspots (default: 99)', default=99)
 
 args = parser.parse_args()
 args_dict=vars(args)
@@ -191,7 +192,7 @@ if USE_GENE_EXPRESSION:
 
 
 #CALL HAYSTACK HOTSPOTS
-cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s' % \
+cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s %s' % \
             (sample_names_hotspots_filename, genome_name,output_directory,bin_size,
              ('--recompute_all' if recompute_all else ''),
              ('--depleted' if depleted else ''),
@@ -199,7 +200,8 @@ cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s
              ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
              '--transformation %s' % transformation,
              '--z_score_high %f' % z_score_high,
-             '--z_score_low %f' % z_score_low)
+             '--z_score_low %f' % z_score_low,
+             '--th_rpm %f' % th_rpm)
 print cmd_to_run
 sb.call(cmd_to_run ,shell=True,env=system_env)        
 
