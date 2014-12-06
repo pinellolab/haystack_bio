@@ -112,6 +112,17 @@ https://developer.apple.com/downloads/index.action
 
 You may need to create a free apple developer account.
 
+To generate the motif logo you need a recent version of XQuartz, download and install the dmg from here: http://xquartz.macosforge.org/landing/.
+
+Updating from Yosemite may break the motif logo generation.
+If you don't see the motif logo in the output of the haystack_motifs utility, please install the latest version XQuartz:http://xquartz.macosforge.org/landing/.
+
+Alternatively if you don't want to update XQuartz you can fix the problem from the terminal typing the following commands:
+```
+sudo ln -s /opt/X11 /usr/X11
+sudo ln -s /opt/X11 /usr/X11R6
+```
+
 **CYGWIN**
 
 On Cygwin, please be sure to have the following packages installed **before** running the setup:
