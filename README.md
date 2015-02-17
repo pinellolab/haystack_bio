@@ -293,7 +293,7 @@ http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_test_dataset_h3k27ac.tar
 
 Decompress the file with the following command: 
 	
-	tar xvzf test_haystack_h3k27ac.tar.gz
+	tar xvzf haystack_test_dataset_h3k27ac.tar.gz
 	
 Go into the folder with the test data:
 
