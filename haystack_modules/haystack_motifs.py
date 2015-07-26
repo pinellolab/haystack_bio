@@ -642,8 +642,11 @@ def run_haystack():
 
 
     #filter here positive or positive and negative#################################
-
-    idxs_to_keep=np.nonzero(motif_ratios>1)[0]
+    if not disable_ratio:
+        idxs_to_keep=np.nonzero(motif_ratios>1)[0]
+    else:
+        idxs_to_keep=range(len(motif_ratios))
+        
 
     rankings=rankings[idxs_to_keep]
     motif_ratios=motif_ratios[idxs_to_keep]
