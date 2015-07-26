@@ -104,6 +104,18 @@ Operating System Notes
   haystack_pipeline samples_names.txt hg19
   ```
 
+Alternatively you can quickly fire and use an Amazon Machine Image (AMI) with everything preinstalled and configured to use the Hyastack pipeline. In particular, you can find and launch the Haystack AMI from here: 
+
+https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:
+
+Click on Community AMIs and search for: **Haystack Pipeline** or **ami-cc1a4ea4**.
+
+Instructions on how to launch an AMI with pictures can be found in the bioconductor website: 
+
+http://www.bioconductor.org/help/bioconductor-cloud-ami/
+
+See in particular the sections: _How To Use It_ and _Launching the AMI_
+
 **Apple OSX**
 
 To install HAYSTACK on OSX you need the _Command Line Tools_ (usually shipped with Xcode). 
@@ -293,7 +305,7 @@ http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_test_dataset_h3k27ac.tar
 
 Decompress the file with the following command: 
 	
-	tar xvzf test_haystack_h3k27ac.tar.gz
+	tar xvzf haystack_test_dataset_h3k27ac.tar.gz
 	
 Go into the folder with the test data:
 

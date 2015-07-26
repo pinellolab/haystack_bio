@@ -328,6 +328,7 @@ def run_haystack():
     parser.add_argument('--name',  help='Define a custom output filename for the report', default='')
     parser.add_argument('--internal_window_length', type=int, help='Window length in bp for the enrichment (default: average lenght of the target sequences)')
     parser.add_argument('--window_length', type=int, help='Window length in bp for the profiler (default:internal_window_length*5)')
+    parser.add_argument('--min_central_enrichment', type=float, help='Minimum central enrichment to report a motif (default:>1.0)',default=1.0)
     parser.add_argument('--dump', help='Dump all the intermediate data, choices: True, False (default: False)',action='store_true')
     parser.add_argument('--output_directory',type=str, help='Output directory (default: current directory)',default='')
     parser.add_argument('--smooth_size',type=int, help='Size in bp for the smoothing window (default: internal_window_length/4)')
@@ -650,6 +651,8 @@ def run_haystack():
 
     motif_ids=[motif_ids[_] for _ in idxs_to_keep]
     motif_names=[motif_names[_] for _ in idxs_to_keep]
+    motif_idxs=[_ for _ in idxs_to_keep]
+
     try:
         qvalues=estimate_qvalues(fisher_p_values); # we test the ones only with ratio >1
     except:
@@ -685,7 +688,7 @@ def run_haystack():
 
     motifs_dump=[]
     for i in np.argsort(rankings):
-        if support_p[i]>=0.03 and fisher_p_values[i]<0.01  and  motif_ratios[i]>1 and central_enrichment[i]>1:
+        if support_p[i]>=0.03 and fisher_p_values[i]<0.01  and  motif_ratios[i]>1 and central_enrichment[i]>min_central_enrichment:
         #if (support_p[i]>=0.01 or  support_n[i]>=0.01) and fisher_p_values[i]<0.1 and  (central_enrichment[i]>1.1 or central_enrichment[i]<0.9) and  ( motif_ratios[i]>1.1 or motif_ratios[i]<0.9):
        
             info('Generating logo and profile for:'+motif_ids[i])
@@ -742,7 +745,7 @@ def run_haystack():
             motifs_dump.append({'id':motif_ids[i],'name':motif_names[i],'support_p':support_p[i]*100,
                                  'support_n':support_n[i]*100, 'ratio':motif_ratios[i],'rank':float(rankings[i]),
                                  'pvalue':fisher_p_values[i],'qvalue':qvalues[i],'central_enrichment':central_enrichment[i],
-                                 'img_logo':img_logo_url,'img_profile':img_profile_url,'regions':regions_url,'genes':genes_url,'idx_motif':motif_ids.index(motif_ids[i])})
+                                 'img_logo':img_logo_url,'img_profile':img_profile_url,'regions':regions_url,'genes':genes_url,'idx_motif':motif_idxs[i]})
 
 
     outfile= codecs.open(os.path.join(output_directory,"Haystack_report.html"), "w", "utf-8")
