@@ -691,7 +691,7 @@ def run_haystack():
 
     motifs_dump=[]
     for i in np.argsort(rankings):
-        if support_p[i]>=0.03 and fisher_p_values[i]<0.01  and  (motif_ratios[i]>1 or disable_ratio) and central_enrichment[i]>min_central_enrichment:
+        if (support_p[i]>=0.03 or disable_ratio)  and fisher_p_values[i]<0.01  and  (motif_ratios[i]>1 or disable_ratio) and central_enrichment[i]>min_central_enrichment:
         #if (support_p[i]>=0.01 or  support_n[i]>=0.01) and fisher_p_values[i]<0.1 and  (central_enrichment[i]>1.1 or central_enrichment[i]<0.9) and  ( motif_ratios[i]>1.1 or motif_ratios[i]<0.9):
        
             info('Generating logo and profile for:'+motif_ids[i])
