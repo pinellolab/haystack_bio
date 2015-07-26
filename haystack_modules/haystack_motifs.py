@@ -635,7 +635,9 @@ def run_haystack():
     motif_ratios=(support_p+0.01)/(support_n+0.01)
 
     #Foundamental!
-    motif_ratios[support_p<0.03]=1
+    if not disable_ratio:
+        motif_ratios[support_p<0.03]=1
+    
     rankings=stats.rankdata(-motif_ratios)
 
 
