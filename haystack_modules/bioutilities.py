@@ -820,23 +820,33 @@ class Fimo:
         self.temp_directory=temp_directory
         
         with open(meme_motifs_filename) as infile:
-            self.motif_id_to_name=dict()
-            self.motif_id_to_index=dict()
-            self.motif_names=[]
-            self.motif_name_to_index=dict()
-            self.motif_ids=[]
-            motif_index=0
-            for line in infile:
-                try:
-                    if 'MOTIF' in line:
-                        self.motif_id_to_name[line.split()[1]]=line.split()[2]
-                        self.motif_id_to_index[line.split()[1]]=motif_index
-                        self.motif_name_to_index[line.split()[2]]=motif_index
-                        self.motif_ids.append(line.split()[1])
-                        self.motif_names.append(line.split()[2])
-                        motif_index+=1
-                except:
-                    print 'problem with this line:', line
+             self.motif_id_to_name=dict()
+             self.motif_id_to_index=dict()
+             self.motif_names=[]
+             self.motif_name_to_index=dict()
+             self.motif_ids=[]
+             motif_index=0
+             for line in infile:
+                 try:
+                     if 'MOTIF' in line:
+ 
+                         #in meme format sometime you don't have the name and id but only one string for both
+                         #like in jolma 2013...
+                         motif_id=line.split()[1]
+ 
+                         try:
+                             motif_name=line.split()[2]
+                         except:
+                             motif_name=motif_id
+                             
+                         self.motif_id_to_name[motif_id]=motif_name
+                         self.motif_id_to_index[motif_id]=motif_index
+                         self.motif_name_to_index[motif_name]=motif_name
+                         self.motif_ids.append(motif_id)
+                         self.motif_names.append(motif_name)
+                         motif_index+=1
+                 except:
+                     print 'problem with this line:', line
 
         
     def extract_motifs(self,seq, report_mode='full'):
