@@ -7,7 +7,7 @@
 
 
 /* Define if building universal (internal helper macro) */
-#define AC_APPLE_UNIVERSAL_BUILD 1
+/* #undef AC_APPLE_UNIVERSAL_BUILD */
 
 /* Define for AIX if your compiler is a genuine IBM xlC/xlC_r and you want
    support for AIX C++ shared extension modules. */
@@ -281,6 +281,9 @@
 /* Define this if you have flockfile(), getc_unlocked(), and funlockfile() */
 #define HAVE_GETC_UNLOCKED 1
 
+/* Define to 1 if you have the `getentropy' function. */
+/* #undef HAVE_GETENTROPY */
+
 /* Define to 1 if you have the `getgroups' function. */
 #define HAVE_GETGROUPS 1
 
@@ -545,6 +548,9 @@
 /* Define to 1 if you have the `putenv' function. */
 #define HAVE_PUTENV 1
 
+/* Define if the libcrypto has RAND_egd */
+#define HAVE_RAND_EGD 1
+
 /* Define to 1 if you have the `readlink' function. */
 #define HAVE_READLINK 1
 
@@ -703,7 +709,7 @@
 /* #undef HAVE_STROPTS_H */
 
 /* Define to 1 if `st_birthtime' is a member of `struct stat'. */
-#define HAVE_STRUCT_STAT_ST_BIRTHTIME 1
+/* #undef HAVE_STRUCT_STAT_ST_BIRTHTIME */
 
 /* Define to 1 if `st_blksize' is a member of `struct stat'. */
 #define HAVE_STRUCT_STAT_ST_BLKSIZE 1
@@ -977,7 +983,7 @@
 /* #undef Py_DEBUG */
 
 /* Defined if Python is built as a shared library. */
-/* #undef Py_ENABLE_SHARED */
+#define Py_ENABLE_SHARED 1
 
 /* Define as the size of the unicode type. */
 #define Py_UNICODE_SIZE 2
@@ -1100,7 +1106,7 @@
 /* #undef WANT_WCTYPE_FUNCTIONS */
 
 /* Define if WINDOW in curses.h offers a field _flags. */
-/* #undef WINDOW_HAS_FLAGS */
+#define WINDOW_HAS_FLAGS 1
 
 /* Define if you want documentation strings in extension modules */
 #define WITH_DOC_STRINGS 1
@@ -1115,7 +1121,7 @@
 
 /* Define if you want to produce an OpenStep/Rhapsody framework (shared
    library plus accessory files). */
-#define WITH_NEXT_FRAMEWORK 1
+/* #undef WITH_NEXT_FRAMEWORK */
 
 /* Define if you want to compile in Python-specific mallocs */
 #define WITH_PYMALLOC 1

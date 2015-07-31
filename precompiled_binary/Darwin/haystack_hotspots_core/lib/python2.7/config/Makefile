@@ -26,23 +26,23 @@ MODLIBS=        $(LOCALMODLIBS) $(BASEMODLIBS)
 
 # === Variables set by configure
 VERSION=	2.7
-srcdir=		/Users/sysadmin/build/v2.7.8
-VPATH=		/Users/sysadmin/build/v2.7.8
-abs_srcdir=	/Users/sysadmin/build/v2.7.8
-abs_builddir=	/private/tmp/_py/_bld/python
-build=		x86_64-apple-darwin10.8.0
-host=		x86_64-apple-darwin10.8.0
+srcdir=		.
 
-CC=		gcc-4.2
-CXX=		g++-4.2
+abs_srcdir=	-------src-dir--------/Python-2.7.10
+abs_builddir=	-------src-dir--------/Python-2.7.10
+build=		i386-apple-darwin9.8.0
+host=		i386-apple-darwin9.8.0
+
+CC=		gcc
+CXX=		g++
 MAINCC=		$(CC)
 LINKCC=		$(PURIFY) $(MAINCC)
 AR=		ar
 RANLIB=		ranlib
 SVNVERSION=	svnversion $(srcdir)
-HGVERSION=	hg id -i $(srcdir)
-HGTAG=		hg id -t $(srcdir)
-HGBRANCH=	hg id -b $(srcdir)
+HGVERSION=	
+HGTAG=		
+HGBRANCH=	
 
 GNULD=          no
 
@@ -62,23 +62,23 @@ INSTALL_DATA=	${INSTALL} -m 644
 # Also, making them read-only seems to be a good idea...
 INSTALL_SHARED= ${INSTALL} -m 555
 
-MKDIR_P=	/Users/sysadmin/build/v2.7.8/install-sh -c -d
+MKDIR_P=	./install-sh -c -d
 
 MAKESETUP=      $(srcdir)/Modules/makesetup
 
 # Compiler options
 OPT=		-DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes
-BASECFLAGS=	 -fno-strict-aliasing -fno-common -dynamic
-CFLAGS=		$(BASECFLAGS) -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch x86_64 -g $(OPT) $(EXTRA_CFLAGS)
+BASECFLAGS=	 -fno-strict-aliasing
+CFLAGS=		$(BASECFLAGS) -I/Users/luca/anaconda/include -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.5.sdk $(OPT) $(EXTRA_CFLAGS)
 # Both CPPFLAGS and LDFLAGS need to contain the shell's value for setup.py to
 # be able to build extension modules using the directories specified in the
 # environment variables
-CPPFLAGS=	-I. -IInclude -I$(srcdir)/Include -isysroot /Developer/SDKs/MacOSX10.6.sdk 
-LDFLAGS=	-arch i386 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.6.sdk -isysroot /Developer/SDKs/MacOSX10.6.sdk -g
+CPPFLAGS=	-I. -IInclude -I$(srcdir)/Include 
+LDFLAGS=	-L/Users/luca/anaconda/lib -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.5.sdk
 LDLAST=		
 SGI_ABI=	
 CCSHARED=	
-LINKFORSHARED=	-u _PyMac_Error $(PYTHONFRAMEWORKDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK)
+LINKFORSHARED=	-u _PyMac_Error
 ARFLAGS=	rc
 # Extra C flags added for building the interpreter object files.
 CFLAGSFORSHARED=$(CCSHARED)
@@ -93,7 +93,7 @@ MACHDEP=	darwin
 MULTIARCH=	
 
 # Install prefix for architecture-independent files
-prefix=		/Library/Frameworks/Python.framework/Versions/2.7
+prefix=		/Users/luca/anaconda
 
 # Install prefix for architecture-dependent files
 exec_prefix=	${prefix}
@@ -128,22 +128,25 @@ EXE=
 BUILDEXE=	.exe
 
 # Short name and location for Mac OS X Python framework
-UNIVERSALSDK=/Developer/SDKs/MacOSX10.6.sdk
-PYTHONFRAMEWORK=	Python
-PYTHONFRAMEWORKDIR=	Python.framework
-PYTHONFRAMEWORKPREFIX=	/Library/Frameworks
-PYTHONFRAMEWORKINSTALLDIR= /Library/Frameworks/Python.framework
+UNIVERSALSDK=
+PYTHONFRAMEWORK=	
+PYTHONFRAMEWORKDIR=	no-framework
+PYTHONFRAMEWORKPREFIX=	
+PYTHONFRAMEWORKINSTALLDIR= 
 # Deployment target selected during configure, to be checked
 # by distutils. The export statement is needed to ensure that the
 # deployment target is active during build.
-MACOSX_DEPLOYMENT_TARGET=10.6
+MACOSX_DEPLOYMENT_TARGET=10.5
 export MACOSX_DEPLOYMENT_TARGET
 
 # Options to enable prebinding (for fast startup prior to Mac OS X 10.3)
 OTHER_LIBTOOL_OPT=
 
 # Environment to run shared python without installed libraries
-RUNSHARED=       DYLD_FRAMEWORK_PATH=/private/tmp/_py/_bld/python
+RUNSHARED=       DYLD_LIBRARY_PATH=-------src-dir--------/Python-2.7.10
+
+# ensurepip options
+ENSUREPIP=      no
 
 # Modes for directories, executables and data files created by the
 # install process.  Default to user-only-writable for all file types.
@@ -152,7 +155,7 @@ EXEMODE=	755
 FILEMODE=	644
 
 # configure script arguments
-CONFIG_ARGS=	 '-C' '--enable-framework' '--enable-universalsdk=/Developer/SDKs/MacOSX10.6.sdk' '--with-universal-archs=intel' 'LDFLAGS=-g' 'CFLAGS=-g' 'CC=gcc-4.2'
+CONFIG_ARGS=	 '--enable-shared' '--enable-ipv6' '--enable-unicode=ucs2' '--prefix=/Users/luca/anaconda' 'CC=gcc' 'CFLAGS=-I/Users/luca/anaconda/include -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.5.sdk' 'LDFLAGS=-L/Users/luca/anaconda/lib -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.5.sdk' 'PKG_CONFIG_PATH=/Users/luca/anaconda/lib/pkgconfig'
 
 
 # Subdirectories with code
@@ -169,8 +172,8 @@ DIST=		$(DISTFILES) $(DISTDIRS)
 
 
 LIBRARY=	libpython$(VERSION).a
-LDLIBRARY=      $(PYTHONFRAMEWORKDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK)
-BLDLIBRARY=     
+LDLIBRARY=      libpython$(VERSION).dylib
+BLDLIBRARY=     -L. -lpython$(VERSION)
 DLLLIBRARY=	
 LDLIBRARYDIR=   
 INSTSONAME=	$(LDLIBRARY)
@@ -195,7 +198,7 @@ BUILDPYTHON=	python$(BUILDEXE)
 
 PYTHON_FOR_BUILD=./$(BUILDPYTHON) -E
 _PYTHON_HOST_PLATFORM=
-HOST_GNU_TYPE=  x86_64-apple-darwin10.8.0
+HOST_GNU_TYPE=  i386-apple-darwin9.8.0
 
 # Tcl and Tk config info from --with-tcltk-includes and -libs options
 TCLTK_INCLUDES=	
@@ -215,7 +218,7 @@ COREPYTHONPATH=$(DESTPATH)$(SITEPATH)$(TESTPATH)$(MACHDEPPATH)$(EXTRAMACHDEPPATH
 OLDPATH=:lib-old
 TKPATH=:lib-tk
 EXTRAMACHDEPPATH=
-MACHDEPPATH=:plat-$(MACHDEP)
+MACHDEPPATH=:$(PLATDIR)
 TESTPATH=
 SITEPATH=
 DESTPATH=
@@ -463,8 +466,18 @@ platform: $(BUILDPYTHON) pybuilddir.txt
 # Create build directory and generate the sysconfig build-time data there.
 # pybuilddir.txt contains the name of the build dir and is used for
 # sys.path fixup -- see Modules/getpath.c.
+# Since this step runs before shared modules are built, try to avoid bootstrap
+# problems by creating a dummy pybuilddir.txt just to allow interpreter
+# initialization to succeed.  It will be overwritten by generate-posix-vars
+# or removed in case of failure.
 pybuilddir.txt: $(BUILDPYTHON)
-		$(RUNSHARED) $(PYTHON_FOR_BUILD) -S -m sysconfig --generate-posix-vars
+	@echo "none" > ./pybuilddir.txt
+	$(RUNSHARED) $(PYTHON_FOR_BUILD) -S -m sysconfig --generate-posix-vars ;\
+	if test $$? -ne 0 ; then \
+		echo "generate-posix-vars failed" ; \
+		rm -f ./pybuilddir.txt ; \
+		exit 1 ; \
+	fi
 
 # Build the shared modules
 # Under GNU make, MAKEFLAGS are sorted and normalized; the 's' for
@@ -835,12 +848,31 @@ memtest:	all platform
 		$(TESTPYTHON) $(TESTPROG) $(MEMTESTOPTS)
 
 # Install everything
-install:	frameworkinstallstructure altinstall bininstall maninstall frameworkinstallmaclib frameworkinstallapps frameworkinstallunixtools
+install:	 commoninstall bininstall maninstall 
+	if test "x$(ENSUREPIP)" != "xno"  ; then \
+		case $(ENSUREPIP) in \
+			upgrade) ensurepip="--upgrade" ;; \
+			install|*) ensurepip="" ;; \
+		esac; \
+		$(RUNSHARED) $(PYTHON_FOR_BUILD) -m ensurepip \
+			$$ensurepip --root=$(DESTDIR)/ ; \
+	fi
 
 # Install almost everything without disturbing previous versions
-altinstall:	frameworkinstallstructure bininstall maninstall altbininstall libinstall inclinstall \
-				libainstall altmaninstall \
-                sharedinstall oldsharedinstall frameworkinstallmaclib frameworkinstallapps frameworkaltinstallunixtools
+altinstall:	commoninstall
+	if test "x$(ENSUREPIP)" != "xno"  ; then \
+		case $(ENSUREPIP) in \
+			upgrade) ensurepip="--altinstall --upgrade --no-default-pip" ;; \
+			install|*) ensurepip="--altinstall --no-default-pip" ;; \
+		esac; \
+		$(RUNSHARED) $(PYTHON_FOR_BUILD) -m ensurepip \
+			$$ensurepip --root=$(DESTDIR)/ ; \
+	fi
+
+commoninstall:	 \
+		altbininstall libinstall inclinstall libainstall \
+		sharedinstall oldsharedinstall altmaninstall \
+		
 
 # Install shared libraries enabled by Setup
 DESTDIRS=	$(exec_prefix) $(LIBDIR) $(BINLIBDEST) $(DESTSHARED)
@@ -930,7 +962,7 @@ maninstall:	altmaninstall
 	(cd $(DESTDIR)$(MANDIR)/man1; $(LN) -s python2.1 python.1)
 
 # Install the library
-PLATDIR=	plat-$(MACHDEP)
+PLATDIR=	plat-darwin
 EXTRAPLATDIR= $(PLATMACDIRS)
 EXTRAMACHDEPPATH=$(PLATMACPATH)
 MACHDEPS=	$(PLATDIR) $(EXTRAPLATDIR)
@@ -946,13 +978,14 @@ PLATMACDIRS= plat-mac plat-mac/Carbon plat-mac/lib-scriptpackages \
 	plat-mac/lib-scriptpackages/Terminal
 PLATMACPATH=:plat-mac:plat-mac/lib-scriptpackages
 LIBSUBDIRS=	lib-tk lib-tk/test lib-tk/test/test_tkinter \
-		lib-tk/test/test_ttk site-packages test test/audiodata test/data \
-		test/cjkencodings test/decimaltestdata test/xmltestdata \
+		lib-tk/test/test_ttk site-packages test test/audiodata test/capath \
+		test/data test/cjkencodings test/decimaltestdata test/xmltestdata \
 		test/imghdrdata \
 		test/subprocessdata \
 		test/tracedmodules \
 		encodings compiler hotshot \
 		email email/mime email/test email/test/data \
+		ensurepip ensurepip/_bundled \
 		json json/tests \
 		sqlite3 sqlite3/test \
 		logging bsddb bsddb/test csv importlib wsgiref \
@@ -1376,7 +1409,7 @@ Python/thread.o:  $(srcdir)/Python/thread_atheos.h $(srcdir)/Python/thread_beos.
 .PHONY: frameworkinstall frameworkinstallframework frameworkinstallstructure
 .PHONY: frameworkinstallmaclib frameworkinstallapps frameworkinstallunixtools
 .PHONY: frameworkaltinstallunixtools recheck autoconf clean clobber distclean
-.PHONY: smelly funny patchcheck touch altmaninstall
+.PHONY: smelly funny patchcheck touch altmaninstall commoninstall
 .PHONY: gdbhooks
 
 # IF YOU PUT ANYTHING HERE IT WILL GO AWAY

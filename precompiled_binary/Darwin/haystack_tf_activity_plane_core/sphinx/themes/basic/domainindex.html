@@ -4,7 +4,7 @@
 
     Template for domain indices (module index, ...).
 
-    :copyright: Copyright 2007-2014 by the Sphinx team, see AUTHORS.
+    :copyright: Copyright 2007-2015 by the Sphinx team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 #}
 {%- extends "layout.html" %}
@@ -44,7 +44,7 @@
            {%- endif %}</td>
        <td>{% if grouptype == 2 %}&nbsp;&nbsp;&nbsp;{% endif %}
        {% if page %}<a href="{{ pathto(page) }}#{{ anchor }}">{% endif -%}
-       <tt class="xref">{{ name|e }}</tt>
+       <code class="xref">{{ name|e }}</code>
        {%- if page %}</a>{% endif %}
      {%- if extra %} <em>({{ extra|e }})</em>{% endif -%}
      </td><td>{% if qualifier %}<strong>{{ qualifier|e }}:</strong>{% endif %}

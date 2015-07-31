@@ -24,7 +24,7 @@
 # Colors: for the color values below, you can either use - a
 # matplotlib color string, such as r, k, or b - an rgb tuple, such as
 # (1.0, 0.5, 0.0) - a hex string, such as ff00ff or #ff00ff - a scalar
-# grayscale intensity such as 0.75 - a legal html color name, eg red,
+# grayscale intensity such as 0.75 - a legal html color name, e.g., red,
 # blue, darkslategray
 
 #### CONFIGURATION BEGINS HERE
@@ -68,7 +68,7 @@ backend      : macosx
 
 #interactive  : False
 #toolbar      : toolbar2   # None | toolbar2  ("classic" is deprecated)
-#timezone     : UTC        # a pytz timezone string, eg US/Central or Europe/Paris
+#timezone     : UTC        # a pytz timezone string, e.g., US/Central or Europe/Paris
 
 # Where your matplotlib data lives if you installed to a non-default
 # location.  This is where the matplotlib fonts, bitmaps, etc reside
@@ -255,10 +255,10 @@ backend      : macosx
                                    # separator in the fr_FR locale.
 #axes.formatter.use_mathtext : False # When True, use mathtext for scientific
                                      # notation.
-#axes.formatter.useoffset      : True    # If True, the tick label formatter 
-                                         # will default to labeling ticks relative 
-                                         # to an offset when the data range is very 
-                                         # small compared to the minimum absolute 
+#axes.formatter.useoffset      : True    # If True, the tick label formatter
+                                         # will default to labeling ticks relative
+                                         # to an offset when the data range is very
+                                         # small compared to the minimum absolute
                                          # value of the data.
 
 #axes.unicode_minus  : True    # use unicode for the minus symbol
@@ -320,7 +320,7 @@ backend      : macosx
 #legend.columnspacing : 2.    # the border between the axes and legend edge in fraction of fontsize
 #legend.shadow        : False
 #legend.frameon       : True   # whether or not to draw a frame around legend
-#legend.framealpha    : 1.0    # opacity of of legend frame
+#legend.framealpha    : None    # opacity of of legend frame
 #legend.scatterpoints : 3 # number of scatter points
 
 ### FIGURE
@@ -399,7 +399,7 @@ backend      : macosx
 #savefig.jpeg_quality: 95       # when a jpeg is saved, the default quality parameter.
 #savefig.directory   : ~        # default directory in savefig dialog box,
                                 # leave empty to always use current working directory
-#savefig.transparent : False    # setting that controls whether figures are saved with a 
+#savefig.transparent : False    # setting that controls whether figures are saved with a
                                 # transparent background by default
 
 # tk backend params
@@ -445,7 +445,7 @@ backend      : macosx
 #
 # You can override the rc default verbosity from the command line by
 # giving the flags --verbose-LEVEL where LEVEL is one of the legal
-# levels, eg --verbose-helpful.
+# levels, e.g., --verbose-helpful.
 #
 # You can access the verbose instance in your code
 #   from matplotlib import verbose.
@@ -489,5 +489,5 @@ backend      : macosx
                                    # $PATH is searched
 #animation.mencoder_args: ''       # Additional arguments to pass to mencoder
 #animation.convert_path: 'convert' # Path to ImageMagick's convert binary.
-                                   # On Windows use the full path since convert 
+                                   # On Windows use the full path since convert
                                    # is also the name of a system tool.
