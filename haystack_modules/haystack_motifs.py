@@ -335,6 +335,7 @@ def run_haystack():
     parser.add_argument('--smooth_size',type=int, help='Size in bp for the smoothing window (default: internal_window_length/4)')
     parser.add_argument('--gene_annotations_filename',type=str, help='Optional gene annotations file from the UCSC Genome Browser in bed format to map each region to its closes gene')
     parser.add_argument('--gene_ids_to_names_filename',type=str, help='Optional mapping file between gene ids to gene names (relevant only if --gene_annotation_filename is used)')
+    parser.add_argument('--n_processes',type=int, help='Specify the number of processes to use. The default is #cores available.',default=multiprocessing.cpu_count())
     parser.add_argument('--version',help='Print version and exit.',action='version', version='Version %.1f' % HAYSTACK_VERSION)
 
     args = parser.parse_args()
@@ -499,7 +500,15 @@ def run_haystack():
             
 
     info('Extracting Motifs in target coordinates')
-    positive_matrix,motifs_profiles_in_sequences, idxs_seqs_with_motif,motif_coords_in_seqs_with_motif,motif_names,motif_ids=ParallelFimoScanning(target_coords,meme_motifs_filename,genome,nucleotide_bg_filename,temp_directory=temp_directory,p_value=p_value,mask_repetitive=mask_repetitive,window_length=window_length,internal_window_length=internal_window_length)
+    positive_matrix,motifs_profiles_in_sequences, idxs_seqs_with_motif,motif_coords_in_seqs_with_motif,motif_names,motif_ids=ParallelFimoScanning(target_coords,
+                                                                                                                                                  meme_motifs_filename,
+                                                                                                                                                  genome,nucleotide_bg_filename,
+                                                                                                                                                  temp_directory=temp_directory,
+                                                                                                                                                  p_value=p_value,
+                                                                                                                                                  mask_repetitive=mask_repetitive,
+                                                                                                                                                  window_length=window_length,
+                                                                                                                                                  internal_window_length=internal_window_length,
+                                                                                                                                                  num_consumers=n_processes)
     n_target_coordinates=len(target_coords) #fix for the bootstrap!
 
 
@@ -605,7 +614,15 @@ def run_haystack():
             debug('After bootstrap:\n\ttarget:%s\n\tbg    :%s' % (target_hist,np.histogram(c_g_content_bg,bins)[0]))
 
     info('Extracting Motifs in background coordinates')
-    negative_matrix,motifs_profiles_in_bg,idxs_seqs_with_motif_bg=ParallelFimoScanning(bg_coords,meme_motifs_filename,genome,nucleotide_bg_filename,temp_directory=temp_directory,p_value=p_value,mask_repetitive=mask_repetitive,window_length=window_length,internal_window_length=internal_window_length)[0:3]
+    negative_matrix,motifs_profiles_in_bg,idxs_seqs_with_motif_bg=ParallelFimoScanning(bg_coords,
+                                                                                       meme_motifs_filename,
+                                                                                       genome,nucleotide_bg_filename,
+                                                                                       temp_directory=temp_directory,
+                                                                                       p_value=p_value,
+                                                                                       mask_repetitive=mask_repetitive,
+                                                                                       window_length=window_length,
+                                                                                       internal_window_length=internal_window_length,
+                                                                                       num_consumers=n_processes)[0:3]
 
     #allocate date for reports
     N_MOTIFS=len(motif_ids)
