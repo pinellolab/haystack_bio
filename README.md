@@ -123,7 +123,7 @@ sudo ln -s /opt/X11 /usr/X11
 sudo ln -s /opt/X11 /usr/X11R6
 ```
 
-**CYGWIN (not officialy supported)**
+**CYGWIN (not officially supported)**
 
 On Cygwin, please be sure to have the following packages installed **before** running the setup:
 ```
