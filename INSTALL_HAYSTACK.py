@@ -1,4 +1,5 @@
 import os
+import time
 import pickle as cp
 import glob
 import subprocess as sb
@@ -136,6 +137,8 @@ def check_ghostscript():
             if CURRENT_PLATFORM=='Linux':
                 print('Ok be patient!')
                 shutil.copy2('dependencies/Linux/gs',BIN_FOLDER)
+                time.sleep(3) # we need some time to allow the NFS to sync the file... 		
+		sb.call('chmod +x %s' % os.path.join(BIN_FOLDER,'gs'),shell=True)
                
                 #if not check_installation(os.path.join(BIN_FOLDER,'gs'),'Ghostscript'):
                 #    sys.exit(1)
@@ -150,7 +153,7 @@ def check_ghostscript():
         
 CURRENT_PLATFORM=platform.system().split('_')[0]
 
-if CURRENT_PLATFORM not in  ['Linux','Darwin'] and platform.architecture()!='64bit':
+if CURRENT_PLATFORM not in  ['Linux','Darwin','CYGWIN'] and platform.architecture()!='64bit':
     print 'Sorry your platform is not supported\n Haystack is supported only on 64bit versions of Linux or OSX '
     sys.exit(1)
     
