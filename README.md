@@ -59,7 +59,7 @@ The current version is compatible only with Unix like operating systems on 64 bi
 - Debian 6.0
 - Ubuntu 12.04 and 14.04 LTS
 - OSX Maverick and Mountain Lion
-- Cygwin x86_64 (1.7) on Windows 7/8 64 bit
+
  
 **If you have an outdated Linux distribution and have problem running Haystack you should download instead this setup file:**
 
@@ -104,18 +104,6 @@ Operating System Notes
   haystack_pipeline samples_names.txt hg19
   ```
 
-Alternatively you can quickly fire and use an Amazon Machine Image (AMI) with everything preinstalled and configured to use the Hyastack pipeline. In particular, you can find and launch the Haystack AMI from here: 
-
-https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LaunchInstanceWizard:
-
-Click on Community AMIs and search for: **Haystack Pipeline** or **ami-cc1a4ea4**.
-
-Instructions on how to launch an AMI with pictures can be found in the bioconductor website: 
-
-http://www.bioconductor.org/help/bioconductor-cloud-ami/
-
-See in particular the sections: _How To Use It_ and _Launching the AMI_
-
 **Apple OSX**
 
 To install HAYSTACK on OSX you need the _Command Line Tools_ (usually shipped with Xcode). 
@@ -135,7 +123,7 @@ sudo ln -s /opt/X11 /usr/X11
 sudo ln -s /opt/X11 /usr/X11R6
 ```
 
-**CYGWIN**
+**CYGWIN (not officially supported)**
 
 On Cygwin, please be sure to have the following packages installed **before** running the setup:
 ```
