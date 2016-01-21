@@ -168,7 +168,7 @@ sub create_template {
 
     } elsif ($format eq "PDF"){
 #	print("outfile = $outfile\n");
-	my $program = "| $gsprog -sOutputFile=$outfile -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -q -r$res -dDEVICEWIDTHPOINTS=$width -dDEVICEHEIGHTPOINTS=$height -dEmbedAllFonts=true $antialias -dSAFER -dBATCH  -dNOPAUSE -_";
+	my $program = "| $gsprog -sOutputFile=$outfile -sDEVICE=pdfwrite -dPDFSETTINGS=/screen -q -r$res -dDEVICEWIDTHPOINTS=$width -dDEVICEHEIGHTPOINTS=$height -dEmbedAllFonts=true $antialias -dSAFER -dBATCH  -dNOPAUSE -_";
 	open(WRITEME, $program);
 	print WRITEME "$eps";
 	close (WRITEME);

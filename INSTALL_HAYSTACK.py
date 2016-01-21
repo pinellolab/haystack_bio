@@ -50,79 +50,70 @@ def which(program):
 
     return None
 
-def check_installation(filename,tool_name):
+def check_installation(filename,tool_name,verbose=False):
     if os.path.isfile(filename):
-        print('%s was succesfully installed ' % tool_name)
+        if verbose:
+            print('%s is/was succesfully installed ' % tool_name)
         return True
     else:
-        print 'Sorry I cannot install %s for you, install manually and try again.' % tool_name
+        if verbose:
+            print 'Sorry I cannot install %s for you, check you have all the required dependencies and and try again to install HAYSTACK.' % tool_name
         return False
     
 
 
 def check_fimo():
-    if which('fimo') and  '--thresh' in sb.Popen('fimo ',stdout=sb.PIPE,stderr=sb.PIPE,shell=True).communicate()[1]:
-            print '\nFIMO is present!'
-            return
-    else:
-        print '\nHAYSTACK requires a recent version FIMO from the MEME suite(>=4.9.1): http://ebi.edu.au/ftp/software/MEME/index.html'
-        if query_yes_no('Should I install FIMO for you?'):
-            print('Ok be patient!')
-            os.chdir('dependencies/meme_4.9.1/')
+            if not check_installation(os.path.join(BIN_FOLDER,'fimo'),'FIMO',verbose=False):
+                print '\nHAYSTACK requires to install FIMO from the MEME suite(4.9.1): http://ebi.edu.au/ftp/software/MEME/index.html'
+                print('Please be patient!')
+                os.chdir('dependencies/meme_4.9.1/')
 
-            cmd_cfg='./configure --prefix=%s --enable-build-libxml2 --enable-build-libxslt ' % INSTALLATION_PATH
-            if CURRENT_PLATFORM=='CYGWIN':
-                cmd_cfg+=' --build=x86_64-cygwin'
+                cmd_cfg='./configure --prefix=%s --enable-build-libxml2 --enable-build-libxslt ' % INSTALLATION_PATH
+                if CURRENT_PLATFORM=='CYGWIN':
+                    cmd_cfg+=' --build=x86_64-cygwin'
 
-            print cmd_cfg    
-            sb.call(cmd_cfg,shell=True)
-            #sb.call('make clean',shell=True)
-            sb.call('make && make install',shell=True)
-            sb.call('make clean',shell=True)
-            os.chdir('..')
-            os.chdir('..')   
-            #installa fimo
-            print('FIMO should be installed (please check the output)')
+                print cmd_cfg    
+                sb.call(cmd_cfg,shell=True)
+                #sb.call('make clean',shell=True)
+                sb.call('make && make install',shell=True)
+                sb.call('make clean',shell=True)
+                os.chdir('..')
+                os.chdir('..')   
+                #installa fimo
+                print('FIMO should be installed (please check the output)')
             
-    if not check_installation(os.path.join(BIN_FOLDER,'fimo'),'FIMO'):
-        sys.exit(1)
+    	    if not check_installation(os.path.join(BIN_FOLDER,'fimo'),'FIMO'):
+	    	sys.exit(1)
 
             
 def check_samtools():
-    if which('samtools'):
-        print '\nSAMTOOLS is present!'
-        return
-    else:
-        print '\nHAYSTACK requires SAMTOOLS:http://sourceforge.net/projects/samtools/files/samtools/0.1.19/'
-        if query_yes_no('Should I install SAMTOOLS for you?'):
-            print('Ok be patient!')
-            os.chdir('dependencies/samtools-0.1.19/')
-            sb.call('make clean',shell=True)
-            if CURRENT_PLATFORM=='CYGWIN':
-                sb.call('make --makefile=Makefile.cygwin',shell=True)
-            else:
-                sb.call('make',shell=True)
-            try:
-                shutil.copy2('samtools',BIN_FOLDER)
-            except:
-                pass
-            sb.call('make clean',shell=True)
-            os.chdir('..')
-            os.chdir('..')         
-            
-    if not check_installation(os.path.join(BIN_FOLDER,'samtools'),'SAMTOOLS'):
-                sys.exit(1)
+            if not check_installation(os.path.join(BIN_FOLDER,'samtools'),'SAMTOOLS',verbose=False):
+                print '\nHAYSTACK requires to install SAMTOOLS 0.1.19:http://sourceforge.net/projects/samtools/files/samtools/0.1.19/'
+                print('Please be patient!')
+                os.chdir('dependencies/samtools-0.1.19/')
+                sb.call('make clean',shell=True)
+                if CURRENT_PLATFORM=='CYGWIN':
+                    sb.call('make --makefile=Makefile.cygwin',shell=True)
+                else:
+                    sb.call('make',shell=True)
+                try:
+                    shutil.copy2('samtools',BIN_FOLDER)
+                except:
+                    pass
+                sb.call('make clean',shell=True)
+                os.chdir('..')
+                os.chdir('..')         
+                
+            if not check_installation(os.path.join(BIN_FOLDER,'samtools'),'SAMTOOLS'):
+            	sys.exit(1)
             
 
                 
 def check_bedtools():
-    if which('bedtools'):
-        print '\nBEDTOOLS is present!'
-        return
-    else:
-        print '\nHAYSTACK requires BEDTOOLS:https://github.com/arq5x/bedtools2/releases/tag/v2.20.1'
-        if query_yes_no('Should I install BEDTOOLS for you?'):
-            print('Ok be patient!')
+        
+        if not check_installation(os.path.join(BIN_FOLDER,'bedtools'),'BEDTOOLS',verbose=False):
+            print '\nHAYSTACK requires to install BEDTOOLS:https://github.com/arq5x/bedtools2/releases/tag/v2.20.1'
+            print('Please be patient!')
             os.chdir('dependencies/bedtools2-2.20.1/')
             sb.call('make clean',shell=True)
             sb.call('make',shell=True)
@@ -132,21 +123,15 @@ def check_bedtools():
             os.chdir('..')
             os.chdir('..')
             
-    if not check_installation(os.path.join(BIN_FOLDER,'bedtools'),'BEDTOOLS'):
-        sys.exit(1)
+        if not check_installation(os.path.join(BIN_FOLDER,'bedtools'),'BEDTOOLS'):
+            sys.exit(1)
 
             
 def check_ghostscript():
-     if which('gs'):
-        print '\nGhostscript is present!'
-        return 
-     else:
-        print '\nHAYSTACK requires Ghostscript'
-
-        if CURRENT_PLATFORM=='CYGWIN':
-            print 'Plase run the CYGWIN setup to install the ghostscript package'
         
-        if query_yes_no('Should I install Ghostscript for you?'):
+
+        if (not check_installation(os.path.join(BIN_FOLDER,'gs'),'Ghostscript',verbose=False) and CURRENT_PLATFORM=='Linux') or ( CURRENT_PLATFORM=='Darwin' and which('gs') is None):
+            print '\nHAYSTACK requires to install Ghostscript 9.14'
             
             if CURRENT_PLATFORM=='Linux':
                 print('Ok be patient!')
@@ -160,16 +145,12 @@ def check_ghostscript():
                 print 'To install Ghostscript I need admin privileges.'
                 sb.call('sudo installer -pkg dependencies/Darwin/Ghostscript-9.14.pkg -target /',shell=True)
 
-     if which('gs'):
-        print('%Ghostscript was succesfully installed ')
-     else:
-        print 'Sorry I cannot install  Ghostscript for you, install manually and try again.'
-        sys.exit(1)
-
+            elif CURRENT_PLATFORM=='CYGWIN':
+               print 'You need to install manually Ghostscript!' 
         
 CURRENT_PLATFORM=platform.system().split('_')[0]
 
-if CURRENT_PLATFORM not in  ['Linux','Darwin','CYGWIN'] and platform.architecture()!='64bit':
+if CURRENT_PLATFORM not in  ['Linux','Darwin'] and platform.architecture()!='64bit':
     print 'Sorry your platform is not supported\n Haystack is supported only on 64bit versions of Linux or OSX '
     sys.exit(1)
     
