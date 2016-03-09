@@ -119,6 +119,9 @@
 /* Define to 1 if you have the `clock' function. */
 #define HAVE_CLOCK 1
 
+/* Define if the C compiler supports computed gotos. */
+#define HAVE_COMPUTED_GOTOS 1
+
 /* Define to 1 if you have the `confstr' function. */
 #define HAVE_CONFSTR 1
 
@@ -1069,6 +1072,9 @@
 
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 /* #undef TM_IN_SYS_TIME */
+
+/* Define if you want to use computed gotos in ceval.c. */
+/* #undef USE_COMPUTED_GOTOS */
 
 /* Enable extensions on AIX 3, Interix.  */
 #ifndef _ALL_SOURCE

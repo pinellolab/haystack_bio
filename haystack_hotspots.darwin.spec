@@ -19,7 +19,7 @@ a = Analysis(['haystack_modules/haystack_hotspots.py'],
              hiddenimports=['scipy.special._ufuncs_cxx'],
              hookspath=None,
              runtime_hooks=None,
-             excludes=['IPython','jinja2']	)
+             excludes=['IPython','jinja2','PyQt4']	)
 
 a.datas += extra_datas('haystack_modules')             
              

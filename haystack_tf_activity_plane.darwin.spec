@@ -4,7 +4,7 @@ a = Analysis(['haystack_modules/haystack_tf_activity_plane.py'],
              hiddenimports=[],
              hookspath=None,
              runtime_hooks=None,
-	     excludes=['IPython','jinja2']	)
+	     excludes=['IPython','jinja2','PyQt4']	)
 
 pyz = PYZ(a.pure)
 exe = EXE(pyz,

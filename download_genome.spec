@@ -3,7 +3,8 @@ a = Analysis(['haystack_modules/download_genome.py'],
              pathex=None,
              hiddenimports=['bx.seq.twobit','bx','shutil'],
              hookspath=None,
-             runtime_hooks=None)
+             runtime_hooks=None,
+             excludes=['IPython','PyQt4'])
 
 pyz = PYZ(a.pure)
 exe = EXE(pyz,

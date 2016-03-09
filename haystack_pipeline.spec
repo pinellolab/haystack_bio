@@ -19,7 +19,8 @@ a = Analysis(['haystack_modules/haystack_pipeline.py'],
              pathex=None,
              hiddenimports=None,
              hookspath=None,
-             runtime_hooks=None)
+             runtime_hooks=None,
+             excludes=['IPython','PyQt4'])
 
 a.datas += extra_datas('haystack_modules')
 

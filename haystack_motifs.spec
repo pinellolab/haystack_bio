@@ -18,7 +18,8 @@ a = Analysis(['haystack_modules/haystack_motifs.py'],
              pathex=None,
              hiddenimports=['scipy.special._ufuncs_cxx'],
              hookspath=None,
-             runtime_hooks=None)
+             runtime_hooks=None,
+             excludes=['IPython','PyQt4'])
 
 a.datas += extra_datas('haystack_modules')
 

@@ -108,7 +108,6 @@ def check_samtools():
             if not check_installation(os.path.join(BIN_FOLDER,'samtools'),'SAMTOOLS'):
             	sys.exit(1)
             
-
                 
 def check_bedtools():
         
@@ -270,11 +269,14 @@ elif shell=='tcsh':
 
 elif shell=='csh':
     shell_profile='.cshrc'
+    
+else:
+	shell='bash'
 
 if shell in ['bash', 'sh','ksh']:
-    line_to_add='export PATH=%s:$PATH' % BIN_FOLDER
+    line_to_add='export PATH=$PATH:%s' % BIN_FOLDER
 elif shell in ['tcsh','csh']:
-    line_to_add= 'set path = ( %s $path)' % BIN_FOLDER
+    line_to_add= 'set path = ($path %s )' % BIN_FOLDER
     
 cmd_add_path="echo '%s'  >> ~/%s" % (line_to_add,shell_profile)
 
@@ -292,9 +294,8 @@ else:
     print '\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!'    
 
 #COPY current env for subprocess
-os.environ['PATH']=('%s:' % BIN_FOLDER) +os.environ['PATH']
+os.environ['PATH']=('%s:' % BIN_FOLDER) +os.environ['PATH'] #here the order is important
 system_env=os.environ
 cp.dump(system_env,open(os.path.join(dest,'system_env.pickle'),'w+'))
 
-    
             
