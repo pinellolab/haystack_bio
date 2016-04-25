@@ -52,9 +52,9 @@ def main():
     parser.add_argument('target_cell_type', type=str,  help='The sample name to use as a target for the analysis')
     
     #optional
-    parser.add_argument('--motif_mapping_filename', type=str, help='Custom motif to gene mapping file (the default is for JASPAR CORE 2016 database)',default='')
-    parser.add_argument('--output_directory',type=str, help='Output directory (default: current directory)',default='')
-    parser.add_argument('--name',  help='Define a custom output filename for the report', default='')
+    parser.add_argument('--motif_mapping_filename', type=str, help='Custom motif to gene mapping file (the default is for JASPAR CORE 2016 database)')
+    parser.add_argument('--output_directory',type=str, help='Output directory (default: current directory)')
+    parser.add_argument('--name',  help='Define a custom output filename for the report')
     parser.add_argument('--plot_all',  help='Disable the filter on the TF activity and correlation (default z-score TF>0 and rho>0.3)',action='store_true')
     parser.add_argument('--version',help='Print version and exit.',action='version', version='Version %s' % HAYSTACK_VERSION)
     
@@ -74,7 +74,7 @@ def main():
     if motif_mapping_filename:
          check_file(motif_mapping_filename)
     else:
-        motif_mapping_filename=os.path.join(determine_path('motif_databases'),'JASPAR_CORE_REDUNDANT_2016_vertebrates_mapped_to_gene_human_mouse.txt')
+        motif_mapping_filename=os.path.join(determine_path('motif_databases'),'JASPAR_CORE_2016_vertebrates_mapped_to_gene_human_mouse.txt')
         
     if name:
         directory_name='HAYSTACK_TFs_ACTIVITY_PLANES_on_'+name

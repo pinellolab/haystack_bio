@@ -37,12 +37,25 @@ def main():
     parser.add_argument('--z_score_high', type=float,help='z-score value to select the specific regions(default: 1.5)',default=1.5)
     parser.add_argument('--z_score_low', type=float,help='z-score value to select the not specific regions(default: 0.25)',default=0.25)
     parser.add_argument('--th_rpm',type=float,help='Percentile on the signal intensity to consider for the hotspots (default: 99)', default=99)
+    parser.add_argument('--meme_motifs_filename', type=str, help='Motifs database in MEME format (default JASPAR CORE 2016)')
+    parser.add_argument('--motif_mapping_filename', type=str, help='Custom motif to gene mapping file (the default is for JASPAR CORE 2016 database)')
+    parser.add_argument('--plot_all',  help='Disable the filter on the TF activity and correlation (default z-score TF>0 and rho>0.3)',action='store_true')
     parser.add_argument('--version',help='Print version and exit.',action='version', version='Version %s' % HAYSTACK_VERSION)
     
     args = parser.parse_args()
     args_dict=vars(args)
     for key,value in args_dict.items():
             exec('%s=%s' %(key,repr(value)))
+            
+            
+            
+    if meme_motifs_filename:
+        check_file(meme_motifs_filename)
+    
+    if motif_mapping_filename:
+        check_file(motif_mapping_filename)
+        
+    
     
     if input_is_bigwig:
             extension_to_check='.bw'
@@ -175,6 +188,11 @@ def main():
         #bg_regions_filename=glob.glob(specific_regions_filename.replace('Regions_specific','Background')[:-11]+'*.bed')[0] #lo zscore e' diverso...
         #print specific_regions_filename,bg_regions_filename
         cmd_to_run='haystack_motifs %s %s --bed_bg_filename %s --output_directory %s --name %s' % (specific_regions_filename,genome_name, bg_regions_filename,motif_directory, sample_name)
+        
+        if meme_motifs_filename:
+             cmd_to_run+=' --meme_motifs_filename %s' % meme_motifs_filename
+            
+        
         print cmd_to_run
         sb.call(cmd_to_run,shell=True,env=system_env)
     
@@ -183,6 +201,14 @@ def main():
                 motifs_output_folder=os.path.join(motif_directory,'HAYSTACK_MOTIFS_on_%s' % sample_name) 
                 if os.path.exists(motifs_output_folder):
                     cmd_to_run='haystack_tf_activity_plane %s %s %s --output_directory %s'  %(motifs_output_folder,sample_names_tf_activity_filename,sample_name,tf_activity_directory)
+                    
+                    if motif_mapping_filename:
+                        cmd_to_run+=' --motif_mapping_filename %s' %  motif_mapping_filename       
+                    
+                    if plot_all:
+                        cmd_to_run+=' --plot_all'
+                        
+                    
                     print cmd_to_run
                     sb.call(cmd_to_run,shell=True,env=system_env) 
          

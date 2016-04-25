@@ -882,8 +882,8 @@ class Fimo:
                     motif_name=self.motif_id_to_name[motif_id]
                     
                     if report_mode=='full':
-                        c_start=float(fields[2])
-                        c_end=float(fields[3])
+                        c_start=int(fields[2])
+                        c_end=int(fields[3])
                         strand=fields[4]
                         score=float(fields[5])
                         p_value=float(fields[6])

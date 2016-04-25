@@ -211,15 +211,18 @@ def ParallelFimoScanning(target_coords,meme_motifs_filename,genome,nucleotide_bg
         idx_seq,row= results.get()
         motif_in_center=set()
         for motif in row:
-            motifs_profiles_in_sequences[motif['id']][motif['start']:motif['end']]+=1.0
             
-            if motif['start']>=internal_bpstart and motif['end']<=internal_bpend: #keep track only if is in the internal window!
-                idxs_seqs_with_motif[motif['id']].add(idx_seq)
-                motifs_in_sequences_matrix[idx_seq,fimo.motif_id_to_index[motif['id']]]=+1
-                motif_in_center.add(motif['id'])
-
-                motif_coords_in_seqs_with_motif[motif['id']][original_target_coords[idx_seq]].append((int(motif['start']+target_coords[idx_seq].bpstart-1),int(motif['end']+target_coords[idx_seq].bpstart-1) ))
+            try:
+                motifs_profiles_in_sequences[motif['id']][motif['start']:motif['end']]+=1.0
                 
+                if motif['start']>=internal_bpstart and motif['end']<=internal_bpend: #keep track only if is in the internal window!
+                    idxs_seqs_with_motif[motif['id']].add(idx_seq)
+                    motifs_in_sequences_matrix[idx_seq,fimo.motif_id_to_index[motif['id']]]=+1
+                    motif_in_center.add(motif['id'])
+    
+                    motif_coords_in_seqs_with_motif[motif['id']][original_target_coords[idx_seq]].append((int(motif['start']+target_coords[idx_seq].bpstart-1),int(motif['end']+target_coords[idx_seq].bpstart-1) ))
+            except:
+                print motif['id'],motif['start'],motif['end']
             
 
     return motifs_in_sequences_matrix,motifs_profiles_in_sequences,idxs_seqs_with_motif,motif_coords_in_seqs_with_motif,fimo.motif_names, fimo.motif_ids
@@ -301,7 +304,7 @@ def main():
     if meme_motifs_filename:
         check_file(meme_motifs_filename)
     else:
-        meme_motifs_filename=os.path.join(determine_path('motif_databases'),'JASPAR_CORE_REDUNDANT_2016_vertebrates.meme')
+        meme_motifs_filename=os.path.join(determine_path('motif_databases'),'JASPAR_CORE_2016_vertebrates.meme')
         
     annotation_directory=determine_path('gene_annotations')
     if gene_annotations_filename:

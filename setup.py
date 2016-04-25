@@ -201,9 +201,9 @@ def check_ghostscript(CURRENT_PLATFORM):
                 sb.call('sudo installer -pkg dependencies/Darwin/Ghostscript-9.14.pkg -target /',shell=True)
 
 
-def install_dependencies():
+def install_dependencies(CURRENT_PLATFORM):
 
-   CURRENT_PLATFORM=platform.system().split('_')[0]
+
 
    if CURRENT_PLATFORM not in  ['Linux','Darwin'] and platform.architecture()!='64bit':
 		sys.stdout.write('Sorry your platform is not supported\n CRISPResso is supported only on 64bit versions of Linux or OSX ')
@@ -229,7 +229,7 @@ def install_dependencies():
    check_samtools()
 
 
-def copy_data():
+def copy_data(CURRENT_PLATFORM):
     
    
     #coping data in place
@@ -241,6 +241,21 @@ def copy_data():
     copy_tree(*d_path('gene_annotations'))
     copy_tree(*d_path('motif_databases'))
     copy_tree(*d_path('extra'))
+    
+    
+    if CURRENT_PLATFORM=='Linux':
+        src='precompiled_binary/Linux/'
+    
+    elif CURRENT_PLATFORM=='Darwin':
+        src='precompiled_binary/Darwin/'
+
+    dest=BIN_FOLDER
+    src_files = os.listdir(src)
+    for file_name in src_files:
+        full_file_name = os.path.join(src, file_name)
+        if (os.path.isfile(full_file_name)):
+            shutil.copy(full_file_name, dest)      
+    
             
     #COPY current env for subprocess
     os.environ['PATH']=('%s:' % BIN_FOLDER) +os.environ['PATH'] #here the order is important
@@ -252,9 +267,11 @@ def copy_data():
 if __name__ == '__main__':
     if sys.argv[1]=='install':
         
+        CURRENT_PLATFORM=platform.system().split('_')[0]
+        
         sys.stdout.write ('\n\nInstalling dependencies...')
-        install_dependencies()
-        copy_data()
+        install_dependencies(CURRENT_PLATFORM)
+        copy_data(CURRENT_PLATFORM)
         sys.stdout.write ('\nInstalling Python package installed')
         main()
         sys.stdout.write ('\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!'    )
