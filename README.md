@@ -2,7 +2,7 @@ HAYSTACK
 ========
 Epigenetic Variability and Motif Analysis Pipeline       
 --------------------------------------------------
-**Current version**: 0.2
+**Current version**: 0.3.0
 
 Summary
 -------
@@ -34,25 +34,33 @@ We have run Haystack on several ENCODE datasets for which you can download the t
 3. Analysis on  10 RRBS-seq tracks of DNA-Methylation in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_Methylation.tar.gz
 4. Analysis on 17 ChIP-seq tracks of H3k27me3 in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27me3.tar.gz
 
-Installation
-------------
-First download and extract the setup zip file from here: 
+Installation and Requirements
+-----------------------------
+To install HAYSTACK, some dependencies must be installed before running the setup:
 
-https://github.com/lucapinello/HAYSTACK/archive/master.zip
+1) Python 2.7 Anaconda:  http://continuum.io/downloads
+2) Java: http://java.com/download
+3) C compiler / make. For Mac with OSX 10.7 or greater, open the terminal app and type and execute the command 'make', which will trigger the installation of OSX developer tools.Windows systems are not officially supported.
 
-or from here if you want preloaded the human and mouse genomes (hg19 and mm9):
 
-http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
+To install the package:
 
-From the Haystack-master folder created run the following command:
+1) Download the setup file: https://github.com/lucapinello/HAYSTACK/archive/master.zip and decompress it  
+    or from here if you want preloaded the human and mouse genomes (hg19 and mm9): http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
+2) Open a terminal window  and go to the folder where you have decompressed the zip file
+3) Type the command: 
 
-  <code>python INSTALL_HAYSTACK.py</code>
+  <code>python setup.py install</code>
 
-The script will try to install HAYSTACK in your HOME folder and will setup all the dependencies, eventually asking to install automatically the missing ones for you (you don't need root privileges to install packages in your home directory).
 
-If you want to install HAYSTACK on a different location run the following command:
+The setup will automatically create a folder in your home folder called HAYASTACK_dependencies (if this folder is deleted, HAYSTACK will not work!)! If you want to put the folder in a different location, you need to set the environment variable: CRISPRESSO_DEPENDENCIES_FOLDER. For example to put the folder in /home/lpinello/other_stuff you can write in the terminal *BEFORE* the installation:
 
-  <code>python INSTALL_HAYSTACK.py /MY_FOLDER </code>
+.. code:: bash
+        
+        export HAYSTACK_DEPENDENCIES_FOLDER=/home/lpinello/other_stuff
+
+The script will try to install HAYSTACK and will put all the required dependencied in a folder called HAYSTACK_DEPENDENCIES in your HOME folder. 
+
 
 The current version is compatible only with Unix like operating systems on 64 bit architectures and was tested on:
 - CentOS 6.5
@@ -61,10 +69,6 @@ The current version is compatible only with Unix like operating systems on 64 bi
 - OSX Maverick and Mountain Lion
 
  
-**If you have an outdated Linux distribution and have problem running Haystack you should download instead this setup file:**
-
-http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_old_architectures_setup_with_genomes.zip
-
 Operating System Notes
 ----------------------
 **UBUNTU (tested on 14.04 LTS) in the Amazon Web Service (AWS) Cloud**
@@ -92,7 +96,7 @@ Operating System Notes
   unzip haystack_setup_with_genomes.zip
   cd Haystack-master/
   sh create_binary_unix.sh #this command  is OPTIONAL and should be used ONLY if you want to recompile the binary
-  python INSTALL_HAYSTACK.py
+  python setup.py install
   ```
  
 5. Download and run the test dataset
@@ -123,27 +127,7 @@ sudo ln -s /opt/X11 /usr/X11
 sudo ln -s /opt/X11 /usr/X11R6
 ```
 
-**CYGWIN (not officially supported)**
 
-On Cygwin, please be sure to have the following packages installed **before** running the setup:
-```
-ghostscript
-python 
-python-numpy
-perl
-gcc-core
-gcc-g++
-make
-zlib-devel
-libfreetype6
-libfreetype-devel 
-liblapack-dev
-libpng-devel 
-python-gtk2.0 
-libgtk2.0-devel
-libuuid-devel
-libmysqlclient-dev
-```
 
 In addition, you need to install Java for Windows.
 

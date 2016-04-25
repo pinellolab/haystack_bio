@@ -1,0 +1,171 @@
+meme_xml_html-meme-print-html.o: meme-print-html.c libexslt/exslt.h \
+ ../src/libxml2/include/libxml/tree.h /usr/include/stdio.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
+ /usr/include/gnu/stubs-64.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.4.7/include/stddef.h \
+ /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+ /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.4.7/include/stdarg.h \
+ /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+ /usr/include/bits/stdio.h ../src/libxml2/include/libxml/xmlversion.h \
+ ../src/libxml2/include/libxml/xmlexports.h \
+ ../src/libxml2/include/libxml/xmlstring.h \
+ ../src/libxml2/include/libxml/xmlregexp.h \
+ ../src/libxml2/include/libxml/dict.h \
+ ../src/libxml2/include/libxml/xmlmemory.h \
+ ../src/libxml2/include/libxml/threads.h \
+ ../src/libxml2/include/libxml/globals.h \
+ ../src/libxml2/include/libxml/parser.h \
+ ../src/libxml2/include/libxml/hash.h \
+ ../src/libxml2/include/libxml/valid.h \
+ ../src/libxml2/include/libxml/xmlerror.h \
+ ../src/libxml2/include/libxml/list.h \
+ ../src/libxml2/include/libxml/xmlautomata.h \
+ ../src/libxml2/include/libxml/entities.h \
+ ../src/libxml2/include/libxml/encoding.h \
+ ../src/libxml2/include/libxml/xmlIO.h \
+ ../src/libxml2/include/libxml/SAX.h /usr/include/stdlib.h \
+ /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+ /usr/include/endian.h /usr/include/bits/endian.h \
+ /usr/include/bits/byteswap.h /usr/include/sys/types.h \
+ /usr/include/time.h /usr/include/sys/select.h /usr/include/bits/select.h \
+ /usr/include/bits/sigset.h /usr/include/bits/time.h \
+ /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+ /usr/include/alloca.h ../src/libxml2/include/libxml/xlink.h \
+ ../src/libxml2/include/libxml/SAX2.h \
+ ../src/libxml2/include/libxml/xpath.h libexslt/exsltexports.h \
+ libexslt/exsltconfig.h libxslt/xslt.h libxslt/xsltexports.h \
+ libxslt/xsltInternals.h libxslt/xsltlocale.h libxslt/numbersInternals.h \
+ libxslt/transform.h libxslt/xsltutils.h libxslt/xsltconfig.h \
+ libxslt/xsltInternals.h
+
+libexslt/exslt.h:
+
+../src/libxml2/include/libxml/tree.h:
+
+/usr/include/stdio.h:
+
+/usr/include/features.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-64.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.4.7/include/stddef.h:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.4.7/include/stdarg.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
+../src/libxml2/include/libxml/xmlversion.h:
+
+../src/libxml2/include/libxml/xmlexports.h:
+
+../src/libxml2/include/libxml/xmlstring.h:
+
+../src/libxml2/include/libxml/xmlregexp.h:
+
+../src/libxml2/include/libxml/dict.h:
+
+../src/libxml2/include/libxml/xmlmemory.h:
+
+../src/libxml2/include/libxml/threads.h:
+
+../src/libxml2/include/libxml/globals.h:
+
+../src/libxml2/include/libxml/parser.h:
+
+../src/libxml2/include/libxml/hash.h:
+
+../src/libxml2/include/libxml/valid.h:
+
+../src/libxml2/include/libxml/xmlerror.h:
+
+../src/libxml2/include/libxml/list.h:
+
+../src/libxml2/include/libxml/xmlautomata.h:
+
+../src/libxml2/include/libxml/entities.h:
+
+../src/libxml2/include/libxml/encoding.h:
+
+../src/libxml2/include/libxml/xmlIO.h:
+
+../src/libxml2/include/libxml/SAX.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/bits/waitflags.h:
+
+/usr/include/bits/waitstatus.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/bits/byteswap.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/time.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/select.h:
+
+/usr/include/bits/sigset.h:
+
+/usr/include/bits/time.h:
+
+/usr/include/sys/sysmacros.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/alloca.h:
+
+../src/libxml2/include/libxml/xlink.h:
+
+../src/libxml2/include/libxml/SAX2.h:
+
+../src/libxml2/include/libxml/xpath.h:
+
+libexslt/exsltexports.h:
+
+libexslt/exsltconfig.h:
+
+libxslt/xslt.h:
+
+libxslt/xsltexports.h:
+
+libxslt/xsltInternals.h:
+
+libxslt/xsltlocale.h:
+
+libxslt/numbersInternals.h:
+
+libxslt/transform.h:
+
+libxslt/xsltutils.h:
+
+libxslt/xsltconfig.h:
+
+libxslt/xsltInternals.h:
