@@ -11,7 +11,7 @@
 /* #undef Cygwin */
 
 /* Path to ghostscript utility */
-#define GHOSTSCRIPT_PATH "/gcdata/gcproj/Luca/leo/bin//gs"
+#define GHOSTSCRIPT_PATH "/usr/bin/gs"
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -44,7 +44,7 @@
 #define HAVE_ISASCII 1
 
 /* Define to 1 if you have the `exslt' library (-lexslt). */
-#define HAVE_LIBEXSLT 1
+/* #undef HAVE_LIBEXSLT */
 
 /* Define to 1 if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
@@ -62,7 +62,7 @@
 #define HAVE_LIBXML2 1
 
 /* Define to 1 if you have the `xslt' library (-lxslt). */
-#define HAVE_LIBXSLT 1
+/* #undef HAVE_LIBXSLT */
 
 /* Define to 1 if you have the `z' library (-lz). */
 #define HAVE_LIBZ 1
@@ -173,7 +173,7 @@
 #define HAVE__BOOL 1
 
 /* Build host name */
-#define HOSTNAME "leo"
+#define HOSTNAME "noah"
 
 /* Using IRIX64 */
 /* #undef IRIX64 */
@@ -220,7 +220,7 @@
 #define PERL "/usr/bin/perl"
 
 /* Path to Python */
-#define PYTHON "/gcdata/gcproj/Luca/leo/bin//python"
+#define PYTHON "/gcdata/gcproj/Luca/noah/bin/python"
 
 /* Define as the return type of signal handlers (`int' or `void'). */
 #define RETSIGTYPE void

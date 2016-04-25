@@ -24,9 +24,6 @@ import time
 from distutils.dir_util import copy_tree
 
 
-
-
-
 #TO INSTALL HAYSTACK DEPENDECIENS IN A CUSTOM LOCATION SET THE ENV VARIABLE: HAYSTACK_DEPENDENCIES_FOLDER
 if os.environ.get('HAYSTACK_DEPENDENCIES_FOLDER'):
 	INSTALLATION_PATH=os.environ.get('HAYSTACK_DEPENDENCIES_FOLDER')
@@ -94,30 +91,6 @@ def main():
 
           )
 
-
-
-def query_yes_no(question, default="yes"):
-    valid = {"yes":True,   "y":True,  "ye":True,
-             "no":False,     "n":False}
-    if default == None:
-        prompt = " [y/n] "
-    elif default == "yes":
-        prompt = " [Y/n] "
-    elif default == "no":
-        prompt = " [y/N] "
-    else:
-        raise ValueError("invalid default answer: '%s'" % default)
-
-    while True:
-        sys.stdout.write(question + prompt)
-        choice = raw_input().lower()
-        if default is not None and choice == '':
-            return valid[default]
-        elif choice in valid:
-            return valid[choice]
-        else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "\
-                             "(or 'y' or 'n').\n")
 
 
 def which(program):
@@ -229,40 +202,27 @@ def check_ghostscript(CURRENT_PLATFORM):
 
 
 def install_dependencies():
-    
-		
+
    CURRENT_PLATFORM=platform.system().split('_')[0]
 
    if CURRENT_PLATFORM not in  ['Linux','Darwin'] and platform.architecture()!='64bit':
-		sys.stdout.write('Sorry your platform is not supported\n Haystack is supported only on 64bit versions of Linux or OSX ')
+		sys.stdout.write('Sorry your platform is not supported\n CRISPResso is supported only on 64bit versions of Linux or OSX ')
 		sys.exit(1)
- 
-
-   if query_yes_no('I will install HAYSTACK external dependencies and files in:%s \n\nIs that ok?' % INSTALLATION_PATH):    
-       
-        if not os.path.exists(INSTALLATION_PATH):
-            print 'OK, creating the folder:%s' % INSTALLATION_PATH
-            os.makedirs(INSTALLATION_PATH)
-            os.makedirs(BIN_FOLDER)
-        else:
-            print '\nI cannot create the folder!\nThe folder %s is not empty!' % INSTALLATION_PATH
-            if query_yes_no('\nCan I overwrite its content? \nWARNING: all the files inside will be overwritten!'):
-
-                try:
-                    os.makedirs(BIN_FOLDER)
-                except:
-                    pass
-            else:
-                print '''\nOK, to install HAYSTACK in a different PATH, plese set the enviroment variable with:\n\nexport HAYSTACK_DEPENDENCIES_FOLDER="YOUR_PATH"\n\n then run again the installation '''
-                sys.exit(1)
-            
+   
+   if not os.path.exists(INSTALLATION_PATH):
+		sys.stdout.write ('OK, creating the folder:%s' % INSTALLATION_PATH)
+		os.makedirs(INSTALLATION_PATH)
+		os.makedirs(BIN_FOLDER)
    else:
-        print '''\nOK, to install HAYSTACK in a different PATH, plese set the enviroment variable with:\n\nexport HAYSTACK_DEPENDENCIES_FOLDER="YOUR_PATH"\n\n then run again the installation '''
-        sys.exit(1)
+		sys.stdout.write ('\nI cannot create the folder!\nThe folder %s is not empty!' % INSTALLATION_PATH)
 
-	sys.stdout.write( '\nCHECKING DEPENDENCIES...')
-	
-   print 'CHECKING DEPENDENCIES...'
+		try:
+			os.makedirs(BIN_FOLDER)
+		except:
+			pass
+
+
+   sys.stdout.write( '\nCHECKING DEPENDENCIES...')
    check_ghostscript(CURRENT_PLATFORM)
    check_fimo()
    check_bedtools()

@@ -6,7 +6,7 @@ from bx.seq.twobit import TwoBitFile
 import time
 
 
-from haystack_common import determine_path
+from haystack_common import determine_path, HAYSTACK_VERSION
 
 class Genome_2bit:
 

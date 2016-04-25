@@ -1,0 +1,10 @@
+include LICENSE
+include README.rst
+recursive-include dependencies *.*
+recursive-include haystack *.*
+recursive-include extra *.*
+recursive-include gene_annotations *.*
+recursive-include genome *.*
+recursive-include motif_databases *.*
+recursive-include precompiled_binary *.*
+recursive-include test_bed *.*
