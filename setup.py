@@ -51,7 +51,7 @@ def main():
 
 	setup(
 		  version=version,
-          name = "haystack_bio",
+          name = "haystack-bio",
           include_package_data = True,
     	   packages = ["haystack"],
     	   package_dir={'haystack': 'haystack'},
