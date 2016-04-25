@@ -4,6 +4,7 @@ Epigenetic Variability and Motif Analysis Pipeline
 --------------------------------------------------
 **Current version**: 0.3.0
 
+
 Summary
 -------
 Haystack is a suite of computational tools to study 
