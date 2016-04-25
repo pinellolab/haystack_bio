@@ -18,7 +18,7 @@ In particualar, Haystack highlights enriched TF motifs in  variable and cell-typ
 
 A summary of the pipeline and an example on H3k27ac data is shown in the following figure:
 
-![Haystack Pipeline](http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/Final_figure.png)
+.. image:: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/Final_figure.png)
 
 
 **(A)** Haystack overview: modules and corresponding functions. **(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted.  **(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. **(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif.   
@@ -128,22 +128,11 @@ sudo ln -s /opt/X11 /usr/X11
 sudo ln -s /opt/X11 /usr/X11R6
 ```
 
-
-
 In addition, you need to install Java for Windows.
 
 Note: If you install HAYSTACK in a custom folder please make sure to select a path without white spaces.
 
-It is reaccomended to perform a rebase of Cygwin after the installation:
- 
-1. Open a Windows command shell (cmd) 
-2. type <code>cd \cygwin64\bin</code>  
-3. type <code>ash /usr/bin/rebaseall</code>
 
-If you get strange errors about  _"address space is already occupied"_  when running HAYSTACK your antivirus may interfeer with the Cygwin as explained here: 
-http://stackoverflow.com/questions/11107155/how-to-fix-address-space-is-already-occupied-error-on-fetch-commit
-
-Try to temporaly disable it and restart Cygwin.
 
 How to use HAYSTACK
 -------------------
