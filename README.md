@@ -47,10 +47,10 @@ To install the package:
    ```
    http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
    ```
-    
 2) Decompress the file, you will get a folder called: Haystack-master
 
 3) Open a terminal window and go to the folder where you have decompressed the zip file, for example:
+
 	```
 	cd ~/Downloads
 	cd Haystack-master
@@ -60,7 +60,6 @@ To install the package:
   ```
   python setup.py install
   ```
-
 
 The setup will automatically create a folder in your HOME folder called *HAYASTACK\_dependencies*, and will put all the required dependencies here (if this folder is deleted, HAYSTACK will not work!)
 
