@@ -1,1 +1,0 @@
-meme_bin-message.o: message.c

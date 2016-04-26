@@ -1,1 +1,0 @@
-meme_bin-mp.o: mp.c
