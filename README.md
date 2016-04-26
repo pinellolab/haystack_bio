@@ -2,7 +2,7 @@ HAYSTACK
 ========
 Epigenetic Variability and Motif Analysis Pipeline       
 --------------------------------------------------
-**Current version**: 0.3.0
+**Current version**: 0.3
 
 
 Summary

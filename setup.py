@@ -170,7 +170,6 @@ def check_samtools():
             if not check_installation(os.path.join(BIN_FOLDER,'samtools'),'SAMTOOLS',verbose=False):
                 sys.stdout.write('\nHAYSTACK requires to install SAMTOOLS 0.1.19:http://sourceforge.net/projects/samtools/files/samtools/0.1.19/')
                 sys.stdout.write('I will download and install for you. Please be patient!')
-                
                 os.chdir('dependencies/')    
                 sb.call('rm -Rf samtools-0.1.19',shell=True)
                 sb.call('rm samtools-0.1.19.tar.bz2',shell=True)
@@ -199,6 +198,7 @@ def check_bedtools():
         if not check_installation(os.path.join(BIN_FOLDER,'bedtools'),'BEDTOOLS',verbose=False):
             sys.stdout.write('\nHAYSTACK requires to install BEDTOOLS v2.20.1')
             sys.stdout.write('I will download and install for you. Please be patient!')
+            os.chdir('dependencies/')  
             sb.call('rm bedtools2-2.20.1.tar.bz2',shell=True)   
             sb.call('rm -Rf bedtools2-2.20.1',shell=True)             
             urllib.urlretrieve ('http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/bedtools2-2.20.1.tar.bz2','bedtools2-2.20.1.tar.bz2')
