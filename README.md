@@ -18,22 +18,12 @@ In particualar, Haystack highlights enriched TF motifs in  variable and cell-typ
 
 A summary of the pipeline and an example on H3k27ac data is shown in the following figure:
 
-.. image:: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/Final_figure.png
+![Haystack Pipeline](http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/Final_figure.png)
 
 
 **(A)** Haystack overview: modules and corresponding functions. **(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted.  **(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. **(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif.   
 
 Haystack was designed to be highly modular. The whole pipeline can be called using the _haystack_pipeline_ command or alternatively the different modules can be used and combined indipendently.  For example it is possible to use only the motif analysis calling the _haystack_motifs_ module on a given set of genomic regions. A nice description of each module is present in the **_How to use HAYSTACK_** section.
-
-Precomputed Analysis
---------------------
-
-We have run Haystack on several ENCODE datasets for which you can download the the precomputed results (variability tracks, hotspots, specific regions, enriched motifs and activity planes):
-
-1. Analysis on 12 ChIP-seq tracks of H3k27ac in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27ac.tar.gz
-2. Analysis on  17 DNase-seq tracks in human cell lines + gene expression: (Gain) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE.tar.gz  and (Loss) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE_DEPLETED.tar.gz
-3. Analysis on  10 RRBS-seq tracks of DNA-Methylation in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_Methylation.tar.gz
-4. Analysis on 17 ChIP-seq tracks of H3k27me3 in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27me3.tar.gz
 
 Installation and Requirements
 -----------------------------
@@ -46,21 +36,41 @@ To install HAYSTACK, some dependencies must be installed before running the setu
 
 To install the package:
 
-1) Download the setup file: https://github.com/lucapinello/HAYSTACK/archive/master.zip and decompress it  
-    or from here if you want preloaded the human and mouse genomes (hg19 and mm9): http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
-2) Open a terminal window  and go to the folder where you have decompressed the zip file
-3) Type the command: 
+1) Download the setup file: 
 
-  <code>python setup.py install</code>
+   ```
+   https://github.com/lucapinello/HAYSTACK/archive/master.zip
+   ``` 
+   
+   or download this one if you want preloaded the human and mouse genomes (hg19 and mm9): 
+   
+   ```
+   http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
+   ```
+    
+2) Decompress the file, you will get a folder called: Haystack-master
+
+3) Open a terminal window and go to the folder where you have decompressed the zip file, for example:
+	```
+	cd ~/Downloads
+	cd Haystack-master
+	```
+4) Type the installation command: 
+
+  ```
+  python setup.py install
+  ```
 
 
-The setup will automatically create a folder in your home folder called HAYASTACK_dependencies (if this folder is deleted, HAYSTACK will not work!)! If you want to put the folder in a different location, you need to set the environment variable: CRISPRESSO_DEPENDENCIES_FOLDER. For example to put the folder in /home/lpinello/other_stuff you can write in the terminal *BEFORE* the installation:
+The setup will automatically create a folder in your HOME folder called *HAYASTACK\_dependencies*, and will put all the required dependencies here (if this folder is deleted, HAYSTACK will not work!)
 
-.. code:: bash
-        
-        export HAYSTACK_DEPENDENCIES_FOLDER=/home/lpinello/other_stuff
+If you want to put the folder in a different location, you need to set the environment variable: *HAYSTACK\_DEPENDENCIES\_FOLDER*. 
 
-The script will try to install HAYSTACK and will put all the required dependencied in a folder called HAYSTACK_DEPENDENCIES in your HOME folder. 
+For example to put the folder in /home/lpinello/other_stuff you can write in the terminal *BEFORE* the installation:
+     
+	```
+	export HAYSTACK_DEPENDENCIES_FOLDER=/home/lpinello/other_stuff
+	```
 
 
 The current version is compatible only with Unix like operating systems on 64 bit architectures and was tested on:
@@ -132,6 +142,16 @@ In addition, you need to install Java for Windows.
 
 Note: If you install HAYSTACK in a custom folder please make sure to select a path without white spaces.
 
+
+Precomputed Analysis
+--------------------
+
+We have run Haystack on several ENCODE datasets for which you can download the the precomputed results (variability tracks, hotspots, specific regions, enriched motifs and activity planes):
+
+1. Analysis on 12 ChIP-seq tracks of H3k27ac in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27ac.tar.gz
+2. Analysis on  17 DNase-seq tracks in human cell lines + gene expression: (Gain) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE.tar.gz  and (Loss) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE_DEPLETED.tar.gz
+3. Analysis on  10 RRBS-seq tracks of DNA-Methylation in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_Methylation.tar.gz
+4. Analysis on 17 ChIP-seq tracks of H3k27me3 in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27me3.tar.gz
 
 
 How to use HAYSTACK
