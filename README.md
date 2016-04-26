@@ -51,25 +51,21 @@ To install the package:
 
 3) Open a terminal window and go to the folder where you have decompressed the zip file, for example:
 
-	```
-	cd ~/Downloads
-	cd Haystack-master
-	```
+
+    cd ~/Downloads
+    cd Haystack-master
+
 4) Type the installation command: 
 
-  ```
-  python setup.py install
-  ```
+    python setup.py install
 
 The setup will automatically create a folder in your HOME folder called *HAYASTACK\_dependencies*, and will put all the required dependencies here (if this folder is deleted, HAYSTACK will not work!)
 
 If you want to put the folder in a different location, you need to set the environment variable: *HAYSTACK\_DEPENDENCIES\_FOLDER*. 
 
 For example to put the folder in /home/lpinello/other_stuff you can write in the terminal *BEFORE* the installation:
-     
-	```
-	export HAYSTACK_DEPENDENCIES_FOLDER=/home/lpinello/other_stuff
-	```
+
+    export HAYSTACK_DEPENDENCIES_FOLDER=/home/lpinello/other_stuff
 
 
 The current version is compatible only with Unix like operating systems on 64 bit architectures and was tested on:
