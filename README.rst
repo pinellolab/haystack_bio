@@ -51,7 +51,9 @@ To install the package:
 2) Open a terminal window  and go to the folder where you have decompressed the zip file
 3) Type the command: 
 
-  <code>python setup.py install</code>
+.. code:: bash
+  
+  python setup.py install
 
 
 The setup will automatically create a folder in your home folder called HAYASTACK_dependencies (if this folder is deleted, HAYSTACK will not work!)! If you want to put the folder in a different location, you need to set the environment variable: CRISPRESSO_DEPENDENCIES_FOLDER. For example to put the folder in /home/lpinello/other_stuff you can write in the terminal *BEFORE* the installation:
@@ -96,7 +98,6 @@ Operating System Notes
   wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
   unzip haystack_setup_with_genomes.zip
   cd Haystack-master/
-  sh create_binary_unix.sh #this command  is OPTIONAL and should be used ONLY if you want to recompile the binary
   python setup.py install
   ```
  
