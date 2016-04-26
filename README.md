@@ -33,8 +33,16 @@ To install HAYSTACK, some dependencies must be installed before running the setu
 2) Java: http://java.com/download
 3) C compiler / make. For Mac with OSX 10.7 or greater, open the terminal app and type and execute the command 'make', which will trigger the installation of OSX developer tools.Windows systems are not officially supported.
 
+After checking that the required software is installed you can install Haystack from the official Python repository following these steps:
 
-To install the package:
+1) Open a terminal window
+
+2) Type the command:
+	
+	pip install haystack_bio  --no-use-wheel --verbose
+
+
+Alternatively if want to install the package without the PIP utility:
 
 1) Download the setup file:  
   https://github.com/lucapinello/HAYSTACK/archive/master.zip
@@ -53,11 +61,13 @@ To install the package:
 
     python setup.py install
 
-The setup will automatically create a folder in your HOME folder called *HAYASTACK\_dependencies*, and will put all the required dependencies here (if this folder is deleted, HAYSTACK will not work!)
+**IMPORTANT**: The setup will automatically create a folder in your HOME folder called *HAYASTACK\_dependencies*, and will put all the required dependencies there. __If this folder is deleted, HAYSTACK will not work!__
 
-If you want to put the folder in a different location, you need to set the environment variable: *HAYSTACK\_DEPENDENCIES\_FOLDER*. 
+If you want to put the folder in a different location, you need to set the environment variable: 
 
-For example to put the folder in /home/lpinello/other_stuff you can write in the terminal *BEFORE* the installation:
+    HAYSTACK_DEPENDENCIES_FOLDER 
+
+For example to put the folder in /home/lpinello/other_stuff you can write in the terminal **BEFORE** the installation:
 
     export HAYSTACK_DEPENDENCIES_FOLDER=/home/lpinello/other_stuff
 
@@ -95,7 +105,6 @@ Operating System Notes
   wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
   unzip haystack_setup_with_genomes.zip
   cd Haystack-master/
-  sh create_binary_unix.sh #this command  is OPTIONAL and should be used ONLY if you want to recompile the binary
   python setup.py install
   ```
  
