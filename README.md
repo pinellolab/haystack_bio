@@ -99,25 +99,25 @@ Operating System Notes
   ```
 3. Install dependencies
   ```
-  sudo apt-get update && sudo apt-get install git default-jre python-setuptools python-pip  python-dev python-numpy         python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose  python-pil  python-imaging python-setuptools unzip ghostscript make gcc g++ zlib1g-dev zlib1g -y && sudo pip install git+https://github.com/pyinstaller/pyinstaller.git bx-python
+  sudo apt-get update && sudo apt-get update && sudo apt-get install git wget default-jre python-setuptools python-pip  python-dev python-numpy  python-scipy python-matplotlib python-pandas python-imaging python-setuptools unzip ghostscript make gcc g++ zlib1g-dev zlib1g -y 
   ```
+  
+  __If you are installing it on a docker image you don't need the sudo before each apt-get command__
 
 4. Install Haystack 
   ```
-  wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
-  unzip haystack_setup_with_genomes.zip
-  cd Haystack-master/
-  python setup.py install
+  pip install haystack_bio --no-use-wheel --verbose --user
   ```
  
 5. Download and run the test dataset
   ```
-  cd && source .bashrc
   wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_test_dataset_h3k27ac.tar.gz
   tar xvzf haystack_test_dataset_h3k27ac.tar.gz
   cd TEST_DATASET
   haystack_pipeline samples_names.txt hg19
   ```
+  
+  All the results will be stored in the folder HAYSTACK_PIPELINE_RESULT	
 
 **Apple OSX**
 
