@@ -122,19 +122,6 @@ def check_installation(filename,tool_name,verbose=False):
         return False
 
 
-def download_dependencies(CURRENT_PLATFORM):
-
-   
-   
-    
-   urllib.urlretrieve ("",'bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/meme_4.9.1.tar.bz2','meme_4.9.1.tar.bz2')
-   sb.call('tar xvjf meme_4.9.1.tar.bz2',shell=True)
-   
-   urllib.urlretrieve ("",'bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/meme_4.9.1.tar.bz2','meme_4.9.1.tar.bz2')
-   sb.call('tar xvjf meme_4.9.1.tar.bz2',shell=True)
-   
-
-
 def check_fimo():
             if not check_installation(os.path.join(BIN_FOLDER,'fimo'),'FIMO',verbose=False):
                 sys.stdout.write('\nHAYSTACK requires to install FIMO from the MEME suite(4.9.1)')
@@ -297,6 +284,12 @@ def copy_data(CURRENT_PLATFORM):
         if (os.path.isfile(full_file_name)):
             shutil.copy(full_file_name, dest)      
     
+    
+    #fix permission so people can write in haystack dep folders
+    
+    sb.call('chmod -R 777 %s' % os.path.join(INSTALLATION_PATH,'genomes'),shell=True)
+    sb.call('chmod -R 777 %s' % os.path.join(INSTALLATION_PATH,'gene_annotations'),shell=True)
+    sb.call('chmod -R 777 %s' % os.path.join(INSTALLATION_PATH,'motif_databases'),shell=True)
             
     #COPY current env for subprocess
     os.environ['PATH']=('%s:' % BIN_FOLDER) +os.environ['PATH'] #here the order is important
