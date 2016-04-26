@@ -36,17 +36,11 @@ To install HAYSTACK, some dependencies must be installed before running the setu
 
 To install the package:
 
-1) Download the setup file: 
-
-   ```
-   https://github.com/lucapinello/HAYSTACK/archive/master.zip
-   ``` 
-   
+1) Download the setup file:  
+  https://github.com/lucapinello/HAYSTACK/archive/master.zip
    or download this one if you want preloaded the human and mouse genomes (hg19 and mm9): 
+  http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
    
-   ```
-   http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_setup_with_genomes.zip
-   ```
 2) Decompress the file, you will get a folder called: Haystack-master
 
 3) Open a terminal window and go to the folder where you have decompressed the zip file, for example:
