@@ -1,10 +1,10 @@
 include LICENSE
 include README.md
 recursive-include dependencies *
-recursive-include haystack *.*
-recursive-include extra *.*
-recursive-include gene_annotations *.*
+recursive-include haystack *
+recursive-include extra *
+recursive-include gene_annotations *
 recursive-include genomes *
-recursive-include motif_databases *.*
+recursive-include motif_databases *
 recursive-include precompiled_binary *
-recursive-include test_bed *.*
+recursive-include test_bed *
