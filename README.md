@@ -30,7 +30,9 @@ Installation and Requirements
 To install HAYSTACK, some dependencies must be installed before running the setup:
 
 1) Python 2.7 Anaconda:  http://continuum.io/downloads
+
 2) Java: http://java.com/download
+
 3) C compiler / make. For Mac with OSX 10.7 or greater, open the terminal app and type and execute the command 'make', which will trigger the installation of OSX developer tools.Windows systems are not officially supported.
 
 After checking that the required software is installed you can install Haystack from the official Python repository following these steps:
