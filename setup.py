@@ -80,11 +80,11 @@ def main():
               'Programming Language :: Python',
               ],
           install_requires=[
-              'numpy>=1.9',
+              'numpy>=1.8.2',
               'pandas>=0.15',
               'matplotlib>=1.3.1',
               'argparse>=1.3',
-              'scipy>=0.15.1',
+              'scipy>=0.13.3',
               'jinja2>=2.7.3',
               'bx-python>=0.7.3',
               ],
