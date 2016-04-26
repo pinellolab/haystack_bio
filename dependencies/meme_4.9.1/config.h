@@ -5,13 +5,13 @@
 /* #undef AIX */
 
 /* Path to convert utility */
-#define CONVERT_PATH "/usr/bin/convert"
+#define CONVERT_PATH ""
 
 /* Using cygwin */
 /* #undef Cygwin */
 
 /* Path to ghostscript utility */
-#define GHOSTSCRIPT_PATH "/usr/bin/gs"
+#define GHOSTSCRIPT_PATH "/usr/local/bin/gs"
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #define HAVE_ARPA_INET_H 1
@@ -44,10 +44,10 @@
 #define HAVE_ISASCII 1
 
 /* Define to 1 if you have the `exslt' library (-lexslt). */
-/* #undef HAVE_LIBEXSLT */
+#define HAVE_LIBEXSLT 1
 
 /* Define to 1 if you have the `m' library (-lm). */
-#define HAVE_LIBM 1
+/* #undef HAVE_LIBM */
 
 /* Define to 1 if you have the `mpi' library (-lmpi). */
 /* #undef HAVE_LIBMPI */
@@ -62,7 +62,7 @@
 #define HAVE_LIBXML2 1
 
 /* Define to 1 if you have the `xslt' library (-lxslt). */
-/* #undef HAVE_LIBXSLT */
+#define HAVE_LIBXSLT 1
 
 /* Define to 1 if you have the `z' library (-lz). */
 #define HAVE_LIBZ 1
@@ -131,7 +131,7 @@
 #define HAVE_STRING_H 1
 
 /* Define to 1 if you have the `strlcpy' function. */
-/* #undef HAVE_STRLCPY */
+#define HAVE_STRLCPY 1
 
 /* Define to 1 if you have the `strspn' function. */
 #define HAVE_STRSPN 1
@@ -173,24 +173,24 @@
 #define HAVE__BOOL 1
 
 /* Build host name */
-#define HOSTNAME "noah"
+#define HOSTNAME "MacBook-Pro.local"
 
 /* Using IRIX64 */
 /* #undef IRIX64 */
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */
-#define LSTAT_FOLLOWS_SLASHED_SYMLINK 1
+/* #undef LSTAT_FOLLOWS_SLASHED_SYMLINK */
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
 #define LT_OBJDIR ".libs/"
 
 /* Using Linux */
-#define Linux /**/
+/* #undef Linux */
 
 /* Using MacOS X */
-/* #undef MACOSX */
+#define MACOSX /**/
 
 /* Define to 1 if your C compiler doesn't accept -c and -o together. */
 /* #undef NO_MINUS_C_MINUS_O */
@@ -220,7 +220,7 @@
 #define PERL "/usr/bin/perl"
 
 /* Path to Python */
-#define PYTHON "/gcdata/gcproj/Luca/noah/bin/python"
+#define PYTHON "/Users/luca/anaconda/bin/python"
 
 /* Define as the return type of signal handlers (`int' or `void'). */
 #define RETSIGTYPE void
