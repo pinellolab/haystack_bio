@@ -83,7 +83,6 @@ def main():
               'numpy>=1.9',
               'pandas>=0.15',
               'matplotlib>=1.3.1',
-              'biopython>=1.6.5',
               'argparse>=1.3',
               'scipy>=0.15.1',
               'jinja2>=2.7.3',
