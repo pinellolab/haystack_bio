@@ -42,7 +42,18 @@ def smooth(x,window_len=200,window='hanning'):
     y=np.convolve(w/w.sum(),s,mode='valid')
     return y[window_len/2:-window_len/2+1]
 
+#write the IGV session file
+def rem_base_path(path,base_path):
+            return path.replace(os.path.join(base_path,''),'')
 
+def find_th_rpm(df_chip,th_rpm):
+    return np.min(df_chip.apply(lambda x: np.percentile(x,th_rpm)))
+
+def log2_transform(x):
+    return np.log2(x+1)
+    
+def angle_transform(x):
+    return np.arcsin(np.sqrt(x)/1000000.0)
 
 #def run_haystack():
 
@@ -155,7 +166,7 @@ def main():
     else:
             info("\nIt seems you don't have the required genome file.")
             if query_yes_no('Should I download it for you?'):
-                    sb.call('download_genome %s' %genome_name,shell=True,env=system_env)
+                    sb.call('haystack_download_genome %s' %genome_name,shell=True,env=system_env)
                     if os.path.exists(genome_2bit):
                             info('Genome correctly downloaded!')
                             genome=Genome_2bit(genome_2bit)
@@ -308,17 +319,20 @@ def main():
             info('Sorry I cannot creat the bigwig file.\nPlease download and install bedGraphToBigWig from here: http://hgdownload.cse.ucsc.edu/admin/exe/ and add to your PATH')
          
             
-    th_rpm=np.min(df_chip.apply(lambda x: np.percentile(x,th_rpm)))
+    #th_rpm=np.min(df_chip.apply(lambda x: np.percentile(x,th_rpm)))
+    th_rpm=find_th_rpm(df_chip,th_rpm)
     info('Estimated th_rpm:%s' % th_rpm)
     
     df_chip_not_empty=df_chip.ix[(df_chip>th_rpm).any(1),:]
     
+
+    
     if transformation=='log2':
-            df_chip_not_empty=df_chip_not_empty.applymap(lambda x: np.log2(x+1))
+            df_chip_not_empty=df_chip_not_empty.applymap(log2_transform)
             info('Using log2 transformation')
     
     elif transformation =='angle':     
-            df_chip_not_empty=df_chip_not_empty.applymap(lambda x: np.arcsin(np.sqrt(x)/1000000.0))
+            df_chip_not_empty=df_chip_not_empty.applymap(angle_transform )
             info('Using angle transformation')
     
     else:
@@ -459,9 +473,6 @@ def main():
     pl.savefig(os.path.join(output_directory,'SELECTION_OF_VARIABILITY_HOTSPOT.pdf'))
     pl.close()
     
-    #write the IGV session file
-    def rem_base_path(path,base_path=output_directory):
-            return path.replace(os.path.join(base_path,''),'')
     
     
     igv_session_filename=os.path.join(output_directory,'OPEN_ME_WITH_IGV.xml')
@@ -488,7 +499,7 @@ def main():
         else:
                 track_full_path=os.path.join(output_directory,'TRACKS','%s.%dbp_quantile_normalized.bw' % (sample_name,bin_size))
     
-        track_filename=rem_base_path(track_full_path)        
+        track_filename=rem_base_path(track_full_path,output_directory)        
     
         if os.path.exists(track_full_path):    
                 resource_items.append( ET.SubElement(resources, "Resource"))
@@ -499,27 +510,27 @@ def main():
                 track_items[-1].set("name",sample_name)
     
     resource_items.append(ET.SubElement(resources, "Resource"))
-    resource_items[-1].set("path",rem_base_path(bw_iod_track_filename))
+    resource_items[-1].set("path",rem_base_path(bw_iod_track_filename,output_directory))
     
     track_items.append(ET.SubElement(panel, "Track" ))
     track_items[-1].set('color',"178,0,0")
-    track_items[-1].set('id',rem_base_path(bw_iod_track_filename))
+    track_items[-1].set('id',rem_base_path(bw_iod_track_filename,output_directory))
     track_items[-1].set('renderer',"HEATMAP")
     track_items[-1].set("colorScale","ContinuousColorScale;%e;%e;%e;%e;0,153,255;255,255,51;204,0,0" % (mid_h,min_h,mid_h,max_h))
     track_items[-1].set("name",'VARIABILITY')
     
     resource_items.append(ET.SubElement(resources, "Resource"))
-    resource_items[-1].set("path",rem_base_path(bed_hpr_fileaname))
+    resource_items[-1].set("path",rem_base_path(bed_hpr_fileaname,output_directory))
     track_items.append(ET.SubElement(panel, "Track" ))
     track_items[-1].set('color',"178,0,0")
-    track_items[-1].set('id',rem_base_path(bed_hpr_fileaname))
+    track_items[-1].set('id',rem_base_path(bed_hpr_fileaname,output_directory))
     track_items[-1].set('renderer',"HEATMAP")
     track_items[-1].set("colorScale","ContinuousColorScale;%e;%e;%e;%e;0,153,255;255,255,51;204,0,0" % (mid_h,min_h,mid_h,max_h))
     track_items[-1].set("name",'HOTSPOTS')
     
     for sample_name in sample_names:
         track_full_path=glob.glob(os.path.join(output_directory,'SPECIFIC_REGIONS','Regions_specific_for_%s*.bedgraph' %sample_name))[0]    
-        specific_track_filename=rem_base_path(track_full_path)
+        specific_track_filename=rem_base_path(track_full_path,output_directory)
         if os.path.exists(track_full_path):
                 resource_items.append( ET.SubElement(resources, "Resource"))
                 resource_items[-1].set("path",specific_track_filename)
