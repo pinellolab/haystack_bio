@@ -14,7 +14,7 @@ Haystack identifies  highly variable regions across different cell types also ca
 
 Haystack can be used with  histone modifications data, DNase I hypersensitive sites data and methylation data obtained for example by ChIP-seq, DNase-Seq and Bisulfite-seq assays and measured across multiple cell-types. In addition, it  is also possible to integrate gene expression data obtained from array based or RNA-seq approaches.
 
-In particualar, Haystack highlights enriched TF motifs in  variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
+In particular, Haystack highlights enriched TF motifs in  variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
 
 A summary of the pipeline and an example on H3k27ac data is shown in the following figure:
 
