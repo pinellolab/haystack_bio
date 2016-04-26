@@ -49,9 +49,9 @@ def main():
     		sys.stdout.write("ERROR: Python version must be 2.6 or 2.7!\n")
     		sys.exit(1)
 
-	setup(
-		  version=version,
-          name = "haystack-bio",
+	setup( 
+		   version=version,
+          name = "haystack_bio",
           include_package_data = True,
     	   packages = ["haystack"],
     	   package_dir={'haystack': 'haystack'},
@@ -315,7 +315,9 @@ if __name__ == '__main__':
         install_dependencies(CURRENT_PLATFORM)
         copy_data(CURRENT_PLATFORM)
         sys.stdout.write ('\nInstalling Python package installed')
-        main()
+    main()
+    
+    if sys.argv[1]=='install':
         sys.stdout.write ('\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!'    )
 
 
