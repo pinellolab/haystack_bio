@@ -106,7 +106,7 @@ Operating System Notes
 
 4. Install Haystack 
   ```
-  sudo pip install haystack_bio --no-use-wheel --verbose --user
+  sudo pip install haystack_bio --no-use-wheel --verbose
   ```
  
 5. Download and run the test dataset
