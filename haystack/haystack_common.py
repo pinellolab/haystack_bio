@@ -11,7 +11,7 @@ import sys
 import os
 import platform 
 
-__version__ = "0.3.6"
+__version__ = "0.3.8"
 HAYSTACK_VERSION=__version__ 
 
 
