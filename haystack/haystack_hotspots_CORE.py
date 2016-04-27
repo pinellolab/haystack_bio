@@ -29,18 +29,11 @@ def quantile_normalization(A):
         return AA
 
 
-def smooth(x,window_len=200,window='hanning'):
-    if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']:
-        raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
-
-
+def smooth(x,window_len=200):
     s=np.r_[x[window_len-1:0:-1],x,x[-1:-window_len:-1]]
-    if window == 'flat': #moving average
-        w=np.ones(window_len,'d')
-    else:
-        w=eval('np.'+window+'(window_len)')
+    w=np.hanning(window_len)
     y=np.convolve(w/w.sum(),s,mode='valid')
-    return y[window_len/2:-window_len/2+1]
+    return y[int(window_len/2):-int(window_len/2)+1]
 
 #write the IGV session file
 def rem_base_path(path,base_path):
