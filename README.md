@@ -73,6 +73,19 @@ For example to put the folder in /home/lpinello/other_stuff you can write in the
 
     export HAYSTACK_DEPENDENCIES_FOLDER=/home/lpinello/other_stuff
 
+Docker Image
+------------
+If you like Docker, we also provide a Docker image:
+	
+	https://hub.docker.com/r/lucapinello/haystack_bio/
+
+To use the image first install Docker: http://docker.com
+
+Then type the command:
+
+	docker pull lucapinello/haystack_bio
+
+See an example on how to run Haystack with a Docket image see the section **Testing HAYSTACK** below. __If you get memory errors try to allocate at least 8GB to the docker image in order to run Haystack__.
 
 The current version is compatible only with Unix like operating systems on 64 bit architectures and was tested on:
 - CentOS 6.5
@@ -297,6 +310,10 @@ Then run the haystack_pipeline command using the provided samples_names.txt file
 
 	haystack_pipeline samples_names.txt hg19
 	
+If you use a Docker image instead run with the following command:
+
+	docker run -v ${PWD}:/DATA -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
+
 This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
 
 Citation
