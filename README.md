@@ -314,6 +314,10 @@ If you use a Docker image instead run with the following command:
 
 	docker run -v ${PWD}:/DATA -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
 
+If you run Docker on Window you have to specify the full path:
+
+	docker run -v $/c/User/Luca/Downloads/TEST_DATASET:/DATA -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
+
 This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
 
 Citation
