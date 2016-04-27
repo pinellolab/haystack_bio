@@ -220,7 +220,9 @@ def main():
     
         info('Processing:%s' %bam_filename)
         
-        rpm_filename=os.path.join(tracks_directory,'%s.bedgraph' %base_name)
+        rpm_filename=os.path.join(tracks_directory,'%s.bedgraph' % base_name)
+        sorted_rpm_filename=os.path.join(tracks_directory,'%s_sorted.bedgraph' % base_name)
+        mapped_sorted_rpm_filename=os.path.join(tracks_directory,'%s_mapped_sorted.bedgraph' % base_name)
         binned_rpm_filename=os.path.join(intermediate_directory,'%s.%dbp.rpm' % (base_name,bin_size))
         bigwig_filename=os.path.join(tracks_directory,'%s.bw' %base_name)
     
@@ -260,11 +262,23 @@ def main():
     
                 if not os.path.exists(binned_rpm_filename) or recompute_all:      
                         info('Make constant binned (%dbp) rpm values file' % bin_size)
-                        cmd='bedtools sort -i %s |  bedtools map -a %s -b stdin -c 4 -o mean -null 0.0 | cut -f5 > %s'   %(rpm_filename,genome_sorted_bins_file,binned_rpm_filename)
+                        #cmd='bedtools sort -i %s |  bedtools map -a %s -b stdin -c 4 -o mean -null 0.0 | cut -f5 > %s'   %(rpm_filename,genome_sorted_bins_file,binned_rpm_filename)
+                        #proc=sb.call(cmd,shell=True,env=system_env)
+                        
+                        cmd='sort -k1,1 -k2,2n  %s  > %s'   %(rpm_filename,sorted_rpm_filename)
                         proc=sb.call(cmd,shell=True,env=system_env)
+
+                        cmd='bedtools map -a %s -b %s -c 4 -o mean -null 0.0  > %s'   % (genome_sorted_bins_file,sorted_rpm_filename,mapped_sorted_rpm_filename)
+                        proc=sb.call(cmd,shell=True,env=system_env)
+                        
+                        cmd='cut -f5 %s  > %s'   %(mapped_sorted_rpm_filename,binned_rpm_filename)
+                        proc=sb.call(cmd,shell=True,env=system_env)
+
                 
                 try:    
                         os.remove(rpm_filename)
+                        os.remove(sorted_rpm_filename)
+                        os.remove(mapped_sorted_rpm_filename)
                 except:
                         pass
     
@@ -399,7 +413,7 @@ def main():
     
     if not os.path.exists(bed_hpr_fileaname) or recompute_all:  
             info('Writing the HPRs in: %s' % bed_hpr_fileaname)
-            sb.call('bedtools sort -i %s | bedtools merge -i stdin >  %s' %(bedgraph_hpr_filename,bed_hpr_fileaname),shell=True,env=system_env)
+            sb.call('sort -k1,1 -k2,2n %s | bedtools merge -i stdin >  %s' %(bedgraph_hpr_filename,bed_hpr_fileaname),shell=True,env=system_env)
     
     #os.remove(bedgraph_hpr_filename)
     
@@ -433,7 +447,7 @@ def main():
                     coord_zscore.dropna().to_csv(specific_output_filename,sep='\t',header=False,index=False)
     
                     info('Writing:%s' % specific_output_bed_filename )
-                    sb.call('bedtools sort -i %s | bedtools merge -i stdin >  %s' %(specific_output_filename,specific_output_bed_filename),shell=True,env=system_env)
+                    sb.call('sort -k1,1 -k2,2n %s | bedtools merge -i stdin >  %s' %(specific_output_filename,specific_output_bed_filename),shell=True,env=system_env)
     
     
     #write background
@@ -454,7 +468,7 @@ def main():
                     coord_zscore.dropna().to_csv(bg_output_filename,sep='\t',header=False,index=False)
     
                     info('Writing:%s' % bg_output_bed_filename )
-                    sb.call('bedtools sort -i %s | bedtools merge -i stdin >  %s' %(bg_output_filename,bg_output_bed_filename),shell=True,env=system_env)    
+                    sb.call('sort -k1,1 -k2,2n -i %s | bedtools merge -i stdin >  %s' %(bg_output_filename,bg_output_bed_filename),shell=True,env=system_env)    
     
     
     ###plot selection
