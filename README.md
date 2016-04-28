@@ -332,7 +332,7 @@ Please send any comment or bug to lpinello AT jimmy DOT harvard DOT edu
 Third part software included and used in this distribution
 -----------------------------------------------------------
 1. PeakAnnotator: http://www.ebi.ac.uk/research/bertone/software
-2. FIMO from the MEME suite (4.9.1): http://meme.nbcr.net/meme/
+2. FIMO from the MEME suite (4.11.1): http://meme.nbcr.net/meme/
 3. WebLogo: http://weblogo.berkeley.edu/logo.cgi
 4. Samtools (0.1.19): http://samtools.sourceforge.net/
 5. Bedtools (2.20.1): https://github.com/arq5x/bedtools2
