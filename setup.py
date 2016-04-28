@@ -124,7 +124,7 @@ def check_installation(filename,tool_name,verbose=False):
 
 def check_fimo():
             if not check_installation(os.path.join(BIN_FOLDER,'fimo'),'FIMO',verbose=False):
-                sys.stdout.write('\nHAYSTACK requires to install FIMO from the MEME suite(4.9.1)')
+                sys.stdout.write('\nHAYSTACK requires to install FIMO from the MEME suite(4.11.1)')
                 sys.stdout.write('I will download and install for you. Please be patient!')
                 os.chdir('dependencies/')
                 sb.call('rm -Rf meme_4.11.1 &> /dev/null',shell=True)
