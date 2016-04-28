@@ -58,8 +58,8 @@ def main():
     if motif_mapping_filename:
         check_file(motif_mapping_filename)
         
-    if not os.path.exits(temp_directory):
-        error('The folder specified with --temp_directory: %s does not exist!'+temp_directory)
+    if not os.path.exists(temp_directory):
+        error('The folder specified with --temp_directory: %s does not exist!' % temp_directory)
         sys.exit(1)
     
     if input_is_bigwig:
