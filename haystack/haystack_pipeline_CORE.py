@@ -8,6 +8,7 @@ import shutil
 import argparse
 import logging
 import pickle as cp
+import multiprocessing
 
 #commmon functions
 from haystack_common import determine_path,query_yes_no,which,logging,error,warn,debug,info,check_file,CURRENT_PLATFORM,HAYSTACK_VERSION,system_env
@@ -40,6 +41,8 @@ def main():
     parser.add_argument('--meme_motifs_filename', type=str, help='Motifs database in MEME format (default JASPAR CORE 2016)')
     parser.add_argument('--motif_mapping_filename', type=str, help='Custom motif to gene mapping file (the default is for JASPAR CORE 2016 database)')
     parser.add_argument('--plot_all',  help='Disable the filter on the TF activity and correlation (default z-score TF>0 and rho>0.3)',action='store_true')
+    parser.add_argument('--n_processes',type=int, help='Specify the number of processes to use. The default is #cores available.',default=multiprocessing.cpu_count())
+    parser.add_argument('--temp_directory',  help='Directory to store temporary files  (default: /tmp)', default='/tmp')
     parser.add_argument('--version',help='Print version and exit.',action='version', version='Version %s' % HAYSTACK_VERSION)
     
     args = parser.parse_args()
@@ -55,7 +58,9 @@ def main():
     if motif_mapping_filename:
         check_file(motif_mapping_filename)
         
-    
+    if not os.path.exits(temp_directory):
+        error('The folder specified with --temp_directory: %s does not exist!'+temp_directory)
+        sys.exit(1)
     
     if input_is_bigwig:
             extension_to_check='.bw'
@@ -191,6 +196,14 @@ def main():
         
         if meme_motifs_filename:
              cmd_to_run+=' --meme_motifs_filename %s' % meme_motifs_filename
+             
+             
+        if n_processes:
+            cmd_to_run+=' --n_processes %d' % n_processes
+            
+        if temp_directory:
+            cmd_to_run+=' --temp_directory %s' % temp_directory
+            
             
         
         print cmd_to_run

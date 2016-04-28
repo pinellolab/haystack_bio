@@ -1,5 +1,7 @@
 #python modules
-import multiprocessing
+import multiprocessing as mp
+from functools import partial
+import uuid
 import subprocess as sb
 import os
 import sys
@@ -122,83 +124,62 @@ def get_random_coordinates(coords,genome):
         random_coords.append(Coordinate(c.chr_id,random_bpstart,random_bpstart+len(c)-1))
     return random_coords
 
-# CLASS TO DEFINE THE FIMO CONSUMER
-class FimoSequencesConsumer(multiprocessing.Process):
+
+def call_fimo(target_coords_fasta_filename,prefix,meme_motifs_filename,nucleotide_bg_filename,temp_directory,p_value,motif_id):
     
-    def __init__(self, task_queue, result_queue):
-        multiprocessing.Process.__init__(self)
-        self.task_queue = task_queue
-        self.result_queue = result_queue
+    output_filename=os.path.join(temp_directory,'%s_%s.motifs' % (prefix,motif_id))
 
-    def run(self):
-        proc_name = self.name
-        while True:
-            next_task = self.task_queue.get()
-            if next_task is None:
-                # Poison pill means we should exit
-                #print '%s: Exiting' % proc_name
-                break
-            #print '%s: %s' % (proc_name, next_task)
-            answer = next_task()
-            self.result_queue.put(answer)
-        return
-
-# CLASS FOR THE FIMO TASK
-class FimoOnSingleSequence(object):
-    def __init__(self, seq, fimo_instance,idx_seq):
-        self.seq = seq
-        self.fimo = fimo_instance
-        self.idx_seq=idx_seq
-    def __call__(self):
-        #print 'Running Fimo on',str(self.idx_seq)
-        return self.idx_seq,self.fimo.extract_motifs(self.seq, report_mode='full')
-    def __str__(self):
-        return 'Fimo Instance on:'+str(self.idx_seq)
-
-
-def ParallelFimoScanning(target_coords,meme_motifs_filename,genome,nucleotide_bg_filename,temp_directory='/tmp',p_value=1e-4,num_consumers=multiprocessing.cpu_count(),mask_repetitive=False,window_length=None,internal_window_length=None):
-    # Establish communication queues
-    tasks = multiprocessing.Queue()
-    results = multiprocessing.Queue()
+    if motif_id=='ALL_MOTIFS':
+        sb.call("fimo --thresh %f --text  --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" % \
+                (p_value,nucleotide_bg_filename,meme_motifs_filename,target_coords_fasta_filename,output_filename),shell=True)
+    else:
+        sb.call("fimo --motif %s --thresh %f --text --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" %\
+                (motif_id, p_value,nucleotide_bg_filename,meme_motifs_filename,target_coords_fasta_filename,output_filename),shell=True)
     
-    # Start consumers
-    debug('Creating %d fimo consumers' % num_consumers)
-    consumers = [ FimoSequencesConsumer(tasks, results)
-                  for i in xrange(num_consumers) ]
-    for w in consumers:
-        w.start()
+    return output_filename
 
-
-    #Initialize Fimo
-    info('Initiliaze Fimo and load motifs')
+def parallel_fimo_scanning(target_coords,
+                              meme_motifs_filename,
+                              genome,nucleotide_bg_filename,
+                              temp_directory,
+                              p_value,
+                              mask_repetitive,
+                              window_length,
+                              internal_window_length,
+                              num_consumers):
+    
     fimo=Fimo(meme_motifs_filename,nucleotide_bg_filename,temp_directory=temp_directory,p_value=p_value)
-
-    #print 'DEBUG:',target_coords[0],len(target_coords[0])
-    original_target_coords=target_coords
     
-    if window_length:
-        internal_bpstart=window_length/2-internal_window_length/2
-        internal_bpend=window_length/2+internal_window_length/2
-        #print 'DEBUG:',target_coords[0],window_length,internal_window_length,internal_bpstart,internal_bpend
-        original_target_coords=target_coords
-        target_coords=Coordinate.coordinates_of_intervals_around_center(target_coords,window_length)
-        #print 'DEBUG:',target_coords[0],len(target_coords[0])
+    #init variables
+    prefix='haystack_motifs_'+str(uuid.uuid4())
         
-    
-    # Enqueue jobs
-    num_jobs = len(target_coords)
-    for idx,c in enumerate(target_coords):
-        seq=genome.extract_sequence(c,mask_repetitive=mask_repetitive)
-        tasks.put(FimoOnSingleSequence(seq, fimo,idx))
-    
-    # Add a poison pill for each consumer
-    for i in xrange(num_consumers):
-        tasks.put(None)
+
 
     motifs_profiles_in_sequences=dict()
     idxs_seqs_with_motif=dict()
     motif_coords_in_seqs_with_motif=dict()
     
+    
+        
+    #extend with flanking
+    original_target_coords=target_coords
+
+    if window_length:
+        internal_bpstart=window_length/2-internal_window_length/2
+        internal_bpend=window_length/2+internal_window_length/2
+        target_coords=Coordinate.coordinates_of_intervals_around_center(target_coords,window_length)
+    
+    #write fasta
+    target_coords_fasta_filename=os.path.join(temp_directory,prefix+'.fa')  
+    Coordinate.coordinates_to_fasta(target_coords,target_coords_fasta_filename,genome)
+    
+    #mapping
+    coord_to_idx=dict()
+    for idx,c in enumerate(target_coords):
+        coord_to_idx[str(c).split()[0]]=idx
+        
+        
+        
     for motif_id in fimo.motif_ids:
         motifs_profiles_in_sequences[motif_id]=np.zeros(len(c))
         idxs_seqs_with_motif[motif_id]=set()
@@ -206,26 +187,46 @@ def ParallelFimoScanning(target_coords,meme_motifs_filename,genome,nucleotide_bg
 
     motifs_in_sequences_matrix=np.zeros((len(target_coords),len(fimo.motif_ids)))
 
-    # Build the final matrix
-    for idx in xrange(len(target_coords)):
-        idx_seq,row= results.get()
-        motif_in_center=set()
-        for motif in row:
-            
-            try:
-                motifs_profiles_in_sequences[motif['id']][motif['start']:motif['end']]+=1.0
-                
-                if motif['start']>=internal_bpstart and motif['end']<=internal_bpend: #keep track only if is in the internal window!
-                    idxs_seqs_with_motif[motif['id']].add(idx_seq)
-                    motifs_in_sequences_matrix[idx_seq,fimo.motif_id_to_index[motif['id']]]=+1
-                    motif_in_center.add(motif['id'])
+    #compute motifs with fimo
+    if n_processes>1:
+        
+        #partial function for multiprocessing
+        compute_single_motif=partial(call_fimo,target_coords_fasta_filename,prefix,meme_motifs_filename,nucleotide_bg_filename,temp_directory,p_value)
+        
+        pool = mp.Pool(processes=n_processes)
+        results=pool.map(compute_single_motif,fimo.motif_ids)
+        pool.close()
+        pool.join()
+        fimo_output_filename=os.path.join(temp_directory,prefix+'_fimo_output.motifs')
+        sb.call('cat %s*.motifs > %s' % (os.path.join(temp_directory,prefix),fimo_output_filename ),shell=True)
+    else:
+        call_fimo(target_coords_fasta_filename,prefix,meme_motifs_filename,nucleotide_bg_filename,temp_directory,p_value,'ALL_MOTIFS')
+        fimo_output_filename=os.path.join(temp_directory,'%s_%s.motifs' % (prefix,'ALL_MOTIFS'))
     
-                    motif_coords_in_seqs_with_motif[motif['id']][original_target_coords[idx_seq]].append((int(motif['start']+target_coords[idx_seq].bpstart-1),int(motif['end']+target_coords[idx_seq].bpstart-1) ))
-            except:
-                print motif['id'],motif['start'],motif['end']
+
+    with open(fimo_output_filename) as infile:
+        
+        for line in infile:
+            #try:
             
+            motif_id,motif_coord,motif_start,motif_end=line.split()
+            motif_start=int(motif_start)
+            motif_end=int(motif_end)
+            idx_seq=coord_to_idx[motif_coord]
+
+            motifs_profiles_in_sequences[motif_id][motif_start:motif_end]+=1.0
+
+            if motif_start>=internal_bpstart and motif_end<=internal_bpend: #keep track only if is in the internal window!
+                idxs_seqs_with_motif[motif_id].add(idx_seq)
+                motifs_in_sequences_matrix[idx_seq,fimo.motif_id_to_index[motif_id]]=+1
+                motif_coords_in_seqs_with_motif[motif_id][original_target_coords[idx_seq]].append((motif_start+target_coords[idx_seq].bpstart-1,motif_end+target_coords[idx_seq].bpstart-1 ))  
+            #except:
+            #    print line
+      
+    sb.call('rm %s* ' % os.path.join(temp_directory,prefix),shell=True)
 
     return motifs_in_sequences_matrix,motifs_profiles_in_sequences,idxs_seqs_with_motif,motif_coords_in_seqs_with_motif,fimo.motif_names, fimo.motif_ids
+
 
 ################################################################################
 
@@ -269,7 +270,7 @@ def main():
     parser.add_argument('--smooth_size',type=int, help='Size in bp for the smoothing window (default: internal_window_length/4)')
     parser.add_argument('--gene_annotations_filename',type=str, help='Optional gene annotations file from the UCSC Genome Browser in bed format to map each region to its closes gene')
     parser.add_argument('--gene_ids_to_names_filename',type=str, help='Optional mapping file between gene ids to gene names (relevant only if --gene_annotation_filename is used)')
-    parser.add_argument('--n_processes',type=int, help='Specify the number of processes to use. The default is #cores available.',default=multiprocessing.cpu_count())
+    parser.add_argument('--n_processes',type=int, help='Specify the number of processes to use. The default is #cores available.',default=mp.cpu_count())
     parser.add_argument('--version',help='Print version and exit.',action='version', version='Version %s' % HAYSTACK_VERSION)
 
     args = parser.parse_args()
@@ -434,7 +435,7 @@ def main():
             
 
     info('Extracting Motifs in target coordinates')
-    positive_matrix,motifs_profiles_in_sequences, idxs_seqs_with_motif,motif_coords_in_seqs_with_motif,motif_names,motif_ids=ParallelFimoScanning(target_coords,
+    positive_matrix,motifs_profiles_in_sequences, idxs_seqs_with_motif,motif_coords_in_seqs_with_motif,motif_names,motif_ids=parallel_fimo_scanning(target_coords,
                                                                                                                                                   meme_motifs_filename,
                                                                                                                                                   genome,nucleotide_bg_filename,
                                                                                                                                                   temp_directory=temp_directory,
@@ -548,7 +549,7 @@ def main():
             debug('After bootstrap:\n\ttarget:%s\n\tbg    :%s' % (target_hist,np.histogram(c_g_content_bg,bins)[0]))
 
     info('Extracting Motifs in background coordinates')
-    negative_matrix,motifs_profiles_in_bg,idxs_seqs_with_motif_bg=ParallelFimoScanning(bg_coords,
+    negative_matrix,motifs_profiles_in_bg,idxs_seqs_with_motif_bg=parallel_fimo_scanning(bg_coords,
                                                                                        meme_motifs_filename,
                                                                                        genome,nucleotide_bg_filename,
                                                                                        temp_directory=temp_directory,
