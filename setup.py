@@ -224,7 +224,7 @@ def check_ghostscript(CURRENT_PLATFORM):
             elif CURRENT_PLATFORM=='Darwin': 
                 sys.stdout.write('Ok downloading and launching the installer for you!')
                 sb.call('rm dependencies/Darwin/Ghostscript-9.14.pkg',shell=True)
-                urllib.urlretrieve ('http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/Darwin/gs','dependencies/Darwin/Ghostscript-9.14.pkg')
+                urllib.urlretrieve ('http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/Darwin/Ghostscript-9.14.pkg','dependencies/Darwin/Ghostscript-9.14.pkg')
                 sys.stdout.write('To install Ghostscript I need admin privileges.')
                 sb.call('sudo installer -pkg dependencies/Darwin/Ghostscript-9.14.pkg -target /',shell=True)
                 sb.call('rm dependencies/Darwin/Ghostscript-9.14.pkg',shell=True)
