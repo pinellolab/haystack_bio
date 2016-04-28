@@ -130,10 +130,10 @@ def call_fimo(target_coords_fasta_filename,prefix,meme_motifs_filename,nucleotid
     output_filename=os.path.join(temp_directory,'%s_%s.motifs' % (prefix,motif_id))
 
     if motif_id=='ALL_MOTIFS':
-        sb.call("fimo --verbosity 1 --thresh %f --text  --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" % \
+        sb.call("fimo --verbosity 0 --thresh %f --text  --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" % \
                 (p_value,nucleotide_bg_filename,meme_motifs_filename,target_coords_fasta_filename,output_filename),shell=True)
     else:
-        sb.call("fimo --verbosity 1 --motif %s --thresh %f --text --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" %\
+        sb.call("fimo --verbosity 0 --motif %s --thresh %f --text --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" %\
                 (motif_id, p_value,nucleotide_bg_filename,meme_motifs_filename,target_coords_fasta_filename,output_filename),shell=True)
     
     return output_filename
@@ -684,11 +684,11 @@ def main():
                 peak_annotator_path=os.path.join(determine_path('extra/'),'PeakAnnotator.jar')
                     
                 if gene_ids_to_names_filename:
-                    sb.call('java -jar '+peak_annotator_path+' -u TSS -p %s -a %s -s %s -o %s &> %s' \
-                            %(regions,gene_annotations_filename,gene_ids_to_names_filename,genes_list_directory,os.path.join(genes_list_directory,'log_peakannotator.txt')),  shell=True,env=system_env)
+                    sb.call('java -jar '+peak_annotator_path+' -u TSS -p %s -a %s -s %s -o %s >/dev/null 2>&1' \
+                            %(regions,gene_annotations_filename,gene_ids_to_names_filename,genes_list_directory),  shell=True,env=system_env)
                 else:
-                    sb.call('java -jar '+peak_annotator_path+' -u TSS -p %s -a %s  -o %s &> %s' \
-                            %(regions,gene_annotations_filename,genes_list_directory,os.path.join(genes_list_directory,'log_peakannotator.txt')),  shell=True,env=system_env)
+                    sb.call('java -jar '+peak_annotator_path+' -u TSS -p %s -a %s  -o %s >/dev/null 2>&1' \
+                            %(regions,gene_annotations_filename,genes_list_directory),  shell=True,env=system_env)
 
                 
                 genes_url=os.path.join('genes_lists',motif_ids[i]+'_motif_region_in_target.tss.bed')
