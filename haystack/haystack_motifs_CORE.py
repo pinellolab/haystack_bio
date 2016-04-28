@@ -130,10 +130,10 @@ def call_fimo(target_coords_fasta_filename,prefix,meme_motifs_filename,nucleotid
     output_filename=os.path.join(temp_directory,'%s_%s.motifs' % (prefix,motif_id))
 
     if motif_id=='ALL_MOTIFS':
-        sb.call("fimo --thresh %f --text  --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" % \
+        sb.call("fimo --verbosity 1 --thresh %f --text  --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" % \
                 (p_value,nucleotide_bg_filename,meme_motifs_filename,target_coords_fasta_filename,output_filename),shell=True)
     else:
-        sb.call("fimo --motif %s --thresh %f --text --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" %\
+        sb.call("fimo --verbosity 1 --motif %s --thresh %f --text --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" %\
                 (motif_id, p_value,nucleotide_bg_filename,meme_motifs_filename,target_coords_fasta_filename,output_filename),shell=True)
     
     return output_filename
@@ -188,12 +188,12 @@ def parallel_fimo_scanning(target_coords,
     motifs_in_sequences_matrix=np.zeros((len(target_coords),len(fimo.motif_ids)))
 
     #compute motifs with fimo
-    if n_processes>1:
+    if num_consumers>1:
         
         #partial function for multiprocessing
         compute_single_motif=partial(call_fimo,target_coords_fasta_filename,prefix,meme_motifs_filename,nucleotide_bg_filename,temp_directory,p_value)
         
-        pool = mp.Pool(processes=n_processes)
+        pool = mp.Pool(processes=num_consumers)
         results=pool.map(compute_single_motif,fimo.motif_ids)
         pool.close()
         pool.join()
@@ -207,21 +207,21 @@ def parallel_fimo_scanning(target_coords,
     with open(fimo_output_filename) as infile:
         
         for line in infile:
-            #try:
+            try:
             
-            motif_id,motif_coord,motif_start,motif_end=line.split()
-            motif_start=int(motif_start)
-            motif_end=int(motif_end)
-            idx_seq=coord_to_idx[motif_coord]
-
-            motifs_profiles_in_sequences[motif_id][motif_start:motif_end]+=1.0
-
-            if motif_start>=internal_bpstart and motif_end<=internal_bpend: #keep track only if is in the internal window!
-                idxs_seqs_with_motif[motif_id].add(idx_seq)
-                motifs_in_sequences_matrix[idx_seq,fimo.motif_id_to_index[motif_id]]=+1
-                motif_coords_in_seqs_with_motif[motif_id][original_target_coords[idx_seq]].append((motif_start+target_coords[idx_seq].bpstart-1,motif_end+target_coords[idx_seq].bpstart-1 ))  
-            #except:
-            #    print line
+                motif_id,motif_coord,motif_start,motif_end=line.split()
+                motif_start=int(motif_start)
+                motif_end=int(motif_end)
+                idx_seq=coord_to_idx[motif_coord]
+    
+                motifs_profiles_in_sequences[motif_id][motif_start:motif_end]+=1.0
+    
+                if motif_start>=internal_bpstart and motif_end<=internal_bpend: #keep track only if is in the internal window!
+                    idxs_seqs_with_motif[motif_id].add(idx_seq)
+                    motifs_in_sequences_matrix[idx_seq,fimo.motif_id_to_index[motif_id]]=+1
+                    motif_coords_in_seqs_with_motif[motif_id][original_target_coords[idx_seq]].append((motif_start+target_coords[idx_seq].bpstart-1,motif_end+target_coords[idx_seq].bpstart-1 ))  
+            except:
+                print line
       
     sb.call('rm %s* ' % os.path.join(temp_directory,prefix),shell=True)
 
