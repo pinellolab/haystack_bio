@@ -85,7 +85,7 @@ Then type the command:
 
 	docker pull lucapinello/haystack_bio
 
-See an example on how to run Haystack with a Docket image see the section **Testing HAYSTACK** below. __If you get memory errors try to allocate at least 8GB to the docker image in order to run Haystack__.
+See an example on how to run Haystack with a Docker image see the section **Testing HAYSTACK** below. __If you get memory errors try to allocate at least 8GB to the docker image in order to run Haystack__.
 
 The current version is compatible only with Unix like operating systems on 64 bit architectures and was tested on:
 - CentOS 6.5
