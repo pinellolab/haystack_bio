@@ -190,10 +190,13 @@ The output will consist of:
 Suppose you have a folder called /users/luca/mybamfolder you can run the variability analysis with: 
 	
 	haystack_hotspots /users/luca/mybamfolder hg19
+
 If you have instead a file with the samples description, like the _samples_names_hotspot.txt_  you can run the variability analysis with: 
 	
 	haystack_hotspots samples_names_hotspot.txt  hg19
-  	
+
+**IMPORTANT:** if are running haystack_hotspots using bigwig files you need to add the option: **--input_is_bigwig**
+
 2) **haystack_motifs**: find enriched transcription factor motifs in a given set of genomic regions
 The input is a set of regions in .bed format (http://genome.ucsc.edu/FAQ/FAQformat.html#format1) and the reference genome, the output consist of an HTML report with:
 - motif enriched with p and q values
