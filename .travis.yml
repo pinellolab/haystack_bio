@@ -1,0 +1,26 @@
+language: python
+
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    python: '2.7'
+  - os: linux
+    dist: vivid
+    python: '2.7'
+  - os: linux
+    dist: Xenial
+    python: '2.7'
+
+cache: pip
+before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get wget default-jre unzip ghostscript make gcc g++ zlib1g-dev zlib1g
+
+install: python setup.py install
+script:
+  - haystack_pipeline -help
+
+
+
+
