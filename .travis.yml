@@ -14,8 +14,8 @@ matrix:
 
 cache: pip
 before_install:
-    - sudo apt-get -qq update
-    - sudo apt-get wget default-jre unzip ghostscript make gcc g++ zlib1g-dev zlib1g
+    - apt-get -qq update
+    - apt-get wget default-jre unzip ghostscript make gcc g++ zlib1g-dev zlib1g
 
 install: python setup.py install
 script:
