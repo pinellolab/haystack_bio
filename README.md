@@ -281,14 +281,14 @@ If you have instead a file with the samples description containing .bam or .bw  
 	
 	haystack_pipeline samples_names.txt  hg19
 
-5) **download_genome**: it allows you to download and add a reference genomes from UCSC to Haystack in the appropriate format. To download a genome run: 
+5) **haystack_download_genome**: it allows you to download and add a reference genomes from UCSC to Haystack in the appropriate format. To download a genome run: 
 	
-	 download_genome genome_name 
+	 haystack_download_genome genome_name 
 
 **_Example_**
 To download the human genome assembly hg19 run: 
 	
-	download_genome hg19
+	haystack_download_genome hg19
 
 Note: Probably you don't need to call this command explicitely since it is called when the other commands need to download a particular assembly.
 
