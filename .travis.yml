@@ -11,8 +11,6 @@ matrix:
   - os: linux
     dist: Xenial
     python: '2.7'
-
-cache: pip
 before_install:
     - sudo apt-get -qq update
     - sudo apt-get install git default-jre python-setuptools python-pip  python-dev python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose python-pil  python-imaging python-setuptools unzip ghostscript make gcc g++ zlib1g-dev zlib1g -y
