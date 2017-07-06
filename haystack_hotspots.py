@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from haystack.haystack_hotspot_CORE import main
+from haystack.haystack_hotspots_CORE import main
 
 
 if __name__ == '__main__':

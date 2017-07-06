@@ -43,7 +43,7 @@ After checking that the required software is installed you can install Haystack 
 
 2) Type the command:
 	
-	pip install haystack_bio --no-use-wheel --verbose
+	pip install haystack_bio --verbose
 
 
 Alternatively if want to install the package without the PIP utility:

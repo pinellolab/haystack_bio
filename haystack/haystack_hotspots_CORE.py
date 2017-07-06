@@ -55,16 +55,16 @@ def main():
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
     print 'Version %s\n' % HAYSTACK_VERSION
-    
-    
+
+
     if which('samtools') is None:
             error('Haystack requires samtools free available at: http://sourceforge.net/projects/samtools/files/samtools/0.1.19/')
             sys.exit(1)
-    
+
     if which('bedtools') is None:
             error('Haystack requires bedtools free available at: https://github.com/arq5x/bedtools2/releases/tag/v2.20.1')
             sys.exit(1)
-    
+
     if which('bedGraphToBigWig') is None:
             info('To generate the bigwig files Haystack requires bedGraphToBigWig please download from here: http://hgdownload.cse.ucsc.edu/admin/exe/ and add to your PATH')
     

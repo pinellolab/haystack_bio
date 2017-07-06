@@ -80,12 +80,12 @@ def main():
               'Programming Language :: Python',
               ],
           install_requires=[
-              'numpy>=1.8.2',
-              'pandas>=0.13.1',
-              'matplotlib>=1.3.1',
-              'argparse>=1.3',
-              'scipy>=0.13.3',
-              'jinja2>=2.7.3',
+              'numpy>=1.13.0',
+              'pandas>=0.20.2',
+              'matplotlib>=2.0.2',
+              'argparse>=1.4',
+              'scipy>=0.19.1',
+              'jinja2>=2.9.6',
               'bx-python>=0.7.3',
               ],
 
@@ -130,8 +130,8 @@ def check_fimo():
                 sb.call('rm -Rf meme_4.11.1 &> /dev/null',shell=True)
                 sb.call('rm meme_4.11.1.tar.bz2 &> /dev/null',shell=True)
                 urllib.urlretrieve ('http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/meme_4.11.1.tar.bz2','meme_4.11.1.tar.bz2')
-                sb.call('tar xvjf meme_4.11.1.tar.bz2',shell=True)                
-                
+                sb.call('tar xvjf meme_4.11.1.tar.bz2',shell=True)
+
                 os.chdir('meme_4.11.1/')
 
                 cmd_cfg='./configure --prefix=%s --enable-build-libxml2 --enable-build-libxslt ' % INSTALLATION_PATH
@@ -144,19 +144,19 @@ def check_fimo():
                 os.chdir('..')
                 sb.call('rm -Rf meme_4.11.1',shell=True)
                 sb.call('rm meme_4.11.1.tar.bz2',shell=True)
-                os.chdir('..')   
+                os.chdir('..')
                 #installa fimo
                 sys.stdout.write('FIMO should be installed (please check the output)')
-            
+
     	    if not check_installation(os.path.join(BIN_FOLDER,'fimo'),'FIMO'):
              sys.exit(1)
 
-            
+
 def check_samtools():
             if not check_installation(os.path.join(BIN_FOLDER,'samtools'),'SAMTOOLS',verbose=False):
                 sys.stdout.write('\nHAYSTACK requires to install SAMTOOLS 0.1.19:http://sourceforge.net/projects/samtools/files/samtools/0.1.19/')
                 sys.stdout.write('I will download and install for you. Please be patient!')
-                os.chdir('dependencies/')    
+                os.chdir('dependencies/')
                 sb.call('rm -Rf samtools-0.1.19 &> /dev/null',shell=True)
                 sb.call('rm samtools-0.1.19.tar.bz2 &> /dev/null',shell=True)
                 urllib.urlretrieve ('http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/samtools-0.1.19.tar.bz2','samtools-0.1.19.tar.bz2')
@@ -164,7 +164,7 @@ def check_samtools():
                 os.chdir('samtools-0.1.19/')
                 sb.call('make clean',shell=True)
                 sb.call('make',shell=True)
-                
+
                 try:
                     shutil.copy2('samtools',BIN_FOLDER)
                 except:
@@ -173,20 +173,20 @@ def check_samtools():
                 os.chdir('..')
                 sb.call('rm -Rf samtools-0.1.19',shell=True)
                 sb.call('rm samtools-0.1.19.tar.bz2',shell=True)
-                os.chdir('..')         
-                
+                os.chdir('..')
+
             if not check_installation(os.path.join(BIN_FOLDER,'samtools'),'SAMTOOLS'):
             	sys.exit(1)
-            
-                
+
+
 def check_bedtools():
-        
+
         if not check_installation(os.path.join(BIN_FOLDER,'bedtools'),'BEDTOOLS',verbose=False):
             sys.stdout.write('\nHAYSTACK requires to install BEDTOOLS v2.20.1')
             sys.stdout.write('I will download and install for you. Please be patient!')
-            os.chdir('dependencies/')  
-            sb.call('rm bedtools2-2.20.1.tar.bz2 &> /dev/null',shell=True)   
-            sb.call('rm -Rf bedtools2-2.20.1 &> /dev/null',shell=True)             
+            os.chdir('dependencies/')
+            sb.call('rm bedtools2-2.20.1.tar.bz2 &> /dev/null',shell=True)
+            sb.call('rm -Rf bedtools2-2.20.1 &> /dev/null',shell=True)
             urllib.urlretrieve ('http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/bedtools2-2.20.1.tar.bz2','bedtools2-2.20.1.tar.bz2')
             sb.call('tar xvjf bedtools2-2.20.1.tar.bz2',shell=True)
             os.chdir('bedtools2-2.20.1/')
@@ -194,34 +194,34 @@ def check_bedtools():
             sb.call('make',shell=True)
             for filename in glob.glob(os.path.join('bin', '*')):
                 shutil.copy(filename, BIN_FOLDER)
-            #sb.call('make clean',shell=True)    
+            #sb.call('make clean',shell=True)
             os.chdir('..')
             sb.call('rm -Rf bedtools2-2.20.1',shell=True)
             sb.call('rm bedtools2-2.20.1.tar.bz2',shell=True)
             os.chdir('..')
-            
+
         if not check_installation(os.path.join(BIN_FOLDER,'bedtools'),'BEDTOOLS'):
             sys.exit(1)
 
-            
+
 def check_ghostscript(CURRENT_PLATFORM):
 
         if (not check_installation(os.path.join(BIN_FOLDER,'gs'),'Ghostscript',verbose=False) and CURRENT_PLATFORM=='Linux') or ( CURRENT_PLATFORM=='Darwin' and which('gs') is None):
             sys.stdout.write('\nHAYSTACK requires to install Ghostscript 9.14')
-            
+
             if CURRENT_PLATFORM=='Linux':
                 sys.stdout.write('I will download and install for you. Please be patient!')
                 sb.call('rm dependencies/Linux/gs &> /dev/null',shell=True)
                 urllib.urlretrieve ('http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/Linux/gs','dependencies/Linux/gs')
                 shutil.copy2('dependencies/Linux/gs',BIN_FOLDER)
-                time.sleep(3) # we need some time to allow the NFS to sync the file... 		
+                time.sleep(3) # we need some time to allow the NFS to sync the file...
                 sb.call('chmod +x %s' % os.path.join(BIN_FOLDER,'gs'),shell=True)
                 sb.call('rm dependencies/Linux/gs',shell=True)
-               
+
                 #if not check_installation(os.path.join(BIN_FOLDER,'gs'),'Ghostscript'):
                 #    sys.exit(1)
- 
-            elif CURRENT_PLATFORM=='Darwin': 
+
+            elif CURRENT_PLATFORM=='Darwin':
                 sys.stdout.write('Ok downloading and launching the installer for you!')
                 sb.call('rm dependencies/Darwin/Ghostscript-9.14.pkg &> /dev/null',shell=True)
                 urllib.urlretrieve ('http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/dependencies/Darwin/Ghostscript-9.14.pkg','dependencies/Darwin/Ghostscript-9.14.pkg')
@@ -234,7 +234,7 @@ def install_dependencies(CURRENT_PLATFORM):
 
 
    if CURRENT_PLATFORM not in  ['Linux','Darwin'] and platform.architecture()!='64bit':
-		sys.stdout.write('Sorry your platform is not supported\n CRISPResso is supported only on 64bit versions of Linux or OSX ')
+		sys.stdout.write('Sorry your platform is not supported\n Haystack is supported only on 64bit versions of Linux or OSX ')
 		sys.exit(1)
    
    if not os.path.exists(INSTALLATION_PATH):
@@ -310,7 +310,7 @@ if __name__ == '__main__':
     main()
     
     if sys.argv[1]=='install':
-        sys.stdout.write ('\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!'    )
+        sys.stdout.write ('\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!')
 
 
 
