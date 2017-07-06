@@ -100,7 +100,7 @@ def main():
                             info('Skipping header/comment line:%s' % line)
                             continue
     
-                    fields=line.strip().split()
+                    fields=line.strip().split("\t")
                     n_fields=len(fields)
     
                     if n_fields==2:
