@@ -11,10 +11,21 @@ matrix:
   - os: linux
     dist: Xenial
     python: '2.7'
+
 before_install:
-    - sudo apt-get -qq update
-    - sudo apt-get install git default-jre python-setuptools python-pip  python-dev python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose python-pil  python-imaging python-setuptools unzip ghostscript make gcc g++ zlib1g-dev zlib1g -y
-    - sudo pip install bx-python
+  - sudo apt-get -qq update
+  - sudo apt-get install git default-jre make gcc g++ zlib1g-dev zlib1g -y
+  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - export PATH=/home/travis/miniconda/bin:$PATH
+  - conda update --yes conda
+  - (conda config --add channels r)
+  - conda config --add channels defaults
+  - conda config --add channels conda-forge
+  - conda config --add channels bioconda
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION bx-python numpy scipy matplotlib argparse jinja2 nose dateutil pandas setuptools pil ipython unzip meme samtools bedtools
+
 install: python setup.py install
 script:
   - haystack_pipeline -help
