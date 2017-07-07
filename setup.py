@@ -116,8 +116,6 @@ def install_dependencies(CURRENT_PLATFORM):
 		except:
 			pass
 
-
-
 def copy_data(CURRENT_PLATFORM):
     
    
