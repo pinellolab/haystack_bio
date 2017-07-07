@@ -172,7 +172,7 @@ def main():
     
     
     #CALL HAYSTACK HOTSPOTS
-    cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s %s' % \
+    cmd_to_run='haystack_hotspots "%s" %s --output_directory "%s" --bin_size %d %s %s %s %s %s %s %s %s' % \
                 (sample_names_hotspots_filename, genome_name,output_directory,bin_size,
                  ('--recompute_all' if recompute_all else ''),
                  ('--depleted' if depleted else ''),
@@ -192,10 +192,10 @@ def main():
         bg_regions_filename=glob.glob(os.path.join(output_directory,'HAYSTACK_HOTSPOTS','SPECIFIC_REGIONS','Background_for_%s*.bed' %sample_name))[0]
         #bg_regions_filename=glob.glob(specific_regions_filename.replace('Regions_specific','Background')[:-11]+'*.bed')[0] #lo zscore e' diverso...
         #print specific_regions_filename,bg_regions_filename
-        cmd_to_run='haystack_motifs %s %s --bed_bg_filename %s --output_directory %s --name %s' % (specific_regions_filename,genome_name, bg_regions_filename,motif_directory, sample_name)
+        cmd_to_run='haystack_motifs "%s" %s --bed_bg_filename "%s" --output_directory "%s" --name %s' % (specific_regions_filename,genome_name, bg_regions_filename,motif_directory, sample_name)
         
         if meme_motifs_filename:
-             cmd_to_run+=' --meme_motifs_filename %s' % meme_motifs_filename
+             cmd_to_run+=' --meme_motifs_filename "%s"' % meme_motifs_filename
              
              
         if n_processes:
@@ -213,10 +213,10 @@ def main():
                 #CALL HAYSTACK TF ACTIVITY 
                 motifs_output_folder=os.path.join(motif_directory,'HAYSTACK_MOTIFS_on_%s' % sample_name) 
                 if os.path.exists(motifs_output_folder):
-                    cmd_to_run='haystack_tf_activity_plane %s %s %s --output_directory %s'  %(motifs_output_folder,sample_names_tf_activity_filename,sample_name,tf_activity_directory)
+                    cmd_to_run='haystack_tf_activity_plane "%s" "%s" %s --output_directory "%s"'  %(motifs_output_folder,sample_names_tf_activity_filename,sample_name,tf_activity_directory)
                     
                     if motif_mapping_filename:
-                        cmd_to_run+=' --motif_mapping_filename %s' %  motif_mapping_filename       
+                        cmd_to_run+=' --motif_mapping_filename "%s"' %  motif_mapping_filename
                     
                     if plot_all:
                         cmd_to_run+=' --plot_all'
