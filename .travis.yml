@@ -15,10 +15,8 @@ matrix:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install git default-jre make gcc g++ zlib1g-dev zlib1g -y
-  - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
-  - chmod +x miniconda.sh
-  - ./miniconda.sh -b
-  - export PATH=/home/travis/miniconda2/bin:$PATH
+  - ./.travis/travis_before_install.sh
+  - export PATH=$HOME/miniconda2/bin:$PATH
   - conda update --all --yes
   - (conda config --add channels r)
   - conda config --add channels defaults
@@ -27,8 +25,16 @@ before_install:
   - conda install --yes python=$TRAVIS_PYTHON_VERSION bx-python numpy scipy matplotlib argparse jinja2 nose dateutil pandas setuptools pil ipython unzip meme samtools bedtools
 
 install: python setup.py install
+
+cache:
+  directories:
+  - $HOME/Haystack_dependencies
+  - $HOME/download #  add miniconda.sh to TRAVIS cache.
+  - $HOME/miniconda2 # Add the installation to TRAVIS cache.
+
 script:
   - haystack_pipeline -help
+  - haystack_download_genome hg19
 
 
 
