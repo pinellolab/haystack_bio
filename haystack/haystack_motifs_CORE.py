@@ -14,7 +14,12 @@ import shutil
 from collections import defaultdict
 import codecs
 import platform
-import pickle as cp
+
+try:
+    import cPickle as cp
+except:
+    import pickle as cp
+
 import re
 
 #commmon functions

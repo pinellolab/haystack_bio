@@ -7,6 +7,8 @@ Epigenetic Variability and Motif Analysis Pipeline
 [![Build Status](https://travis-ci.org/rfarouni/Haystack.svg?branch=master)](https://travis-ci.org/rfarouni/Haystack)
 
 
+[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square)](http://bioconda.github.io/recipes/haystack/README.html)
+
 Summary
 -------
 Haystack is a suite of computational tools to study 

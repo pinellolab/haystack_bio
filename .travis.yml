@@ -14,7 +14,7 @@ matrix:
 
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install git default-jre make gcc g++ zlib1g-dev zlib1g -y
+  - sudo apt-get install default-jre -y
   - chmod +x ./.travis/travis_before_install.sh
   - ./.travis/travis_before_install.sh
   - export PATH=$HOME/miniconda2/bin:$PATH

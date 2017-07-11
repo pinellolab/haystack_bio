@@ -1,10 +1,9 @@
 #from https://github.com/nfusi/qvalue
-import numpy as np
 import scipy as sp
-import sys, pickle, pdb
-import scipy.stats as st
+import sys
 import scipy.interpolate
 import  re, math,  tempfile
+
 
 def estimate_qvalues(pv, m = None, verbose = False, lowmem = False, pi0 = None):
     """

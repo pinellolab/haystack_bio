@@ -7,7 +7,12 @@ import glob
 import shutil
 import argparse
 import logging
-import pickle as cp
+
+try:
+    import cPickle as cp
+except:
+    import pickle as cp
+
 import multiprocessing
 
 #commmon functions

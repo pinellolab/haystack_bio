@@ -23,7 +23,10 @@ from bx.intervals.intersection import Intersecter, Interval
 from bx.seq.twobit import TwoBitFile
 
 
-import cPickle
+try:
+    import cPickle as cp
+except:
+    import pickle as cp
 
 try:
     import pysam
@@ -1275,11 +1278,11 @@ class Ngram:
             filename='ng'+str(self.ngram_length)
         with open(filename,'wb+') as outfile:
             print 'saving...'
-            cPickle.dump(self, outfile,2)
+            cp.dump(self, outfile,2)
             print 'done'
         
     @classmethod
     def load_from_file(cls,filename):
         with open(filename,'rb') as infile:
-            return cPickle.load(infile)
+            return cp.load(infile)
 
