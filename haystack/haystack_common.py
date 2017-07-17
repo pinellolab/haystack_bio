@@ -80,14 +80,6 @@ def query_yes_no(question, default="yes"):
 
 CURRENT_PLATFORM=platform.system().split('_')[0]
 
-
-import cPickle as cp
-
-#Use the dependencies folder created and update the path
-_ROOT = os.path.abspath(os.path.dirname(__file__))
-system_env=cp.load( open( os.path.join(_ROOT,'system_env.pickle')))
-os.environ['PATH']=system_env['PATH']
-
-
 def determine_path(folder):
-    return os.path.join(system_env['HAYSTACK_DEPENDENCIES_PATH'],folder)
+    _ROOT = "/mnt/hd2/Dropbox (Partners HealthCare)/PROJECTS/2017_07_HAYSTACK"
+    return os.path.join(_ROOT, folder)

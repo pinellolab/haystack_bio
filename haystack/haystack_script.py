@@ -19,7 +19,6 @@ import pylab as pl
 import xml.etree.cElementTree as ET
 from pybedtools import BedTool
 from bioutilities import Genome_2bit
-import pysam
 import re
 
 # commmon functions haystack hotspots
@@ -266,12 +265,13 @@ plot_all = True
 use_X_Y = True
 chrom_exclude = ''  # '_|chrM|chrX|chrY'
 ext = 200
+blacklist=True
 max_regions_percentage=0.1
 n_processes = multiprocessing.cpu_count()
 temp_directory = ''  # os.path.join(_ROOT, 'tmp')
 version = 'Version %s' % HAYSTACK_VERSION
 
-
+"/mnt/hd2/Dropbox (Partners HealthCare)/PROJECTS/2017_07_HAYSTACK/test_data/samples_names.txt" hg19 --output_directory "/mnt/hd2/Dropbox (Partners HealthCare)/PROJECTS/2017_07_HAYSTACK/haystack_analysis/output_haystack" --bin_size 200
 
 ######################
 
@@ -432,12 +432,10 @@ if not os.path.exists(specific_regions_directory):
 #############################
 
 chr_len_filename = os.path.join(genome_directory, "%s_chr_lengths.txt" % genome_name)
-blacklist = os.path.join(genome_directory, 'blacklist.bed')
 check_file(chr_len_filename)
-check_file(blacklist)
 
-genome_sorted_filtered_bins_file = os.path.join(output_directory,
-                                                '%s.%dbp.bins.sorted.filterd.bed' % (os.path.basename(genome_name),
+genome_sorted_bins_file = os.path.join(output_directory,
+                                                '%s.%dbp.bins.sorted.bed' % (os.path.basename(genome_name),
                                                                                      bin_size))
 bedgraph_iod_track_filename = os.path.join(tracks_directory,
                                            'VARIABILITY.bedgraph')
@@ -451,6 +449,8 @@ bed_hpr_fileaname = os.path.join(output_directory,
 ########################################
 
 def intialize_genome(genome_name):
+
+    info('Initializing Genome:%s' % genome_name)
     genome_2bit = os.path.join(genome_directory, genome_name + '.2bit')
 
     if os.path.exists(genome_2bit):
@@ -471,37 +471,52 @@ def intialize_genome(genome_name):
 
 def average_bigwig(bam_filename, binned_rpm_filename, bigwig_filename):
     cmd = 'bigWigAverageOverBed %s %s  /dev/stdout | sort -s -n -k 1,1 | cut -f5 > %s' % (
-        bam_filename, genome_sorted_filtered_bins_file, binned_rpm_filename)
+        bam_filename, genome_sorted_bins_file, binned_rpm_filename)
     sb.call(cmd, shell=True)
     shutil.copy2(bam_filename, bigwig_filename)
 
 
-def create_tiled_genome(genome_sorted_filtered_bins_file):
-    chr_len_filtered_filename = os.path.join(genome_directory,
-                                             "%s_chr_lengths_filtered.txt" % genome_name)
+def create_tiled_genome():
 
     if chrom_exclude:
+        chr_len_filtered_filename = os.path.join(genome_directory,
+                                                 "%s_chr_lengths_filtered.txt" % genome_name)
+
         with open(chr_len_filtered_filename, 'wb') as f:
             f.writelines(line for line in open(chr_len_filename)
                          if not re.search(chrom_exclude, line.split()[0]))
     else:
         chr_len_filtered_filename = chr_len_filename
 
-    BedTool().window_maker(g=chr_len_filtered_filename, w=bin_size). \
-        sort(). \
-        intersect(blacklist,
-                  wa=True,
-                  v=True,
-                  output=genome_sorted_filtered_bins_file)
+    tiled_genome = BedTool().\
+        window_maker(g=chr_len_filtered_filename,
+                                          w=bin_size). \
+        sort()
+
+    if blacklist:
+
+        blacklist = os.path.join(genome_directory,
+                                 'blacklist.bed')
+        check_file(blacklist)
+
+        tiled_genome.intersect(blacklist,
+                               wa=True,
+                               v=True,
+                               output=genome_sorted_bins_file)
+    else:
+        tiled_genome.saveas(genome_sorted_bins_file)
 
 
-def normalize_count(feature, scalar):
-    feature.name = str(int(feature.name) * scalar)
+def normalize_count(feature, scaling_factor):
+    feature.name = str(int(feature.name) * scaling_factor)
     return feature
 
 
 def get_scaling_factor(bam_filename):
-    infile = pysam.AlignmentFile(bam_filename, "rb")
+
+    from pysam import AlignmentFile
+
+    infile = AlignmentFile(bam_filename, "rb")
     numreads = infile.count(until_eof=True)
     scaling_factor = (1.0 / float(numreads)) * 1000000
 
@@ -546,7 +561,7 @@ def to_bedgraph(bam_filtered_nodup_filename, rpm_filename, binned_rpm_filename):
     info('Computing coverage over bins...')
     info('Normalizing counts by scaling factor...')
 
-    bedgraph = BedTool(genome_sorted_filtered_bins_file). \
+    bedgraph = BedTool(genome_sorted_bins_file). \
         intersect(bed_extended, c=True). \
         each(normalize_count, scaling_factor). \
         saveas(rpm_filename)
@@ -577,6 +592,7 @@ def to_bigwig(bigwig_filename, rpm_filename):
 
 
 def to_rpm_tracks(sample_names, bam_filenames, skipfilter=False):
+
     for base_name, bam_filename in zip(sample_names, bam_filenames):
 
         info('Processing:%s' % bam_filename)
@@ -626,7 +642,7 @@ def load_rpm_tracks(binned_rpm_filenames):
 
     df_chip = pd.DataFrame(df_chip)
 
-    coordinates_bin = pd.read_csv(genome_sorted_filtered_bins_file,
+    coordinates_bin = pd.read_csv(genome_sorted_bins_file,
                                   names=['chr_id', 'bpstart', 'bpend'],
                                   sep='\t',
                                   header=None, usecols=[0, 1, 2])
@@ -922,13 +938,12 @@ def create_igv_track_file(hpr_iod_scores):
     tree.write(igv_session_filename, xml_declaration=True)
 
 # step 1
-info('Initializing Genome:%s' % genome_name)
 genome = intialize_genome(genome_name)
 
 # step 2
-info('Creating bins of %dbp in %s' % (bin_size, genome_sorted_filtered_bins_file))
-if not os.path.exists(genome_sorted_filtered_bins_file) or recompute_all:
-    create_tiled_genome(genome_sorted_filtered_bins_file)
+info('Creating bins of %dbp in %s' % (bin_size, genome_sorted_bins_file))
+if not os.path.exists(genome_sorted_bins_file) or recompute_all:
+    create_tiled_genome(genome_sorted_bins_file)
 
 # step 3
 info('Convert files to genome-wide rpm tracks')
