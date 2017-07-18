@@ -80,6 +80,26 @@ def query_yes_no(question, default="yes"):
 
 CURRENT_PLATFORM=platform.system().split('_')[0]
 
+def which(program):
+	import os
+	def is_exe(fpath):
+		return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+	fpath, fname = os.path.split(program)
+	if fpath:
+		if is_exe(program):
+			return program
+	else:
+		for path in os.environ["PATH"].split(os.pathsep):
+			path = path.strip('"')
+			exe_file = os.path.join(path, program)
+			if is_exe(exe_file):
+				return exe_file
+
+	return None
+
+
+
 def determine_path(folder):
     _ROOT = "/mnt/hd2/Dropbox (Partners HealthCare)/PROJECTS/2017_07_HAYSTACK"
     return os.path.join(_ROOT, folder)

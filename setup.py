@@ -10,7 +10,6 @@ Setup script for Haystack -- Epigenetic Variability and Transcription Factor Mot
 import re
 from setuptools import setup, Extension
 import os
-import pickle as cp
 import subprocess as sb
 import sys
 import platform 
@@ -27,21 +26,14 @@ else:
 BIN_FOLDER=os.path.join(INSTALLATION_PATH,'bin')
 
 def main():
-	if float(sys.version[:3])<2.6 or float(sys.version[:3])>=2.8:
-		sys.stdout.write("CRITICAL: Python version must be 2.7!\n")
-		sys.exit(1)
-
 
 	version = re.search(
     	'^__version__\s*=\s*"(.*)"',
     	open('haystack/haystack_common.py').read(),
     	re.M
     	).group(1)
-	
-	
-	if float(sys.version[:3])<2.6 or float(sys.version[:3])>=2.8:
-    		sys.stdout.write("ERROR: Python version must be 2.6 or 2.7!\n")
-    		sys.exit(1)
+
+
 
 	setup( 
 		   version=version,
@@ -78,26 +70,7 @@ def main():
           )
 
 
-def which(program):
-	import os
-	def is_exe(fpath):
-		return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-
-	fpath, fname = os.path.split(program)
-	if fpath:
-		if is_exe(program):
-			return program
-	else:
-		for path in os.environ["PATH"].split(os.pathsep):
-			path = path.strip('"')
-			exe_file = os.path.join(path, program)
-			if is_exe(exe_file):
-				return exe_file
-
-	return None
-
 def install_dependencies(CURRENT_PLATFORM):
-
 
 
    if CURRENT_PLATFORM not in  ['Linux','Darwin'] and platform.architecture()!='64bit':
@@ -118,7 +91,7 @@ def install_dependencies(CURRENT_PLATFORM):
 
 def copy_data(CURRENT_PLATFORM):
     
-   
+
     #coping data in place
     d_path = lambda x: (x,os.path.join(INSTALLATION_PATH,x))
     
@@ -149,12 +122,7 @@ def copy_data(CURRENT_PLATFORM):
     sb.call('chmod -R 777 %s' % os.path.join(INSTALLATION_PATH,'genomes'),shell=True)
     sb.call('chmod -R 777 %s' % os.path.join(INSTALLATION_PATH,'gene_annotations'),shell=True)
     sb.call('chmod -R 777 %s' % os.path.join(INSTALLATION_PATH,'motif_databases'),shell=True)
-            
-    #COPY current env for subprocess
-    os.environ['PATH']=('%s:' % BIN_FOLDER) +os.environ['PATH'] #here the order is important
-    os.environ['HAYSTACK_DEPENDENCIES_PATH']=INSTALLATION_PATH
-    system_env=os.environ
-    cp.dump(system_env,open(os.path.join('haystack','system_env.pickle'),'w+'))
+
 	
 
 if __name__ == '__main__':

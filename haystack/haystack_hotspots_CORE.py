@@ -1,7 +1,6 @@
 from __future__ import division
 import os
 import sys
-import time
 import subprocess as sb
 import glob
 import shutil
@@ -9,66 +8,68 @@ import numpy as np
 from scipy.stats import zscore
 import pandas as pd
 import matplotlib as mpl
+
 mpl.use('Agg')
 import pylab as pl
 import argparse
 import logging
 from bioutilities import Genome_2bit
 import xml.etree.cElementTree as ET
-try:
-    import cPickle as cp
-except:
-    import pickle as cp
-
-#commmon functions
-from haystack_common import determine_path,query_yes_no,which,logging,error,warn,debug,info,check_file,CURRENT_PLATFORM,HAYSTACK_VERSION
-
+import re
+# commmon functions
+from haystack_common import determine_path, which, logging, error, warn, debug, info, check_file, HAYSTACK_VERSION
 
 from pybedtools import BedTool
 import multiprocessing
+
 n_processes = multiprocessing.cpu_count()
 
 
 def quantile_normalization(A):
-        AA = np.zeros_like(A)
-        I = np.argsort(A,axis=0)
-        AA[I,np.arange(A.shape[1])] =np.mean(A[I,np.arange(A.shape[1])],axis=1)[:,np.newaxis]
+    AA = np.zeros_like(A)
+    I = np.argsort(A, axis=0)
+    AA[I, np.arange(A.shape[1])] = np.mean(A[I, np.arange(A.shape[1])], axis=1)[:, np.newaxis]
 
-        return AA
+    return AA
 
 
-def smooth(x,window_len=200):
-    s=np.r_[x[window_len-1:0:-1],x,x[-1:-window_len:-1]]
-    w=np.hanning(window_len)
-    y=np.convolve(w/w.sum(),s,mode='valid')
-    return y[int(window_len/2):-int(window_len/2)+1]
+def smooth(x, window_len=200):
+    s = np.r_[x[window_len - 1:0:-1], x, x[-1:-window_len:-1]]
+    w = np.hanning(window_len)
+    y = np.convolve(w / w.sum(), s, mode='valid')
+    return y[int(window_len / 2):-int(window_len / 2) + 1]
 
-#write the IGV session file
-def rem_base_path(path,base_path):
-            return path.replace(os.path.join(base_path,''),'')
 
-def find_th_rpm(df_chip,th_rpm):
-    return np.min(df_chip.apply(lambda x: np.percentile(x,th_rpm)))
+# write the IGV session file
+def rem_base_path(path, base_path):
+    return path.replace(os.path.join(base_path, ''), '')
+
+
+def find_th_rpm(df_chip, th_rpm):
+    return np.min(df_chip.apply(lambda x: np.percentile(x, th_rpm)))
+
 
 def log2_transform(x):
-    return np.log2(x+1)
-    
+    return np.log2(x + 1)
+
+
 def angle_transform(x):
-    return np.arcsin(np.sqrt(x)/1000000.0)
+    return np.arcsin(np.sqrt(x) / 1000000.0)
 
 
 class C:
     pass
 
-def get_args(input_args):
+
+def get_args():
     # mandatory
     parser = argparse.ArgumentParser(description='HAYSTACK Parameters')
-    parser.add_argument('samples_filename_or_bam_folder', type=str,
-                        help='A tab delimited file with in each row (1) a sample name, (2) the path to the corresponding bam filename. Alternatively it is possible to specify a folder containing some .bam files to analyze.')
+    parser.add_argument('samples_filename', type=str,
+                        help='A tab delimited file with in each row (1) a sample name, (2) the path to the corresponding bam or bigwig filename')
     parser.add_argument('genome_name', type=str, help='Genome assembly to use from UCSC (for example hg19, mm9, etc.)')
 
     # optional
-    parser.add_argument('--bin_size', type=int, help='bin size to use(default: 200bp)', default=200)
+    parser.add_argument('--bin_size', type=int, help='bin size to use(default: 500bp)', default=500)
     parser.add_argument('--disable_quantile_normalization', help='Disable quantile normalization (default: False)',
                         action='store_true')
     parser.add_argument('--th_rpm', type=float,
@@ -86,8 +87,8 @@ def get_args(input_args):
     parser.add_argument('--output_directory', type=str, help='Output directory (default: current directory)',
                         default='')
     parser.add_argument('--blacklist', help='Exclude blacklisted regions.', action='store_true')
-    parser.add_argument('--chrom_exclude', help='Exclude chromomsomes. For example (_|chrM|chrX|chrY).', default='')
-    parser.add_argument('--read_ext',  type=int, help='Read extension', default='200')
+    parser.add_argument('--chrom_exclude', help='Exclude chromosomes. For example (_|chrM|chrX|chrY).', default='chrX|chrY')
+    parser.add_argument('--read_ext', type=int, help='Read extension', default='200')
     parser.add_argument('--max_regions_percentage', type=float,
                         help='Upper bound on the %% of the regions selected  (deafult: 0.1, 0.0=0%% 1.0=100%%)',
                         default=0.1)
@@ -103,14 +104,76 @@ def get_args(input_args):
     c = C()
 
 
+    #input_args=['/mnt/hd2/test_data/samples_names.txt',
+    #                         'hg19',
+    #                         '--output_directory',
+    #                         '/mnt/hd2/test_data/OUTPUT3',
+    #                         '--bin_size',
+    #                         '200']
 
-    parser.parse_args(input_args,namespace=c)
+    parser.parse_args(namespace=c)
 
     return c
 
 
 def main():
 
+    def check_required_packages():
+
+        if which('samtools') is None:
+            error(
+                'Haystack requires samtools. Please install using bioconda')
+            sys.exit(1)
+
+        if which('bedtools') is None:
+            error('Haystack requires bedtools. Please install using bioconda')
+            sys.exit(1)
+
+        if which('bedGraphToBigWig') is None:
+            info(
+                'To generate the bigwig files Haystack requires bedGraphToBigWig. Please install using bioconda')
+            sys.exit(1)
+
+        if which('sambamba') is None:
+            info(
+                'Haystack requires sambamba. Please install using bioconda')
+            sys.exit(1)
+
+
+    def get_data_filepaths(samples_filename):
+        # check folder or sample filename
+        if os.path.isfile(samples_filename):
+            data_filenames = []
+            sample_names = []
+            with open(samples_filename) as infile:
+                for line in infile:
+
+                    if not line.strip():
+                        continue
+
+                    if line.startswith('#'):  # skip optional header line or empty lines
+                        info('Skipping header/comment line:%s' % line)
+                        continue
+
+                    fields = line.strip().split("\t")
+                    n_fields = len(fields)
+
+                    if n_fields == 2:
+                        sample_names.append(fields[0])
+                        data_filenames.append(fields[1])
+                    else:
+                        error('The samples file format is wrong!')
+                        sys.exit(1)
+
+        dir_path = os.path.dirname(os.path.realpath(samples_filename))
+        data_filenames = [os.path.join(dir_path, filename) for filename in data_filenames]
+
+        # check all the files before starting
+        info('Checking samples files location...')
+        for data_filename in data_filenames:
+            check_file(data_filename)
+
+        return sample_names, data_filenames
 
     def intialize_genome(genome_name):
 
@@ -151,7 +214,7 @@ def main():
         if blacklist:
 
             blacklist_filepath = os.path.join(genome_directory,
-                                     'blacklist.bed')
+                                              'blacklist.bed')
             check_file(blacklist_filepath)
 
             tiled_genome.intersect(blacklist_filepath,
@@ -161,15 +224,15 @@ def main():
         else:
             tiled_genome.saveas(genome_sorted_bins_file)
 
-    def average_bigwig(bam_filename, binned_rpm_filename, bigwig_filename):
+    def average_bigwig(data_filename, binned_rpm_filename, bigwig_filename):
         cmd = 'bigWigAverageOverBed %s %s  /dev/stdout | sort -s -n -k 1,1 | cut -f5 > %s' % (
-            bam_filename, genome_sorted_bins_file, binned_rpm_filename)
+            data_filename, genome_sorted_bins_file, binned_rpm_filename)
         sb.call(cmd, shell=True)
-        shutil.copy2(bam_filename, bigwig_filename)
+        shutil.copy2(data_filename, bigwig_filename)
 
-    def normalize_count(feature, scaling_factor):
-        feature.name = str(int(feature.name) * scaling_factor)
-        return feature
+    # def normalize_count(feature, scaling_factor):
+    #     feature.name = str(int(feature.name) * scaling_factor)
+    #     return feature
 
     def get_scaling_factor(bam_filename):
 
@@ -182,24 +245,35 @@ def main():
         return scaling_factor
 
     def to_bedgraph(bam_filename, rpm_filename, binned_rpm_filename):
+
+        info('Computing Scaling Factor...')
+        scaling_factor = get_scaling_factor(bam_filename)
+
         info('Converting bam to bed and extending read length...')
-        bed_extended = BedTool(bam_filename). \
+        bed_coveraged_extended = BedTool(bam_filename). \
             bam_to_bed(). \
             slop(r=read_ext,
                  l=0,
                  s=True,
-                 g=chr_len_filename)
-
-        info('Computing Scaling Factor...')
-        scaling_factor = get_scaling_factor(bam_filename)
+                 g=chr_len_filename). \
+            genome_coverage(bg=True,
+                            scale=scaling_factor,
+                            g=chr_len_filename).sort()
 
         info('Computing coverage over bins...')
         info('Normalizing counts by scaling factor...')
 
         bedgraph = BedTool(genome_sorted_bins_file). \
-            intersect(bed_extended, c=True). \
-            each(normalize_count, scaling_factor). \
+            map(b=bed_coveraged_extended,
+                c=4,
+                o='mean',
+                null=0.0). \
             saveas(rpm_filename)
+
+        # bedgraph = BedTool(genome_sorted_bins_file). \
+        #     intersect(bed_extended, c=True). \
+        #     each(normalize_count, scaling_factor). \
+        #     saveas(rpm_filename)
 
         info('Bedgraph saved...')
         info('Making constant binned (%dbp) rpm values file' % bin_size)
@@ -224,7 +298,7 @@ def main():
             info(
                 'Sorry I cannot create the bigwig file.\nPlease download and install bedGraphToBigWig from here: http://hgdownload.cse.ucsc.edu/admin/exe/ and add to your PATH')
 
-    #convert bam files to genome-wide rpm tracks
+    # convert bam files to genome-wide rpm tracks
 
     def filter_dedup_bam(bam_filename, bam_filtered_nodup_filename):
         bam_temp_filename = os.path.join(os.path.dirname(bam_filtered_nodup_filename),
@@ -232,8 +306,12 @@ def main():
 
         info('Removing  unmapped, mate unmapped, not primary alignment, low MAPQ reads, and reads failing qc')
 
-        cmd = 'sambamba view -f bam -l 0 -t %d -F "not (unmapped or mate_is_unmapped or failed_quality_control or duplicate or secondary_alignment) and mapping_quality >= 30" "%s"  -o "%s"' % (
+        # cmd = 'sambamba view -f bam -l 0 -t %d -F "not (unmapped or mate_is_unmapped or failed_quality_control or duplicate or secondary_alignment) and mapping_quality >= 30" "%s"  -o "%s"' % (
+        #     n_processes, bam_filename, bam_temp_filename)
+
+        cmd = 'sambamba view -f bam -l 0 -t %d -F "not failed_quality_control" "%s"  -o "%s"' % (
             n_processes, bam_filename, bam_temp_filename)
+
         sb.call(cmd, shell=True)
 
         info('Removing  optical duplicates')
@@ -248,11 +326,14 @@ def main():
         except:
             pass
 
-    def to_rpm_tracks(sample_names, bam_filenames, filter=False):
+    def to_rpm_tracks(sample_names, data_filenames):
 
-        for base_name, bam_filename in zip(sample_names, bam_filenames):
+        for base_name, data_filename in zip(sample_names, data_filenames):
 
-            info('Processing:%s' % bam_filename)
+            info('Processing:%s' % data_filename)
+
+            # base_name=sample_names[0]
+            # data_filename = data_filenames[0]
 
             rpm_filename = os.path.join(tracks_directory,
                                         '%s.bedgraph' % base_name)
@@ -262,35 +343,31 @@ def main():
                                            '%s.bw' % base_name)
 
 
+
             if not os.path.exists(binned_rpm_filename) or recompute_all:
 
                 if input_is_bigwig and which('bigWigAverageOverBed'):
-
-                    average_bigwig(bam_filename, binned_rpm_filename, bigwig_filename)
+                    average_bigwig(data_filename,
+                                   binned_rpm_filename,
+                                   bigwig_filename)
 
                 else:
 
-                    if filter:
-                        info('Filtering and deduping BAM file...')
-
-                        bam_filtered_nodup_filename = os.path.join(dir_path,
-                                                                   '%s.filtered.nodup%s' % (os.path.splitext(
-                                                                       os.path.basename(bam_filename))))
-
-                        filter_dedup_bam(bam_filename, bam_filtered_nodup_filename)
-
-                        bam_filename = bam_filtered_nodup_filename
-
+                    bam_filtered_nodup_filename = os.path.join(filtered_bam_directory,
+                                                               '%s.filtered.nodup%s' % (os.path.splitext(
+                                                                   os.path.basename(data_filename))))
+                    info('Filtering and deduping BAM file...')
+                    filter_dedup_bam(data_filename,
+                                     bam_filtered_nodup_filename)
                     info('Building BedGraph RPM track...')
-
-                    to_bedgraph(bam_filename, rpm_filename, binned_rpm_filename)
-
+                    to_bedgraph(bam_filtered_nodup_filename,
+                                rpm_filename,
+                                binned_rpm_filename)
                     info('Converting BedGraph to BigWig')
+                    to_bigwig(bigwig_filename,
+                              rpm_filename)
 
-                    to_bigwig(bigwig_filename, rpm_filename)
-
-    
-    #load coordinates of bins
+    # load coordinates of bins
     def load_rpm_tracks(binned_rpm_filenames):
         # load all the tracks
         info('Loading the processed tracks')
@@ -596,19 +673,16 @@ def main():
 
     #########################
 
-    c = get_args(input_args=['/mnt/hd2/test_data/samples_names.txt',
-                             'hg19',
-                             '--output_directory',
-                             '/mnt/hd2/test_data/OUTPUT1',
-                             '--bin_size',
-                             '200'])
 
-    samples_filename_or_bam_folder = c.samples_filename_or_bam_folder
+    c = get_args()
+
+    samples_filename = c.samples_filename
     genome_name = c.genome_name
 
     # optional
     name = c.name
     output_directory = c.output_directory
+    disable_quantile_normalization = c.disable_quantile_normalization
     bin_size = c.bin_size
     recompute_all = c.recompute_all
     depleted = c.depleted
@@ -622,68 +696,20 @@ def main():
     max_regions_percentage = c.max_regions_percentage
     read_ext = c.read_ext
 
+
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
     print 'Version %s\n' % HAYSTACK_VERSION
-
-    if which('samtools') is None:
-        error(
-            'Haystack requires samtools free available at: http://sourceforge.net/projects/samtools/files/samtools/0.1.19/')
-        sys.exit(1)
-
-    if which('bedtools') is None:
-        error('Haystack requires bedtools free available at: https://github.com/arq5x/bedtools2/releases/tag/v2.20.1')
-        sys.exit(1)
-
-    if which('bedGraphToBigWig') is None:
-        info(
-            'To generate the bigwig files Haystack requires bedGraphToBigWig please download from here: http://hgdownload.cse.ucsc.edu/admin/exe/ and add to your PATH')
 
     if depleted:
         z_score_high = -z_score_high
         z_score_low = -z_score_low
 
-    if input_is_bigwig:
-        extension_to_check = '.bw'
-        info('Input is set BigWig (.bw)')
-    else:
-        extension_to_check = '.bam'
-        info('Input is set compressed SAM (.bam)')
 
-    # check folder or sample filename
-    if os.path.isfile(samples_filename_or_bam_folder):
-        bam_filenames = []
-        sample_names = []
-        with open(samples_filename_or_bam_folder) as infile:
-            for line in infile:
+    check_required_packages()
 
-                if not line.strip():
-                    continue
 
-                if line.startswith('#'):  # skip optional header line or empty lines
-                    info('Skipping header/comment line:%s' % line)
-                    continue
-
-                fields = line.strip().split("\t")
-                n_fields = len(fields)
-
-                if n_fields == 2:
-                    sample_names.append(fields[0])
-                    bam_filenames.append(fields[1])
-                else:
-                    error('The samples file format is wrong!')
-                    sys.exit(1)
-
-    dir_path = os.path.dirname(os.path.realpath(samples_filename_or_bam_folder))
-    bam_filenames = [os.path.join(dir_path, filename) for filename in bam_filenames]
-
-    # check all the files before starting
-    info('Checking samples files location...')
-    for bam_filename in bam_filenames:
-        check_file(bam_filename)
-
-    genome_directory = determine_path('genomes')
-
+    # create directories
     if name:
         directory_name = 'HAYSTACK_HOTSPOTS_on_%s' % name
 
@@ -698,6 +724,10 @@ def main():
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
 
+    filtered_bam_directory = os.path.join(output_directory, 'FILTERED_BAMS')
+    if not os.path.exists(filtered_bam_directory):
+        os.makedirs(filtered_bam_directory)
+
     tracks_directory = os.path.join(output_directory, 'TRACKS')
     if not os.path.exists(tracks_directory):
         os.makedirs(tracks_directory)
@@ -706,13 +736,19 @@ def main():
     if not os.path.exists(intermediate_directory):
         os.makedirs(intermediate_directory)
 
+    specific_regions_directory = os.path.join(output_directory, 'SPECIFIC_REGIONS')
+    if not os.path.exists(specific_regions_directory):
+        os.makedirs(specific_regions_directory)
 
-    chr_len_filename=os.path.join(genome_directory, "%s_chr_lengths.txt" % genome_name)
+    genome_directory = determine_path('genomes')
 
-    genome_sorted_bins_file=os.path.join(output_directory,'%s.%dbp.bins.sorted.bed'
-                                         %(os.path.basename(genome_name),bin_size))
+    sample_names, data_filenames = get_data_filepaths(samples_filename)
 
-    binned_rpm_filenames = glob.glob(os.path.join(intermediate_directory, '*.rpm'))
+
+    chr_len_filename = os.path.join(genome_directory, "%s_chr_lengths.txt" % genome_name)
+
+    genome_sorted_bins_file = os.path.join(output_directory, '%s.%dbp.bins.sorted.bed'
+                                           % (os.path.basename(genome_name), bin_size))
 
     bedgraph_iod_track_filename = os.path.join(tracks_directory,
                                                'VARIABILITY.bedgraph')
@@ -723,23 +759,21 @@ def main():
     bed_hpr_fileaname = os.path.join(output_directory,
                                      'SELECTED_VARIABILITY_HOTSPOT.bed')
 
-
     # step 1
     intialize_genome(genome_name)
     check_file(chr_len_filename)
-
 
     # step 2
     if not os.path.exists(genome_sorted_bins_file) or recompute_all:
         create_tiled_genome()
 
-
     # step 3
     info('Convert files to genome-wide rpm tracks')
-    to_rpm_tracks(sample_names, bam_filenames, filter=False)
+    to_rpm_tracks(sample_names, data_filenames)
 
     # step 4
     info('Normalize rpm tracks')
+    binned_rpm_filenames = glob.glob(os.path.join(intermediate_directory, '*.rpm'))
     df_chip, coordinates_bin = load_rpm_tracks(binned_rpm_filenames)
 
     if disable_quantile_normalization:
@@ -753,12 +787,20 @@ def main():
                                index=df_chip.index)
         df_chip_to_bigwig(df_chip, coordinates_bin, normalized=True)
 
+    #import pyBigWig
+
+   # bw1 = pyBigWig.open("/mnt/hd2/test_data/OUTPUT3/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
+    #bw2 = pyBigWig.open("/mnt/hd2/test_data/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
+    #bw1.header()
+
     # step 5
     info('Determine HP regions')
     hpr_idxs, coordinates_bin, df_chip_hpr_zscore, hpr_iod_scores = find_hpr_coordinates(df_chip, coordinates_bin)
-    info('Save files')
+    info('hpr to bigwig')
     hpr_to_bigwig(coordinates_bin)
+    info('hpr to bedgraph')
     hpr_to_bedgraph(hpr_idxs, coordinates_bin)
+    info('Save files')
     write_specific_regions(coordinates_bin, df_chip_hpr_zscore)
     create_igv_track_file(hpr_iod_scores)
 
