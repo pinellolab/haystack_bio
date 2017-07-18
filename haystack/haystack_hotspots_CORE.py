@@ -241,13 +241,13 @@ def main():
         infile = AlignmentFile(bam_filename, "rb")
         numreads = infile.count(until_eof=True)
         scaling_factor = (1.0 / float(numreads)) * 1000000
-
         return scaling_factor
 
     def to_bedgraph(bam_filename, rpm_filename, binned_rpm_filename):
 
         info('Computing Scaling Factor...')
         scaling_factor = get_scaling_factor(bam_filename)
+        info('Scaling Factor: %e' % scaling_factor)
 
         info('Converting bam to bed and extending read length...')
         bed_coveraged_extended = BedTool(bam_filename). \
