@@ -421,9 +421,7 @@ def main(input_args=None):
     #             '200',
     #             '--chrom_exclude',
     #             '']
-    #args = parser.parse_args(input_args)
-
-    args = parser.parse_args()
+    args = parser.parse_args(input_args)
     info(vars(args))
 
 
