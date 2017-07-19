@@ -7,36 +7,15 @@ Setup script for Haystack -- Epigenetic Variability and Transcription Factor Mot
 @contact: lpinello@jimmy.harvard.edu
 """
 
-import re
-from setuptools import setup, Extension
-import os
-import subprocess as sb
-import sys
-import platform 
-import shutil
-from distutils.dir_util import copy_tree
+from setuptools import setup
 
 
-#TO INSTALL HAYSTACK DEPENDECIENS IN A CUSTOM LOCATION SET THE ENV VARIABLE: HAYSTACK_DEPENDENCIES_FOLDER
-if os.environ.get('HAYSTACK_DEPENDENCIES_FOLDER'):
-	INSTALLATION_PATH=os.environ.get('HAYSTACK_DEPENDENCIES_FOLDER')
-else:
-	INSTALLATION_PATH='%s/Haystack_dependencies' % os.environ['HOME']
 
-BIN_FOLDER=os.path.join(INSTALLATION_PATH,'bin')
+
 
 def main():
-
-	version = re.search(
-    	'^__version__\s*=\s*"(.*)"',
-    	open('haystack/haystack_common.py').read(),
-    	re.M
-    	).group(1)
-
-
-
 	setup( 
-		   version=version,
+		   version=0.4.0,
           name = "haystack_bio",
           include_package_data = True,
     	   packages = ["haystack"],
@@ -53,7 +32,6 @@ def main():
           author='Luca Pinello',
           author_email='lpinello@jimmy.harvard.edu',
           url='http://github.com/lucapinello/Haystack',
-  
           classifiers=[
               'Development Status :: 4 - Beta',
               'Environment :: Console',
@@ -65,83 +43,54 @@ def main():
               'Topic :: Scientific/Engineering :: Bio-Informatics',
               'Programming Language :: Python',
               ],
-          install_requires=[],
-
+          install_requires=[]
           )
 
 
-def install_dependencies(CURRENT_PLATFORM):
+    from __future__ import division, print_function
+    from distutils.dir_util import copy_tree
 
+    import os
+    import subprocess as sb
+    import sys
 
-   if CURRENT_PLATFORM not in  ['Linux','Darwin'] and platform.architecture()!='64bit':
-		sys.stdout.write('Sorry your platform is not supported\n Haystack is supported only on 64bit versions of Linux or OSX ')
-		sys.exit(1)
-   
-   if not os.path.exists(INSTALLATION_PATH):
-		sys.stdout.write ('OK, creating the folder:%s' % INSTALLATION_PATH)
-		os.makedirs(INSTALLATION_PATH)
-		os.makedirs(BIN_FOLDER)
-   else:
-		sys.stdout.write ('\nI cannot create the folder!\nThe folder %s is not empty!' % INSTALLATION_PATH)
+    # TO INSTALL HAYSTACK DEPENDECIENS IN A CUSTOM LOCATION SET THE ENV VARIABLE: HAYSTACK_DEPENDENCIES_FOLDER
+    sys.stdout.write('\n\nInstalling dependencies...')
 
-		try:
-			os.makedirs(BIN_FOLDER)
-		except:
-			pass
+    HAYSTACK_DEPENDENCIES_FOLDER = '%s/Haystack_dependencies' % os.environ['HOME']
 
-def copy_data(CURRENT_PLATFORM):
-    
+    BIN_FOLDER = os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'bin')
 
-    #coping data in place
-    d_path = lambda x: (x,os.path.join(INSTALLATION_PATH,x))
-    
-    s_path=lambda x: os.path.join(INSTALLATION_PATH,x)
-    
+    if not os.path.exists(HAYSTACK_DEPENDENCIES_FOLDER):
+        sys.stdout.write('OK, creating the folder:%s' % HAYSTACK_DEPENDENCIES_FOLDER)
+        os.makedirs(HAYSTACK_DEPENDENCIES_FOLDER)
+        os.makedirs(BIN_FOLDER)
+    else:
+        sys.stdout.write('\nI cannot create the folder!\nThe folder %s is not empty!' % HAYSTACK_DEPENDENCIES_FOLDER)
+
+        try:
+            os.makedirs(BIN_FOLDER)
+        except:
+            pass
+
+    d_path = lambda x: (x, os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, x))
+
     copy_tree(*d_path('genomes'))
     copy_tree(*d_path('gene_annotations'))
     copy_tree(*d_path('motif_databases'))
     copy_tree(*d_path('extra'))
-    
-    
-    if CURRENT_PLATFORM=='Linux':
-        src='precompiled_binary/Linux/'
-    
-    elif CURRENT_PLATFORM=='Darwin':
-        src='precompiled_binary/Darwin/'
 
-    dest=BIN_FOLDER
-    src_files = os.listdir(src)
-    for file_name in src_files:
-        full_file_name = os.path.join(src, file_name)
-        if (os.path.isfile(full_file_name)):
-            shutil.copy(full_file_name, dest)      
-    
-    
-    #fix permission so people can write in haystack dep folders
-    
-    sb.call('chmod -R 777 %s' % os.path.join(INSTALLATION_PATH,'genomes'),shell=True)
-    sb.call('chmod -R 777 %s' % os.path.join(INSTALLATION_PATH,'gene_annotations'),shell=True)
-    sb.call('chmod -R 777 %s' % os.path.join(INSTALLATION_PATH,'motif_databases'),shell=True)
+    # fix permission so people can write in haystack dep folders
 
-	
+    sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'genomes'), shell=True)
+    sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'gene_annotations'), shell=True)
+    sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'motif_databases'), shell=True)
+
 
 if __name__ == '__main__':
-    if sys.argv[1]=='install':
-        
-        CURRENT_PLATFORM=platform.system().split('_')[0]
-        
-        sys.stdout.write ('\n\nInstalling dependencies...')
-        install_dependencies(CURRENT_PLATFORM)
-        copy_data(CURRENT_PLATFORM)
-        sys.stdout.write ('\nInstalling Python package installed')
+
     main()
-    
-    if sys.argv[1]=='install':
-        sys.stdout.write ('\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!')
 
-
-
-
-
+    sys.stdout.write('\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!')
 
 

@@ -6,26 +6,8 @@ Created on Fri Apr 22 15:16:12 2016
 """
 
 
-import logging
 import sys
 import os
-import platform 
-
-__version__ = "0.4.0"
-HAYSTACK_VERSION=__version__ 
-
-
-logging.basicConfig(level=logging.INFO,
-                    format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
-                    datefmt='%a, %d %b %Y %H:%M:%S',
-                    stream=sys.stderr,
-                    filemode="w"
-                    )
-error   = logging.critical		
-warn    = logging.warning
-debug   = logging.debug
-info    = logging.info
-
 
 
 def check_file(filename):
@@ -77,9 +59,6 @@ def query_yes_no(question, default="yes"):
             sys.stdout.write("Please respond with 'yes' or 'no' "\
                              "(or 'y' or 'n').\n")
 
-
-CURRENT_PLATFORM=platform.system().split('_')[0]
-
 def which(program):
 	import os
 	def is_exe(fpath):
@@ -99,7 +78,6 @@ def which(program):
 	return None
 
 
-
 def determine_path(folder):
-    _ROOT = "/mnt/hd2/Dropbox (Partners HealthCare)/PROJECTS/2017_07_HAYSTACK"
+    _ROOT = '%s/Haystack_dependencies' % os.environ['HOME']
     return os.path.join(_ROOT, folder)
