@@ -608,8 +608,6 @@ def main(input_args=None):
 
 
 
-
-
         # load coordinates of bins
 
         def find_hpr_coordinates(df_chip, coordinates_bin):
