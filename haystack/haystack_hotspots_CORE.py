@@ -344,27 +344,26 @@ def load_rpm_tracks(col_names, binned_rpm_filenames):
 
     return df_chip
 
-def df_chip_to_bigwig(df_chip, coordinates_bin, col_names, bedgraph_track_filenames, bigwig_track_filenames):
+def df_chip_to_bigwig(df_chip, coordinates_bin, col_names, bedgraph_track_filenames, bigwig_binned_filenames):
     coord_quantile = coordinates_bin.copy()
     # write quantile normalized tracks
-    for col, bedgraph_track_filename, bigwig_track_filename in zip(col_names, bedgraph_track_filenames,
-                                                                   bigwig_track_filenames):
-        if not os.path.exists(bigwig_track_filename) or recompute_all:
-            info('Writing binned track: %s' % bigwig_track_filename)
+    for col, bedgraph_track_filename, bigwig_binned_filename in zip(col_names, bedgraph_track_filenames,
+                                                                   bigwig_binned_filenames):
+        if not os.path.exists(bigwig_binned_filename) or recompute_all:
+            info('Writing binned track: %s' % bigwig_binned_filename)
             coord_quantile['rpm_normalized'] = df_chip.loc[:, col]
-            coord_quantile.dropna().to_csv(bigwig_track_filename,
+            coord_quantile.dropna().to_csv(bigwig_binned_filename,
                                            sep='\t',
                                            header=False,
                                            index=False)
             cmd = 'bedGraphToBigWig "%s" "%s" "%s"' % (bedgraph_track_filename,
                                                        chr_len_filename,
-                                                       bigwig_track_filename)
+                                                       bigwig_binned_filename)
             sb.call(cmd, shell=True)
             # try:
             #     os.remove(normalized_output_filename)
             # except:
             #     pass
-
 
 def main(input_args=None):
     print '\n[H A Y S T A C K   H O T S P O T]'
@@ -457,7 +456,7 @@ def main(input_args=None):
                       for sample_name in sample_names]
     bedgraph_track_filenames = [os.path.join(tracks_directory, '%s.bedgraph' % col_name)
                                 for col_name in col_names]
-    bigwig_track_filenames = [filename.replace('.bedgraph', '.bw') for filename in bedgraph_track_filenames]
+    bigwig_binned_filenames = [filename.replace('.bedgraph', '.bw') for filename in bedgraph_track_filenames]
     bedgraph_track_normalized_filenames = [os.path.join(tracks_directory, '%s_quantile_normalized.bedgraph' % col_name)
                                            for col_name in col_names]
     bigwig_track_normalized_filenames = [filename.replace('.bedgraph', '.bw') for filename in bedgraph_track_normalized_filenames]
@@ -467,7 +466,7 @@ def main(input_args=None):
                                          'VARIABILITY.bw')
     bedgraph_hpr_filename = os.path.join(tracks_directory,
                                          'SELECTED_VARIABILITY_HOTSPOT.bedgraph')
-    bed_hpr_fileaname = os.path.join(output_directory,
+    bed_hpr_filename = os.path.join(output_directory,
                                      'SELECTED_VARIABILITY_HOTSPOT.bed')
 
     # step 5
@@ -500,7 +499,7 @@ def main(input_args=None):
                     genome_sorted_bins_file,
                     read_ext)
         info('Converting BedGraph to BigWig')
-        to_bigwig(bigwig_filenames,
+        to_bigwig(bigwig_binned_filenames,
                   rpm_filenames,
                   chr_len_filename)
 
@@ -512,14 +511,8 @@ def main(input_args=None):
                                   sep='\t',
                                   header=None,
                                   usecols=[0, 1, 2])
-    if disable_quantile_normalization:
-        info('Skipping quantile normalization...')
-        df_chip_to_bigwig(df_chip,
-                          coordinates_bin,
-                          col_names,
-                          bedgraph_track_filenames,
-                          bigwig_track_filenames)
-    else:
+
+    if not disable_quantile_normalization:
         info('Normalizing the data...')
         df_chip = pd.DataFrame(quantile_normalization(df_chip.values),
                                columns=df_chip.columns,
@@ -529,13 +522,13 @@ def main(input_args=None):
                           col_names,
                           bedgraph_track_normalized_filenames,
                           bigwig_track_normalized_filenames)
-        # import pyBigWig
 
-        # bw1 = pyBigWig.open("/mnt/hd2/test_data/OUTPUT3/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
-        # bw2 = pyBigWig.open("/mnt/hd2/test_data/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
-        # bw1.header()
+     import pyBigWig
 
-    # NOT COMPLETE
+     bw1 = pyBigWig.open("/mnt/hd2/test_data/OUTPUT5/HAYSTACK_HOTSPOTS/TRACKS/K562.bw")
+     bw2 = pyBigWig.open("/mnt/hd2/test_data/HAYSTACK_HOTSPOTS/TRACKS/K562.bw")
+     bw1.header()
+     bw2.header()  # NOT COMPLETE
 
     def find_hpr_coordinates(df_chip, coordinates_bin):
 
@@ -640,10 +633,10 @@ def main(input_args=None):
                         header=False,
                         index=False)
 
-        if not os.path.exists(bed_hpr_fileaname) or recompute_all:
-            info('Writing the HPRs in: "%s"' % bed_hpr_fileaname)
+        if not os.path.exists(bed_hpr_filename) or recompute_all:
+            info('Writing the HPRs in: "%s"' % bed_hpr_filename)
             sb.call('sort -k1,1 -k2,2n "%s" | bedtools merge -i stdin >  "%s"' % (bedgraph_hpr_filename,
-                                                                                  bed_hpr_fileaname),
+                                                                                  bed_hpr_filename),
                     shell=True)
 
     def write_specific_regions(coordinates_bin, df_chip_hpr_zscore):
@@ -753,10 +746,10 @@ def main(input_args=None):
         track_items[-1].set("name", 'VARIABILITY')
 
         resource_items.append(ET.SubElement(resources, "Resource"))
-        resource_items[-1].set("path", rem_base_path(bed_hpr_fileaname, output_directory))
+        resource_items[-1].set("path", rem_base_path(bed_hpr_filename, output_directory))
         track_items.append(ET.SubElement(panel, "Track"))
         track_items[-1].set('color', "178,0,0")
-        track_items[-1].set('id', rem_base_path(bed_hpr_fileaname, output_directory))
+        track_items[-1].set('id', rem_base_path(bed_hpr_filename, output_directory))
         track_items[-1].set('renderer', "HEATMAP")
         track_items[-1].set("colorScale",
                             "ContinuousColorScale;%e;%e;%e;%e;0,153,255;255,255,51;204,0,0" % (
