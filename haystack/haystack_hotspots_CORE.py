@@ -374,14 +374,14 @@ def main(input_args=None):
     check_required_packages()
     # step 2
     parser = get_args()
-    input_args=['/mnt/hd2/test_data/samples_names.txt',
-                'hg19',
-                '--output_directory',
-                '/mnt/hd2/test_data/OUTPUT5',
-                '--bin_size',
-                '200',
-                '--chrom_exclude',
-                '']
+    # input_args=['/mnt/hd2/test_data/samples_names.txt',
+    #             'hg19',
+    #             '--output_directory',
+    #             '/mnt/hd2/test_data/OUTPUT5',
+    #             '--bin_size',
+    #             '200',
+    #             '--chrom_exclude',
+    #             '']
     args = parser.parse_args(input_args)
     info(vars(args))
 
