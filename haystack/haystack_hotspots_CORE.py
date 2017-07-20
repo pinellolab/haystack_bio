@@ -240,24 +240,25 @@ def to_bedgraph(bam_filenames, rpm_filenames, binned_rpm_filenames, chr_len_file
             info('Scaling Factor: %e' % scaling_factor)
 
             info('Converting bam to bed and extending read length...')
-            bed_coveraged_extended = BedTool(bam_filename). \
-                bam_to_bed(). \
+            bed_coveraged_extended = BedTool(bam_filename).\
+                bam_to_bed().\
                 slop(r=read_ext,
                      l=0,
                      s=True,
-                     g=chr_len_filename). \
+                     g=chr_len_filename).\
                 genome_coverage(bg=True,
                                 scale=scaling_factor,
-                                g=chr_len_filename).sort()
+                                g=chr_len_filename).\
+                sort()
 
             info('Computing coverage over bins...')
             info('Normalizing counts by scaling factor...')
 
-            bedgraph = BedTool(genome_sorted_bins_file). \
+            bedgraph = BedTool(genome_sorted_bins_file).\
                 map(b=bed_coveraged_extended,
                     c=4,
                     o='mean',
-                    null=0.0). \
+                    null=0.0).\
                 saveas(rpm_filename)
 
             # bedgraph = BedTool(genome_sorted_bins_file). \
@@ -374,14 +375,14 @@ def main(input_args=None):
     check_required_packages()
     # step 2
     parser = get_args()
-    # input_args=['/mnt/hd2/test_data/samples_names.txt',
-    #             'hg19',
-    #             '--output_directory',
-    #             '/mnt/hd2/test_data/OUTPUT5',
-    #             '--bin_size',
-    #             '200',
-    #             '--chrom_exclude',
-    #             '']
+    input_args=['/mnt/hd2/test_data/samples_names.txt',
+                'hg19',
+                '--output_directory',
+                '/mnt/hd2/test_data/OUTPUT5',
+                '--bin_size',
+                '200',
+                '--chrom_exclude',
+                '']
     args = parser.parse_args(input_args)
     info(vars(args))
 
@@ -443,17 +444,23 @@ def main(input_args=None):
         filtered_bam_directory,
         '%s.filtered.nodup%s' % (os.path.splitext(os.path.basename(data_filename))))
         for data_filename in data_filenames]
-    col_names = '%s.%dbp' % (sample_names, bin_size)
-    binned_rpm_filenames = os.path.join(intermediate_directory,
-                                        '%s.%dbp.rpm' % (sample_names, bin_size))
-    bigwig_filenames = os.path.join(tracks_directory,
-                                    '%s.bw' % sample_names)
-    rpm_filenames = os.path.join(tracks_directory,
-                                 '%s.bedgraph' % sample_names)
-    bedgraph_track_filenames = os.path.join(tracks_directory, '%s.bedgraph' % col_names)
-    bigwig_track_filenames = bedgraph_track_filenames.replace('.bedgraph', '.bw')
-    bedgraph_track_normalized_filenames = os.path.join(tracks_directory, '%s_quantile_normalized.bedgraph' % col_names)
-    bigwig_track_normalized_filenames = bedgraph_track_normalized_filenames.replace('.bedgraph', '.bw')
+    col_names = ['%s.%dbp' % (sample_name, bin_size)
+                 for sample_name in sample_names]
+    binned_rpm_filenames = [os.path.join(intermediate_directory,
+                                        '%s.%dbp.rpm' % (sample_name, bin_size))
+                            for sample_name in sample_names]
+    bigwig_filenames = [os.path.join(tracks_directory,
+                                    '%s.bw' % sample_name)
+                        for sample_name in sample_names]
+    rpm_filenames =  [os.path.join(tracks_directory,
+                                 '%s.bedgraph' % sample_name)
+                      for sample_name in sample_names]
+    bedgraph_track_filenames = [os.path.join(tracks_directory, '%s.bedgraph' % col_name)
+                                for col_name in col_names]
+    bigwig_track_filenames = [filename.replace('.bedgraph', '.bw') for filename in bedgraph_track_filenames]
+    bedgraph_track_normalized_filenames = [os.path.join(tracks_directory, '%s_quantile_normalized.bedgraph' % col_name)
+                                           for col_name in col_names]
+    bigwig_track_normalized_filenames = [filename.replace('.bedgraph', '.bw') for filename in bedgraph_track_normalized_filenames]
     bedgraph_iod_track_filename = os.path.join(tracks_directory,
                                                'VARIABILITY.bedgraph')
     bw_iod_track_filename = os.path.join(tracks_directory,
