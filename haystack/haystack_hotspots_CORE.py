@@ -344,14 +344,14 @@ def load_rpm_tracks(col_names, binned_rpm_filenames):
 
     return df_chip
 
-def df_chip_to_bigwig(df_chip, coordinates_bin, col_names, bedgraph_track_filenames, bigwig_filenames):
+def df_chip_normalized_to_bigwig(df_chip, coordinates_bin, col_names, bedgraph_track_filenames, bigwig_filenames):
 
     # write quantile normalized tracks
     for col, bedgraph_track_filename, bigwig_filename in zip(col_names, bedgraph_track_filenames,
                                                                    bigwig_filenames):
         if not os.path.exists(bigwig_filename) or recompute_all:
             info('Writing binned track: %s' % bigwig_filename)
-            joined_df = pd.DataFrame.join(coordinates_bin, df_chip[col_names[0]])
+            joined_df = pd.DataFrame.join(coordinates_bin, df_chip[col])
             joined_df.to_csv(bedgraph_track_filename,
                                            sep='\t',
                                            header=False,
@@ -520,18 +520,11 @@ def main(input_args=None):
         df_chip = pd.DataFrame(quantile_normalization(df_chip.values),
                                columns=df_chip.columns,
                                index=df_chip.index)
-        df_chip_to_bigwig(df_chip,
-                          coordinates_bin,
-                          col_names,
-                          bedgraph_track_normalized_filenames,
-                          bigwig_track_normalized_filenames)
-
-     import pyBigWig
-
-     bw1 = pyBigWig.open("/mnt/hd2/test_data/OUTPUT5/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
-     bw2 = pyBigWig.open("/mnt/hd2/test_data/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
-     bw1.header()
-     bw2.header()  # NOT COMPLETE
+        df_chip_normalized_to_bigwig(df_chip,
+                                     coordinates_bin,
+                                     col_names,
+                                     bedgraph_track_normalized_filenames,
+                                     bigwig_track_normalized_filenames)
 
     def find_hpr_coordinates(df_chip, coordinates_bin):
 

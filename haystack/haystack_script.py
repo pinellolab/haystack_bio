@@ -978,3 +978,12 @@ create_igv_track_file(hpr_iod_scores)
 
 info('All done! Ciao!')
 sys.exit(0)
+
+#import pyBigWig
+
+#  bw1 = pyBigWig.open("/mnt/hd2/test_data/OUTPUT5/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
+#  bw2 = pyBigWig.open("/mnt/hd2/test_data/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
+#  bw1.header()
+#  bw2.header()
+# bw1.values("chr1", 100000, 100003)# NOT COMPLETE
+# bw2.values("chr1", 100000, 100003)
