@@ -22,7 +22,7 @@ from pybedtools import BedTool
 import multiprocessing
 
 n_processes = multiprocessing.cpu_count()
-
+recompute_all=None
 HAYSTACK_VERSION = "0.4.0"
 
 logging.basicConfig(level=logging.INFO,
@@ -404,14 +404,14 @@ def main(input_args=None):
 
     parser = get_args()
 
-    # input_args=['/mnt/hd2/test_data/samples_names.txt',
-    #             'hg19',
-    #             '--output_directory',
-    #             '/mnt/hd2/test_data/OUTPUT5',
-    #             '--bin_size',
-    #             '200',
-    #             '--chrom_exclude',
-    #             '']
+    input_args=['/mnt/hd2/test_data/samples_names.txt',
+                'hg19',
+                '--output_directory',
+                '/mnt/hd2/test_data/OUTPUT5',
+                '--bin_size',
+                '200',
+                '--chrom_exclude',
+                '']
     args = parser.parse_args(input_args)
     info(vars(args))
 
@@ -422,18 +422,19 @@ def main(input_args=None):
     output_directory = args.output_directory
     disable_quantile_normalization = args.disable_quantile_normalization
     bin_size = args.bin_size
-    recompute_all = args.recompute_all
     depleted = args.depleted
     input_is_bigwig = args.input_is_bigwig
     transformation = args.transformation
-    z_score_high = args.z_score_high
-    z_score_low = args.z_score_low
     th_rpm = args.th_rpm
     chrom_exclude = args.chrom_exclude  # '_|chrM|chrX|chrY'
     blacklist = args.blacklist
     max_regions_percentage = args.max_regions_percentage
     read_ext = args.read_ext
 
+    global recompute_all
+    recompute_all = args.recompute_all
+    z_score_high = args.z_score_high
+    z_score_low = args.z_score_low
     if depleted:
         z_score_high = -z_score_high
         z_score_low = -z_score_low
