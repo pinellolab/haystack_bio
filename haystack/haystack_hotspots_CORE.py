@@ -344,21 +344,21 @@ def load_rpm_tracks(col_names, binned_rpm_filenames):
 
     return df_chip
 
-def df_chip_to_bigwig(df_chip, coordinates_bin, col_names, bedgraph_track_filenames, bigwig_binned_filenames):
-    coord_quantile = coordinates_bin.copy()
+def df_chip_to_bigwig(df_chip, coordinates_bin, col_names, bedgraph_track_filenames, bigwig_filenames):
+
     # write quantile normalized tracks
-    for col, bedgraph_track_filename, bigwig_binned_filename in zip(col_names, bedgraph_track_filenames,
-                                                                   bigwig_binned_filenames):
-        if not os.path.exists(bigwig_binned_filename) or recompute_all:
-            info('Writing binned track: %s' % bigwig_binned_filename)
-            coord_quantile['rpm_normalized'] = df_chip.loc[:, col]
-            coord_quantile.dropna().to_csv(bigwig_binned_filename,
+    for col, bedgraph_track_filename, bigwig_filename in zip(col_names, bedgraph_track_filenames,
+                                                                   bigwig_filenames):
+        if not os.path.exists(bigwig_filename) or recompute_all:
+            info('Writing binned track: %s' % bigwig_filename)
+            joined_df = pd.DataFrame.join(coordinates_bin, df_chip[col_names[0]])
+            joined_df.to_csv(bedgraph_track_filename,
                                            sep='\t',
                                            header=False,
                                            index=False)
             cmd = 'bedGraphToBigWig "%s" "%s" "%s"' % (bedgraph_track_filename,
                                                        chr_len_filename,
-                                                       bigwig_binned_filename)
+                                                       bigwig_filename)
             sb.call(cmd, shell=True)
             # try:
             #     os.remove(normalized_output_filename)
@@ -374,14 +374,14 @@ def main(input_args=None):
     check_required_packages()
     # step 2
     parser = get_args()
-    input_args=['/mnt/hd2/test_data/samples_names.txt',
-                'hg19',
-                '--output_directory',
-                '/mnt/hd2/test_data/OUTPUT5',
-                '--bin_size',
-                '200',
-                '--chrom_exclude',
-                '']
+    # input_args=['/mnt/hd2/test_data/samples_names.txt',
+    #             'hg19',
+    #             '--output_directory',
+    #             '/mnt/hd2/test_data/OUTPUT5',
+    #             '--bin_size',
+    #             '200',
+    #             '--chrom_exclude',
+    #             '']
     args = parser.parse_args(input_args)
     info(vars(args))
 
@@ -456,10 +456,13 @@ def main(input_args=None):
                       for sample_name in sample_names]
     bedgraph_track_filenames = [os.path.join(tracks_directory, '%s.bedgraph' % col_name)
                                 for col_name in col_names]
-    bigwig_binned_filenames = [filename.replace('.bedgraph', '.bw') for filename in bedgraph_track_filenames]
-    bedgraph_track_normalized_filenames = [os.path.join(tracks_directory, '%s_quantile_normalized.bedgraph' % col_name)
+    bigwig_binned_filenames = [filename.replace('.bedgraph', '.bw')
+                               for filename in bedgraph_track_filenames]
+    bedgraph_track_normalized_filenames = [os.path.join(tracks_directory,
+                                                        '%s_quantile_normalized.bedgraph' % col_name)
                                            for col_name in col_names]
-    bigwig_track_normalized_filenames = [filename.replace('.bedgraph', '.bw') for filename in bedgraph_track_normalized_filenames]
+    bigwig_track_normalized_filenames = [filename.replace('.bedgraph', '.bw')
+                                         for filename in bedgraph_track_normalized_filenames]
     bedgraph_iod_track_filename = os.path.join(tracks_directory,
                                                'VARIABILITY.bedgraph')
     bw_iod_track_filename = os.path.join(tracks_directory,
@@ -525,8 +528,8 @@ def main(input_args=None):
 
      import pyBigWig
 
-     bw1 = pyBigWig.open("/mnt/hd2/test_data/OUTPUT5/HAYSTACK_HOTSPOTS/TRACKS/K562.bw")
-     bw2 = pyBigWig.open("/mnt/hd2/test_data/HAYSTACK_HOTSPOTS/TRACKS/K562.bw")
+     bw1 = pyBigWig.open("/mnt/hd2/test_data/OUTPUT5/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
+     bw2 = pyBigWig.open("/mnt/hd2/test_data/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
      bw1.header()
      bw2.header()  # NOT COMPLETE
 
