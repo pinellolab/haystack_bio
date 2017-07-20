@@ -6,9 +6,12 @@ Setup script for Haystack -- Epigenetic Variability and Transcription Factor Mot
 @author:  Luca Pinello
 @contact: lpinello@jimmy.harvard.edu
 """
-
+from __future__ import division, print_function
 from setuptools import setup
-
+from distutils.dir_util import copy_tree
+import os
+import subprocess as sb
+import sys
 
 def main():
     setup(
@@ -42,14 +45,6 @@ def main():
         ],
         install_requires=[]
     )
-
-
-from __future__ import division, print_function
-from distutils.dir_util import copy_tree
-
-import os
-import subprocess as sb
-import sys
 
 # TO INSTALL HAYSTACK DEPENDECIENS IN A CUSTOM LOCATION SET THE ENV VARIABLE: HAYSTACK_DEPENDENCIES_FOLDER
 sys.stdout.write('\n\nInstalling dependencies...')
