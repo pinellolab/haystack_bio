@@ -34,7 +34,7 @@ cache:
   - $HOME/miniconda2 # Add the installation to TRAVIS cache.
 
 script:
-  - haystack_pipeline -h
+  - haystack_hotspots -h
   - haystack_download_genome hg19
 
 
