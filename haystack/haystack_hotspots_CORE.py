@@ -295,8 +295,8 @@ def to_filtered_deduped_bams(bam_filenames, output_directory, n_processes):
 
     bam_filtered_nodup_filenames = [os.path.join(
         filtered_bam_directory,
-        '%s.filtered.nodup%s' % (os.path.splitext(os.path.basename(data_filename))))
-        for data_filename in data_filenames]
+        '%s.filtered.nodup%s' % (os.path.splitext(os.path.basename(bam_filename))))
+        for bam_filename in bam_filenames]
 
     for bam_filename, bam_filtered_nodup_filename in zip(bam_filenames, bam_filtered_nodup_filenames):
 
