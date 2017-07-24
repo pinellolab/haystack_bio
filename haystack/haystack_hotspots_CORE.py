@@ -61,6 +61,20 @@ def log2_transform(x):
 def angle_transform(x):
     return np.arcsin(np.sqrt(x) / 1000000.0)
 
+
+# def normalize_count(feature, scaling_factor):
+#     feature.name = str(int(feature.name) * scaling_factor)
+#     return feature
+
+def get_scaling_factor(bam_filename):
+    from pysam import AlignmentFile
+
+    infile = AlignmentFile(bam_filename, "rb")
+    numreads = infile.count(until_eof=True)
+    scaling_factor = (1.0 / float(numreads)) * 1000000
+    return scaling_factor
+
+
 def get_args():
     # mandatory
     parser = argparse.ArgumentParser(description='HAYSTACK Parameters')
@@ -163,10 +177,13 @@ def get_data_filepaths(samples_filename):
     return sample_names, data_filenames
 
 
-def initialize_genome(genome_directory, genome_name):
+def initialize_genome(genome_name):
     from bioutilities import Genome_2bit
 
     info('Initializing Genome:%s' % genome_name)
+
+    genome_directory = determine_path('genomes')
+
     genome_2bit = os.path.join(genome_directory, genome_name + '.2bit')
     chr_len_filename=os.path.join(genome_directory, "%s_chr_lengths.txt" % genome_name)
 
@@ -188,9 +205,11 @@ def initialize_genome(genome_directory, genome_name):
     return chr_len_filename
 
 
-def create_tiled_genome(genome_directory, genome_name, output_directory, chr_len_filename, bin_size,
+def create_tiled_genome(genome_name, output_directory, chr_len_filename, bin_size,
                         chrom_exclude, blacklist):
     from re import search
+
+    genome_directory = determine_path('genomes')
 
     genome_sorted_bins_file = os.path.join(output_directory, '%s.%dbp.bins.sorted.bed'
                                            % (os.path.basename(genome_name), bin_size))
@@ -227,6 +246,37 @@ def create_tiled_genome(genome_directory, genome_name, output_directory, chr_len
             tiled_genome.saveas(genome_sorted_bins_file)
     return genome_sorted_bins_file
 
+### if bigwig
+
+def copy_bigwigs(data_filenames, sample_names, tracks_directory):
+
+    bigwig_filenames =  [os.path.join(tracks_directory,
+                                 '%s.bw' % sample_name)
+                      for sample_name in sample_names]
+
+    for data_filename, bigwig_filename in zip(data_filenames, bigwig_filenames):
+        shutil.copy2(data_filename, bigwig_filename)
+
+    return bigwig_filenames
+
+def to_binned_tracks_if_bigwigs(data_filenames, intermediate_directory, binned_sample_names, genome_sorted_bins_file):
+
+
+    binned_rpm_filenames = [os.path.join(intermediate_directory,
+                                        '%s.rpm' %binned_sample_name)
+                            for binned_sample_name in binned_sample_names]
+
+    for data_filename, binned_rpm_filename in zip(data_filenames,binned_rpm_filenames):
+
+        if not os.path.exists(binned_rpm_filename) or recompute_all:
+            info('Processing:%s' % data_filename)
+
+            cmd = 'bigWigAverageOverBed %s %s  /dev/stdout | sort -s -n -k 1,1 | cut -f5 > %s' % (
+                data_filename, genome_sorted_bins_file, binned_rpm_filename)
+            sb.call(cmd, shell=True)
+
+    return binned_rpm_filenames
+#######
 # convert bam files to genome-wide rpm tracks
 def to_filtered_deduped_bams(bam_filenames, output_directory):
 
@@ -271,46 +321,12 @@ def to_filtered_deduped_bams(bam_filenames, output_directory):
     return bam_filtered_nodup_filenames
 
 
-
-def average_bigwigs(data_filenames, intermediate_directory, binned_sample_names, genome_sorted_bins_file):
-
-
-    binned_rpm_filenames = [os.path.join(intermediate_directory,
-                                        '%s.rpm' %binned_sample_name)
-                            for binned_sample_name in binned_sample_names]
-
-    for data_filename, binned_rpm_filename in zip(data_filenames,binned_rpm_filenames):
-
-        if not os.path.exists(binned_rpm_filename) or recompute_all:
-            info('Processing:%s' % data_filename)
-
-            cmd = 'bigWigAverageOverBed %s %s  /dev/stdout | sort -s -n -k 1,1 | cut -f5 > %s' % (
-                data_filename, genome_sorted_bins_file, binned_rpm_filename)
-            sb.call(cmd, shell=True)
-
-    return binned_rpm_filenames
-
-
-def move_bigwigs(data_filenames, sample_names, tracks_directory):
-
-    bigwig_filenames =  [os.path.join(tracks_directory,
-                                 '%s.bw' % sample_name)
-                      for sample_name in sample_names]
-
-    for data_filename, bigwig_filename in zip(data_filenames, bigwig_filenames):
-        shutil.copy2(data_filename, bigwig_filename)
-
-    return bigwig_filenames
-
 def to_normalized_extended_reads_tracks(bam_filenames, sample_names, tracks_directory, chr_len_filename, read_ext):
-
 
     bedgraph_filenames = [os.path.join(tracks_directory,'%s.bedgraph' %sample_name)
                           for sample_name in sample_names]
-
     bigwig_filenames = [filename.replace('.bedgraph', '.bw')
                         for filename in bedgraph_filenames]
-
 
     for bam_filename, bedgraph_filename, bigwig_filename in zip(bam_filenames,
                                                                     bedgraph_filenames,
@@ -348,28 +364,24 @@ def to_normalized_extended_reads_tracks(bam_filenames, sample_names, tracks_dire
 
     return bedgraph_filenames, bigwig_filenames
 
-
-def to_binned_tracks(binned_sample_names, tracks_directory, intermediate_directory,
+def to_binned_tracks(bedgraph_filenames, binned_sample_names, tracks_directory, intermediate_directory,
                      chr_len_filename, genome_sorted_bins_file):
 
     bedgraph_binned_filenames =  [os.path.join(tracks_directory,
-                                 '%s.bedgraph' % binned_sample_name)
-                      for binned_sample_name in binned_sample_names]
-
+                                               '%s.bedgraph' % binned_sample_name)
+                                  for binned_sample_name in binned_sample_names]
 
     binned_rpm_filenames = [os.path.join(intermediate_directory,
                                         '%s.rpm' % binned_sample_name)
                             for binned_sample_name in binned_sample_names]
 
-
-
     bigwig_binned_filenames = [filename.replace('.bedgraph', '.bw')
                                for filename in bedgraph_binned_filenames]
 
-    for bedgraph_binned_filename, binned_rpm_filename, bigwig_binned_filename in zip(bedgraph_binned_filenames,
-                                                                                     binned_rpm_filenames,
-                                                                                     bigwig_binned_filenames):
-
+    for bedgraph_filename, bedgraph_binned_filename, binned_rpm_filename, bigwig_binned_filename in zip(bedgraph_filenames,
+                                                                                                        bedgraph_binned_filenames,
+                                                                                                        binned_rpm_filenames,
+                                                                                                        bigwig_binned_filenames):
         if not os.path.exists(bedgraph_binned_filename) or recompute_all:
 
             bedgraph = BedTool(genome_sorted_bins_file).\
@@ -377,14 +389,14 @@ def to_binned_tracks(binned_sample_names, tracks_directory, intermediate_directo
                     c=4,
                     o='mean',
                     null=0.0).\
-                saveas(bedgraph_binned_filenames)
+                saveas(bedgraph_binned_filename)
 
             # bedgraph = BedTool(genome_sorted_bins_file). \
             #     intersect(bed_extended, c=True). \
             #     each(normalize_count, scaling_factor). \
             #     saveas(bedgraph_filename)
 
-            info('Bedgraph saved...')
+            info('Binned Bedgraph saved...')
 
         if not os.path.exists(binned_rpm_filename) or recompute_all:
 
@@ -399,18 +411,6 @@ def to_binned_tracks(binned_sample_names, tracks_directory, intermediate_directo
                                                        bigwig_binned_filename)
             sb.call(cmd, shell=True)
     return binned_rpm_filenames
-
-# def normalize_count(feature, scaling_factor):
-#     feature.name = str(int(feature.name) * scaling_factor)
-#     return feature
-
-def get_scaling_factor(bam_filename):
-    from pysam import AlignmentFile
-
-    infile = AlignmentFile(bam_filename, "rb")
-    numreads = infile.count(until_eof=True)
-    scaling_factor = (1.0 / float(numreads)) * 1000000
-    return scaling_factor
 
 
 def load_binned_rpm_tracks(binned_sample_names, binned_rpm_filenames):
@@ -439,7 +439,6 @@ def to_binned_normalized_tracks(df_chip, coordinates_bin, binned_sample_names,ch
                                            for binned_sample_name in binned_sample_names]
     bigwig_binned_normalized_filenames = [filename.replace('.bedgraph', '.bw')
                                          for filename in bedgraph_binned_normalized_filenames]
-
     # write quantile normalized tracks
     for binned_sample_name, bedgraph_binned_normalized_filename, bigwig_binned_normalized_filename in zip(binned_sample_names,
                                                              bedgraph_binned_normalized_filenames,
@@ -461,6 +460,269 @@ def to_binned_normalized_tracks(df_chip, coordinates_bin, binned_sample_names,ch
             #     pass
     return df_chip_normalized, bigwig_binned_normalized_filenames
 
+def find_hpr_coordinates(df_chip, coordinates_bin, th_rpm, transformation, max_regions_percentage):
+
+    # th_rpm=np.min(df_chip.apply(lambda x: np.percentile(x,th_rpm)))
+    th_rpm_est = find_th_rpm(df_chip, th_rpm)
+    info('Estimated th_rpm:%s' % th_rpm_est)
+
+    df_chip_not_empty = df_chip.loc[(df_chip > th_rpm_est).any(1), :]
+
+    if transformation == 'log2':
+        df_chip_not_empty = df_chip_not_empty.applymap(log2_transform)
+        info('Using log2 transformation')
+
+    elif transformation == 'angle':
+        df_chip_not_empty = df_chip_not_empty.applymap(angle_transform)
+        info('Using angle transformation')
+
+    else:
+        info('Using no transformation')
+
+    iod_values = df_chip_not_empty.var(1) / df_chip_not_empty.mean(1)
+
+    ####calculate the inflation point a la superenhancers
+    scores = iod_values
+    min_s = np.min(scores)
+    max_s = np.max(scores)
+
+    N_POINTS = len(scores)
+    x = np.linspace(0, 1, N_POINTS)
+    y = sorted((scores - min_s) / (max_s - min_s))
+    m = smooth((np.diff(y) / np.diff(x)), 50)
+    m = m - 1
+    m[m <= 0] = np.inf
+    m[:int(len(m) * (1 - max_regions_percentage))] = np.inf
+    idx_th = np.argmin(m) + 1
+
+    ###
+    ###plot selection
+    pl.figure()
+    pl.title('Selection of the HPRs')
+    pl.plot(x, y, 'r', lw=3)
+    pl.plot(x[idx_th], y[idx_th], '*', markersize=20)
+    x_ext = np.linspace(-0.1, 1.2, N_POINTS)
+    y_line = (m[idx_th] + 1.0) * (x_ext - x[idx_th]) + y[idx_th];
+    pl.plot(x_ext, y_line, '--k', lw=3)
+    pl.xlim(0, 1.1)
+    pl.ylim(0, 1)
+    pl.xlabel('Fraction of bins')
+    pl.ylabel('Score normalized')
+    pl.savefig(os.path.join(output_directory, 'SELECTION_OF_VARIABILITY_HOTSPOT.pdf'))
+    pl.close()
+
+    # print idx_th,
+    th_iod = sorted(iod_values)[idx_th]
+    # print th_iod
+
+    hpr_idxs = iod_values > th_iod
+
+    hpr_iod_scores = iod_values[hpr_idxs]
+    # print len(iod_values),len(hpr_idxs),sum(hpr_idxs), sum(hpr_idxs)/float(len(hpr_idxs)),
+
+    info('Selected %f%% regions (%d)' % (sum(hpr_idxs) / float(len(hpr_idxs)) * 100, sum(hpr_idxs)))
+    coordinates_bin['iod'] = iod_values
+    # we remove the regions "without" signal in any of the cell types
+    coordinates_bin.dropna(inplace=True)
+
+    df_chip_hpr_zscore = df_chip_not_empty.loc[hpr_idxs, :].apply(zscore, axis=1)
+
+    return hpr_idxs, coordinates_bin, df_chip_hpr_zscore, hpr_iod_scores
+
+def hpr_to_bigwig(coordinates_bin, tracks_directory):
+
+    bedgraph_iod_track_filename = os.path.join(tracks_directory,
+                                               'VARIABILITY.bedgraph')
+
+    bw_iod_track_filename = os.path.join(tracks_directory,
+                                         'VARIABILITY.bw')
+
+    # create a track for IGV
+
+    if not os.path.exists(bw_iod_track_filename) or recompute_all:
+
+        info('Generating variability track in bigwig format in:%s' % bw_iod_track_filename)
+
+        coordinates_bin.to_csv(bedgraph_iod_track_filename,
+                               sep='\t',
+                               header=False,
+                               index=False)
+        sb.call('bedGraphToBigWig "%s" "%s" "%s"' % (bedgraph_iod_track_filename,
+                                                     chr_len_filename,
+                                                     bw_iod_track_filename),
+                shell=True)
+        try:
+            os.remove(bedgraph_iod_track_filename)
+        except:
+            pass
+
+def hpr_to_bedgraph(hpr_idxs, coordinates_bin, tracks_directory):
+
+    bedgraph_hpr_filename = os.path.join(tracks_directory,
+                                         'SELECTED_VARIABILITY_HOTSPOT.bedgraph')
+
+    bed_hpr_filename = os.path.join(output_directory,
+                                    'SELECTED_VARIABILITY_HOTSPOT.bed')
+
+    to_write = coordinates_bin.loc[hpr_idxs[hpr_idxs].index]
+    to_write.dropna(inplace=True)
+    to_write['bpstart'] = to_write['bpstart'].astype(int)
+    to_write['bpend'] = to_write['bpend'].astype(int)
+
+    to_write.to_csv(bedgraph_hpr_filename,
+                    sep='\t',
+                    header=False,
+                    index=False)
+
+    if not os.path.exists(bed_hpr_filename) or recompute_all:
+        info('Writing the HPRs in: "%s"' % bed_hpr_filename)
+        sb.call('sort -k1,1 -k2,2n "%s" | bedtools merge -i stdin >  "%s"' % (bedgraph_hpr_filename,
+                                                                              bed_hpr_filename),
+                shell=True)
+
+    return bed_hpr_filename
+
+def write_specific_regions(coordinates_bin, df_chip_hpr_zscore, specific_regions_directory, depleted, z_score_low, z_score_high):
+
+    # write target
+    info('Writing Specific Regions for each cell line...')
+    coord_zscore = coordinates_bin.copy()
+    for col in df_chip_hpr_zscore:
+        regions_specific_filename = 'Regions_specific_for_%s_z_%.2f.bedgraph' % (
+            os.path.basename(col).replace('.rpm', ''), z_score_high)
+        specific_output_filename = os.path.join(specific_regions_directory,
+                                                regions_specific_filename)
+        specific_output_bed_filename = specific_output_filename.replace('.bedgraph', '.bed')
+
+        if not os.path.exists(specific_output_bed_filename) or recompute_all:
+            if depleted:
+                z_score_high = -z_score_high
+                coord_zscore['z-score'] = df_chip_hpr_zscore.loc[
+                    df_chip_hpr_zscore.loc[:, col] < z_score_high, col]
+            else:
+                coord_zscore['z-score'] = df_chip_hpr_zscore.loc[
+                    df_chip_hpr_zscore.loc[:, col] > z_score_high, col]
+            coord_zscore.dropna().to_csv(specific_output_filename,
+                                         sep='\t',
+                                         header=False,
+                                         index=False)
+
+            info('Writing:%s' % specific_output_bed_filename)
+            sb.call('sort -k1,1 -k2,2n "%s" | bedtools merge -i stdin >  "%s"' % (specific_output_filename,
+                                                                                  specific_output_bed_filename),
+                    shell=True)
+    # write background
+    info('Writing Background Regions for each cell line...')
+    coord_zscore = coordinates_bin.copy()
+    for col in df_chip_hpr_zscore:
+
+        bg_output_filename = os.path.join(specific_regions_directory,
+                                          'Background_for_%s_z_%.2f.bedgraph' % (
+                                              os.path.basename(col).replace('.rpm', ''), z_score_low))
+        bg_output_bed_filename = bg_output_filename.replace('.bedgraph', '.bed')
+
+        if not os.path.exists(bg_output_bed_filename) or recompute_all:
+
+            if depleted:
+                z_score_low = -z_score_low
+                coord_zscore['z-score'] = df_chip_hpr_zscore.loc[
+                    df_chip_hpr_zscore.loc[:, col] > z_score_low, col]
+            else:
+                coord_zscore['z-score'] = df_chip_hpr_zscore.loc[
+                    df_chip_hpr_zscore.loc[:, col] < z_score_low, col]
+
+            coord_zscore.dropna().to_csv(bg_output_filename,
+                                         sep='\t',
+                                         header=False,
+                                         index=False)
+
+            info('Writing:%s' % bg_output_bed_filename)
+            sb.call(
+                'sort -k1,1 -k2,2n -i "%s" | bedtools merge -i stdin >  "%s"' % (bg_output_filename,
+                                                                                 bg_output_bed_filename),
+                shell=True)
+
+def create_igv_track_file(hpr_iod_scores, bed_hpr_filename, genome_name, output_directory, binned_sample_names):
+
+    igv_session_filename = os.path.join(output_directory, 'OPEN_ME_WITH_IGV.xml')
+    info('Creating an IGV session file (.xml) in: %s' % igv_session_filename)
+
+    session = ET.Element("Session")
+    session.set("genome", genome_name)
+    session.set("hasGeneTrack", "true")
+    session.set("version", "7")
+    resources = ET.SubElement(session, "Resources")
+    panel = ET.SubElement(session, "Panel")
+
+    resource_items = []
+    track_items = []
+
+    min_h = np.mean(hpr_iod_scores) - 2 * np.std(hpr_iod_scores)
+    max_h = np.mean(hpr_iod_scores) + 2 * np.std(hpr_iod_scores)
+    mid_h = np.mean(hpr_iod_scores)
+    # write the tracks
+    for binned_sample_name in binned_sample_names:
+        if disable_quantile_normalization:
+            track_full_path = os.path.join(output_directory, 'TRACKS', '%s.bw' % binned_sample_name)
+        else:
+            track_full_path = os.path.join(output_directory, 'TRACKS',
+                                           '%s_quantile_normalized.bw' % binned_sample_name)
+
+        track_filename = rem_base_path(track_full_path, output_directory)
+
+        if os.path.exists(track_full_path):
+            resource_items.append(ET.SubElement(resources, "Resource"))
+            resource_items[-1].set("path", track_filename)
+            track_items.append(ET.SubElement(panel, "Track"))
+            track_items[-1].set('color', "0,0,178")
+            track_items[-1].set('id', track_filename)
+            track_items[-1].set("name", sample_name)
+
+    resource_items.append(ET.SubElement(resources, "Resource"))
+    resource_items[-1].set("path", rem_base_path(bw_iod_track_filename, output_directory))
+
+    track_items.append(ET.SubElement(panel, "Track"))
+    track_items[-1].set('color', "178,0,0")
+    track_items[-1].set('id', rem_base_path(bw_iod_track_filename, output_directory))
+    track_items[-1].set('renderer', "HEATMAP")
+    track_items[-1].set("colorScale",
+                        "ContinuousColorScale;%e;%e;%e;%e;0,153,255;255,255,51;204,0,0" % (
+                            mid_h, min_h, mid_h, max_h))
+    track_items[-1].set("name", 'VARIABILITY')
+
+    resource_items.append(ET.SubElement(resources, "Resource"))
+    resource_items[-1].set("path", rem_base_path(bed_hpr_filename, output_directory))
+    track_items.append(ET.SubElement(panel, "Track"))
+    track_items[-1].set('color', "178,0,0")
+    track_items[-1].set('id', rem_base_path(bed_hpr_filename, output_directory))
+    track_items[-1].set('renderer', "HEATMAP")
+    track_items[-1].set("colorScale",
+                        "ContinuousColorScale;%e;%e;%e;%e;0,153,255;255,255,51;204,0,0" % (
+                            mid_h, min_h, mid_h, max_h))
+    track_items[-1].set("name", 'HOTSPOTS')
+
+    for sample_name in sample_names:
+        track_full_path = \
+            glob.glob(os.path.join(output_directory, 'SPECIFIC_REGIONS',
+                                   'Regions_specific_for_%s*.bedgraph' % sample_name))[0]
+        specific_track_filename = rem_base_path(track_full_path, output_directory)
+        if os.path.exists(track_full_path):
+            resource_items.append(ET.SubElement(resources, "Resource"))
+            resource_items[-1].set("path", specific_track_filename)
+
+            track_items.append(ET.SubElement(panel, "Track"))
+            track_items[-1].set('color', "178,0,0")
+            track_items[-1].set('id', specific_track_filename)
+            track_items[-1].set('renderer', "HEATMAP")
+            track_items[-1].set("colorScale",
+                                "ContinuousColorScale;%e;%e;%e;%e;0,153,255;255,255,51;204,0,0" % (
+                                    mid_h, min_h, mid_h, max_h))
+            track_items[-1].set("name", 'REGION SPECIFIC FOR %s' % sample_name)
+
+    tree = ET.ElementTree(session)
+    tree.write(igv_session_filename, xml_declaration=True)
+
+
 def main(input_args=None):
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
@@ -481,37 +743,18 @@ def main(input_args=None):
     args = parser.parse_args(input_args)
     info(vars(args))
 
-    samples_filename = args.samples_filename
-    genome_name = args.genome_name
     # optional
-    name = args.name
-    output_directory = args.output_directory
-    disable_quantile_normalization = args.disable_quantile_normalization
-    bin_size = args.bin_size
-    depleted = args.depleted
-    input_is_bigwig = args.input_is_bigwig
-    transformation = args.transformation
-    th_rpm = args.th_rpm
-    chrom_exclude = args.chrom_exclude  # '_|chrM|chrX|chrY'
-    blacklist = args.blacklist
-    max_regions_percentage = args.max_regions_percentage
-    read_ext = args.read_ext
 
     global recompute_all
     recompute_all = args.recompute_all
-    z_score_high = args.z_score_high
-    z_score_low = args.z_score_low
-    if depleted:
-        z_score_high = -z_score_high
-        z_score_low = -z_score_low
 
     # step 3: create directories
-    if name:
-        directory_name = 'HAYSTACK_HOTSPOTS_on_%s' % name
+    if args.name:
+        directory_name = 'HAYSTACK_HOTSPOTS_on_%s' % args.name
     else:
         directory_name = 'HAYSTACK_HOTSPOTS'
-    if output_directory:
-        output_directory = os.path.join(output_directory, directory_name)
+    if args.output_directory:
+        output_directory = os.path.join(args.output_directory, directory_name)
     else:
         output_directory = directory_name
     if not os.path.exists(output_directory):
@@ -528,34 +771,29 @@ def main(input_args=None):
         os.makedirs(specific_regions_directory)
 
     # step 4: set pathnames
-    genome_directory = determine_path('genomes')
-    sample_names, data_filenames = get_data_filepaths(samples_filename)
-
-
-    binned_sample_names = ['%s.%dbp' % (sample_name, bin_size)
-                 for sample_name in sample_names]
+    sample_names, data_filenames = get_data_filepaths(args.samples_filename)
+    binned_sample_names = ['%s.%dbp' % (sample_name, args.bin_size) for sample_name in sample_names]
     # step 5
-
-    chr_len_filename = initialize_genome(genome_directory, genome_name)
+    chr_len_filename = initialize_genome(args.genome_name)
 
     # step 6
-    genome_sorted_bins_files=create_tiled_genome(genome_directory,
-                                                genome_name,
+    genome_sorted_bins_file=create_tiled_genome(args.genome_name,
                                                 output_directory,
                                                 chr_len_filename,
-                                                bin_size,
-                                                chrom_exclude,
-                                                blacklist)
+                                                args.bin_size,
+                                                args.chrom_exclude,
+                                                args.blacklist)
     # step 7
     info('Convert files to genome-wide rpm tracks')
-    if input_is_bigwig:
-        binned_rpm_filenames= average_bigwigs(data_filenames,
+    if args.input_is_bigwig:
+
+        bigwig_filenames = copy_bigwigs(data_filenames,
+                                        sample_names,
+                                        tracks_directory)
+        binned_rpm_filenames= to_binned_tracks_if_bigwigs(bigwig_filenames,
                                               intermediate_directory,
                                               binned_sample_names,
-                                              genome_sorted_bins_files)
-        bigwig_filenames=move_bigwigs(data_filenames,
-                                      sample_names,
-                                      tracks_directory)
+                                              genome_sorted_bins_file)
     else:
         bam_filtered_nodup_filenames= to_filtered_deduped_bams(data_filenames,
                                                                output_directory)
@@ -565,8 +803,9 @@ def main(input_args=None):
                                                                                   sample_names,
                                                                                   tracks_directory,
                                                                                   chr_len_filename,
-                                                                                  read_ext)
-        binned_rpm_filenames=to_binned_tracks(binned_sample_names,
+                                                                                  args.read_ext)
+        binned_rpm_filenames=to_binned_tracks(bedgraph_filenames,
+                                              binned_sample_names,
                                               tracks_directory,
                                               intermediate_directory,
                                               chr_len_filename,
@@ -581,294 +820,37 @@ def main(input_args=None):
                                   header=None,
                                   usecols=[0, 1, 2])
 
-    if not disable_quantile_normalization:
+    if not args.disable_quantile_normalization:
         info('Normalizing the data...')
 
-        bigwig_binned_normalized_filenames=to_binned_normalized_tracks(df_chip,
+        df_chip, bigwig_binned_normalized_filenames=to_binned_normalized_tracks(df_chip,
                                                                         coordinates_bin,
                                                                         binned_sample_names,
                                                                         chr_len_filename,
                                                                         tracks_directory)
-
-
-
-
-    bedgraph_iod_track_filename = os.path.join(tracks_directory,
-                                               'VARIABILITY.bedgraph')
-    bw_iod_track_filename = os.path.join(tracks_directory,
-                                         'VARIABILITY.bw')
-    bedgraph_hpr_filename = os.path.join(tracks_directory,
-                                         'SELECTED_VARIABILITY_HOTSPOT.bedgraph')
-    bed_hpr_filename = os.path.join(output_directory,
-                                     'SELECTED_VARIABILITY_HOTSPOT.bed')
-
-
-
-
-
-
-
-
-
-    def find_hpr_coordinates(df_chip, coordinates_bin):
-
-        # th_rpm=np.min(df_chip.apply(lambda x: np.percentile(x,th_rpm)))
-        th_rpm_est = find_th_rpm(df_chip, th_rpm)
-        info('Estimated th_rpm:%s' % th_rpm_est)
-
-        df_chip_not_empty = df_chip.loc[(df_chip > th_rpm_est).any(1), :]
-
-        if transformation == 'log2':
-            df_chip_not_empty = df_chip_not_empty.applymap(log2_transform)
-            info('Using log2 transformation')
-
-        elif transformation == 'angle':
-            df_chip_not_empty = df_chip_not_empty.applymap(angle_transform)
-            info('Using angle transformation')
-
-        else:
-            info('Using no transformation')
-
-        iod_values = df_chip_not_empty.var(1) / df_chip_not_empty.mean(1)
-
-        ####calculate the inflation point a la superenhancers
-        scores = iod_values
-        min_s = np.min(scores)
-        max_s = np.max(scores)
-
-        N_POINTS = len(scores)
-        x = np.linspace(0, 1, N_POINTS)
-        y = sorted((scores - min_s) / (max_s - min_s))
-        m = smooth((np.diff(y) / np.diff(x)), 50)
-        m = m - 1
-        m[m <= 0] = np.inf
-        m[:int(len(m) * (1 - max_regions_percentage))] = np.inf
-        idx_th = np.argmin(m) + 1
-
-        ###
-
-        ###plot selection
-        pl.figure()
-        pl.title('Selection of the HPRs')
-        pl.plot(x, y, 'r', lw=3)
-        pl.plot(x[idx_th], y[idx_th], '*', markersize=20)
-        x_ext = np.linspace(-0.1, 1.2, N_POINTS)
-        y_line = (m[idx_th] + 1.0) * (x_ext - x[idx_th]) + y[idx_th];
-        pl.plot(x_ext, y_line, '--k', lw=3)
-        pl.xlim(0, 1.1)
-        pl.ylim(0, 1)
-        pl.xlabel('Fraction of bins')
-        pl.ylabel('Score normalized')
-        pl.savefig(os.path.join(output_directory, 'SELECTION_OF_VARIABILITY_HOTSPOT.pdf'))
-        pl.close()
-
-        # print idx_th,
-        th_iod = sorted(iod_values)[idx_th]
-        # print th_iod
-
-        hpr_idxs = iod_values > th_iod
-
-        hpr_iod_scores = iod_values[hpr_idxs]
-        # print len(iod_values),len(hpr_idxs),sum(hpr_idxs), sum(hpr_idxs)/float(len(hpr_idxs)),
-
-        info('Selected %f%% regions (%d)' % (sum(hpr_idxs) / float(len(hpr_idxs)) * 100, sum(hpr_idxs)))
-        coordinates_bin['iod'] = iod_values
-        # we remove the regions "without" signal in any of the cell types
-        coordinates_bin.dropna(inplace=True)
-
-        df_chip_hpr_zscore = df_chip_not_empty.loc[hpr_idxs, :].apply(zscore, axis=1)
-
-        return hpr_idxs, coordinates_bin, df_chip_hpr_zscore, hpr_iod_scores
-
-    def hpr_to_bigwig(coordinates_bin):
-
-        # create a track for IGV
-
-        if not os.path.exists(bw_iod_track_filename) or recompute_all:
-
-            info('Generating variability track in bigwig format in:%s' % bw_iod_track_filename)
-
-            coordinates_bin.to_csv(bedgraph_iod_track_filename,
-                                   sep='\t',
-                                   header=False,
-                                   index=False)
-            sb.call('bedGraphToBigWig "%s" "%s" "%s"' % (bedgraph_iod_track_filename,
-                                                         chr_len_filename,
-                                                         bw_iod_track_filename),
-                    shell=True)
-            try:
-                os.remove(bedgraph_iod_track_filename)
-            except:
-                pass
-
-    def hpr_to_bedgraph(hpr_idxs, coordinates_bin):
-
-        to_write = coordinates_bin.loc[hpr_idxs[hpr_idxs].index]
-        to_write.dropna(inplace=True)
-        to_write['bpstart'] = to_write['bpstart'].astype(int)
-        to_write['bpend'] = to_write['bpend'].astype(int)
-
-        to_write.to_csv(bedgraph_hpr_filename,
-                        sep='\t',
-                        header=False,
-                        index=False)
-
-        if not os.path.exists(bed_hpr_filename) or recompute_all:
-            info('Writing the HPRs in: "%s"' % bed_hpr_filename)
-            sb.call('sort -k1,1 -k2,2n "%s" | bedtools merge -i stdin >  "%s"' % (bedgraph_hpr_filename,
-                                                                                  bed_hpr_filename),
-                    shell=True)
-
-    def write_specific_regions(coordinates_bin, df_chip_hpr_zscore):
-
-        # write target
-        info('Writing Specific Regions for each cell line...')
-        coord_zscore = coordinates_bin.copy()
-        for col in df_chip_hpr_zscore:
-            regions_specific_filename = 'Regions_specific_for_%s_z_%.2f.bedgraph' % (
-                os.path.basename(col).replace('.rpm', ''), z_score_high)
-            specific_output_filename = os.path.join(specific_regions_directory,
-                                                    regions_specific_filename)
-            specific_output_bed_filename = specific_output_filename.replace('.bedgraph', '.bed')
-
-            if not os.path.exists(specific_output_bed_filename) or recompute_all:
-                if depleted:
-                    coord_zscore['z-score'] = df_chip_hpr_zscore.loc[
-                        df_chip_hpr_zscore.loc[:, col] < z_score_high, col]
-                else:
-                    coord_zscore['z-score'] = df_chip_hpr_zscore.loc[
-                        df_chip_hpr_zscore.loc[:, col] > z_score_high, col]
-                coord_zscore.dropna().to_csv(specific_output_filename,
-                                             sep='\t',
-                                             header=False,
-                                             index=False)
-
-                info('Writing:%s' % specific_output_bed_filename)
-                sb.call('sort -k1,1 -k2,2n "%s" | bedtools merge -i stdin >  "%s"' % (specific_output_filename,
-                                                                                      specific_output_bed_filename),
-                        shell=True)
-        # write background
-        info('Writing Background Regions for each cell line...')
-        coord_zscore = coordinates_bin.copy()
-        for col in df_chip_hpr_zscore:
-
-            bg_output_filename = os.path.join(specific_regions_directory,
-                                              'Background_for_%s_z_%.2f.bedgraph' % (
-                                                  os.path.basename(col).replace('.rpm', ''), z_score_low))
-            bg_output_bed_filename = bg_output_filename.replace('.bedgraph', '.bed')
-
-            if not os.path.exists(bg_output_bed_filename) or recompute_all:
-
-                if depleted:
-                    coord_zscore['z-score'] = df_chip_hpr_zscore.loc[
-                        df_chip_hpr_zscore.loc[:, col] > z_score_low, col]
-                else:
-                    coord_zscore['z-score'] = df_chip_hpr_zscore.loc[
-                        df_chip_hpr_zscore.loc[:, col] < z_score_low, col]
-
-                coord_zscore.dropna().to_csv(bg_output_filename,
-                                             sep='\t',
-                                             header=False,
-                                             index=False)
-
-                info('Writing:%s' % bg_output_bed_filename)
-                sb.call(
-                    'sort -k1,1 -k2,2n -i "%s" | bedtools merge -i stdin >  "%s"' % (bg_output_filename,
-                                                                                     bg_output_bed_filename),
-                    shell=True)
-
-    def create_igv_track_file(hpr_iod_scores):
-
-        igv_session_filename = os.path.join(output_directory, 'OPEN_ME_WITH_IGV.xml')
-        info('Creating an IGV session file (.xml) in: %s' % igv_session_filename)
-
-        session = ET.Element("Session")
-        session.set("genome", genome_name)
-        session.set("hasGeneTrack", "true")
-        session.set("version", "7")
-        resources = ET.SubElement(session, "Resources")
-        panel = ET.SubElement(session, "Panel")
-
-        resource_items = []
-        track_items = []
-
-        min_h = np.mean(hpr_iod_scores) - 2 * np.std(hpr_iod_scores)
-        max_h = np.mean(hpr_iod_scores) + 2 * np.std(hpr_iod_scores)
-        mid_h = np.mean(hpr_iod_scores)
-        # write the tracks
-        for sample_name in sample_names:
-            if disable_quantile_normalization:
-                track_full_path = os.path.join(output_directory, 'TRACKS', '%s.%dbp.bw' % (sample_name, bin_size))
-            else:
-                track_full_path = os.path.join(output_directory, 'TRACKS',
-                                               '%s.%dbp_quantile_normalized.bw' % (sample_name, bin_size))
-
-            track_filename = rem_base_path(track_full_path, output_directory)
-
-            if os.path.exists(track_full_path):
-                resource_items.append(ET.SubElement(resources, "Resource"))
-                resource_items[-1].set("path", track_filename)
-                track_items.append(ET.SubElement(panel, "Track"))
-                track_items[-1].set('color', "0,0,178")
-                track_items[-1].set('id', track_filename)
-                track_items[-1].set("name", sample_name)
-
-        resource_items.append(ET.SubElement(resources, "Resource"))
-        resource_items[-1].set("path", rem_base_path(bw_iod_track_filename, output_directory))
-
-        track_items.append(ET.SubElement(panel, "Track"))
-        track_items[-1].set('color', "178,0,0")
-        track_items[-1].set('id', rem_base_path(bw_iod_track_filename, output_directory))
-        track_items[-1].set('renderer', "HEATMAP")
-        track_items[-1].set("colorScale",
-                            "ContinuousColorScale;%e;%e;%e;%e;0,153,255;255,255,51;204,0,0" % (
-                                mid_h, min_h, mid_h, max_h))
-        track_items[-1].set("name", 'VARIABILITY')
-
-        resource_items.append(ET.SubElement(resources, "Resource"))
-        resource_items[-1].set("path", rem_base_path(bed_hpr_filename, output_directory))
-        track_items.append(ET.SubElement(panel, "Track"))
-        track_items[-1].set('color', "178,0,0")
-        track_items[-1].set('id', rem_base_path(bed_hpr_filename, output_directory))
-        track_items[-1].set('renderer', "HEATMAP")
-        track_items[-1].set("colorScale",
-                            "ContinuousColorScale;%e;%e;%e;%e;0,153,255;255,255,51;204,0,0" % (
-                                mid_h, min_h, mid_h, max_h))
-        track_items[-1].set("name", 'HOTSPOTS')
-
-        for sample_name in sample_names:
-            track_full_path = \
-                glob.glob(os.path.join(output_directory, 'SPECIFIC_REGIONS',
-                                       'Regions_specific_for_%s*.bedgraph' % sample_name))[0]
-            specific_track_filename = rem_base_path(track_full_path, output_directory)
-            if os.path.exists(track_full_path):
-                resource_items.append(ET.SubElement(resources, "Resource"))
-                resource_items[-1].set("path", specific_track_filename)
-
-                track_items.append(ET.SubElement(panel, "Track"))
-                track_items[-1].set('color', "178,0,0")
-                track_items[-1].set('id', specific_track_filename)
-                track_items[-1].set('renderer', "HEATMAP")
-                track_items[-1].set("colorScale",
-                                    "ContinuousColorScale;%e;%e;%e;%e;0,153,255;255,255,51;204,0,0" % (
-                                        mid_h, min_h, mid_h, max_h))
-                track_items[-1].set("name", 'REGION SPECIFIC FOR %s' % sample_name)
-
-        tree = ET.ElementTree(session)
-        tree.write(igv_session_filename, xml_declaration=True)
-
-    #########################
-
-    # step 10
+    # step 9
     info('Determine HP regions')
-    hpr_idxs, coordinates_bin, df_chip_hpr_zscore, hpr_iod_scores = find_hpr_coordinates(df_chip, coordinates_bin)
+    hpr_idxs, coordinates_bin, df_chip_hpr_zscore, hpr_iod_scores = find_hpr_coordinates(df_chip,
+                                                                                         coordinates_bin,
+                                                                                         args.th_rpm,
+                                                                                         args.transformation,
+                                                                                         args.max_regions_percentage)
     info('hpr to bigwig')
-    hpr_to_bigwig(coordinates_bin)
+    hpr_to_bigwig(coordinates_bin, tracks_directory)
     info('hpr to bedgraph')
-    hpr_to_bedgraph(hpr_idxs, coordinates_bin)
+    bed_hpr_filename=hpr_to_bedgraph(hpr_idxs, coordinates_bin, tracks_directory)
     info('Save files')
-    write_specific_regions(coordinates_bin, df_chip_hpr_zscore)
+    write_specific_regions(coordinates_bin, df_chip_hpr_zscore, specific_regions_directory, args.depleted, args.z_score_low, args.z_score_high)
     create_igv_track_file(hpr_iod_scores)
 
     info('All done! Ciao!')
     sys.exit(0)
+
+
+
+
+
+
+    #########################
+
+
