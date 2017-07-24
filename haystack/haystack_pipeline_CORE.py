@@ -54,8 +54,7 @@ def main():
     args_dict=vars(args)
     for key,value in args_dict.items():
             exec('%s=%s' %(key,repr(value)))
-            
-            
+
             
     if meme_motifs_filename:
         check_file(meme_motifs_filename)

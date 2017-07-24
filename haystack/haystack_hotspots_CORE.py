@@ -443,21 +443,20 @@ def to_binned_normalized_tracks(df_chip, coordinates_bin, binned_sample_names,ch
     for binned_sample_name, bedgraph_binned_normalized_filename, bigwig_binned_normalized_filename in zip(binned_sample_names,
                                                              bedgraph_binned_normalized_filenames,
                                                              bigwig_binned_normalized_filenames):
-        if not os.path.exists(bigwig_binned_normalized_filename) or recompute_all:
+        if not os.path.exists(bedgraph_binned_normalized_filename) or recompute_all:
             info('Writing binned track: %s' % bigwig_binned_normalized_filename)
             joined_df = pd.DataFrame.join(coordinates_bin, df_chip_normalized[binned_sample_name])
             joined_df.to_csv(bedgraph_binned_normalized_filename,
                                            sep='\t',
                                            header=False,
                                            index=False)
+        if not os.path.exists(bigwig_binned_normalized_filename) or recompute_all:
+
             cmd = 'bedGraphToBigWig "%s" "%s" "%s"' % (bedgraph_binned_normalized_filename,
                                                        chr_len_filename,
                                                        bigwig_binned_normalized_filename)
             sb.call(cmd, shell=True)
-            # try:
-            #     os.remove(normalized_output_filename)
-            # except:
-            #     pass
+
     return df_chip_normalized, bigwig_binned_normalized_filenames
 
 def find_hpr_coordinates(df_chip, coordinates_bin, th_rpm, transformation, max_regions_percentage):
@@ -529,7 +528,8 @@ def find_hpr_coordinates(df_chip, coordinates_bin, th_rpm, transformation, max_r
 
     return hpr_idxs, coordinates_bin, df_chip_hpr_zscore, hpr_iod_scores
 
-def hpr_to_bigwig(coordinates_bin, tracks_directory):
+
+def hpr_to_bigwig(coordinates_bin, tracks_directory,chr_len_filename):
 
     bedgraph_iod_track_filename = os.path.join(tracks_directory,
                                                'VARIABILITY.bedgraph')
@@ -555,6 +555,7 @@ def hpr_to_bigwig(coordinates_bin, tracks_directory):
             os.remove(bedgraph_iod_track_filename)
         except:
             pass
+    return bw_iod_track_filename
 
 def hpr_to_bedgraph(hpr_idxs, coordinates_bin, tracks_directory):
 
@@ -797,7 +798,6 @@ def main(input_args=None):
     else:
         bam_filtered_nodup_filenames= to_filtered_deduped_bams(data_filenames,
                                                                output_directory)
-        info('Building BedGraph RPM track...')
 
         bedgraph_filenames, bigwig_filenames= to_normalized_extended_reads_tracks(bam_filtered_nodup_filenames,
                                                                                   sample_names,
@@ -812,7 +812,6 @@ def main(input_args=None):
                                               genome_sorted_bins_file)
 
     # step 8
-    info('Normalize rpm tracks')
     df_chip = load_binned_rpm_tracks(binned_sample_names, binned_rpm_filenames)
     coordinates_bin = pd.read_csv(genome_sorted_bins_file,
                                   names=['chr_id', 'bpstart', 'bpend'],
@@ -836,7 +835,7 @@ def main(input_args=None):
                                                                                          args.transformation,
                                                                                          args.max_regions_percentage)
     info('hpr to bigwig')
-    hpr_to_bigwig(coordinates_bin, tracks_directory)
+    bw_iod_track_filename=hpr_to_bigwig(coordinates_bin, tracks_directory,chr_len_filename)
     info('hpr to bedgraph')
     bed_hpr_filename=hpr_to_bedgraph(hpr_idxs, coordinates_bin, tracks_directory)
     info('Save files')
@@ -847,6 +846,14 @@ def main(input_args=None):
     sys.exit(0)
 
 
+    import pyBigWig
+
+    bw1 = pyBigWig.open("/mnt/hd2/test_data/OUTPUT5/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
+    bw2 = pyBigWig.open("/mnt/hd2/test_data/HAYSTACK_HOTSPOTS/TRACKS/K562.200bp_quantile_normalized.bw")
+    bw1.header()
+    bw2.header()
+    bw1.values("chrY", 100000, 100013)# NOT COMPLETE
+    bw2.values("chrY", 100000, 100013)
 
 
 
