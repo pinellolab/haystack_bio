@@ -192,14 +192,13 @@ def get_data_filepaths(samples_filename):
                     sys.exit(1)
 
     dir_path = os.path.dirname(os.path.realpath(samples_filename))
-    data_filenames = [os.path.join(dir_path, filename)
-                      for filename in data_filenames]
+    data_filenames_full = [os.path.join(dir_path, filename) for filename in data_filenames]
     # check all the files before starting
     info('Checking samples files location...')
-    for data_filename in data_filenames:
+    for data_filename in data_filenames_full:
         check_file(data_filename)
 
-    return sample_names, data_filenames
+    return sample_names, data_filenames_full
 
 def initialize_genome(genome_name):
     from bioutilities import Genome_2bit
