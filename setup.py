@@ -15,7 +15,7 @@ import sys
 
 def main():
     setup(
-        version="0.4.0",
+        version="0.5.0",
         name="haystack_bio",
         include_package_data=True,
         packages=["haystack"],

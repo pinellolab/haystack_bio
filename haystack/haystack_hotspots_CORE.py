@@ -11,7 +11,7 @@ import multiprocessing
 from haystack_common import determine_path, which, check_file
 
 recompute_all = None
-HAYSTACK_VERSION = "0.4.0"
+HAYSTACK_VERSION = "0.5.0"
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',

@@ -5,7 +5,7 @@ import shutil as sh
 from bioutilities import Genome_2bit
 from haystack_common import determine_path
 
-HAYSTACK_VERSION = "0.4.0"
+HAYSTACK_VERSION = "0.5.0"
 
 
 def download_genome(name, output_directory=None):
