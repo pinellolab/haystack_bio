@@ -987,3 +987,13 @@ sys.exit(0)
 #  bw2.header()
 # bw1.values("chr1", 100000, 100003)# NOT COMPLETE
 # bw2.values("chr1", 100000, 100003)
+
+
+# input_args=['/mnt/hd2/test_data/samples_names.txt',
+#             'hg19',
+#             '--output_directory',
+#             '/mnt/hd2/test_data/OUTPUT5',
+#             '--bin_size',
+#             '200',
+#             '--chrom_exclude',
+#             '']
