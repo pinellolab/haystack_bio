@@ -75,7 +75,7 @@ def main():
     parser.add_argument('--blacklist', help='Exclude blacklisted regions.', action='store_true')
     parser.add_argument('--chrom_exclude', help='Exclude chromosomes. For example (_|chrM|chrX|chrY).',
                         default='chrX|chrY')
-    parser.add_argument('--read_ext', type=int, help='Read extension', default='200')
+    parser.add_argument('--read_ext', type=int, help='Read extension in bps (default: 200)', default='200')
     parser.add_argument('--temp_directory', help='Directory to store temporary files  (default: /tmp)', default='/tmp')
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
@@ -187,7 +187,7 @@ def main():
         tf_activity_directory = os.path.join(output_directory, 'HAYSTACK_TFs_ACTIVITY_PLANES')
 
     # CALL HAYSTACK HOTSPOTS
-    cmd_to_run = 'haystack_hotspots "%s" %s --output_directory "%s" --bin_size %d %s %s %s %s %s %s %s %s' % \
+    cmd_to_run = 'haystack_hotspots "%s" %s --output_directory "%s" --bin_size %d %s %s %s %s %s %s %s %s %s %s %s' % \
                  (sample_names_hotspots_filename, genome_name, output_directory, bin_size,
                   ('--recompute_all' if recompute_all else ''),
                   ('--depleted' if depleted else ''),
@@ -196,6 +196,9 @@ def main():
                   '--transformation %s' % transformation,
                   '--z_score_high %f' % z_score_high,
                   '--z_score_low %f' % z_score_low,
+                  ('--blacklist'  if blacklist else ''),
+                  '--chrom_exclude %s' % chrom_exclude,
+                  '--read_ext %f' % read_ext,
                   '--th_rpm %f' % th_rpm)
     print cmd_to_run
     sb.call(cmd_to_run, shell=True)
