@@ -143,26 +143,31 @@ def get_args():
 def check_required_packages():
     if which('samtools') is None:
         error(
-            'Haystack requires samtools. Please install using bioconda')
+            'Haystack requires samtools. '
+            'Please install using bioconda')
         sys.exit(1)
 
     if which('bedtools') is None:
-        error('Haystack requires bedtools. Please install using bioconda')
+        error('Haystack requires bedtools.'
+              ' Please install using bioconda')
         sys.exit(1)
 
     if which('bedGraphToBigWig') is None:
         info(
-            'To generate the bigwig files Haystack requires bedGraphToBigWig. Please install using bioconda')
+            ' Haystack requires bedGraphToBigWig.'
+            ' Please install using bioconda')
         sys.exit(1)
 
     if which('sambamba') is None:
         info(
-            'Haystack requires sambamba. Please install using bioconda')
+            'Haystack requires sambamba.'
+            ' Please install using bioconda')
         sys.exit(1)
 
     if which('bigWigAverageOverBed') is None:
         info(
-            'Haystack requires bigWigAverageOverBed. Please install using bioconda')
+            'Haystack requires bigWigAverageOverBed. '
+            'Please install using bioconda')
         sys.exit(1)
 
 def get_data_filepaths(samples_filename):
@@ -172,11 +177,9 @@ def get_data_filepaths(samples_filename):
         sample_names = []
         with open(samples_filename) as infile:
             for line in infile:
-
                 if not line.strip():
                     continue
-
-                if line.startswith('#'):  # skip optional header line or empty lines
+                if line.startswith('#'): # skip optional header line
                     info('Skipping header/comment line:%s' % line)
                     continue
 
@@ -191,7 +194,8 @@ def get_data_filepaths(samples_filename):
                     sys.exit(1)
 
     dir_path = os.path.dirname(os.path.realpath(samples_filename))
-    data_filenames = [os.path.join(dir_path, filename) for filename in data_filenames]
+    data_filenames = [os.path.join(dir_path, filename)
+                      for filename in data_filenames]
     # check all the files before starting
     info('Checking samples files location...')
     for data_filename in data_filenames:
