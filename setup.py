@@ -23,7 +23,7 @@ def main():
         package_data={'haystack': ['./*']},
         entry_points={
             "console_scripts": ['haystack_pipeline = haystack.haystack_pipeline_CORE:main',
-                                'haystack_hotspots =  haystack.haystack_hotspots:main',
+                                'haystack_hotspots =  haystack.haystack_hotspots_CORE:main',
                                 'haystack_motifs = haystack.haystack_motifs_CORE:main',
                                 'haystack_tf_activity_plane = haystack.haystack_tf_activity_plane_CORE:main',
                                 'haystack_download_genome = haystack.haystack_download_genome_CORE:main', ]
