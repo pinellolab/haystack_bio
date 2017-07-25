@@ -29,8 +29,6 @@ print('\n-SELECTION OF VARIABLE REGIONS- '
 print 'Version %s\n' % HAYSTACK_VERSION
 
 
-
-
 def quantile_normalization(A):
     AA = np.zeros_like(A)
     I = np.argsort(A, axis=0)
@@ -198,14 +196,12 @@ def get_data_filepaths(samples_filename):
                 else:
                     error('The samples file format is wrong!')
                     sys.exit(1)
-
     dir_path = os.path.dirname(os.path.realpath(samples_filename))
     data_filenames_full = [os.path.join(dir_path, filename) for filename in data_filenames]
     # check all the files before starting
     info('Checking samples files location...')
     for data_filename in data_filenames_full:
         check_file(data_filename)
-
     return sample_names, data_filenames_full
 
 def initialize_genome(genome_name):
@@ -223,7 +219,6 @@ def initialize_genome(genome_name):
         Genome_2bit(genome_2bit)
     else:
         info("\nIt seems you don't have the required genome file.")
-
         download_genome(genome_name,
                         genome_directory)
         if os.path.exists(genome_2bit):
@@ -233,7 +228,6 @@ def initialize_genome(genome_name):
             error('Sorry I cannot download the required file for you.'
                   ' Check your Internet connection.')
             sys.exit(1)
-
     check_file(chr_len_filename)
 
     return chr_len_filename
