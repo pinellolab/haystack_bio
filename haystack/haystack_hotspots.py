@@ -176,6 +176,9 @@ def check_required_packages():
 
 def get_data_filepaths(samples_filename):
     # check folder or sample filename
+    if not os.path.exists(samples_filename):
+        error("The file or folder %s doesn't exist. Exiting." % samples_filename)
+        sys.exit(1)
     if os.path.isfile(samples_filename):
         data_filenames = []
         sample_names = []
@@ -186,10 +189,8 @@ def get_data_filepaths(samples_filename):
                 if line.startswith('#'): # skip optional header line
                     info('Skipping header/comment line:%s' % line)
                     continue
-
                 fields = line.strip().split("\t")
                 n_fields = len(fields)
-
                 if n_fields == 2:
                     sample_names.append(fields[0])
                     data_filenames.append(fields[1])
@@ -197,12 +198,13 @@ def get_data_filepaths(samples_filename):
                     error('The samples file format is wrong!')
                     sys.exit(1)
     dir_path = os.path.dirname(os.path.realpath(samples_filename))
-    data_filenames_full = [os.path.join(dir_path, filename) for filename in data_filenames]
+    data_filenames = [os.path.join(dir_path, filename)
+                      for filename in data_filenames]
     # check all the files before starting
     info('Checking samples files location...')
-    for data_filename in data_filenames_full:
+    for data_filename in data_filenames:
         check_file(data_filename)
-    return sample_names, data_filenames_full
+    return sample_names, data_filenames
 
 def initialize_genome(genome_name):
     from bioutilities import Genome_2bit
