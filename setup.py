@@ -71,12 +71,13 @@ copy_tree(*d_path('genomes'))
 copy_tree(*d_path('gene_annotations'))
 copy_tree(*d_path('motif_databases'))
 copy_tree(*d_path('extra'))
-
+copy_tree(*d_path('test_data'))
 # fix permission so people can write in haystack dep folders
 
 sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'genomes'), shell=True)
 sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'gene_annotations'), shell=True)
 sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'motif_databases'), shell=True)
+sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'test_data'), shell=True)
 
 if __name__ == '__main__':
     main()

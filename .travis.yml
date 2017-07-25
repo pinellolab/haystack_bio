@@ -36,7 +36,5 @@ cache:
 script:
   - haystack_hotspots -h
   - haystack_download_genome hg19
-
-
-
-
+  - cd $HOME/Haystack_dependencies
+  - haystack_hotspots samples_names.txt hg19 --output_directory $HOME/OUTPUT --bin_size 200 --chrom_exclude 'chr(?!21)'

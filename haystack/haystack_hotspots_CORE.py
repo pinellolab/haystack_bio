@@ -59,8 +59,6 @@ def get_scaling_factor(bam_filename):
     infile = AlignmentFile(bam_filename, "rb")
     numreads = infile.count(until_eof=True)
     scaling_factor = (1.0 / float(numreads)) * 1000000
-
-    scaling_factor =np.float32(scaling_factor)
     return scaling_factor
 
 def get_args():
@@ -385,19 +383,23 @@ def to_normalized_extended_reads_tracks(bam_filenames,
             info('Computing Scaling Factor...')
             scaling_factor = get_scaling_factor(bam_filename)
             info('Scaling Factor: %e' % scaling_factor)
-
             info('Converting bam to bed and extending read length...')
-            BedTool(bam_filename). \
-                bam_to_bed(). \
-                slop(r=read_ext,
-                     l=0,
-                     s=True,
-                     g=chr_len_filename). \
-                genome_coverage(bg=True,
-                                scale=scaling_factor,
-                                g=chr_len_filename). \
-                sort(). \
-                saveas(bedgraph_filename)
+            # BedTool(bam_filename). \
+            #     bam_to_bed(). \
+            #     slop(r=read_ext,
+            #          l=0,
+            #          s=True,
+            #          g=chr_len_filename). \
+            #     genome_coverage(bg=True,
+            #                     scale=scaling_factor,
+            #                     g=chr_len_filename). \
+            #     sort(). \
+            #     saveas(bedgraph_filename)
+
+            cmd = 'samtools view -b %s | bamToBed | slopBed  -r %s -l 0 -s -i stdin -g %s | ' \
+                  'genomeCoverageBed -g  %s -i stdin -bg -scale %.32f| bedtools sort -i stdin > %s' % (
+            bam_filename, read_ext, chr_len_filename, chr_len_filename, scaling_factor, bedgraph_filename)
+            sb.call(cmd, shell=True)
 
         if not os.path.exists(bigwig_filename) or recompute_all:
             info('Converting BedGraph to BigWig')
