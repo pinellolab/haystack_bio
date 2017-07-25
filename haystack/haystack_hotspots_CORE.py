@@ -2,23 +2,14 @@ from __future__ import division
 import os
 import sys
 import subprocess as sb
-import glob
-import shutil
 import numpy as np
-from scipy.stats import zscore
 import pandas as pd
-import matplotlib as mpl
-
-mpl.use('Agg')
-import pylab as pl
 import argparse
 import logging
-import xml.etree.cElementTree as ET
-# commmon functions
-from haystack_common import determine_path, which, check_file
-
 from pybedtools import BedTool
 import multiprocessing
+# commmon functions
+from haystack_common import determine_path, which, check_file
 
 recompute_all = None
 
@@ -35,14 +26,11 @@ warn = logging.warning
 debug = logging.debug
 info = logging.info
 
-
 def quantile_normalization(A):
     AA = np.zeros_like(A)
     I = np.argsort(A, axis=0)
     AA[I, np.arange(A.shape[1])] = np.mean(A[I, np.arange(A.shape[1])], axis=1)[:, np.newaxis]
-
     return AA
-
 
 def smooth(x, window_len=200):
     s = np.r_[x[window_len - 1:0:-1], x, x[-1:-window_len:-1]]
@@ -78,6 +66,8 @@ def get_scaling_factor(bam_filename):
     infile = AlignmentFile(bam_filename, "rb")
     numreads = infile.count(until_eof=True)
     scaling_factor = (1.0 / float(numreads)) * 1000000
+
+    scaling_factor =np.float32(scaling_factor)
     return scaling_factor
 
 
@@ -102,14 +92,14 @@ def get_args():
     parser.add_argument('--z_score_high', type=float, help='z-score value to select the specific regions(default: 1.5)',
                         default=1.5)
     parser.add_argument('--z_score_low', type=float,
-                        help='z-score value to select the not specific regions(default: 0.25)', default=0.25)
+                        help='z-score value to select the not specific regions (default: 0.25)', default=0.25)
     parser.add_argument('--name', help='Define a custom output filename for the report', default='')
     parser.add_argument('--output_directory', type=str, help='Output directory (default: current directory)',
                         default='')
     parser.add_argument('--blacklist', help='Exclude blacklisted regions.', action='store_true')
     parser.add_argument('--chrom_exclude', help='Exclude chromosomes. For example (_|chrM|chrX|chrY).',
                         default='chrX|chrY')
-    parser.add_argument('--read_ext', type=int, help='Read extension', default='200')
+    parser.add_argument('--read_ext', type=int, help='Read extension in bps (default: 200)', default=200)
     parser.add_argument('--max_regions_percentage', type=float,
                         help='Upper bound on the %% of the regions selected  (default: 0.1, 0.0=0%% 1.0=100%%)',
                         default=0.1)
@@ -259,6 +249,7 @@ def create_tiled_genome(genome_name, output_directory, chr_len_filename, bin_siz
 ### if bigwig
 
 def copy_bigwigs(data_filenames, sample_names, tracks_directory):
+    import shutil
     bigwig_filenames = [os.path.join(tracks_directory,
                                      '%s.bw' % sample_name)
                         for sample_name in sample_names]
@@ -373,8 +364,8 @@ def to_normalized_extended_reads_tracks(bam_filenames, sample_names, tracks_dire
     return bedgraph_filenames, bigwig_filenames
 
 
-def to_binned_tracks(bedgraph_filenames, binned_sample_names, tracks_directory, intermediate_directory,
-                     chr_len_filename, genome_sorted_bins_file):
+def to_binned_tracks(bedgraph_filenames, binned_sample_names, tracks_directory,
+                     intermediate_directory,chr_len_filename, genome_sorted_bins_file):
     bedgraph_binned_filenames = [os.path.join(tracks_directory,
                                               '%s.bedgraph' % binned_sample_name)
                                  for binned_sample_name in binned_sample_names]
@@ -386,18 +377,21 @@ def to_binned_tracks(bedgraph_filenames, binned_sample_names, tracks_directory, 
     bigwig_binned_filenames = [filename.replace('.bedgraph', '.bw')
                                for filename in bedgraph_binned_filenames]
 
-    for bedgraph_filename, bedgraph_binned_filename, binned_rpm_filename, bigwig_binned_filename in zip(
-            bedgraph_filenames,
-            bedgraph_binned_filenames,
-            binned_rpm_filenames,
-            bigwig_binned_filenames):
-        if not os.path.exists(bedgraph_binned_filename) or recompute_all:
+    for bedgraph_filename, bedgraph_binned_filename, binned_rpm_filename, bigwig_binned_filename in zip(bedgraph_filenames,
+                                                                                                        bedgraph_binned_filenames,
+                                                                                                        binned_rpm_filenames,
+                                                                                                        bigwig_binned_filenames):
+        if not os.path.exists(binned_rpm_filename) or recompute_all:
+            info('Making constant binned rpm values file: %s' % binned_rpm_filename)
             bedgraph = BedTool(genome_sorted_bins_file). \
                 map(b=bedgraph_filename,
                     c=4,
                     o='mean',
-                    null=0.0). \
+                    null=0.0).\
                 saveas(bedgraph_binned_filename)
+
+            bedgraph.to_dataframe()['name'].\
+                to_csv(binned_rpm_filename, index=False)
 
             # bedgraph = BedTool(genome_sorted_bins_file). \
             #     intersect(bed_extended, c=True). \
@@ -405,11 +399,6 @@ def to_binned_tracks(bedgraph_filenames, binned_sample_names, tracks_directory, 
             #     saveas(bedgraph_filename)
 
             info('Binned Bedgraph saved...')
-
-        if not os.path.exists(binned_rpm_filename) or recompute_all:
-            info('Making constant binned (%dbp) rpm values file' % bin_size)
-            bedgraph.to_dataframe()['name'].to_csv(binned_rpm_filename,
-                                                   index=False)
 
         if not os.path.exists(bigwig_binned_filename) or recompute_all:
             info('Converting BedGraph to BigWig')
@@ -466,7 +455,13 @@ def to_binned_normalized_tracks(df_chip, coordinates_bin, binned_sample_names, c
     return df_chip_normalized, bigwig_binned_normalized_filenames
 
 
-def find_hpr_coordinates(df_chip, coordinates_bin, th_rpm, transformation, max_regions_percentage):
+def find_hpr_coordinates(df_chip, coordinates_bin, th_rpm, transformation, max_regions_percentage, output_directory):
+
+    from scipy.stats import zscore
+    import matplotlib as mpl
+    mpl.use('Agg')
+    import pylab as pl
+
     # th_rpm=args.th_rpm
     # transformation=args.transformation
     # max_regions_percentage=args.max_regions_percentage
@@ -566,7 +561,7 @@ def hpr_to_bigwig(coordinates_bin, tracks_directory, chr_len_filename):
     return bw_iod_track_filename
 
 
-def hpr_to_bedgraph(hpr_idxs, coordinates_bin, tracks_directory):
+def hpr_to_bedgraph(hpr_idxs, coordinates_bin, tracks_directory, output_directory):
     bedgraph_hpr_filename = os.path.join(tracks_directory,
                                          'SELECTED_VARIABILITY_HOTSPOT.bedgraph')
 
@@ -653,8 +648,12 @@ def write_specific_regions(coordinates_bin, df_chip_hpr_zscore, specific_regions
                 shell=True)
 
 
-def create_igv_track_file(hpr_iod_scores, bed_hpr_filename, genome_name, output_directory, binned_sample_names,
-                          disable_quantile_normalization):
+def create_igv_track_file(hpr_iod_scores, bed_hpr_filename, bw_iod_track_filename, genome_name, output_directory,
+                          binned_sample_names,sample_names, disable_quantile_normalization):
+
+    import xml.etree.cElementTree as ET
+    import glob
+
     igv_session_filename = os.path.join(output_directory, 'OPEN_ME_WITH_IGV.xml')
     info('Creating an IGV session file (.xml) in: %s' % igv_session_filename)
 
@@ -839,7 +838,8 @@ def main(input_args=None):
                                                                                          coordinates_bin,
                                                                                          args.th_rpm,
                                                                                          args.transformation,
-                                                                                         args.max_regions_percentage)
+                                                                                         args.max_regions_percentage,
+                                                                                         output_directory)
     info('hpr to bigwig')
     bw_iod_track_filename = hpr_to_bigwig(coordinates_bin,
                                           tracks_directory,
@@ -847,7 +847,8 @@ def main(input_args=None):
     info('hpr to bedgraph')
     bed_hpr_filename = hpr_to_bedgraph(hpr_idxs,
                                        coordinates_bin,
-                                       tracks_directory)
+                                       tracks_directory,
+                                       output_directory)
     info('Save files')
     write_specific_regions(coordinates_bin,
                            df_chip_hpr_zscore,
@@ -857,9 +858,11 @@ def main(input_args=None):
                            args.z_score_high)
     create_igv_track_file(hpr_iod_scores,
                           bed_hpr_filename,
+                          bw_iod_track_filename,
                           args.genome_name,
                           output_directory,
                           binned_sample_names,
+                          sample_names,
                           args.disable_quantile_normalization)
 
     info('All done! Ciao!')
