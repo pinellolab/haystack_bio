@@ -233,17 +233,7 @@ def parallel_fimo_scanning(target_coords,
 
     return motifs_in_sequences_matrix, motifs_profiles_in_sequences, idxs_seqs_with_motif, motif_coords_in_seqs_with_motif, fimo.motif_names, fimo.motif_ids
 
-
-################################################################################
-
-def main():
-    print '\n[H A Y S T A C K   M O T I F S]'
-    print('\n-MOTIF ENRICHMENT ANALYSIS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
-    print 'Version %s\n' % HAYSTACK_VERSION
-
-    bootstrap = False
-    ngram_correction = 'g'
-
+def get_args_motif():
     # mandatory
     parser = argparse.ArgumentParser(description='HAYSTACK Parameters')
     parser.add_argument('bed_target_filename', type=str,
@@ -305,7 +295,25 @@ def main():
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
 
-    args = parser.parse_args()
+    return parser
+
+
+
+###############################################################################
+
+
+
+
+def main(input_args=None):
+    print '\n[H A Y S T A C K   M O T I F S]'
+    print('\n-MOTIF ENRICHMENT ANALYSIS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
+    print 'Version %s\n' % HAYSTACK_VERSION
+
+    bootstrap = False
+    ngram_correction = 'g'
+
+    parser = get_args()
+    args = parser.parse_args(input_args)
 
     args_dict = vars(args)
     for key, value in args_dict.items():
@@ -769,3 +777,7 @@ def main():
 
     info('All done! Ciao!')
     sys.exit(0)
+
+
+if __name__ == '__main__':
+    main()

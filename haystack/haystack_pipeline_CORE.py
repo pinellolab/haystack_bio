@@ -9,7 +9,8 @@ import logging
 import multiprocessing
 
 import haystack_hotspots_CORE as hotspots
-
+import haystack_motifs_CORE as motifs
+import haystack_tf_activity_plane as tf_activity_plane
 
 # commmon functions
 from haystack_common import determine_path, query_yes_no, which, check_file
@@ -119,7 +120,6 @@ def main():
     # check folder or sample filename
 
     USE_GENE_EXPRESSION = True
-
     if not os.path.exists(samples_filename):
         error("The file or folder %s doesn't exist. Exiting." %
               samples_filename)
@@ -153,7 +153,6 @@ def main():
                 elif n_fields == 3:
 
                     USE_GENE_EXPRESSION = USE_GENE_EXPRESSION and True
-
                     sample_names.append(fields[0])
                     data_filenames.append(fields[1])
                     gene_expression_filenames.append(fields[2])
@@ -224,7 +223,6 @@ def main():
                 '{:f}'.format(z_score_low),
                 '--read_ext',
                 '{:d}'.format(read_ext)]
-
     if noblacklist:
         input_args.append('--noblacklist')
     if recompute_all:
@@ -235,6 +233,8 @@ def main():
         input_args.append('--input_is_bigwig')
     if disable_quantile_normalization:
         input_args.append('--disable_quantile_normalization')
+
+
 
     hotspots.main(input_args=input_args)
 
@@ -264,37 +264,73 @@ def main():
         # bg_regions_filename=glob.glob(specific_regions_filename.replace('Regions_specific','Background')[:-11]+'*.bed')[0] #lo zscore e' diverso...
         # print specific_regions_filename,bg_regions_filename
 
-
-        cmd_to_run = 'haystack_motifs "%s" %s --bed_bg_filename "%s" --output_directory "%s" --name %s' % (
-            specific_regions_filename, genome_name, bg_regions_filename, motif_directory, sample_name)
+        input_args_motif = [specific_regions_filename,
+                            genome_name,
+                            '--bed_bg_filename',
+                            bg_regions_filename,
+                            '--output_directory',
+                            motif_directory,
+                            '--name',
+                            sample_name]
 
         if meme_motifs_filename:
-            cmd_to_run += ' --meme_motifs_filename "%s"' % meme_motifs_filename
-
+            input_args_motif.extend(['--meme_motifs_filename', meme_motifs_filename])
         if n_processes:
-            cmd_to_run += ' --n_processes %d' % n_processes
-
+            input_args_motif.extend(['--n_processes', '{:d}'.format(n_processes)])
         if temp_directory:
-            cmd_to_run += ' --temp_directory %s' % temp_directory
+            input_args_motif.extend(['--temp_directory', temp_directory])
 
-        print cmd_to_run
-        sb.call(cmd_to_run, shell=True)
+        motifs.main(input_args_motif)
+
+
+        #
+        # cmd_to_run = 'haystack_motifs "%s" %s --bed_bg_filename "%s" --output_directory "%s" --name %s' % (
+        #     specific_regions_filename, genome_name, bg_regions_filename, motif_directory, sample_name)
+        #
+        # if meme_motifs_filename:
+        #     cmd_to_run += ' --meme_motifs_filename "%s"' % meme_motifs_filename
+        #
+        # if n_processes:
+        #     cmd_to_run += ' --n_processes %d' % n_processes
+        #
+        # if temp_directory:
+        #     cmd_to_run += ' --temp_directory %s' % temp_directory
+        #
+        # print cmd_to_run
+        # sb.call(cmd_to_run, shell=True)
 
         if USE_GENE_EXPRESSION:
             # CALL HAYSTACK TF ACTIVITY
-            motifs_output_folder = os.path.join(motif_directory, 'HAYSTACK_MOTIFS_on_%s' % sample_name)
+
+            motifs_output_folder = os.path.join(motif_directory,
+                                                'HAYSTACK_MOTIFS_on_%s' % sample_name)
+
             if os.path.exists(motifs_output_folder):
-                cmd_to_run = 'haystack_tf_activity_plane "%s" "%s" %s --output_directory "%s"' % (
-                    motifs_output_folder, sample_names_tf_activity_filename, sample_name, tf_activity_directory)
 
+                input_args_activity= [motifs_output_folder,
+                                      sample_names_tf_activity_filename,
+                                      sample_name,
+                                      '--output_directory',
+                                      tf_activity_directory]
                 if motif_mapping_filename:
-                    cmd_to_run += ' --motif_mapping_filename "%s"' % motif_mapping_filename
-
+                    input_args_activity.extend(['--motif_mapping_filename', motif_mapping_filename])
                 if plot_all:
-                    cmd_to_run += ' --plot_all'
+                    input_args_activity.append(['--plot_all'])
 
-                print cmd_to_run
-                sb.call(cmd_to_run, shell=True)
+
+                tf_activity_plane.main(input_args_activity)
+
+                # cmd_to_run = 'haystack_tf_activity_plane "%s" "%s" %s --output_directory "%s"' % (
+                #     motifs_output_folder, sample_names_tf_activity_filename, sample_name, tf_activity_directory)
+                #
+                # if motif_mapping_filename:
+                #     cmd_to_run += ' --motif_mapping_filename "%s"' % motif_mapping_filename
+                #
+                # if plot_all:
+                #     cmd_to_run += ' --plot_all'
+                #
+                # print cmd_to_run
+                # sb.call(cmd_to_run, shell=True)
 
 
 if __name__ == '__main__':

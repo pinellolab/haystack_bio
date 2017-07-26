@@ -56,11 +56,7 @@ def zscore_series(series):
     return (series - series.mean()) / np.std(series, ddof=0)
 
 
-def main():
-    print '\n[H A Y S T A C K   T F  A C T I V I T Y  P L A N E]'
-    print('\n-TFs Activity on Gene Expression- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
-    print 'Version %s\n' % HAYSTACK_VERSION
-
+def get_args_activity():
     # mandatory
     parser = argparse.ArgumentParser(description='HAYSTACK Parameters',
                                      prog='haystack_tf_activity_plane')
@@ -89,6 +85,19 @@ def main():
                         help='Print version and exit.',
                         action='version',
                         version='Version %s' % HAYSTACK_VERSION)
+    return parser
+
+
+
+
+def main(input_args=None):
+    print '\n[H A Y S T A C K   T F  A C T I V I T Y  P L A N E]'
+    print('\n-TFs Activity on Gene Expression- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
+    print 'Version %s\n' % HAYSTACK_VERSION
+
+    parser = get_args()
+    args = parser.parse_args(input_args)
+    info(vars(args))
 
     args = parser.parse_args()
 
@@ -270,3 +279,7 @@ def main():
             warn('Sorry the motif %s is not mappable to gene' % current_motif_id)
     info('All done! Ciao!')
     sys.exit(0)
+
+
+if __name__ == '__main__':
+    main()
