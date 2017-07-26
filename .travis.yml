@@ -19,11 +19,10 @@ before_install:
   - ./.travis/travis_before_install.sh
   - export PATH=$HOME/miniconda2/bin:$PATH
   - conda update --all --yes
-  - (conda config --add channels r)
   - conda config --add channels defaults
   - conda config --add channels conda-forge
   - conda config --add channels bioconda
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION bx-python numpy scipy matplotlib argparse jinja2 nose dateutil pandas setuptools pil ipython unzip pybedtools pysam meme samtools bedtools sambamba ucsc-bigwigaverageoverbed ucsc-bedgraphtobigwig
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION bx-python numpy scipy matplotlib argparse jinja2 nose dateutil pandas setuptools pil ipython glob unzip pybedtools pysam meme samtools bedtools sambamba ucsc-bigwigaverageoverbed ucsc-bedgraphtobigwig
 
 install: python setup.py install
 
@@ -31,8 +30,10 @@ cache:
   directories:
   - $HOME/Haystack_dependencies
   - $HOME/download #  add miniconda.sh to TRAVIS cache.
+  - $HOME/miniconda2
+
 script:
   - haystack_hotspots -h
   - haystack_download_genome hg19
   - cd $HOME/Haystack_dependencies
-  - haystack_hotspots test_data/samples_names.txt hg19 --output_directory $HOME/OUTPUT --bin_size 200 --chrom_exclude 'chr(?!21)'
+  - haystack_hotspots test_data/samples_names_genes.txt hg19 --output_directory $HOME/OUTPUT --bin_size 200 --chrom_exclude 'chr(?!21)'

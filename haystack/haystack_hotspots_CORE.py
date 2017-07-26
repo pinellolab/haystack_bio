@@ -11,6 +11,7 @@ import multiprocessing
 import glob
 from haystack_common import determine_path, which, check_file
 
+
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
                     datefmt='%a, %d %b %Y %H:%M:%S',
@@ -81,13 +82,17 @@ def get_args():
                         help='Genome assembly to use from UCSC (for example hg19, mm9, etc.)')
 
     # optional
+    parser.add_argument('--output_directory',
+                        type=str,
+                        help='Output directory (default: current directory)',
+                        default='')
     parser.add_argument('--bin_size',
                         type=int,
                         help='bin size to use(default: 500bp)',
                         default=500)
-    parser.add_argument('--disable_quantile_normalization',
-                        help='Disable quantile normalization (default: False)',
-                        action='store_true')
+    parser.add_argument('--chrom_exclude',
+                        help='Exclude chromosomes. For example (_|chrM|chrX|chrY).',
+                        default='chrX|chrY')
     parser.add_argument('--th_rpm',
                         type=float,
                         help='Percentile on the signal intensity to consider for the hotspots (default: 99)',
@@ -97,9 +102,6 @@ def get_args():
                         help='Variance stabilizing transformation among: none, log2, angle (default: angle)',
                         default='angle',
                         choices=['angle', 'log2', 'none'])
-    parser.add_argument('--recompute_all',
-                        help='Ignore any file previously precalculated',
-                        action='store_true')
     parser.add_argument('--z_score_high',
                         type=float,
                         help='z-score value to select the specific regions(default: 1.5)',
@@ -108,19 +110,6 @@ def get_args():
                         type=float,
                         help='z-score value to select the not specific regions (default: 0.25)',
                         default=0.25)
-    parser.add_argument('--name',
-                        help='Define a custom output filename for the report',
-                        default='')
-    parser.add_argument('--output_directory',
-                        type=str,
-                        help='Output directory (default: current directory)',
-                        default='')
-    parser.add_argument('--noblacklist',
-                        help='Do not exclude blacklisted regions. Blacklisted regions are excluded by default',
-                        action='store_true')
-    parser.add_argument('--chrom_exclude',
-                        help='Exclude chromosomes. For example (_|chrM|chrX|chrY).',
-                        default='chrX|chrY')
     parser.add_argument('--read_ext',
                         type=int,
                         help='Read extension in bps (default: 200)',
@@ -129,8 +118,20 @@ def get_args():
                         type=float,
                         help='Upper bound on the %% of the regions selected  (default: 0.1, 0.0=0%% 1.0=100%%)',
                         default=0.1)
+    parser.add_argument('--name',
+                        help='Define a custom output filename for the report',
+                        default='')
+    parser.add_argument('--noblacklist',
+                        help='Do not exclude blacklisted regions. Blacklisted regions are excluded by default',
+                        action='store_true')
     parser.add_argument('--depleted',
                         help='Look for cell type specific regions with depletion of signal instead of enrichment',
+                        action='store_true')
+    parser.add_argument('--disable_quantile_normalization',
+                        help='Disable quantile normalization (default: False)',
+                        action='store_true')
+    parser.add_argument('--recompute_all',
+                        help='Ignore any file previously precalculated',
                         action='store_true')
     parser.add_argument('--input_is_bigwig',
                         help='Use the bigwig format instead of the bam format for the input. '

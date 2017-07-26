@@ -8,10 +8,13 @@ import argparse
 import logging
 import multiprocessing
 
+import haystack_hotspots_CORE as hotspots
+
+
 # commmon functions
 from haystack_common import determine_path, query_yes_no, which, check_file
 
-HAYSTACK_VERSION = "0.4.0"
+HAYSTACK_VERSION = "0.5.0"
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -33,7 +36,7 @@ def main():
     # mandatory
     parser = argparse.ArgumentParser(description='HAYSTACK Parameters')
     parser.add_argument('samples_filename', type=str,
-                        help='A tab delimeted file with in each row (1) a sample name, (2) the path to the corresponding bam filename, (3 optional) the path to the corresponding gene expression filaneme.')
+                        help='A tab delimeted file with in each row (1) a sample name, (2) the path to the corresponding bam filename, (3 optional) the path to the corresponding gene expression filename.')
     parser.add_argument('genome_name', type=str, help='Genome assembly to use from UCSC (for example hg19, mm9, etc.)')
 
     # optional
@@ -72,7 +75,7 @@ def main():
     parser.add_argument('--n_processes', type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
                         default=multiprocessing.cpu_count())
-    parser.add_argument('--blacklist', help='Exclude blacklisted regions.', action='store_true')
+    parser.add_argument('--noblacklist', help='Exclude blacklisted regions.', action='store_true')
     parser.add_argument('--chrom_exclude', help='Exclude chromosomes. For example (_|chrM|chrX|chrY).',
                         default='chrX|chrY')
     parser.add_argument('--read_ext', type=int, help='Read extension in bps (default: 200)', default='200')
@@ -117,8 +120,13 @@ def main():
 
     USE_GENE_EXPRESSION = True
 
+    if not os.path.exists(samples_filename):
+        error("The file or folder %s doesn't exist. Exiting." %
+              samples_filename)
+        sys.exit(1)
+
     if os.path.isfile(samples_filename):
-        bam_filenames = []
+        data_filenames = []
         gene_expression_filenames = []
         sample_names = []
 
@@ -140,23 +148,29 @@ def main():
                     USE_GENE_EXPRESSION = False
 
                     sample_names.append(fields[0])
-                    bam_filenames.append(fields[1])
+                    data_filenames.append(fields[1])
 
                 elif n_fields == 3:
 
                     USE_GENE_EXPRESSION = USE_GENE_EXPRESSION and True
 
                     sample_names.append(fields[0])
-                    bam_filenames.append(fields[1])
+                    data_filenames.append(fields[1])
                     gene_expression_filenames.append(fields[2])
                 else:
                     error('The samples file format is wrong!')
                     sys.exit(1)
 
+    dir_path = os.path.dirname(os.path.realpath(samples_filename))
+    data_filenames = [os.path.join(dir_path, filename)
+                      for filename in data_filenames]
+    gene_expression_filenames = [os.path.join(dir_path, filename)
+                      for filename in data_filenames]
+
     # check all the files before starting
     info('Checking samples files location...')
-    for bam_filename in bam_filenames:
-        check_file(bam_filename)
+    for data_filename in data_filenames:
+        check_file(data_filename)
 
     if USE_GENE_EXPRESSION:
         for gene_expression_filename in gene_expression_filenames:
@@ -170,38 +184,75 @@ def main():
     shutil.copy2(samples_filename, output_directory)
 
     # write hotspots conf files
-    sample_names_hotspots_filename = os.path.join(output_directory, 'sample_names_hotspots.txt')
+    sample_names_hotspots_filename = os.path.join(output_directory,
+                                                  'sample_names_hotspots.txt')
 
     with open(sample_names_hotspots_filename, 'w+') as outfile:
-        for sample_name, bam_filename in zip(sample_names, bam_filenames):
-            outfile.write('%s\t%s\n' % (sample_name, bam_filename))
+        for sample_name, data_filename in zip(sample_names, data_filenames):
+            outfile.write('%s\t%s\n' % (sample_name, data_filename))
 
     # write tf activity  conf files
     if USE_GENE_EXPRESSION:
-        sample_names_tf_activity_filename = os.path.join(output_directory, 'sample_names_tf_activity.txt')
+        sample_names_tf_activity_filename = os.path.join(output_directory,
+                                                         'sample_names_tf_activity.txt')
 
         with open(sample_names_tf_activity_filename, 'w+') as outfile:
-            for sample_name, gene_expression_filename in zip(sample_names, gene_expression_filenames):
-                outfile.write('%s\t%s\n' % (sample_name, gene_expression_filename))
+            for sample_name, gene_expression_filename in zip(sample_names,
+                                                             gene_expression_filenames):
+                outfile.write('%s\t%s\n' % (sample_name,
+                                            gene_expression_filename))
 
         tf_activity_directory = os.path.join(output_directory, 'HAYSTACK_TFs_ACTIVITY_PLANES')
 
     # CALL HAYSTACK HOTSPOTS
-    cmd_to_run = 'haystack_hotspots "%s" %s --output_directory "%s" --bin_size %d %s %s %s %s %s %s %s %s %s %s %s' % \
-                 (sample_names_hotspots_filename, genome_name, output_directory, bin_size,
-                  ('--recompute_all' if recompute_all else ''),
-                  ('--depleted' if depleted else ''),
-                  ('--input_is_bigwig' if input_is_bigwig else ''),
-                  ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
-                  '--transformation %s' % transformation,
-                  '--z_score_high %f' % z_score_high,
-                  '--z_score_low %f' % z_score_low,
-                  ('--blacklist'  if blacklist else ''),
-                  '--chrom_exclude %s' % chrom_exclude,
-                  '--read_ext %f' % read_ext,
-                  '--th_rpm %f' % th_rpm)
-    print cmd_to_run
-    sb.call(cmd_to_run, shell=True)
+
+    input_args=[sample_names_hotspots_filename,
+                genome_name,
+                '--output_directory',
+                output_directory,
+                '--bin_size',
+                '{:d}'.format(bin_size),
+                '--chrom_exclude',
+                chrom_exclude,
+                '--th_rpm',
+                '{:f}'.format(th_rpm),
+                '--transformation',
+                transformation,
+                '--z_score_high',
+                '{:f}'.format(z_score_high),
+                '--z_score_low',
+                '{:f}'.format(z_score_low),
+                '--read_ext',
+                '{:d}'.format(read_ext)]
+
+    if noblacklist:
+        input_args.append('--noblacklist')
+    if recompute_all:
+        input_args.append('--recompute_all')
+    if depleted:
+        input_args.append('--depleted')
+    if input_is_bigwig:
+        input_args.append('--input_is_bigwig')
+    if disable_quantile_normalization:
+        input_args.append('--disable_quantile_normalization')
+
+    hotspots.main(input_args=input_args)
+
+    # cmd_to_run = 'haystack_hotspots "%s" %s --output_directory "%s" --bin_size %d %s %s %s %s %s %s %s %s %s %s %s' % \
+    #              (sample_names_hotspots_filename, genome_name, output_directory, bin_size,
+    #               ('--recompute_all' if recompute_all else ''),
+    #               ('--depleted' if depleted else ''),
+    #               ('--input_is_bigwig' if input_is_bigwig else ''),
+    #               ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
+    #               '--transformation %s' % transformation,
+    #               '--z_score_high %f' % z_score_high,
+    #               '--z_score_low %f' % z_score_low,
+    #               ('--noblacklist'  if noblacklist else ''),
+    #               '--chrom_exclude %s' % chrom_exclude,
+    #               '--read_ext %f' % read_ext,
+    #               '--th_rpm %f' % th_rpm)
+    # print cmd_to_run
+    # sb.call(cmd_to_run, shell=True)
 
     # CALL HAYSTACK MOTIFS
     motif_directory = os.path.join(output_directory, 'HAYSTACK_MOTIFS')
@@ -212,6 +263,8 @@ def main():
                                                      'Background_for_%s*.bed' % sample_name))[0]
         # bg_regions_filename=glob.glob(specific_regions_filename.replace('Regions_specific','Background')[:-11]+'*.bed')[0] #lo zscore e' diverso...
         # print specific_regions_filename,bg_regions_filename
+
+
         cmd_to_run = 'haystack_motifs "%s" %s --bed_bg_filename "%s" --output_directory "%s" --name %s' % (
             specific_regions_filename, genome_name, bg_regions_filename, motif_directory, sample_name)
 
@@ -242,3 +295,7 @@ def main():
 
                 print cmd_to_run
                 sb.call(cmd_to_run, shell=True)
+
+
+if __name__ == '__main__':
+    main()
