@@ -17,8 +17,24 @@ try:
 except:
     import pickle as cp
 
+
+
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
+                    datefmt='%a, %d %b %Y %H:%M:%S',
+                    stream=sys.stderr,
+                    filemode="w")
+error = logging.critical
+warn = logging.warning
+debug = logging.debug
+info = logging.info
+
+
 # commmon functions
 from haystack_common import determine_path, query_yes_no, which, check_file
+HAYSTACK_VERSION = "0.5.0"
 
 # dependencies
 from bioutilities import Genome_2bit, Coordinate, Sequence, Fimo
@@ -771,10 +787,8 @@ def main(input_args=None):
         Coordinate.coordinates_to_bed(bg_coords,
                                       os.path.join(dump_directory, 'BG_coordinates_selected_on_' + bg_name + '.bed'),
                                       minimal_format=True)
-
     info('All done! Ciao!')
-    sys.exit(0)
-
 
 if __name__ == '__main__':
     main()
+    sys.exit(0)

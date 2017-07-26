@@ -5,12 +5,12 @@ import subprocess as sb
 import numpy as np
 import pandas as pd
 import argparse
-import logging
 from pybedtools import BedTool
 import multiprocessing
 import glob
 from haystack_common import determine_path, which, check_file
 
+import logging
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -991,7 +991,7 @@ def main(input_args=None):
                           args.disable_quantile_normalization)
 
     info('All done! Ciao!')
-    sys.exit(0)
 
 if __name__ == '__main__':
     main()
+    sys.exit(0)

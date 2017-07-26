@@ -278,8 +278,8 @@ def main(input_args=None):
         else:
             warn('Sorry the motif %s is not mappable to gene' % current_motif_id)
     info('All done! Ciao!')
-    sys.exit(0)
 
 
 if __name__ == '__main__':
     main()
+    sys.exit(0)
