@@ -95,7 +95,7 @@ def main(input_args=None):
     print('\n-TFs Activity on Gene Expression- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
     print 'Version %s\n' % HAYSTACK_VERSION
 
-    parser = get_args()
+    parser = get_args_activity()
     args = parser.parse_args(input_args)
     info(vars(args))
 
@@ -105,24 +105,24 @@ def main(input_args=None):
     for key, value in args_dict.items():
         exec ('%s=%s' % (key, repr(value)))
 
-    if not os.path.exists(haystack_motifs_output_folder):
+    if not os.path.exists(args.haystack_motifs_output_folder):
         error("The haystack_motifs_output_folder specified: %s doesn't exist!")
         sys.exit(1)
 
-    check_file(gene_expression_samples_filename)
+    check_file(args.gene_expression_samples_filename)
 
-    if motif_mapping_filename:
-        check_file(motif_mapping_filename)
+    if args.motif_mapping_filename:
+        check_file(args.motif_mapping_filename)
     else:
         motif_mapping_filename = os.path.join(determine_path('motif_databases'),
                                               'JASPAR_CORE_2016_vertebrates_mapped_to_gene_human_mouse.txt')
 
-    if name:
+    if args.name:
         directory_name = 'HAYSTACK_TFs_ACTIVITY_PLANES_on_' + name
     else:
-        directory_name = 'HAYSTACK_TFs_ACTIVITY_PLANES_on_' + target_cell_type
+        directory_name = 'HAYSTACK_TFs_ACTIVITY_PLANES_on_' + args.target_cell_type
 
-    if output_directory:
+    if args.output_directory:
         output_directory = os.path.join(output_directory, directory_name)
     else:
         output_directory = directory_name
@@ -133,10 +133,10 @@ def main(input_args=None):
     motif_mapping = motif_mapping.set_index('MOTIF_ID')
 
     # load mapping filename
-    df_gene_mapping = pd.read_table(FileWrapper("#", gene_expression_samples_filename, "r"), header=None, index_col=0,
+    df_gene_mapping = pd.read_table(FileWrapper("#", args.gene_expression_samples_filename, "r"), header=None, index_col=0,
                                     names=['Sample_name', 'Sample_file'])
 
-    if target_cell_type not in df_gene_mapping.index:
+    if args.target_cell_type not in df_gene_mapping.index:
         error(
             '\nThe target_cell_type must be among these sample names:\n\n%s' % '\t'.join(df_gene_mapping.index.values))
         sys.exit(1)
@@ -148,9 +148,9 @@ def main(input_args=None):
         sys.exit(1)
     elif N_SAMPLES == 2:
         USE_ZSCORE = False
-        bg_target_cell_type = list(set(df_gene_mapping.index) - {target_cell_type})[0]
+        bg_target_cell_type = list(set(df_gene_mapping.index) - {args.target_cell_type})[0]
         info('Only 2 samples provided, use expression ratio plane instead of z-score. Target:%s, Bg: %s' % (
-            target_cell_type, bg_target_cell_type))
+            args.target_cell_type, bg_target_cell_type))
     else:
         USE_ZSCORE = True
 
@@ -171,7 +171,7 @@ def main(input_args=None):
         os.makedirs(output_directory)
 
     # For each motif make the plots
-    for motif_gene_filename in glob.glob(os.path.join(haystack_motifs_output_folder, 'genes_lists') + '/*.bed'):
+    for motif_gene_filename in glob.glob(os.path.join(args.haystack_motifs_output_folder, 'genes_lists') + '/*.bed'):
 
         current_motif_id = os.path.basename(motif_gene_filename).split('_')[0]
         info('Analyzing %s from:%s' % (current_motif_id, motif_gene_filename))
@@ -214,7 +214,7 @@ def main(input_args=None):
                         gene_name, tf_value, ds_value, ro))
 
                     # make plots
-                    if (tf_value > 0 and np.abs(ro) > 0.3) or plot_all:
+                    if (tf_value > 0 and np.abs(ro) > 0.3) or args.plot_all:
                         x_min = min(-4, tf_values.min() * 1.1)
                         x_max = max(4, tf_values.max() * 1.1)
                         y_min = min(-4, ds_values.min() * 1.1)
@@ -254,7 +254,7 @@ def main(input_args=None):
                     y_min = min(0, ds_values * 1.1)
                     y_max = max(2, ds_values * 1.1)
 
-                    if (tf_values > 1.2) & ((ds_values > 1.2) | (ds_values < 0.8)) or plot_all:
+                    if (tf_values > 1.2) & ((ds_values > 1.2) | (ds_values < 0.8)) or args.plot_all:
                         fig = plt.figure(figsize=(10, 10), dpi=80, facecolor='w', edgecolor='w')
                         ax = fig.add_subplot(111)
                         plt.grid()

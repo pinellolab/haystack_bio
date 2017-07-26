@@ -1,7 +1,6 @@
 from __future__ import division
 import os
 import sys
-import subprocess as sb
 import glob
 import shutil
 import argparse
@@ -10,7 +9,7 @@ import multiprocessing
 
 import haystack_hotspots_CORE as hotspots
 import haystack_motifs_CORE as motifs
-import haystack_tf_activity_plane as tf_activity_plane
+import haystack_tf_activity_plane_CORE as tf_activity_plane
 
 # commmon functions
 from haystack_common import determine_path, query_yes_no, which, check_file
@@ -29,11 +28,8 @@ debug = logging.debug
 info = logging.info
 
 
-def main():
-    print '\n[H A Y S T A C K   P I P E L I N E]'
-    print('\n-SELECTION OF HOTSPOTS OF VARIABILITY AND ENRICHED MOTIFS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
-    print 'Version %s\n' % HAYSTACK_VERSION
 
+def get_args_pipeline():
     # mandatory
     parser = argparse.ArgumentParser(description='HAYSTACK Parameters')
     parser.add_argument('samples_filename', type=str,
@@ -84,7 +80,15 @@ def main():
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
 
-    args = parser.parse_args()
+    return parser
+
+def main(input_args=None):
+    print '\n[H A Y S T A C K   P I P E L I N E]'
+    print('\n-SELECTION OF HOTSPOTS OF VARIABILITY AND ENRICHED MOTIFS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
+    print 'Version %s\n' % HAYSTACK_VERSION
+    parser = get_args_pipeline()
+    args = parser.parse_args(input_args)
+
     args_dict = vars(args)
     for key, value in args_dict.items():
         exec ('%s=%s' % (key, repr(value)))
@@ -234,8 +238,6 @@ def main():
     if disable_quantile_normalization:
         input_args.append('--disable_quantile_normalization')
 
-
-
     hotspots.main(input_args=input_args)
 
     # cmd_to_run = 'haystack_hotspots "%s" %s --output_directory "%s" --bin_size %d %s %s %s %s %s %s %s %s %s %s %s' % \
@@ -255,11 +257,16 @@ def main():
     # sb.call(cmd_to_run, shell=True)
 
     # CALL HAYSTACK MOTIFS
-    motif_directory = os.path.join(output_directory, 'HAYSTACK_MOTIFS')
+    motif_directory = os.path.join(output_directory,
+                                   'HAYSTACK_MOTIFS')
     for sample_name in sample_names:
-        specific_regions_filename = os.path.join(output_directory, 'HAYSTACK_HOTSPOTS', 'SPECIFIC_REGIONS',
+        specific_regions_filename = os.path.join(output_directory,
+                                                 'HAYSTACK_HOTSPOTS',
+                                                 'SPECIFIC_REGIONS',
                                                  'Regions_specific_for_%s*.bed' % sample_name)
-        bg_regions_filename = glob.glob(os.path.join(output_directory, 'HAYSTACK_HOTSPOTS', 'SPECIFIC_REGIONS',
+        bg_regions_filename = glob.glob(os.path.join(output_directory,
+                                                     'HAYSTACK_HOTSPOTS',
+                                                     'SPECIFIC_REGIONS',
                                                      'Background_for_%s*.bed' % sample_name))[0]
         # bg_regions_filename=glob.glob(specific_regions_filename.replace('Regions_specific','Background')[:-11]+'*.bed')[0] #lo zscore e' diverso...
         # print specific_regions_filename,bg_regions_filename
@@ -279,9 +286,7 @@ def main():
             input_args_motif.extend(['--n_processes', '{:d}'.format(n_processes)])
         if temp_directory:
             input_args_motif.extend(['--temp_directory', temp_directory])
-
         motifs.main(input_args_motif)
-
 
         #
         # cmd_to_run = 'haystack_motifs "%s" %s --bed_bg_filename "%s" --output_directory "%s" --name %s' % (
@@ -301,7 +306,6 @@ def main():
 
         if USE_GENE_EXPRESSION:
             # CALL HAYSTACK TF ACTIVITY
-
             motifs_output_folder = os.path.join(motif_directory,
                                                 'HAYSTACK_MOTIFS_on_%s' % sample_name)
 
@@ -317,7 +321,6 @@ def main():
                 if plot_all:
                     input_args_activity.append(['--plot_all'])
 
-
                 tf_activity_plane.main(input_args_activity)
 
                 # cmd_to_run = 'haystack_tf_activity_plane "%s" "%s" %s --output_directory "%s"' % (
@@ -331,7 +334,6 @@ def main():
                 #
                 # print cmd_to_run
                 # sb.call(cmd_to_run, shell=True)
-
 
 if __name__ == '__main__':
     main()

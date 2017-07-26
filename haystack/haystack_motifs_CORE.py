@@ -301,9 +301,6 @@ def get_args_motif():
 
 ###############################################################################
 
-
-
-
 def main(input_args=None):
     print '\n[H A Y S T A C K   M O T I F S]'
     print('\n-MOTIF ENRICHMENT ANALYSIS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
@@ -312,7 +309,7 @@ def main(input_args=None):
     bootstrap = False
     ngram_correction = 'g'
 
-    parser = get_args()
+    parser = get_args_motif()
     args = parser.parse_args(input_args)
 
     args_dict = vars(args)
