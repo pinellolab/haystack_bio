@@ -8,6 +8,7 @@ import argparse
 import logging
 from pybedtools import BedTool
 import multiprocessing
+import glob
 from haystack_common import determine_path, which, check_file
 
 logging.basicConfig(level=logging.INFO,
@@ -70,10 +71,11 @@ def get_scaling_factor(bam_filename):
 def get_args():
     # mandatory
     parser = argparse.ArgumentParser(description='HAYSTACK Parameters')
-    parser.add_argument('samples_filename',
+    parser.add_argument('samples_filename_or_bam_folder',
                         type=str,
                         help='A tab delimited file with in each row (1) a sample name, '
-                             '(2) the path to the corresponding bam or bigwig filename')
+                             '(2) the path to the corresponding bam or bigwig filename. '
+                             'Alternatively it is possible to specify a folder containing some .bam files to analyze.')
     parser.add_argument('genome_name',
                         type=str,
                         help='Genome assembly to use from UCSC (for example hg19, mm9, etc.)')
@@ -174,15 +176,16 @@ def check_required_packages():
             'Please install using bioconda')
         sys.exit(1)
 
-def get_data_filepaths(samples_filename):
+def get_data_filepaths(samples_filename_or_bam_folder, input_is_bigwig):
     # check folder or sample filename
-    if not os.path.exists(samples_filename):
-        error("The file or folder %s doesn't exist. Exiting." % samples_filename)
+    if not os.path.exists(samples_filename_or_bam_folder):
+        error("The file or folder %s doesn't exist. Exiting." %
+              samples_filename_or_bam_folder)
         sys.exit(1)
-    if os.path.isfile(samples_filename):
+    if os.path.isfile(samples_filename_or_bam_folder):
         data_filenames = []
         sample_names = []
-        with open(samples_filename) as infile:
+        with open( samples_filename_or_bam_folder) as infile:
             for line in infile:
                 if not line.strip():
                     continue
@@ -197,14 +200,31 @@ def get_data_filepaths(samples_filename):
                 else:
                     error('The samples file format is wrong!')
                     sys.exit(1)
-    dir_path = os.path.dirname(os.path.realpath(samples_filename))
-    data_filenames = [os.path.join(dir_path, filename)
-                      for filename in data_filenames]
+        dir_path = os.path.dirname(os.path.realpath(samples_filename_or_bam_folder))
+        data_filenames = [os.path.join(dir_path, filename)
+                            for filename in data_filenames]
+    else:
+        if input_is_bigwig:
+            extension_to_check = '.bw'
+            info('Input is set BigWig (.bw)')
+        else:
+            extension_to_check = '.bam'
+            info('Input is set compressed SAM (.bam)')
+
+        data_filenames = glob.glob(os.path.join(samples_filename_or_bam_folder,
+                                                '*' + extension_to_check))
+        if not data_filenames:
+            error('No bam/bigwig  files to analyze in %s. Exiting.'
+                  %  samples_filename_or_bam_folder_or_bam_folder)
+            sys.exit(1)
+        sample_names = [os.path.basename(data_filename).replace(extension_to_check, '')
+                        for data_filename in data_filenames]
     # check all the files before starting
     info('Checking samples files location...')
     for data_filename in data_filenames:
         check_file(data_filename)
     return sample_names, data_filenames
+
 
 def initialize_genome(genome_name):
     from bioutilities import Genome_2bit
@@ -873,7 +893,8 @@ def main(input_args=None):
         os.makedirs(specific_regions_directory)
 
     # step 4: get filepaths
-    sample_names, data_filenames = get_data_filepaths(args.samples_filename)
+    sample_names, data_filenames = get_data_filepaths(args.samples_filename_or_bam_folder,
+                                                      args.input_is_bigwig)
     binned_sample_names = ['%s.%dbp' % (sample_name, args.bin_size)
                            for sample_name in sample_names]
     # step 5: get genome data
