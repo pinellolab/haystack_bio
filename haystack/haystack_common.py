@@ -8,7 +8,11 @@ Created on Fri Apr 22 15:16:12 2016
 
 import sys
 import os
-
+import logging
+error = logging.critical
+warn = logging.warning
+debug = logging.debug
+info = logging.info
 
 def check_file(filename):
     try:

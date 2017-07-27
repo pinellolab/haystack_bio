@@ -4,18 +4,13 @@ import sys
 import glob
 import shutil
 import argparse
-import logging
 import multiprocessing
-
 import haystack_hotspots_CORE as hotspots
 import haystack_motifs_CORE as motifs
 import haystack_tf_activity_plane_CORE as tf_activity_plane
-
 # commmon functions
 from haystack_common import determine_path, query_yes_no, which, check_file
-
-HAYSTACK_VERSION = "0.5.0"
-
+import logging
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
                     datefmt='%a, %d %b %Y %H:%M:%S',
@@ -27,6 +22,7 @@ warn = logging.warning
 debug = logging.debug
 info = logging.info
 
+HAYSTACK_VERSION = "0.5.0"
 
 
 def get_args_pipeline():
