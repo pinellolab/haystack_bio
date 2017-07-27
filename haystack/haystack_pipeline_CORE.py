@@ -129,6 +129,8 @@ def main(input_args=None):
               samples_filename)
         sys.exit(1)
 
+        samples_filename= "test_data/samples_names_genes.txt"
+
     if os.path.isfile(samples_filename):
         data_filenames = []
         gene_expression_filenames = []
@@ -144,7 +146,7 @@ def main(input_args=None):
                     info('Skipping header/comment line:%s' % line)
                     continue
 
-                fields = line.strip().split("\t")
+                fields = line.strip().split()
                 n_fields = len(fields)
 
                 if n_fields == 2:
@@ -162,7 +164,7 @@ def main(input_args=None):
                     gene_expression_filenames.append(fields[2])
                 else:
                     error('The samples file format is wrong!')
-                    sys.exit(1)
+                    #sys.exit(1)
 
     dir_path = os.path.dirname(os.path.realpath(samples_filename))
     data_filenames = [os.path.join(dir_path, filename)

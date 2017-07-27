@@ -193,7 +193,7 @@ def get_data_filepaths(samples_filename_or_bam_folder, input_is_bigwig):
                 if line.startswith('#'): # skip optional header line
                     info('Skipping header/comment line:%s' % line)
                     continue
-                fields = line.strip().split("\t")
+                fields = line.strip().split()
                 n_fields = len(fields)
                 if n_fields == 2:
                     sample_names.append(fields[0])
