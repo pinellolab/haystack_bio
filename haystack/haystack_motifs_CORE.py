@@ -170,7 +170,10 @@ def parallel_fimo_scanning(target_coords,
                            window_length,
                            internal_window_length,
                            num_consumers):
-    fimo = Fimo(meme_motifs_filename, nucleotide_bg_filename, temp_directory=temp_directory, p_value=p_value)
+    fimo = Fimo(meme_motifs_filename,
+                nucleotide_bg_filename,
+                temp_directory=temp_directory,
+                p_value=p_value)
 
     # init variables
     prefix = 'haystack_motifs_' + str(uuid.uuid4())

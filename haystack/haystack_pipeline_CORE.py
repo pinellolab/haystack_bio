@@ -8,6 +8,7 @@ import multiprocessing
 import haystack_hotspots_CORE as hotspots
 import haystack_motifs_CORE as motifs
 import haystack_tf_activity_plane_CORE as tf_activity_plane
+import re
 # commmon functions
 from haystack_common import determine_path, query_yes_no, which, check_file
 import logging
@@ -28,7 +29,7 @@ HAYSTACK_VERSION = "0.5.0"
 def get_args_pipeline():
     # mandatory
     parser = argparse.ArgumentParser(description='HAYSTACK Parameters')
-    parser.add_argument('samples_filename', type=str,
+    parser.add_argument('samples_filename_or_bam_folder', type=str,
                         help='A tab delimeted file with in each row (1) a sample name, (2) the path to the corresponding bam filename, (3 optional) the path to the corresponding gene expression filename.')
     parser.add_argument('genome_name', type=str, help='Genome assembly to use from UCSC (for example hg19, mm9, etc.)')
 
@@ -120,19 +121,18 @@ def main(input_args=None):
     # check folder or sample filename
 
     USE_GENE_EXPRESSION = True
-    if not os.path.exists(samples_filename):
+    if not os.path.exists(samples_filename_or_bam_folder):
         error("The file or folder %s doesn't exist. Exiting." %
-              samples_filename)
+              samples_filename_or_bam_folder)
         sys.exit(1)
 
-        samples_filename= "test_data/samples_names_genes.txt"
-
-    if os.path.isfile(samples_filename):
+    if os.path.isfile(samples_filename_or_bam_folder):
+        BAM_FOLDER = False
         data_filenames = []
         gene_expression_filenames = []
         sample_names = []
 
-        with open(samples_filename) as infile:
+        with open(samples_filename_or_bam_folder) as infile:
             for line in infile:
 
                 if not line.strip():
@@ -160,9 +160,24 @@ def main(input_args=None):
                     gene_expression_filenames.append(fields[2])
                 else:
                     error('The samples file format is wrong!')
-                    #sys.exit(1)
+                    sys.exit(1)
+    else:
+        if os.path.exists(samples_filename_or_bam_folder):
+            BAM_FOLDER = True
+            USE_GENE_EXPRESSION = False
+            data_filenames = glob.glob(os.path.join(samples_filename_or_bam_folder, '*' + extension_to_check))
 
-    dir_path = os.path.dirname(os.path.realpath(samples_filename))
+            if not data_filenames:
+                error('No bam/bigwig  files to analyze in %s. Exiting.' % samples_filename_or_bam_folder)
+                sys.exit(1)
+
+            sample_names = [os.path.basename(data_filename).replace(extension_to_check, '') for data_filename in
+                            data_filenames]
+        else:
+            error("The file or folder %s doesn't exist. Exiting." % samples_filename_or_bam_folder)
+            sys.exit(1)
+
+    dir_path = os.path.dirname(os.path.realpath(samples_filename_or_bam_folder))
     data_filenames = [os.path.join(dir_path, filename)
                       for filename in data_filenames]
     gene_expression_filenames = [os.path.join(dir_path, filename)
@@ -181,8 +196,8 @@ def main(input_args=None):
         os.makedirs(output_directory)
 
     # copy back the file used
-
-    shutil.copy2(samples_filename, output_directory)
+    if not BAM_FOLDER:
+        shutil.copy2(samples_filename_or_bam_folder, output_directory)
 
     # write hotspots conf files
     sample_names_hotspots_filename = os.path.join(output_directory,
@@ -192,21 +207,7 @@ def main(input_args=None):
         for sample_name, data_filename in zip(sample_names, data_filenames):
             outfile.write('%s\t%s\n' % (sample_name, data_filename))
 
-    # write tf activity  conf files
-    if USE_GENE_EXPRESSION:
-        sample_names_tf_activity_filename = os.path.join(output_directory,
-                                                         'sample_names_tf_activity.txt')
-
-        with open(sample_names_tf_activity_filename, 'w+') as outfile:
-            for sample_name, gene_expression_filename in zip(sample_names,
-                                                             gene_expression_filenames):
-                outfile.write('%s\t%s\n' % (sample_name,
-                                            gene_expression_filename))
-
-        tf_activity_directory = os.path.join(output_directory, 'HAYSTACK_TFs_ACTIVITY_PLANES')
-
     # CALL HAYSTACK HOTSPOTS
-
     input_args=[sample_names_hotspots_filename,
                 genome_name,
                 '--output_directory',
@@ -257,17 +258,22 @@ def main(input_args=None):
     # CALL HAYSTACK MOTIFS
     motif_directory = os.path.join(output_directory,
                                    'HAYSTACK_MOTIFS')
+
+
     for sample_name in sample_names:
-        specific_regions_filename = os.path.join(output_directory,
+
+        specific_regions_filename = glob.glob(os.path.join(output_directory,
                                                  'HAYSTACK_HOTSPOTS',
                                                  'SPECIFIC_REGIONS',
-                                                 'Regions_specific_for_%s*.bed' % sample_name)
+                                                 'Regions_specific_for_%s*.bed' % sample_name))[0]
+
         bg_regions_filename = glob.glob(os.path.join(output_directory,
                                                      'HAYSTACK_HOTSPOTS',
                                                      'SPECIFIC_REGIONS',
                                                      'Background_for_%s*.bed' % sample_name))[0]
+
         # bg_regions_filename=glob.glob(specific_regions_filename.replace('Regions_specific','Background')[:-11]+'*.bed')[0] #lo zscore e' diverso...
-        # print specific_regions_filename,bg_regions_filename
+        print specific_regions_filename,bg_regions_filename
 
         input_args_motif = [specific_regions_filename,
                             genome_name,
@@ -302,7 +308,25 @@ def main(input_args=None):
         # print cmd_to_run
         # sb.call(cmd_to_run, shell=True)
 
-        if USE_GENE_EXPRESSION:
+    if USE_GENE_EXPRESSION:
+
+        sample_names_tf_activity_filename = os.path.join(output_directory,
+                                                         'sample_names_tf_activity.txt')
+
+        with open(sample_names_tf_activity_filename, 'w+') as outfile:
+            for sample_name, gene_expression_filename in zip(sample_names,
+                                                             gene_expression_filenames):
+                outfile.write('%s\t%s\n' % (sample_name,
+                                            gene_expression_filename))
+
+        tf_activity_directory = os.path.join(output_directory,
+                                             'HAYSTACK_TFs_ACTIVITY_PLANES')
+
+        for sample_name in sample_names:
+
+            # write tf activity  conf files
+
+
             # CALL HAYSTACK TF ACTIVITY
             motifs_output_folder = os.path.join(motif_directory,
                                                 'HAYSTACK_MOTIFS_on_%s' % sample_name)
@@ -315,9 +339,12 @@ def main(input_args=None):
                                       '--output_directory',
                                       tf_activity_directory]
                 if motif_mapping_filename:
-                    input_args_activity.extend(['--motif_mapping_filename', motif_mapping_filename])
+                    input_args_activity.extend(['--motif_mapping_filename',
+                                                motif_mapping_filename])
                 if plot_all:
                     input_args_activity.append(['--plot_all'])
+
+                print(input_args_activity)
 
                 tf_activity_plane.main(input_args_activity)
 

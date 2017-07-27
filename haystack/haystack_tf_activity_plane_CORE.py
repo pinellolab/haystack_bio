@@ -1,8 +1,4 @@
 from __future__ import division
-import os
-import sys
-import time
-
 import matplotlib as mpl
 
 mpl.use('Agg')
@@ -88,8 +84,6 @@ def get_args_activity():
     return parser
 
 
-
-
 def main(input_args=None):
     print '\n[H A Y S T A C K   T F  A C T I V I T Y  P L A N E]'
     print('\n-TFs Activity on Gene Expression- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
@@ -99,44 +93,51 @@ def main(input_args=None):
     args = parser.parse_args(input_args)
     info(vars(args))
 
-    args = parser.parse_args()
+    haystack_motifs_output_folder = args.haystack_motifs_output_folder
+    gene_expression_samples_filename = args.gene_expression_samples_filename
+    target_cell_type = args.target_cell_type
 
-    args_dict = vars(args)
-    for key, value in args_dict.items():
-        exec ('%s=%s' % (key, repr(value)))
-
-    if not os.path.exists(args.haystack_motifs_output_folder):
+    if not os.path.exists(haystack_motifs_output_folder):
         error("The haystack_motifs_output_folder specified: %s doesn't exist!")
         sys.exit(1)
 
-    check_file(args.gene_expression_samples_filename)
+    check_file(gene_expression_samples_filename)
 
     if args.motif_mapping_filename:
         check_file(args.motif_mapping_filename)
+        motif_mapping_filename=args.motif_mapping_filename
     else:
         motif_mapping_filename = os.path.join(determine_path('motif_databases'),
                                               'JASPAR_CORE_2016_vertebrates_mapped_to_gene_human_mouse.txt')
 
     if args.name:
-        directory_name = 'HAYSTACK_TFs_ACTIVITY_PLANES_on_' + name
+        directory_name = 'HAYSTACK_TFs_ACTIVITY_PLANES_on_' + args.name
     else:
-        directory_name = 'HAYSTACK_TFs_ACTIVITY_PLANES_on_' + args.target_cell_type
+        directory_name = 'HAYSTACK_TFs_ACTIVITY_PLANES_on_' + target_cell_type
 
     if args.output_directory:
-        output_directory = os.path.join(output_directory, directory_name)
+        output_directory = os.path.join(args.output_directory,
+                                        directory_name)
     else:
         output_directory = directory_name
 
-    motif_mapping = pd.read_table(motif_mapping_filename, header=None, names=['MOTIF_ID', 'MOTIF_NAME', 'GENES'],
+
+    info("reading motif mapping file")
+
+    motif_mapping = pd.read_table(motif_mapping_filename,
+                                  header=None,
+                                  names=['MOTIF_ID', 'MOTIF_NAME', 'GENES'],
                                   index_col=0)
     motif_mapping = motif_mapping.reset_index().groupby('MOTIF_ID').apply(group_motif_mapping)
     motif_mapping = motif_mapping.set_index('MOTIF_ID')
 
     # load mapping filename
-    df_gene_mapping = pd.read_table(FileWrapper("#", args.gene_expression_samples_filename, "r"), header=None, index_col=0,
+    df_gene_mapping = pd.read_table(FileWrapper("#", gene_expression_samples_filename, "r"),
+                                    header=None,
+                                    index_col=0,
                                     names=['Sample_name', 'Sample_file'])
 
-    if args.target_cell_type not in df_gene_mapping.index:
+    if target_cell_type not in df_gene_mapping.index:
         error(
             '\nThe target_cell_type must be among these sample names:\n\n%s' % '\t'.join(df_gene_mapping.index.values))
         sys.exit(1)
@@ -148,9 +149,9 @@ def main(input_args=None):
         sys.exit(1)
     elif N_SAMPLES == 2:
         USE_ZSCORE = False
-        bg_target_cell_type = list(set(df_gene_mapping.index) - {args.target_cell_type})[0]
+        bg_target_cell_type = list(set(df_gene_mapping.index) - {target_cell_type})[0]
         info('Only 2 samples provided, use expression ratio plane instead of z-score. Target:%s, Bg: %s' % (
-            args.target_cell_type, bg_target_cell_type))
+            target_cell_type, bg_target_cell_type))
     else:
         USE_ZSCORE = True
 
@@ -171,7 +172,7 @@ def main(input_args=None):
         os.makedirs(output_directory)
 
     # For each motif make the plots
-    for motif_gene_filename in glob.glob(os.path.join(args.haystack_motifs_output_folder, 'genes_lists') + '/*.bed'):
+    for motif_gene_filename in glob.glob(os.path.join(haystack_motifs_output_folder, 'genes_lists') + '/*.bed'):
 
         current_motif_id = os.path.basename(motif_gene_filename).split('_')[0]
         info('Analyzing %s from:%s' % (current_motif_id, motif_gene_filename))
@@ -184,12 +185,14 @@ def main(input_args=None):
             ds_values = zscore_series(gene_ranking.ix[mapped_genes, :].mean())
         else:
             ds_values = (
-                gene_ranking.ix[mapped_genes, target_cell_type] / gene_ranking.ix[mapped_genes, bg_target_cell_type]).mean()
+                gene_ranking.ix[mapped_genes, target_cell_type] / gene_ranking.ix[
+                    mapped_genes, bg_target_cell_type]).mean()
 
         if current_motif_id in motif_mapping.index:
             current_motif_name = motif_mapping.ix[current_motif_id].MOTIF_NAME
 
-            for gene_name in set(map(str.upper, motif_mapping.ix[current_motif_id].GENES.split(','))):
+            for gene_name in set(map(str.upper,
+                                     motif_mapping.ix[current_motif_id].GENES.split(','))):
 
                 # specificity of the TF
                 try:
@@ -227,7 +230,6 @@ def main(input_args=None):
                         plt.plot([0, 0], [y_min, y_max], 'k')
                         ax.scatter(tf_values, ds_values, s=100, facecolors='none', edgecolors='k',
                                    label='rest of cell-types')
-                        ax.hold(True)
                         ax.plot(tf_values[target_cell_type], ds_values[target_cell_type], '*r', markersize=30,
                                 linestyle='None', label=target_cell_type)
                         ax.legend(loc='center', bbox_to_anchor=(0.5, -0.1), ncol=3, fancybox=True, shadow=True,
