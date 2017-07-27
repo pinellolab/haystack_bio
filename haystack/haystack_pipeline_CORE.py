@@ -181,7 +181,7 @@ def main(input_args=None):
     data_filenames = [os.path.join(dir_path, filename)
                       for filename in data_filenames]
     gene_expression_filenames = [os.path.join(dir_path, filename)
-                      for filename in data_filenames]
+                      for filename in gene_expression_filenames]
 
     # check all the files before starting
     info('Checking samples files location...')
@@ -262,6 +262,9 @@ def main(input_args=None):
 
     for sample_name in sample_names:
 
+
+
+
         specific_regions_filename = glob.glob(os.path.join(output_directory,
                                                  'HAYSTACK_HOTSPOTS',
                                                  'SPECIFIC_REGIONS',
@@ -273,7 +276,6 @@ def main(input_args=None):
                                                      'Background_for_%s*.bed' % sample_name))[0]
 
         # bg_regions_filename=glob.glob(specific_regions_filename.replace('Regions_specific','Background')[:-11]+'*.bed')[0] #lo zscore e' diverso...
-        print specific_regions_filename,bg_regions_filename
 
         input_args_motif = [specific_regions_filename,
                             genome_name,
@@ -343,8 +345,6 @@ def main(input_args=None):
                                                 motif_mapping_filename])
                 if plot_all:
                     input_args_activity.append(['--plot_all'])
-
-                print(input_args_activity)
 
                 tf_activity_plane.main(input_args_activity)
 

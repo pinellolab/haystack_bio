@@ -1,0 +1,53 @@
+package:
+  name: haystack
+  version: 0.5.0
+
+source:
+  fn: Haystack-0.5.0.tar.gz
+  url: https://github.com/rfarouni/Haystack/archive/v0.5.0.tar.gz
+  md5: 0323eb7e1036ccdfd43466d976b51b7e
+
+build:
+  number: 0
+  skip: true # [not py27 and osx]
+
+about:
+    home: https://github.com/rfarouni/Haystack
+    license: GPLv3
+    summary: Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline
+
+requirements:
+
+  build:
+    - python
+    - samtools
+    - bedtools
+    - openjdk
+    - meme
+    - sambamba
+    - ucsc-bigwigaverageoverbed
+    - ucsc-bedgraphtobigwig
+    - ghostscript=9.10
+  run:
+    - openjdk
+    - meme 
+    - samtools
+    - bedtools
+    - bx-python>=0.7.3
+    - numpy>=1.13.0
+    - scipy>=0.19.1
+    - matplotlib>=2.0.2 
+    - argparse>=1.4
+    - jinja2>=2.9.5
+    - ghostscript=9.10
+    - nose
+    - dateutil
+    - pandas=0.20.2
+    - pil
+    - ipython
+    - unzip 
+    - pysam
+    - pybedtools
+test:
+  commands:
+    - haystack_pipeline -h
