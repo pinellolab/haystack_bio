@@ -13,11 +13,6 @@ import os
 import subprocess as sb
 import sys
 
-
-
-outdir=$PREFIX/share/$PKG_NAME-$PKG_VERSION-$PKG_BUILDNUM
-mkdir -p $outdir
-
 def main():
     setup(
         version="0.5.0",
