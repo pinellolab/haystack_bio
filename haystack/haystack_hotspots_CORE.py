@@ -272,7 +272,7 @@ def create_tiled_genome(genome_name,
         info('Creating bins of %dbp in %s' % (bin_size, genome_sorted_bins_file))
 
         if chrom_exclude:
-            chr_len_filtered_filename = os.path.join(genome_directory,
+            chr_len_filtered_filename = os.path.join(output_directory,
                                                      "%s_chr_lengths_filtered.txt" % genome_name)
 
             with open(chr_len_filtered_filename, 'wb') as f:
