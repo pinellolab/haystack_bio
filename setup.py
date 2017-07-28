@@ -6,7 +6,6 @@ Setup script for Haystack -- Epigenetic Variability and Transcription Factor Mot
 @author:  Luca Pinello
 @contact: lpinello@jimmy.harvard.edu
 """
-from __future__ import division, print_function
 from setuptools import setup
 import sys
 import os
@@ -25,10 +24,9 @@ def copy_haystack_data():
         copy_tree(*d_path('gene_annotations'))
         copy_tree(*d_path('motif_databases'))
     except:
-       print "Cannot move data"
+        print("Cannot move data")
 
     print(os.listdir(os.path.join(data_root)))
-
     print(os.getcwd())
 
 
@@ -70,6 +68,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-    print 'copying haystack data'
+    print("copying haystack data")
     copy_haystack_data()
     sys.stdout.write('\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!')
