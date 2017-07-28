@@ -148,15 +148,21 @@ def call_fimo(target_coords_fasta_filename, prefix, meme_motifs_filename, nucleo
               p_value, motif_id):
     output_filename = os.path.join(temp_directory, '%s_%s.motifs' % (prefix, motif_id))
 
+    FNULL = open(os.devnull, 'w')
+
     if motif_id == 'ALL_MOTIFS':
         sb.call("fimo --verbosity 0 --thresh %f --text  --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" % \
                 (p_value, nucleotide_bg_filename, meme_motifs_filename, target_coords_fasta_filename, output_filename),
+                stdout = FNULL,
+                stderr = sb.STDOUT,
                 shell=True)
     else:
         sb.call(
             "fimo --verbosity 0 --motif %s --thresh %f --text --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" % \
-            (motif_id, p_value, nucleotide_bg_filename, meme_motifs_filename, target_coords_fasta_filename,
-             output_filename), shell=True)
+            (motif_id, p_value, nucleotide_bg_filename, meme_motifs_filename, target_coords_fasta_filename,output_filename),
+            stdout = FNULL,
+            stderr = sb.STDOUT,
+            shell=True)
 
     return output_filename
 

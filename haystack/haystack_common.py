@@ -106,5 +106,5 @@ def query_yes_no(question, default="yes"):
                              "(or 'y' or 'n').\n")
 
 def determine_path(folder):
-    _ROOT = '%s/Haystack_dependencies' % os.environ['HOME']
+    _ROOT = '%s/haystack_dependencies' % os.environ['HOME']
     return os.path.join(_ROOT, folder)

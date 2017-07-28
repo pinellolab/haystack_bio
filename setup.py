@@ -49,35 +49,29 @@ def main():
 # TO INSTALL HAYSTACK DEPENDECIENS IN A CUSTOM LOCATION SET THE ENV VARIABLE: HAYSTACK_DEPENDENCIES_FOLDER
 sys.stdout.write('\n\nInstalling dependencies...')
 
-HAYSTACK_DEPENDENCIES_FOLDER = '%s/Haystack_dependencies' % os.environ['HOME']
-
-BIN_FOLDER = os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'bin')
+HAYSTACK_DEPENDENCIES_FOLDER = '%s/haystack_dependencies' % os.environ['HOME']
 
 if not os.path.exists(HAYSTACK_DEPENDENCIES_FOLDER):
     sys.stdout.write('OK, creating the folder:%s' % HAYSTACK_DEPENDENCIES_FOLDER)
     os.makedirs(HAYSTACK_DEPENDENCIES_FOLDER)
-    os.makedirs(BIN_FOLDER)
 else:
     sys.stdout.write('\nI cannot create the folder!\nThe folder %s is not empty!' % HAYSTACK_DEPENDENCIES_FOLDER)
 
-    try:
-        os.makedirs(BIN_FOLDER)
-    except:
-        pass
 
 d_path = lambda x: (x, os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, x))
 
-copy_tree(*d_path('genomes'))
-copy_tree(*d_path('gene_annotations'))
-copy_tree(*d_path('motif_databases'))
-copy_tree(*d_path('extra'))
-copy_tree(*d_path('test_data'))
+# copy_tree(*d_path('genomes'))
+# copy_tree(*d_path('gene_annotations'))
+# copy_tree(*d_path('motif_databases'))
+# copy_tree(*d_path('extra'))
+# copy_tree(*d_path('test_data'))
+copy_tree(*d_path('haystack_dependencies'))
 # fix permission so people can write in haystack dep folders
 
-sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'genomes'), shell=True)
-sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'gene_annotations'), shell=True)
-sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'motif_databases'), shell=True)
-sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'test_data'), shell=True)
+# sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'genomes'), shell=True)
+# sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'gene_annotations'), shell=True)
+# sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'motif_databases'), shell=True)
+# sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'test_data'), shell=True)
 
 if __name__ == '__main__':
     main()
