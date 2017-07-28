@@ -27,7 +27,7 @@ requirements:
     - sambamba
     - ucsc-bigwigaverageoverbed
     - ucsc-bedgraphtobigwig
-    - ghostscript =9.10
+    - ghostscript ==9.10
   run:
     - openjdk
     - meme 
@@ -39,10 +39,10 @@ requirements:
     - matplotlib >=2.0.2
     - argparse >=1.4
     - jinja2 >=2.9.5
-    - ghostscript =9.10
+    - ghostscript ==9.10
     - nose
     - dateutil
-    - pandas =0.20.2
+    - pandas >=0.20.2
     - pil
     - ipython
     - unzip 
