@@ -15,19 +15,6 @@ import sys
 
 def main():
 
-    HAYSTACK_DEPENDENCIES_FOLDER = '%s/haystack_data' % os.environ['HOME']
-
-    if not os.path.exists(HAYSTACK_DEPENDENCIES_FOLDER):
-        sys.stdout.write('OK, creating the folder:%s' % HAYSTACK_DEPENDENCIES_FOLDER)
-        os.makedirs(HAYSTACK_DEPENDENCIES_FOLDER)
-    else:
-        sys.stdout.write('\nI cannot create the folder!\nThe folder %s is not empty!' % HAYSTACK_DEPENDENCIES_FOLDER)
-
-    d_path = lambda x: (x, os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, x))
-
-    copy_tree(*d_path('haystack_data'))
-
-
     setup(
         version="0.5.0",
         name="haystack_bio",
@@ -40,7 +27,8 @@ def main():
                                 'haystack_hotspots =  haystack.haystack_hotspots_CORE:main',
                                 'haystack_motifs = haystack.haystack_motifs_CORE:main',
                                 'haystack_tf_activity_plane = haystack.haystack_tf_activity_plane_CORE:main',
-                                'haystack_download_genome = haystack.haystack_download_genome_CORE:main', ]
+                                'haystack_download_genome = haystack.haystack_download_genome_CORE:main',
+                                'haystack_copy_data = haystack.copy_data:main']
         },
         description="Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline",
         author='Luca Pinello',
