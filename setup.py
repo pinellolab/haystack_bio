@@ -13,6 +13,11 @@ import os
 import subprocess as sb
 import sys
 
+
+
+outdir=$PREFIX/share/$PKG_NAME-$PKG_VERSION-$PKG_BUILDNUM
+mkdir -p $outdir
+
 def main():
     setup(
         version="0.5.0",
@@ -46,10 +51,7 @@ def main():
         install_requires=[]
     )
 
-# TO INSTALL HAYSTACK DEPENDECIENS IN A CUSTOM LOCATION SET THE ENV VARIABLE: HAYSTACK_DEPENDENCIES_FOLDER
-sys.stdout.write('\n\nInstalling dependencies...')
-
-HAYSTACK_DEPENDENCIES_FOLDER = '%s/haystack_dependencies' % os.environ['HOME']
+HAYSTACK_DEPENDENCIES_FOLDER = '%s/haystack_data' % os.environ['HOME']
 
 if not os.path.exists(HAYSTACK_DEPENDENCIES_FOLDER):
     sys.stdout.write('OK, creating the folder:%s' % HAYSTACK_DEPENDENCIES_FOLDER)
@@ -60,18 +62,7 @@ else:
 
 d_path = lambda x: (x, os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, x))
 
-# copy_tree(*d_path('genomes'))
-# copy_tree(*d_path('gene_annotations'))
-# copy_tree(*d_path('motif_databases'))
-# copy_tree(*d_path('extra'))
-# copy_tree(*d_path('test_data'))
-copy_tree(*d_path('haystack_dependencies'))
-# fix permission so people can write in haystack dep folders
-
-# sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'genomes'), shell=True)
-# sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'gene_annotations'), shell=True)
-# sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'motif_databases'), shell=True)
-# sb.call('chmod -R 777 %s' % os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, 'test_data'), shell=True)
+copy_tree(*d_path('haystack_data'))
 
 if __name__ == '__main__':
     main()

@@ -28,12 +28,12 @@ install: python setup.py install
 
 cache:
   directories:
-  - $HOME/haystack_dependencies
+  - $HOME/haystack_data
   - $HOME/download #  add miniconda.sh to TRAVIS cache.
   - $HOME/miniconda2
 
 script:
   - haystack_hotspots -h
   - haystack_download_genome hg19
-  - cd $HOME/haystack_dependencies
+  - cd $HOME/haystack_data
   - haystack_pipeline test_data/samples_names_genes.txt hg19 --output_directory $HOME/OUTPUT --bin_size 200 --chrom_exclude 'chr(?!21)'

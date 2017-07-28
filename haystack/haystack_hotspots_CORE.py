@@ -242,8 +242,7 @@ def initialize_genome(genome_name):
         Genome_2bit(genome_2bit)
     else:
         info("\nIt seems you don't have the required genome file.")
-        download_genome(genome_name,
-                        genome_directory)
+        download_genome(genome_name)
         if os.path.exists(genome_2bit):
             info('Genome correctly downloaded!')
             Genome_2bit(genome_2bit)
