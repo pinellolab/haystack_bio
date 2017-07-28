@@ -4,7 +4,7 @@ from haystack_common import determine_path
 
 def copy_haystack_data():
 
-    data_root = os.environ['HOME'] determine_path()
+    data_root = determine_path()
     d_path = lambda x: (x, os.path.join(data_root, x))
     try:
         os.chdir('haystack_data')
