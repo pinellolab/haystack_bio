@@ -8,9 +8,6 @@ Setup script for Haystack -- Epigenetic Variability and Transcription Factor Mot
 """
 from __future__ import division, print_function
 from setuptools import setup
-from distutils.dir_util import copy_tree
-import os
-import subprocess as sb
 import sys
 
 def main():

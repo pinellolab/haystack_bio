@@ -1,5 +1,7 @@
 import os
 import sys
+from distutils.dir_util import copy_tree
+
 
 def copy_haystack_data():
 
