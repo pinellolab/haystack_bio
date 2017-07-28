@@ -16,9 +16,14 @@ def copy_haystack_data():
     else:
         sys.stdout.write('\nI cannot create the folder!\nThe folder %s is not empty!' % HAYSTACK_DEPENDENCIES_FOLDER)
 
+    print(os.listdir(HAYSTACK_DEPENDENCIES_FOLDER ))
+
     d_path = lambda x: (x, os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, x))
 
     copy_tree(*d_path('haystack_data'))
+
+    print(os.listdir(HAYSTACK_DEPENDENCIES_FOLDER ))
+
 
 def main():
     print '\n[copy data]\n'
