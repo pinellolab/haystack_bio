@@ -106,7 +106,7 @@ def query_yes_no(question, default="yes"):
                              "(or 'y' or 'n').\n")
 
 def determine_path(folder=''):
-    
+
     if os.environ.has_key('CONDA_PREFIX'): #we check if we are in an conda env
     #_ROOT = '%s/haystack_data' % os.environ['HOME']
         _ROOT=os.environ['CONDA_PREFIX']

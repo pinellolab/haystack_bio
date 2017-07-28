@@ -4,15 +4,19 @@ from haystack_common import determine_path
 
 def copy_haystack_data():
 
-    data_root = determine_path()
+    data_root = os.environ['HOME'] determine_path()
     d_path = lambda x: (x, os.path.join(data_root, x))
     try:
-       copy_tree(*d_path('haystack_data'))
+        os.chdir('haystack_data')
+        copy_tree(*d_path('test_data'))
+        copy_tree(*d_path('extra'))
+        copy_tree(*d_path('genomes'))
+        copy_tree(*d_path('gene_annotations'))
+        copy_tree(*d_path('motif_databases'))
     except:
        print "Cannot move data"
 
-    print(os.listdir(os.path.join(data_root,
-                                  'haystack_data')))
+    print(os.listdir(os.path.join(data_root)))
 
     print(os.getcwd())
 
