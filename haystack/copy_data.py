@@ -20,8 +20,6 @@ def copy_haystack_data():
 
     copy_tree(*d_path('haystack_data'))
 
-
-
 def main():
     print '\n[copy data]\n'
     copy_haystack_data()
