@@ -25,7 +25,8 @@ def main():
                                 'haystack_motifs = haystack.haystack_motifs_CORE:main',
                                 'haystack_tf_activity_plane = haystack.haystack_tf_activity_plane_CORE:main',
                                 'haystack_download_genome = haystack.haystack_download_genome_CORE:main',
-                                'haystack_copy_data = haystack.copy_data:main']
+                                'haystack_copy_data = haystack.copy_data:main',
+                                'haystack_run_test = haystack.run_test:main']
         },
         description="Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline",
         author='Luca Pinello',

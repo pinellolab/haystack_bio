@@ -5,7 +5,7 @@ package:
 source:
   fn: Haystack-v0.5.0.tar.gz
   url: https://github.com/rfarouni/Haystack/archive/v0.5.0.tar.gz
-  md5: b3285f0999edac18f6fe915ea7dd5382
+  md5: de9b7e310ccd748af080e1ba8df8e4d3
 
 build:
   number: 0
@@ -50,7 +50,9 @@ requirements:
     - pybedtools
 test:
   commands:
-    - haystack_pipeline -h
+    - haystack_hotspots -h
+    - haystack_copy_data
     - haystack_download_genome hg19
-    - cd $HOME/haystack_data
-    - haystack_pipeline test_data/samples_names_genes.txt hg19 --output_directory $HOME/OUTPUT --bin_size 200 --chrom_exclude 'chr(?!21)'
+    - cd $HOME/haystack_data/test_data/
+    - ls
+    - haystack_pipeline samples_names_genes.txt hg19 --output_directory $HOME/OUTPUT --bin_size 200 --chrom_exclude 'chr(?!21)'

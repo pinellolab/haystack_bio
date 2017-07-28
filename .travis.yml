@@ -3,9 +3,6 @@ language: python
 matrix:
   include:
   - os: linux
-    dist: trusty
-    python: '2.7'
-  - os: linux
     dist: vivid
     python: '2.7'
   - os: linux
@@ -28,7 +25,6 @@ install: python setup.py install
 
 cache:
   directories:
-  - $HOME/haystack_data
   - $HOME/download #  add miniconda.sh to TRAVIS cache.
   - $HOME/miniconda2
 
@@ -36,6 +32,4 @@ script:
   - haystack_hotspots -h
   - haystack_copy_data
   - haystack_download_genome hg19
-  - cd $HOME/haystack_data/test_data/
-  - ls
-  - haystack_pipeline samples_names_genes.txt hg19 --output_directory $HOME/OUTPUT --bin_size 200 --chrom_exclude 'chr(?!21)'
+  - haystack_run_test

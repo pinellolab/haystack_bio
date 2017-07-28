@@ -2,6 +2,8 @@
 
 $PYTHON setup.py install
 
-outdir=$PREFIX/share/$PKG_NAME-$PKG_VERSION-$PKG_BUILDNUM
+HAYSTACK_DEPENDENCIES_FOLDER=$PREFIX/share/haystack_data
+python setup.py install
+
 echo $outdir
 

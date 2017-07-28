@@ -9,22 +9,6 @@ import tarfile
 HAYSTACK_VERSION = "0.5.0"
 
 
-def copy_haystack_data():
-
-    HAYSTACK_DEPENDENCIES_FOLDER = '%s/haystack_data' % os.environ['HOME']
-
-    if not os.path.exists(HAYSTACK_DEPENDENCIES_FOLDER):
-        sys.stdout.write('OK, creating the folder:%s' % HAYSTACK_DEPENDENCIES_FOLDER)
-        os.makedirs(HAYSTACK_DEPENDENCIES_FOLDER)
-    else:
-        sys.stdout.write('\nI cannot create the folder!\nThe folder %s is not empty!' % HAYSTACK_DEPENDENCIES_FOLDER)
-
-    d_path = lambda x: (x, os.path.join(HAYSTACK_DEPENDENCIES_FOLDER, x))
-
-    copy_tree(*d_path('haystack_data'))
-
-
-
 
 def download_haystack_data(haystack_data_dir=None):
 

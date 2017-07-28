@@ -105,6 +105,13 @@ def query_yes_no(question, default="yes"):
             sys.stdout.write("Please respond with 'yes' or 'no' "
                              "(or 'y' or 'n').\n")
 
-def determine_path(folder):
-    _ROOT = '%s/haystack_data' % os.environ['HOME']
-    return os.path.join(_ROOT, folder)
+def determine_path(folder=''):
+    
+    if os.environ.has_key('CONDA_PREFIX'): #we check if we are in an conda env
+    #_ROOT = '%s/haystack_data' % os.environ['HOME']
+        _ROOT=os.environ['CONDA_PREFIX']
+    else:
+        _ROOT =which('python').replace( '/bin/python', '') #we are in the main conda env
+
+    _ROOT=os.path.join(_ROOT,'share/haystack_data')
+    return os.path.join(_ROOT,folder)
