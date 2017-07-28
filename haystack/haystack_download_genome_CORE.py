@@ -4,64 +4,21 @@ import urllib2
 import shutil as sh
 from bioutilities import Genome_2bit
 from haystack_common import determine_path
-import tarfile
 
 HAYSTACK_VERSION = "0.5.0"
 
 
 
-def download_haystack_data(haystack_data_dir=None):
-
-    if not haystack_data_dir:
-
-        haystack_data_dir =os.environ['HOME']
-    else:
-        haystack_data_dir =haystack_data_dir
-
-    try:
-        url_path = "https://github.com/rfarouni/Haystack/archive/v0.5.0.tar.gz"
-        data_url_origin = urllib2.urlopen(url_path)
-        file_destination = os.path.join(haystack_data_dir,
-                                        'haystack.tar.gz')
-
-        with open(file_destination, 'wb') as file:
-            sh.copyfileobj(data_url_origin, file)
-
-        print 'Downloaded %s in %s:' % (url_path,
-                                        filename)
-    except IOError, e:
-        print "Can't retrieve %r to %r: %s" % (url_path,
-                                               filename, e)
-        #return
-
-    try:
-        if (file_destination.endswith("tar.gz")):
-            tar = tarfile.open(file_destination, "r:gz")
-            subdir_and_files = [
-                tarinfo for tarinfo in tar.getmembers()
-                if tarinfo.name.startswith("Haystack-0.5.0/motif_databases") ]
-            tar.extractall(haystack_data_dir,members=subdir_and_files)
-            tar.close()
-        print 'Extracted %s to %s:' % (file_destination, haystack_data_dir)
-        try:
-            os.remove(file_destination)
-            os.rename(os.path.join(haystack_data_dir,'Haystack-0.5.0'),
-                      os.path.join(haystack_data_dir,'haystack_data'))
-        except:
-            print "Cannot remove %s" % (file_destination)
-    except:
-        print "Bad tar file (from %r)" % (file_destination)
-        #return
-
-
 def download_genome(name):
 
     output_directory= determine_path('genomes')
+
+    print 'genome_directory: %s' % output_directory
+
     try:
         urlpath = "http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % (name, name)
         genome_url_origin = urllib2.urlopen(urlpath)
         genome_filename = os.path.join(output_directory, "%s.2bit" % name)
-
         if os.path.exists(genome_filename):
             print 'File %s exists, skipping download' % genome_filename
         else:

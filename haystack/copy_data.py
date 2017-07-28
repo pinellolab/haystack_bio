@@ -14,6 +14,8 @@ def copy_haystack_data():
     print(os.listdir(os.path.join(data_root,
                                   'haystack_data')))
 
+    print(os.getcwd())
+
 def main():
     print '\n[copy data]\n'
     copy_haystack_data()

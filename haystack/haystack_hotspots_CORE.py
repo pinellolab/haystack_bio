@@ -8,8 +8,8 @@ import argparse
 from pybedtools import BedTool
 import multiprocessing
 import glob
-from haystack_common import determine_path, which, check_file
-
+from haystack_common import determine_path, which, check_file, query_yes_no
+from haystack.haystack_download_genome_CORE import download_genome
 import logging
 
 logging.basicConfig(level=logging.INFO,
@@ -242,6 +242,7 @@ def initialize_genome(genome_name):
         Genome_2bit(genome_2bit)
     else:
         info("\nIt seems you don't have the required genome file.")
+        #if query_yes_no('Should I download it for you?'):
         download_genome(genome_name)
         if os.path.exists(genome_2bit):
             info('Genome correctly downloaded!')
@@ -250,6 +251,9 @@ def initialize_genome(genome_name):
             error('Sorry I cannot download the required file for you.'
                   ' Check your Internet connection.')
             sys.exit(1)
+        #else:
+        #    error('Sorry I need the genome file to perform the analysis. Exiting...')
+        #    sys.exit(1)
     check_file(chr_len_filename)
 
     return chr_len_filename
