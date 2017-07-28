@@ -69,7 +69,7 @@ def download_genome(name):
 
             print 'Downloaded %s in %s:' % (urlpath, genome_filename)
 
-        except IOError, e:
+    except IOError, e:
             print "Can't retrieve %r to %r: %s" % (urlpath, genome_filename, e)
             return
 
