@@ -8,7 +8,6 @@ from haystack_common import determine_path
 HAYSTACK_VERSION = "0.5.0"
 
 
-
 def download_genome(name):
 
     output_directory= determine_path('genomes')
