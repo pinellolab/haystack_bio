@@ -7,8 +7,10 @@ Created on Fri Apr 22 15:16:12 2016
 
 import subprocess as sb
 import sys
-import os
 import logging
+import os
+from distutils.dir_util import copy_tree
+
 error = logging.critical
 warn = logging.warning
 debug = logging.debug
@@ -132,3 +134,19 @@ def run_testdata():
         sb.call(cmd, shell=True)
     except:
        print "Cannot run test"
+
+def copy_haystack_data():
+    data_root = determine_path()
+    d_path = lambda x: (x, os.path.join(data_root, x))
+    try:
+        os.chdir('haystack_data')
+        copy_tree(*d_path('test_data'))
+        copy_tree(*d_path('extra'))
+        copy_tree(*d_path('genomes'))
+        copy_tree(*d_path('gene_annotations'))
+        copy_tree(*d_path('motif_databases'))
+    except:
+        print("Cannot move data")
+
+    print(os.listdir(os.path.join(data_root)))
+    print(os.getcwd())

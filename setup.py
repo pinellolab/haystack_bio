@@ -8,27 +8,6 @@ Setup script for Haystack -- Epigenetic Variability and Transcription Factor Mot
 """
 from setuptools import setup
 import sys
-import os
-from distutils.dir_util import copy_tree
-from haystack_common import determine_path
-
-
-def copy_haystack_data():
-    data_root = determine_path()
-    d_path = lambda x: (x, os.path.join(data_root, x))
-    try:
-        os.chdir('haystack_data')
-        copy_tree(*d_path('test_data'))
-        copy_tree(*d_path('extra'))
-        copy_tree(*d_path('genomes'))
-        copy_tree(*d_path('gene_annotations'))
-        copy_tree(*d_path('motif_databases'))
-    except:
-        print("Cannot move data")
-
-    print(os.listdir(os.path.join(data_root)))
-    print(os.getcwd())
-
 
 
 def main():
@@ -46,7 +25,8 @@ def main():
                                 'haystack_motifs = haystack.haystack_motifs_CORE:main',
                                 'haystack_tf_activity_plane = haystack.haystack_tf_activity_plane_CORE:main',
                                 'haystack_download_genome = haystack.haystack_download_genome_CORE:main',
-                                'haystack_run_test = haystack.run_test:run_testdata']
+                                'haystack_copy_data = haystack.haystack_common:copy_haystack_data',
+                                'haystack_run_test = haystack.haystack_common:run_testdata']
         },
         description="Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline",
         author='Luca Pinello',
@@ -68,6 +48,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    print("copying haystack data")
-    copy_haystack_data()
     sys.stdout.write('\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!')
