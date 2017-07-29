@@ -138,6 +138,8 @@ def copy_haystack_data():
     print(os.getcwd())
     print("copying data")
     data_root = determine_path()
+    print(data_root)
+
     d_path = lambda x: (x, os.path.join(data_root, x))
     try:
         copy_tree(*d_path('test_data'))

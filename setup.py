@@ -50,4 +50,3 @@ if __name__ == '__main__':
     main()
     print("copying data")
     copy_haystack_data()
-    print("Data Copied")
