@@ -135,6 +135,8 @@ def run_testdata():
        print "Cannot run test"
 
 def copy_haystack_data():
+    print(os.getcwd())
+    print("copying data")
     data_root = determine_path()
     d_path = lambda x: (x, os.path.join(data_root, x))
     try:
@@ -143,8 +145,7 @@ def copy_haystack_data():
         copy_tree(*d_path('genomes'))
         copy_tree(*d_path('gene_annotations'))
         copy_tree(*d_path('motif_databases'))
+        print(os.listdir(os.path.join(data_root)))
     except:
         print("Cannot move data")
 
-    print(os.listdir(os.path.join(data_root)))
-    print(os.getcwd())
