@@ -9,6 +9,7 @@ Setup script for Haystack -- Epigenetic Variability and Transcription Factor Mot
 from setuptools import setup
 import sys
 
+from haystack.haystack_common import copy_haystack_data
 
 def main():
 
@@ -25,7 +26,6 @@ def main():
                                 'haystack_motifs = haystack.haystack_motifs_CORE:main',
                                 'haystack_tf_activity_plane = haystack.haystack_tf_activity_plane_CORE:main',
                                 'haystack_download_genome = haystack.haystack_download_genome_CORE:main',
-                                'haystack_copy_data = haystack.haystack_common:copy_haystack_data',
                                 'haystack_run_test = haystack.haystack_common:run_testdata']
         },
         description="Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline",
@@ -48,4 +48,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-    sys.stdout.write('\n\nINSTALLATION COMPLETED, open a NEW terminal and enjoy HAYSTACK!')
+    print("copying data")
+    copy_haystack_data()
+    print("Data Copied")

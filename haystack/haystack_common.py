@@ -83,7 +83,6 @@ def which(program):
 
 	return None
 
-
 def query_yes_no(question, default="yes"):
     valid = {"yes":True,   "y":True,  "ye":True,
              "no":False,     "n":False}
@@ -139,7 +138,6 @@ def copy_haystack_data():
     data_root = determine_path()
     d_path = lambda x: (x, os.path.join(data_root, x))
     try:
-        os.chdir('haystack_data')
         copy_tree(*d_path('test_data'))
         copy_tree(*d_path('extra'))
         copy_tree(*d_path('genomes'))
