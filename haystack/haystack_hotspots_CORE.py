@@ -235,14 +235,14 @@ def initialize_genome(genome_name):
         Genome_2bit(genome_2bit)
     else:
         info("\nIt seems you don't have the required genome file.")
-            download_genome(genome_name)
-            if os.path.exists(genome_2bit):
-                info('Genome correctly downloaded!')
-                Genome_2bit(genome_2bit)
-            else:
-                error('Sorry I cannot download the required file for you.'
-                      ' Check your Internet connection.')
-                sys.exit(1)
+        download_genome(genome_name)
+        if os.path.exists(genome_2bit):
+            info('Genome correctly downloaded!')
+            Genome_2bit(genome_2bit)
+        else:
+            error('Sorry I cannot download the required file for you.'
+                  ' Check your Internet connection.')
+            sys.exit(1)
     check_file(chr_len_filename)
     return chr_len_filename
 
