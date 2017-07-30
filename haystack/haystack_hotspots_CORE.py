@@ -11,6 +11,18 @@ import glob
 from haystack_common import determine_path, which, check_file
 from haystack.haystack_download_genome_CORE import download_genome
 
+import logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
+                    datefmt='%a, %d %b %Y %H:%M:%S',
+                    stream=sys.stderr,
+                    filemode="w")
+error = logging.critical
+warn = logging.warning
+debug = logging.debug
+info = logging.info
+
+HAYSTACK_VERSION = "0.5.0"
 
 
 recompute_all = None
