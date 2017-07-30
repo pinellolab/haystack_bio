@@ -30,5 +30,5 @@ cache:
 
 script:
   - haystack_hotspots -h
-  - haystack_download_genome hg19
+  - haystack_download_genome hg19 --yes
   - haystack_run_test

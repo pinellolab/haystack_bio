@@ -8,23 +8,12 @@ import argparse
 from pybedtools import BedTool
 import multiprocessing
 import glob
-from haystack_common import determine_path, which, check_file, query_yes_no
+from haystack_common import determine_path, which, check_file
 from haystack.haystack_download_genome_CORE import download_genome
-import logging
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
-                    datefmt='%a, %d %b %Y %H:%M:%S',
-                    stream=sys.stderr,
-                    filemode="w")
-error = logging.critical
-warn = logging.warning
-debug = logging.debug
-info = logging.info
 
 
 recompute_all = None
-HAYSTACK_VERSION = "0.5.0"
 print '\n[H A Y S T A C K   H O T S P O T]'
 print('\n-SELECTION OF VARIABLE REGIONS- '
       '[Luca Pinello - lpinello@jimmy.harvard.edu]\n')
@@ -233,12 +222,9 @@ def get_data_filepaths(samples_filename_or_bam_folder, input_is_bigwig):
         check_file(data_filename)
     return sample_names, data_filenames
 
-
 def initialize_genome(genome_name):
     from bioutilities import Genome_2bit
-
     info('Initializing Genome:%s' % genome_name)
-
     genome_directory = determine_path('genomes')
 
     genome_2bit = os.path.join(genome_directory,
@@ -249,20 +235,15 @@ def initialize_genome(genome_name):
         Genome_2bit(genome_2bit)
     else:
         info("\nIt seems you don't have the required genome file.")
-        #if query_yes_no('Should I download it for you?'):
-        download_genome(genome_name)
-        if os.path.exists(genome_2bit):
-            info('Genome correctly downloaded!')
-            Genome_2bit(genome_2bit)
-        else:
-            error('Sorry I cannot download the required file for you.'
-                  ' Check your Internet connection.')
-            sys.exit(1)
-        #else:
-        #    error('Sorry I need the genome file to perform the analysis. Exiting...')
-        #    sys.exit(1)
+            download_genome(genome_name)
+            if os.path.exists(genome_2bit):
+                info('Genome correctly downloaded!')
+                Genome_2bit(genome_2bit)
+            else:
+                error('Sorry I cannot download the required file for you.'
+                      ' Check your Internet connection.')
+                sys.exit(1)
     check_file(chr_len_filename)
-
     return chr_len_filename
 
 def create_tiled_genome(genome_name,
