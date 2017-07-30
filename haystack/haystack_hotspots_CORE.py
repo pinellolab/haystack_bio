@@ -62,11 +62,18 @@ def angle_transform(x):
 #     feature.name = str(int(feature.name) * scaling_factor)
 #     return feature
 def get_scaling_factor(bam_filename):
-    from pysam import AlignmentFile
 
-    infile = AlignmentFile(bam_filename, "rb")
-    numreads = infile.count(until_eof=True)
-    scaling_factor = (1.0 / float(numreads)) * 1000000
+    cmd = 'sambamba view -c %s' % bam_filename
+    # print cmd
+    proc = sb.Popen(cmd, stdout=sb.PIPE,
+                    shell=True)
+    (stdout, stderr) = proc.communicate()
+    # print stdout,stderr
+    scaling_factor = (1.0 / float(stdout.strip())) * 1000000
+    # from pysam import AlignmentFile
+    # infile = AlignmentFile(bam_filename, "rb")
+    # numreads = infile.count(until_eof=True)
+    # scaling_factor = (1.0 / float(numreads)) * 1000000
     return scaling_factor
 
 def get_args():

@@ -4,7 +4,6 @@ Created on Fri Apr 22 15:16:12 2016
 
 @author: lpinello
 """
-
 import subprocess as sb
 import sys
 import logging
@@ -38,9 +37,7 @@ def which(program):
             exe_file = os.path.join(path, program)
             if is_exe(exe_file):
                 return exe_file
-
     return None
-
 
 def query_yes_no(question, default="yes"):
     valid = {"yes":True,   "y":True,  "ye":True,
@@ -129,10 +126,10 @@ def run_testdata():
     cmd= "haystack_pipeline samples_names_genes.txt hg19 --output_directory $HOME/OUTPUT --bin_size 200 --chrom_exclude 'chr(?!21)'"
 
     try:
-        print '\n[running test]\n'
+        print("running test")
         sb.call(cmd, shell=True)
     except:
-       print "Cannot run test"
+        print("Cannot run test")
 
 def copy_haystack_data():
     print(os.getcwd())
