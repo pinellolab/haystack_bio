@@ -10,6 +10,13 @@ import logging
 import os
 from distutils.dir_util import copy_tree
 
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
+                    datefmt='%a, %d %b %Y %H:%M:%S',
+                    stream=sys.stderr,
+                    filemode="w"
+                    )
 error = logging.critical
 warn = logging.warning
 debug = logging.debug
@@ -131,9 +138,7 @@ def query_yes_no(question, default="yes"):
 
 def determine_path(folder=''):
 
-
     _ROOT = os.path.abspath(os.path.dirname(__file__))
-
     _ROOT=os.path.join(_ROOT,'haystack_data')
 
     print(_ROOT)

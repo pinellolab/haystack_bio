@@ -58,5 +58,5 @@ if __name__ == '__main__':
     check_required_packages()
     print("Installing Package")
     main()
-    print("Copying Data")
+   # print("Copying Data")
    # copy_haystack_data()
