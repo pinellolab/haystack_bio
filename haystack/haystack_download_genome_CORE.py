@@ -18,7 +18,7 @@ def download_genome(name, answer):
             if os.path.exists(genome_filename):
                 print 'File %s exists, skipping download' % genome_filename
             else:
-                print 'Downloding %s in %s...' % (urlpath, genome_filename)
+                print 'Downloading %s in %s...' % (urlpath, genome_filename)
                 with open(genome_filename, 'wb') as genome_file_destination:
                     sh.copyfileobj(genome_url_origin, genome_file_destination)
 

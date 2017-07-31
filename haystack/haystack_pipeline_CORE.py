@@ -38,8 +38,8 @@ def get_args_pipeline():
     parser.add_argument('--output_directory', type=str, help='Output directory (default: current directory)',
                         default='')
     parser.add_argument('--bin_size', type=int, help='bin size to use(default: 500bp)', default=500)
-    parser.add_argument('--recompute_all',
-                        help='Ignore any file previously precalculated fot the command haystack_hotstpot',
+    parser.add_argument('--do_not_recompute',
+                        help='Keep any file previously precalculated',
                         action='store_true')
     parser.add_argument('--depleted',
                         help='Look for cell type specific regions with depletion of signal instead of enrichment',
@@ -69,8 +69,15 @@ def get_args_pipeline():
     parser.add_argument('--n_processes', type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
                         default=multiprocessing.cpu_count())
-    parser.add_argument('--noblacklist', help='Exclude blacklisted regions.', action='store_true')
-    parser.add_argument('--chrom_exclude', help='Exclude chromosomes. For example (_|chrM|chrX|chrY).',
+    parser.add_argument('--blacklist',
+                        type=str,
+                        help='Exclude blacklisted regions. Blacklisted regions are not excluded by default. '
+                             'Use hg19 to blacklist regions for the human genome 19, '
+                             'otherwise provide the filepath for a bed file with blacklisted regions.',
+                        default='')
+    parser.add_argument('--chrom_exclude',
+                        type=str,
+                        help='Exclude chromosomes. For example (_|chrM|chrX|chrY).',
                         default='chrX|chrY')
     parser.add_argument('--read_ext', type=int, help='Read extension in bps (default: 200)', default='200')
     parser.add_argument('--temp_directory', help='Directory to store temporary files  (default: /tmp)', default='/tmp')
@@ -210,6 +217,8 @@ def main(input_args=None):
     # CALL HAYSTACK HOTSPOTS
     input_args=[sample_names_hotspots_filename,
                 genome_name,
+                '--blacklist',
+                blacklist,
                 '--output_directory',
                 output_directory,
                 '--bin_size',
@@ -226,10 +235,8 @@ def main(input_args=None):
                 '{:f}'.format(z_score_low),
                 '--read_ext',
                 '{:d}'.format(read_ext)]
-    if noblacklist:
-        input_args.append('--noblacklist')
-    if recompute_all:
-        input_args.append('--recompute_all')
+    if do_not_recompute:
+        input_args.append('--do_not_recompute')
     if depleted:
         input_args.append('--depleted')
     if input_is_bigwig:
@@ -239,21 +246,6 @@ def main(input_args=None):
 
     hotspots.main(input_args=input_args)
 
-    # cmd_to_run = 'haystack_hotspots "%s" %s --output_directory "%s" --bin_size %d %s %s %s %s %s %s %s %s %s %s %s' % \
-    #              (sample_names_hotspots_filename, genome_name, output_directory, bin_size,
-    #               ('--recompute_all' if recompute_all else ''),
-    #               ('--depleted' if depleted else ''),
-    #               ('--input_is_bigwig' if input_is_bigwig else ''),
-    #               ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
-    #               '--transformation %s' % transformation,
-    #               '--z_score_high %f' % z_score_high,
-    #               '--z_score_low %f' % z_score_low,
-    #               ('--noblacklist'  if noblacklist else ''),
-    #               '--chrom_exclude %s' % chrom_exclude,
-    #               '--read_ext %f' % read_ext,
-    #               '--th_rpm %f' % th_rpm)
-    # print cmd_to_run
-    # sb.call(cmd_to_run, shell=True)
 
     # CALL HAYSTACK MOTIFS
     motif_directory = os.path.join(output_directory,
@@ -261,9 +253,6 @@ def main(input_args=None):
 
 
     for sample_name in sample_names:
-
-
-
 
         specific_regions_filename = glob.glob(os.path.join(output_directory,
                                                  'HAYSTACK_HOTSPOTS',
@@ -275,7 +264,6 @@ def main(input_args=None):
                                                      'SPECIFIC_REGIONS',
                                                      'Background_for_%s*.bed' % sample_name))[0]
 
-        # bg_regions_filename=glob.glob(specific_regions_filename.replace('Regions_specific','Background')[:-11]+'*.bed')[0] #lo zscore e' diverso...
 
         input_args_motif = [specific_regions_filename,
                             genome_name,
@@ -293,22 +281,6 @@ def main(input_args=None):
         if temp_directory:
             input_args_motif.extend(['--temp_directory', temp_directory])
         motifs.main(input_args_motif)
-
-        #
-        # cmd_to_run = 'haystack_motifs "%s" %s --bed_bg_filename "%s" --output_directory "%s" --name %s' % (
-        #     specific_regions_filename, genome_name, bg_regions_filename, motif_directory, sample_name)
-        #
-        # if meme_motifs_filename:
-        #     cmd_to_run += ' --meme_motifs_filename "%s"' % meme_motifs_filename
-        #
-        # if n_processes:
-        #     cmd_to_run += ' --n_processes %d' % n_processes
-        #
-        # if temp_directory:
-        #     cmd_to_run += ' --temp_directory %s' % temp_directory
-        #
-        # print cmd_to_run
-        # sb.call(cmd_to_run, shell=True)
 
     if USE_GENE_EXPRESSION:
 
@@ -347,18 +319,6 @@ def main(input_args=None):
                     input_args_activity.append(['--plot_all'])
 
                 tf_activity_plane.main(input_args_activity)
-
-                # cmd_to_run = 'haystack_tf_activity_plane "%s" "%s" %s --output_directory "%s"' % (
-                #     motifs_output_folder, sample_names_tf_activity_filename, sample_name, tf_activity_directory)
-                #
-                # if motif_mapping_filename:
-                #     cmd_to_run += ' --motif_mapping_filename "%s"' % motif_mapping_filename
-                #
-                # if plot_all:
-                #     cmd_to_run += ' --plot_all'
-                #
-                # print cmd_to_run
-                # sb.call(cmd_to_run, shell=True)
 
 if __name__ == '__main__':
     main()

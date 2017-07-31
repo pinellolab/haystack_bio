@@ -7,9 +7,8 @@ Setup script for Haystack -- Epigenetic Variability and Transcription Factor Mot
 @contact: lpinello@jimmy.harvard.edu
 """
 from setuptools import setup
-import sys
 
-from haystack.haystack_common import copy_haystack_data
+from haystack.haystack_common import copy_haystack_data, check_required_packages
 
 def main():
 
@@ -43,10 +42,21 @@ def main():
             'Topic :: Scientific/Engineering :: Bio-Informatics',
             'Programming Language :: Python',
         ],
-        install_requires=[]
+        install_requires=[
+              'numpy>=1.8.2',
+              'pandas>=0.13.1',
+              'matplotlib>=1.3.1',
+              'argparse>=1.3',
+              'scipy>=0.13.3',
+              'jinja2>=2.7.3',
+              'bx-python>=0.7.3',
+              'pybedtools>=0.7.10']
     )
 
 if __name__ == '__main__':
+    print("Checking Required Packages")
+    check_required_packages()
+    print("Installing Package")
     main()
-    print("copying data")
-    copy_haystack_data()
+    print("Copying Data")
+   # copy_haystack_data()
