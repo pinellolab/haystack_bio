@@ -10,6 +10,7 @@ from setuptools import setup
 
 from haystack.haystack_common import check_required_packages
 
+
 def main():
 
     setup(
@@ -28,11 +29,13 @@ def main():
                                 'haystack_run_test = haystack.haystack_common:run_testdata']
         },
         description="Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline",
-        author='Luca Pinello',
-        author_email='lpinello@jimmy.harvard.edu',
+        maintainer= 'Luca Pinello , Rick Farouni',
+        maintainer_email='lpinello@jimmy.harvard.edu, tfarouni@mgh.harvard.edu',
+        author='Luca Pinello, Rick Farouni',
+        author_email='lpinello@jimmy.harvard.edu, tfarouni@mgh.harvard.edu',
         url='http://github.com/lucapinello/Haystack',
         classifiers=[
-            'Development Status :: 4 - Beta',
+            'Development Status :: 5 - Beta',
             'Environment :: Console',
             'Intended Audience :: Developers',
             'Intended Audience :: Science/Research',

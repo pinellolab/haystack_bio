@@ -1,13 +1,22 @@
 language: python
 
 matrix:
-  include:
-  - os: linux
-    dist: vivid
-    python: '2.7'
-  - os: linux
-    dist: Xenial
-    python: '2.7'
+    include:
+        - os: linux
+          dist: trusty
+          python: 2.7
+        - os: linux
+          dist: Xenial
+          python: 2.7
+        - os: osx
+          osx_image: xcode7.3
+          language: generic
+          env: TOXENV=py27
+        - os: osx
+          osx_image: xcode8.3
+          language: generic
+          env: TOXENV=py27
+
 
 before_install:
   - sudo apt-get -qq update
