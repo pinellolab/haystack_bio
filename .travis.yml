@@ -8,14 +8,14 @@ matrix:
         - os: linux
           dist: Xenial
           python: 2.7
-        - os: osx
-          osx_image: xcode7.3
-          language: generic
-          env: TOXENV=py27
-        - os: osx
-          osx_image: xcode8.3
-          language: generic
-          env: TOXENV=py27
+#        - os: osx
+#          osx_image: xcode7.3
+#          language: generic
+#          env: TOXENV=py27
+#        - os: osx
+#          osx_image: xcode8.3
+#          language: generic
+#          env: TOXENV=py27
 
 
 before_install:
@@ -28,7 +28,9 @@ before_install:
   - conda config --add channels defaults
   - conda config --add channels conda-forge
   - conda config --add channels bioconda
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION bx-python ghostscript=9.10 numpy scipy matplotlib argparse jinja2 nose dateutil pandas setuptools pil ipython unzip pybedtools meme bedtools sambamba ucsc-bigwigaverageoverbed ucsc-bedgraphtobigwig
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION bx-python ghostscript=9.10 numpy scipy matplotlib argparse \
+   jinja2 nose dateutil pandas setuptools pil ipython unzip pybedtools \
+   meme bedtools sambamba ucsc-bigwigaverageoverbed ucsc-bedgraphtobigwig
 
 install: python setup.py install
 
