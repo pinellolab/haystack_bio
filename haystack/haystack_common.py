@@ -48,11 +48,6 @@ def which(program):
 	return None
 
 def check_required_packages():
-    if which('samtools') is None:
-        error(
-            'Haystack requires samtools. '
-            'Please install.')
-        sys.exit(1)
 
     if which('bedtools') is None:
         error('Haystack requires bedtools.'

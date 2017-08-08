@@ -8,7 +8,7 @@ Setup script for Haystack -- Epigenetic Variability and Transcription Factor Mot
 """
 from setuptools import setup
 
-from haystack.haystack_common import copy_haystack_data, check_required_packages
+from haystack.haystack_common import check_required_packages
 
 def main():
 
