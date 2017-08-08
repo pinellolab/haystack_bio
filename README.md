@@ -1,48 +1,48 @@
-Haystack-bio
+Haystack 
 ========
 Epigenetic Variability and Motif Analysis Pipeline       
 --------------------------------------------------
 **Current version**: 0.4
 
-[![Build Status](https://travis-ci.org/rfarouni/haystack-bio.svg?branch=master)](https://travis-ci.org/rfarouni/haystack-bio)
+[![Build Status](https://travis-ci.org/rfarouni/haystack_bio.svg?branch=master)](https://travis-ci.org/rfarouni/haystack_bio)
 
 
-[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square)](http://bioconda.github.io/recipes/haystack-bio/README.html)
+[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square)](http://bioconda.github.io/recipes/haystack_bio/README.html)
 
 Summary
 -------
-Haystack-bio is a suite of computational tools to study  epigenetic variability, cross-cell-type plasticity of chromatin states and transcription factors (TFs) motifs providing mechanistic insights into chromatin structure, cellular identity and gene regulation. 
+Haystack is a suite of computational tools to study  epigenetic variability, cross-cell-type plasticity of chromatin states and transcription factors (TFs) motifs providing mechanistic insights into chromatin structure, cellular identity and gene regulation. 
 
-Haystack-bio identifies  highly variable regions across different cell types also called _hotspots_, and the potential regulators that mediate the cell-type specific variation through integration of multiple data-types. 
+Haystack identifies  highly variable regions across different cell types also called _hotspots_, and the potential regulators that mediate the cell-type specific variation through integration of multiple data-types. 
 
-Haystack-bio can be used with  histone modifications data, DNase I hypersensitive sites data and methylation data obtained for example by ChIP-seq, DNase-Seq and Bisulfite-seq assays and measured across multiple cell-types. In addition, it  is also possible to integrate gene expression data obtained from array based or RNA-seq approaches.
+Haystack can be used with  histone modifications data, DNase I hypersensitive sites data and methylation data obtained for example by ChIP-seq, DNase-Seq and Bisulfite-seq assays and measured across multiple cell-types. In addition, it  is also possible to integrate gene expression data obtained from array based or RNA-seq approaches.
 
-In particular, haystack-bio highlights enriched TF motifs in  variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
+In particular, haystack highlights enriched TF motifs in  variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
 
 A summary of the pipeline and an example on H3k27ac data is shown in the following figure:
 
 ![Haystack Pipeline](http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/Final_figure.png)
 
 
-**(A)** Haystack-bio overview: modules and corresponding functions. **(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted.  **(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. **(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif.   
+**(A)** Haystack overview: modules and corresponding functions. **(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted.  **(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. **(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif.   
 
-Haystack-bio was designed to be highly modular. The whole pipeline can be called using the _haystack_pipeline_ command or alternatively the different modules can be used and combined indipendently.  For example it is possible to use only the motif analysis calling the _haystack_motifs_ module on a given set of genomic regions. A nice description of each module is present in the **_How to use HAYSTACK_** section.
+Haystack was designed to be highly modular. The whole pipeline can be called using the _haystack_pipeline_ command or alternatively the different modules can be used and combined indipendently.  For example it is possible to use only the motif analysis calling the _haystack_motifs_ module on a given set of genomic regions. A nice description of each module is present in the **_How to use HAYSTACK_** section.
 
 Operating System Notes
 -----------------
 
-Haystack-bio supports only 64-bit Linux and Mac OSX. The software has been tested on Ubuntu 14.04 LTS, Ubuntu 16.04 LTS, OS X 10.11, and OS X 10.12.  
+Haystack supports only 64-bit Linux and Mac OSX. The software has been tested on Ubuntu 14.04 LTS, Ubuntu 16.04 LTS, OS X 10.11, and OS X 10.12.  
 
 
 Installation 
 -----------------
 
 
-To install haystack-bio, bioconda needs to be configured on your system. For detailed installation instructions please visit 
+To install haystack, bioconda needs to be configured on your system. For detailed installation instructions please visit 
 the bioconda project's installation webpage at https://bioconda.github.io/. After you have bioconda configured, 
-you can install haystack-bio and its dependencies by simply running:
+you can install haystack and its dependencies by simply running:
 
-    conda install haystack-bio
+    conda install haystack_bio
 
 Testing 
 -----------------
@@ -54,7 +54,7 @@ To test if the package was successfully installed, please run the following comm
 The  *-h* help flag generates a description of all the command line options that can be supplied to each of the individual modules. 
   
 
-To test haystack-bio, you would first need to download the genome file and then run the the pipeline on the sample data bundled inside the package. 
+To test haystack, you would first need to download the genome file and then run the the pipeline on the sample data bundled inside the package. 
 To download the human genome for example, please run:
 
      haystack_download_genome hg19
@@ -70,9 +70,9 @@ Note, that this is equivalent to running the following command manually.
 Here *haystack_test_output* is the name of the analysis output folder. 
 
 
-How to use haystack-bio
+How to use haystack
 -------------------
-Haystack-bio consists of 5 modules:
+Haystack consists of 5 modules:
 
 1) **haystack_hotspots**: find the regions that are variable across different ChIP-seq, DNase-seq or Bisulfite-seq tracks (only BigWig processed file are supported for methylation data). The input is a folder containing bam files (with PCR duplicates removed) or bigwig (must be .bw), or a tab delimited text file with two columns containing: 1. the sample name and 2. the path of the corresponding .bam/.bw file. For example you can write inside a file called _samples_names_hotspot.txt_ something like that:
 ```
@@ -184,7 +184,7 @@ If you have instead a file with the samples description containing .bam or .bw  
 	
 	haystack_pipeline samples_names.txt  hg19
 
-5) **haystack_download_genome**: it allows you to download and add a reference genomes from UCSC to haystack-bio in the appropriate format. To download a genome run: 
+5) **haystack_download_genome**: it allows you to download and add a reference genomes from UCSC to haystack in the appropriate format. To download a genome run: 
 	
 	 haystack_download_genome genome_name 
 
@@ -201,7 +201,7 @@ You can get more details about all the parameters of each of these 5 commands us
 Precomputed Analysis
 --------------------
 
-We have run haystack-bio on several ENCODE datasets for which you can download the the precomputed results (variability tracks, hotspots, specific regions, enriched motifs and activity planes):
+We have run haystack on several ENCODE datasets for which you can download the the precomputed results (variability tracks, hotspots, specific regions, enriched motifs and activity planes):
 
 1. Analysis on 12 ChIP-seq tracks of H3k27ac in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27ac.tar.gz
 2. Analysis on  17 DNase-seq tracks in human cell lines + gene expression: (Gain) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE.tar.gz  and (Loss) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE_DEPLETED.tar.gz
@@ -221,7 +221,7 @@ Then type the command:
 
 	docker pull lucapinello/haystack_bio
 
-See an example on how to run haystack-bio with a Docker image see the section **Testing haystack-bio** below. __If you get memory errors try to allocate at least 8GB to the docker image in order to run haystack-bio__.
+See an example on how to run haystack  with a Docker image see the section **Testing haystack ** below. __If you get memory errors try to allocate at least 8GB to the docker image in order to run haystack __.
 
 The current version is compatible only with Unix like operating systems on 64 bit architectures and was tested on:
 - CentOS 6.5
@@ -276,7 +276,7 @@ Operating System Notes
   
   __If you are installing it on a docker image you don't need the sudo before each apt-get command__
 
-4. Install haystack-bio 
+4. Install haystack 
   ```
   sudo pip install haystack_bio --no-use-wheel --verbose
   ```
@@ -293,7 +293,7 @@ Operating System Notes
 
 **Apple OSX**
 
-To install haystack-bio on OSX you need the _Command Line Tools_ (usually shipped with Xcode). 
+To install haystack on OSX you need the _Command Line Tools_ (usually shipped with Xcode). 
 If you don't have them you can download from here: 
 https://developer.apple.com/downloads/index.action
 
@@ -312,12 +312,12 @@ sudo ln -s /opt/X11 /usr/X11R6
 
 In addition, you need to install Java for Windows.
 
-Note: If you install haystack-bio in a custom folder please make sure to select a path without white spaces.
+Note: If you install haystack in a custom folder please make sure to select a path without white spaces.
 
 
 Citation
 --------
-*Please cite the following article if you use haystack-bio in your research*:
+*Please cite the following article if you use haystack in your research*:
   * Luca Pinello, Jian Xu, Stuart H. Orkin, and Guo-Cheng Yuan. Analysis of chromatin-state plasticity identifies cell-type specific regulators of H3K27me3 patterns PNAS 2014; published ahead of print January 6, 2014, doi:10.1073/pnas.1322570111
 
 Contacts
