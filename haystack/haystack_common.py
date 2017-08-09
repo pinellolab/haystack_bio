@@ -134,7 +134,7 @@ def query_yes_no(question, default="yes"):
 def determine_path(folder=''):
 
     _ROOT = os.path.abspath(os.path.dirname(__file__))
-    _ROOT = os.path.join(_ROOT,'data')
+    _ROOT = os.path.join(_ROOT,'haystack_data')
 
     print(_ROOT)
 

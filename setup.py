@@ -19,7 +19,7 @@ def main():
         include_package_data=True,
         packages=["haystack"],
         package_dir={'haystack': 'haystack'},
-        package_data={'haystack': ['./data']},
+        package_data={'haystack': ['./haystack_data']},
         description="Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline",
         maintainer= 'Luca Pinello , Rick Farouni',
         maintainer_email='lpinello@jimmy.harvard.edu, tfarouni@mgh.harvard.edu',
