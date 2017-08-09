@@ -19,15 +19,7 @@ def main():
         include_package_data=True,
         packages=["haystack"],
         package_dir={'haystack': 'haystack'},
-        package_data={'haystack': ['./*']},
-        entry_points={
-            "console_scripts": ['haystack_pipeline = haystack.haystack_pipeline_CORE:main',
-                                'haystack_hotspots =  haystack.haystack_hotspots_CORE:main',
-                                'haystack_motifs = haystack.haystack_motifs_CORE:main',
-                                'haystack_tf_activity_plane = haystack.haystack_tf_activity_plane_CORE:main',
-                                'haystack_download_genome = haystack.haystack_download_genome_CORE:main',
-                                'haystack_run_test = haystack.haystack_common:run_testdata']
-        },
+        package_data={'haystack': ['./data']},
         description="Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline",
         maintainer= 'Luca Pinello , Rick Farouni',
         maintainer_email='lpinello@jimmy.harvard.edu, tfarouni@mgh.harvard.edu',
@@ -45,15 +37,7 @@ def main():
             'Topic :: Scientific/Engineering :: Bio-Informatics',
             'Programming Language :: Python',
         ],
-        install_requires=[
-              'numpy',
-              'pandas',
-              'matplotlib',
-              'argparse',
-              'scipy',
-              'jinja2',
-              'bx-python',
-              'pybedtools']
+        install_requires=[]
     )
 
 if __name__ == '__main__':

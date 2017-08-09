@@ -134,7 +134,7 @@ def query_yes_no(question, default="yes"):
 def determine_path(folder=''):
 
     _ROOT = os.path.abspath(os.path.dirname(__file__))
-    _ROOT=os.path.join(_ROOT,'haystack_data')
+    _ROOT = os.path.join(_ROOT,'data')
 
     print(_ROOT)
 
@@ -162,10 +162,9 @@ def run_testdata():
         print("Cannot run test")
 
 def copy_haystack_data():
-    print(os.getcwd())
     print("copying data")
     data_root = determine_path()
-    print(data_root)
+
 
     d_path = lambda x: (x, os.path.join(data_root, x))
     try:
