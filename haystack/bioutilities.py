@@ -7,10 +7,8 @@ import mmap
 import math
 import os, glob, string
 
-
 import numpy as np
-from numpy import zeros, inf, log2
-from numpy.random import  randint,permutation
+from numpy import zeros
 
 from scipy.stats import rv_discrete
 from scipy.io.matlab import savemat
