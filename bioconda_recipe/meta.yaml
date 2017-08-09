@@ -1,0 +1,55 @@
+package:
+  name: haystack_bio
+  version: 'v0.5.0'
+source:
+  fn:  haystack_bio-0.5.0.tar.gz
+  url: https://github.com/rfarouni/haystack_bio/archive/v0.5.0.tar.gz
+  md5: 48596169d07f8368d394d752bd2748bd
+
+build:
+  number: 0
+  skip: true # [not py27 and osx]
+  entry_points:
+    - haystack_pipeline = haystack.haystack_pipeline_CORE:main
+    - haystack_hotspots =  haystack.haystack_hotspots_CORE:main
+    - haystack_motifs = haystack.haystack_motifs_CORE:main
+    - haystack_tf_activity_plane = haystack.haystack_tf_activity_plane_CORE:main
+    - haystack_download_genome = haystack.haystack_download_genome_CORE:main
+    - haystack_run_test = haystack.haystack_common:run_testdata
+
+about:
+    home: https://github.com/rfarouni/haystack_bio
+    license: GPLv3
+    summary: Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline
+
+requirements:
+
+  build:
+    - python
+    - bedtools
+    - meme
+    - ucsc-bigwigaverageoverbed
+    - ucsc-bedgraphtobigwig
+    - ghostscript ==9.10
+
+  run:
+    - openjdk
+    - meme
+    - bedtools
+    - sambamba
+    - ucsc-bigwigaverageoverbed
+    - ucsc-bedgraphtobigwig
+    - ghostscript ==9.10
+    - bx-python 
+    - numpy 
+    - scipy 
+    - matplotlib 
+    - jinja2 
+    - pandas
+    - pybedtools
+test:
+  commands:
+    - haystack_hotspots -h
+    - haystack_download_genome hg19 --yes
+    - haystack_run_test
+
