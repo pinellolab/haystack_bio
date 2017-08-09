@@ -20,6 +20,14 @@ def main():
         packages=["haystack"],
         package_dir={'haystack': 'haystack'},
         package_data={'haystack': ['./haystack_data']},
+        entry_points={
+            "console_scripts": ['haystack_pipeline = haystack.haystack_pipeline_CORE:main',
+                                'haystack_hotspots =  haystack.haystack_hotspots_CORE:main',
+                                'haystack_motifs = haystack.haystack_motifs_CORE:main',
+                                'haystack_tf_activity_plane = haystack.haystack_tf_activity_plane_CORE:main',
+                                'haystack_download_genome = haystack.haystack_download_genome_CORE:main',
+                                'haystack_run_test = haystack.haystack_common:run_testdata']
+        },
         description="Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline",
         maintainer= 'Luca Pinello , Rick Farouni',
         maintainer_email='lpinello@jimmy.harvard.edu, tfarouni@mgh.harvard.edu',
