@@ -26,10 +26,7 @@ HAYSTACK_VERSION = "0.5.0"
 
 
 do_not_recompute = None
-print '\n[H A Y S T A C K   H O T S P O T]'
-print('\n-SELECTION OF VARIABLE REGIONS- '
-      '[Luca Pinello - lpinello@jimmy.harvard.edu]\n')
-print 'Version %s\n' % HAYSTACK_VERSION
+
 
 
 def quantile_normalization(A):
@@ -850,6 +847,12 @@ def create_igv_track_file(hpr_iod_scores,
 
 
 def main(input_args=None):
+
+
+    print '\n[H A Y S T A C K   H O T S P O T]'
+    print('\n-SELECTION OF VARIABLE REGIONS- '
+          '[Luca Pinello - lpinello@jimmy.harvard.edu]\n')
+    print 'Version %s\n' % HAYSTACK_VERSION
 
     # step 1
     check_required_packages()
