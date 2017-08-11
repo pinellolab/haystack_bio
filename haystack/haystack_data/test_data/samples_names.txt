@@ -1,13 +1,3 @@
-#Haystack samples description file
-
-#NAME	CHIP_SEQ_BAM_FILENAME
-
-K562	K562H3k27ac_chr21.bam
-GM12878	Gm12878H3k27ac_chr21.bam
-HEPG2	Hepg2H3k27ac_chr21.bam
-H1hesc	H1hescH3k27ac_chr21.bam
-HSMM	HsmmH3k27ac_chr21.bam
-NHLF	NhlfH3k27ac_chr21.bam
-
-#Note that any line starting with '#' or empty is ignored
-
+GM12878 Gm12878H3k27ac_chr21.bam GM12878_genes.txt
+HEPG2	Hepg2H3k27ac_chr21.bam	HEPG2_genes.txt
+NHLF	NhlfH3k27ac_chr21.bam    NHLF_genes.txt

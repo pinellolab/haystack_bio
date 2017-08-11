@@ -153,7 +153,7 @@ def run_testdata():
     test_data_dir= determine_path("test_data")
     os.chdir(test_data_dir)
 
-    cmd= "haystack_pipeline samples_names_genes.txt hg19 --output_directory $HOME/haystack_test_output --bin_size 500 --chrom_exclude 'chr(?!21)'"
+    cmd= "haystack_pipeline samples_names.txt hg19 --output_directory $HOME/haystack_test_output --bin_size 500 --chrom_exclude 'chr(?!21)'"
 
     try:
         print("running test")

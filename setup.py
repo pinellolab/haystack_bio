@@ -52,7 +52,7 @@ def main():
             'scipy>=0.13.3',
             'jinja2>=2.7.3',
             'bx-python>=0.7.3',
-             'pybedtools>=0.7.10']
+            'pybedtools>=0.7.10']
     )
 
 if __name__ == '__main__':

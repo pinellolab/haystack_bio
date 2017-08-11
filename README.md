@@ -31,50 +31,150 @@ Haystack was designed to be highly modular. The whole pipeline can be called usi
 Operating System Notes
 -----------------
 
-Haystack supports only 64-bit Linux and Mac OSX. The software has been tested on Ubuntu 14.04 LTS, Ubuntu 16.04 LTS, OS X 10.11, and OS X 10.12.  
-
+The software has been tested on CentOS 6.5, Ubuntu 14.04 LTS, Ubuntu 16.04 LTS, OS X 10.11, and OS X 10.12. 
+Although Haystack supports only 64-bit Linux and Mac OSX, it can be run on Windows systems using a Docker container. 
+The Docker container can also be run on any platform that has the Docker software installed. For instructions on how to install the Docker software and the docker image, please see below.
 
 Installation 
 -----------------
 
+To install Haystack, Bioconda, a channel for the conda package manager, needs to be configured on your system.
+Bioconda streamlines the process of building and installing all the software dependencies that a package needs to have configured on the system.  Haystack depends on several other 
+Python packages and a number of bioinformatics software tools, so by running the following lines of code, Haystack and its dependencies can be installed automatically. 
+The installation consists of three steps: installing Miniconda, adding the Bioconda channel, and installing Haystack. 
+For the following steps, we are assuming you are on a 64-bit Linux or a MacOS system and that you have not installed Miniconda/Anaconda before on your system. 
+In case you encounter difficulty in installing Miniconda or adding the Bioconda channel, please refer to the Bioconda project's website at https://bioconda.github.io/ for more detailed installation instructions.
 
-To install haystack, bioconda needs to be configured on your system. For detailed installation instructions please visit 
-the bioconda project's installation webpage at https://bioconda.github.io/. After you have bioconda configured, 
-you can install haystack and its dependencies by simply running:
+**On Linux**
+
+The instructions are as follows. The first line downloads the latest Linux Miniconda 2 (Python 2) to your home directory. The second line gives permissions to execute the file as a program. The third line executes the program
+ 
+    wget -c https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O $HOME/miniconda.sh
+    chmod +x $HOME/miniconda.sh
+    $HOME/miniconda.sh -b
+
+Next, update the conda repository and add the channels in the following order of priority by running these four lines in the order shown.
+
+     conda update --all --yes
+     conda config --add channels defaults
+     conda config --add channels conda-forge
+     conda config --add channels bioconda
+
+Lastly, you can install haystack and its dependencies by simply running:
 
     conda install haystack_bio
 
-Testing 
+**On Mac**
+
+The instructions are as follows. The first line downloads the latest Linux Miniconda 2 (Python 2) to your home directory. The second line gives permissions to execute the file as a program. The third line executes the program
+ 
+    wget -c https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -O $HOME/miniconda.sh
+    chmod +x $HOME/miniconda.sh
+    $HOME/miniconda.sh -b
+
+Next, update the conda repository and add the channels in the following order of priority by running these four lines in the order shown.
+
+     conda update --all --yes
+     conda config --add channels defaults
+     conda config --add channels conda-forge
+     conda config --add channels bioconda
+
+Lastly, you can install haystack and its dependencies by simply running the following line.
+
+    conda install haystack_bio
+
+**Docker Image**
+
+
+Please visit https://www.docker.com/ for instructions on how to install Docker on your platform. After installation is complete you can use the Docker image for haystack which can be found at this web address 
+
+	
+	https://hub.docker.com/r/lucapinello/haystack_bio/
+
+To download the image onto your system simple run:
+
+	docker pull lucapinello/haystack_bio
+
+
+For Linux platforms, make sure to run the Docker post-installation instructions in order to run the command without sudo privileges.
+
+
+ __If you get memory errors try to allocate at least 8GB to the docker image in order to run haystack __.
+
+To run haystack use the following command:
+
+	docker run -v ${PWD}:/DATA -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
+
+If you run Docker on Window you have to specify the full path of the data:
+
+	docker run -v //c/Users/Luca/Downloads/TEST_DATASET:/DATA -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
+
+
+Testing Installation
 -----------------
 
 To test if the package was successfully installed, please run the following command.
 
      haystack_hotspots -h
   
-The  *-h* help flag generates a description of all the command line options that can be supplied to each of the individual modules. 
+The  *-h* help flag outputs a list of all the possible command line options that you can supply to the *haystack_hotspots* module. 
+If you see such a list, then the software has been installed successfully.
+
+
+To test the haystack pipeline, you would first need to download the genome file and then run the the pipeline on the sample data bundled inside the package. 
+
+The **haystack_download_genome** command allows you to download and add a reference genomes from UCSC to Haystack in the appropriate format. 
+To download a  particular genome run: 
+	
+	 haystack_download_genome genome_name 
+
+Note: Probably you do not need to call this command explicitly since it is called automatically when you run the pipeline. 
+
+**_Example_**
+To download the human genome assembly hg19, please run: 
+	
+	haystack_download_genome hg19
+
+Also note that this command downloads the hg19 genome build from the following location
+
+    http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
+
+and saves it to the genomes folder
+
+    $HOME/miniconda/lib/python2.7/site-packages/haystack/haystack_data/genomes
   
-
-To test haystack, you would first need to download the genome file and then run the the pipeline on the sample data bundled inside the package. 
-To download the human genome for example, please run:
-
-     haystack_download_genome hg19
-     
-To test the software on the test sample data, please run  
+Also note that the *hg19.2bit* file is 778M in size and could take a long time to download on a slow connection.
+  
+  
+To test whether the entire pipeline can run without any problems on your system, please run  
     
          haystack_run_test
 
 Note, that this is equivalent to running the following command manually.
 
-    haystack_pipeline samples_names_genes.txt hg19 --output_directory $HOME/haystack_test_output --bin_size 200 --chrom_exclude 'chr(?!21)'
+    haystack_pipeline samples_names.txt hg19 --output_directory $HOME/haystack_test_output --bin_size 500 --chrom_exclude 'chr(?!21)'
 
-Here *haystack_test_output* is the name of the analysis output folder. 
+Here *haystack_test_output* is the name of the analysis output folder. For instructions on how to create the samples_names.txt file, 
+please refer to the section below on how to use haystack.	
 
+Note: Since the sample test data included in the package is limited to  a small fraction of the genome (i.e. Chromosome 21) and is for three  cell types only,
+the final motif analysis step in the pipeline might not return any positive findings. To recreate the output produced by the pipeline when running on
+ the entire genome with six cell types, please run on and download the complete set of BAM files from the ENCODE project or from here.
+ 
+    wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_test_dataset_h3k27ac.tar.gz
+
+To decompress the archive file, run the following command. 
+	
+	tar xvzf haystack_test_dataset_h3k27ac.tar.gz
 
 How to use haystack
 -------------------
-Haystack consists of 5 modules:
 
-1) **haystack_hotspots**: find the regions that are variable across different ChIP-seq, DNase-seq or Bisulfite-seq tracks (only BigWig processed file are supported for methylation data). The input is a folder containing bam files (with PCR duplicates removed) or bigwig (must be .bw), or a tab delimited text file with two columns containing: 1. the sample name and 2. the path of the corresponding .bam/.bw file. For example you can write inside a file called _samples_names_hotspot.txt_ something like that:
+### Option 1: Individual Pipeline Modules
+
+Haystack consists of the following three modules.
+
+1) **haystack_hotspots**: finds regions that are variable across different ChIP-seq, DNase-seq or Bisulfite-seq tracks (only BigWig processed file are supported for methylation data). The input is a folder containing bam files (with PCR duplicates removed) or bigwig (must be .bw), or a tab delimited text file with two columns containing: 1. the sample name and 2. the path of the corresponding .bam/.bw file. For example you can write inside a file called _samples_names_hotspot.txt_ something like that:
 ```
 K562	./INPUT_DATA/K562H3k27ac_sorted_rmdup.bam	
 GM12878	./INPUT_DATA/Gm12878H3k27ac_sorted_rmdup.bam	
@@ -97,10 +197,12 @@ Suppose you have a folder called /users/luca/mybamfolder you can run the variabi
 If you have instead a file with the samples description, like the _samples_names_hotspot.txt_  you can run the variability analysis with: 
 	
 	haystack_hotspots samples_names_hotspot.txt  hg19
+	
+**IMPORTANT:** Folder names and file paths should not have white spaces. Please use underscore instead. 	
 
-**IMPORTANT:** if are running haystack_hotspots using bigwig files you need to add the option: **--input_is_bigwig**
+**Note:** If you are running haystack_hotspots using bigwig files you need to add the option: **--input_is_bigwig**
 
-2) **haystack_motifs**: find enriched transcription factor motifs in a given set of genomic regions
+2) **haystack_motifs**: finds enriched transcription factor motifs in a given set of genomic regions
 The input is a set of regions in .bed format (http://genome.ucsc.edu/FAQ/FAQformat.html#format1) and the reference genome, the output consist of an HTML report with:
 - motif enriched with p and q values
 - motif profiles and logos
@@ -124,7 +226,11 @@ The database file must be in the MEME format: http://meme.nbcr.net/meme/doc/meme
 
 3) **haystack_tf_activity_plane**: quantifies the specificity and the activity of the TFs highlighed by the **haystack_motif** integrating gene expression data.
 
-The input consist of an 1. output folder of the **haystack_motif** tool, 2. a set of files containing gene expression data specified in a tab delimed file and 3. the target cell-type name to use to perfom the analysis. Each gene expression data file must be a tab delimited text file with two columns: 1. gene symbol 2. gene expression value. Such a file (one for each cell-type profiled) should look like this:
+The input consists of 
+
+1. An output folder of the **haystack_motif** tool
+2. A set of files containing gene expression data specified in a tab delimited file
+3. The target cell-type name to use to perform the analysis. Each gene expression data file must be a tab delimited text file with two columns: 1. gene symbol 2. gene expression value. Such a file (one for each cell-type profiled) should look like this:
 ```
 RNF14	7.408579
 UBE2Q1	9.107306
@@ -140,7 +246,7 @@ REM2	5.957589
 .
 .
 ```
-The file that describe the samples for example a file called  _sample_names_tf_activity.txt_ should contain something like this:
+The file that describe the samples for example a file called  _sample_names_tf_activity.txt_ should have the following format.
 ```
 K562	./INPUT_DATA/K562_genes.txt
 GM12878	./INPUT_DATA/GM12878_genes.txt
@@ -157,7 +263,11 @@ Suppose the utility **haystack_motif** created the folder called _HAYSTACK_MOTIF
 
 	haystack_tf_activity_plane HAYSTACK_MOTIFS_on_K562/ sample_names_tf_activity.txt K562
 
-4) **haystack_pipeline**: executes the whole pipeline automatically, i.e. 1) and 2) and optionally 3) (if gene expression files are provided) finding hotspots, specific regions, motifs and quantifiying their activity on nearby genes.
+
+### Option 2: The entire pipeline
+
+
+The command *haystack_pipeline*  executes the whole pipeline automatically, i.e. 1) and 2) and optionally 3) (if gene expression files are provided) finding hotspots, specific regions, motifs and quantifiying their activity on nearby genes.
 
 The input is a tab delimited text file with two or three columns containing 1. the sample name 2. the path of the corresponding bam file 3. the path of the gene expression file with the same format described in 3); Note that this last column is optional. 
 
@@ -178,147 +288,19 @@ Suppose you have a folder called /users/luca/mybamfolder you can run the command
 
 	haystack_pipeline /users/luca/mybamfolder hg19 
 
-Note:In this case the pipeline run 1) and 2), but not 3) since no gene expression data are provided.
+Note: In this case the pipeline runs Module 1 and  Module 2, but not Module 3 since no gene expression data are provided.
 
 If you have instead a file with the samples description containing .bam or .bw  filenames (note: it is not possible to mix .bam and .bw) and gene expression data, like the _samples_names.txt_ described above you can run the whole pipeline with: 
 	
 	haystack_pipeline samples_names.txt  hg19
 
-5) **haystack_download_genome**: it allows you to download and add a reference genomes from UCSC to haystack in the appropriate format. To download a genome run: 
-	
-	 haystack_download_genome genome_name 
-
-**_Example_**
-To download the human genome assembly hg19 run: 
-	
-	haystack_download_genome hg19
-
-Note: Probably you don't need to call this command explicitly since it is called when the other commands need to download a particular assembly.
-
-You can get more details about all the parameters of each of these 5 commands using the -h  or --help flag that prints a nice description.
-
-
-Precomputed Analysis
---------------------
-
-We have run haystack on several ENCODE datasets for which you can download the the precomputed results (variability tracks, hotspots, specific regions, enriched motifs and activity planes):
-
-1. Analysis on 12 ChIP-seq tracks of H3k27ac in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27ac.tar.gz
-2. Analysis on  17 DNase-seq tracks in human cell lines + gene expression: (Gain) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE.tar.gz  and (Loss) http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_DNASE_DEPLETED.tar.gz
-3. Analysis on  10 RRBS-seq tracks of DNA-Methylation in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_Methylation.tar.gz
-4. Analysis on 17 ChIP-seq tracks of H3k27me3 in human cell lines + gene expression: http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/HAYSTACK_H3k27me3.tar.gz
-
-
-Docker Image
-------------
-If you like Docker, we also provide a Docker image:
-	
-	https://hub.docker.com/r/lucapinello/haystack_bio/
-
-To use the image first install Docker: http://docker.com
-
-Then type the command:
-
-	docker pull lucapinello/haystack_bio
-
-See an example on how to run haystack  with a Docker image see the section **Testing haystack ** below. __If you get memory errors try to allocate at least 8GB to the docker image in order to run haystack __.
-
-The current version is compatible only with Unix like operating systems on 64 bit architectures and was tested on:
-- CentOS 6.5
-- Debian 6.0
-- Ubuntu 12.04 and 14.04 LTS
-- OSX Maverick and Mountain Lion
-
-
-To test the whole pipeline you can download this set of bam file from the ENCODE project:
-http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_test_dataset_h3k27ac.tar.gz
-
-Decompress the file with the following command: 
-	
-	tar xvzf haystack_test_dataset_h3k27ac.tar.gz
-	
-Go into the folder with the test data:
-
-	cd TEST_DATASET
-	
-If you use a Docker image instead run with the following command:
-
-	docker run -v ${PWD}:/DATA -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
-
-If you run Docker on Window you have to specify the full path:
-
-	docker run -v //c/Users/Luca/Downloads/TEST_DATASET:/DATA -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
-
-This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
-
-
- 
-Operating System Notes
-----------------------
-**UBUNTU (tested on 14.04 LTS) in the Amazon Web Service (AWS) Cloud**
-
-1. Launch and connect to the Amazon Instance you have chosen from the AWS console (is suggested to use an m3.large ) or to your Ubuntu machine.
-
-2. Create a swap partition (**this step is only for the AWS cloud**)
-  ```
-  sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=20096
-  sudo chown root:root /mnt/swapfile
-  sudo chmod 600 /mnt/swapfile
-  sudo mkswap /mnt/swapfile
-  sudo swapon /mnt/swapfile
-  sudo sh -c "echo '/mnt/swapfile swap swap defaults 0 0' >> /etc/fstab"
-  sudo swapon -a
-  ```
-3. Install dependencies
-  ```
-  sudo apt-get update && sudo apt-get update && sudo apt-get install git wget default-jre python-setuptools python-pip  python-dev python-numpy  python-scipy python-matplotlib python-pandas python-imaging python-setuptools unzip ghostscript make gcc g++ zlib1g-dev zlib1g -y 
-  ```
   
-  __If you are installing it on a docker image you don't need the sudo before each apt-get command__
-
-4. Install haystack 
-  ```
-  sudo pip install haystack_bio --no-use-wheel --verbose
-  ```
- 
-5. Download and run the test dataset
-  ```
-  wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_test_dataset_h3k27ac.tar.gz
-  tar xvzf haystack_test_dataset_h3k27ac.tar.gz
-  cd TEST_DATASET
-  haystack_pipeline samples_names.txt hg19
-  ```
-  
-  All the results will be stored in the folder HAYSTACK_PIPELINE_RESULT	
-
-**Apple OSX**
-
-To install haystack on OSX you need the _Command Line Tools_ (usually shipped with Xcode). 
-If you don't have them you can download from here: 
-https://developer.apple.com/downloads/index.action
-
-You may need to create a free apple developer account.
-
-To generate the motif logo you need a recent version of XQuartz, download and install the dmg from here: http://xquartz.macosforge.org/landing/.
-
-Updating from Yosemite may break the motif logo generation.
-If you don't see the motif logo in the output of the haystack_motifs utility, please install the latest version XQuartz:http://xquartz.macosforge.org/landing/.
-
-Alternatively if you don't want to update XQuartz you can fix the problem from the terminal typing the following commands:
-```
-sudo ln -s /opt/X11 /usr/X11
-sudo ln -s /opt/X11 /usr/X11R6
-```
-
-In addition, you need to install Java for Windows.
-
-Note: If you install haystack in a custom folder please make sure to select a path without white spaces.
+All the results will be stored in the folder HAYSTACK_PIPELINE_RESULT.  This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
 
 
 Citation
 --------
 *Please cite the following article if you use haystack in your research*:
-  * Luca Pinello, Jian Xu, Stuart H. Orkin, and Guo-Cheng Yuan. Analysis of chromatin-state plasticity identifies cell-type specific regulators of H3K27me3 patterns PNAS 2014; published ahead of print January 6, 2014, doi:10.1073/pnas.1322570111
 
 Contacts
 --------
