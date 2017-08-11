@@ -8,7 +8,6 @@ import argparse
 
 HAYSTACK_VERSION = "0.5.0"
 
-
 def get_args_download_genome():
     # mandatory
     parser = argparse.ArgumentParser(description='download_genome parameters')
@@ -16,7 +15,7 @@ def get_args_download_genome():
                         help='genome name. Example: haystack_download_genome hg19.')
 
     # optional
-    parser.add_argument('--yes', help='Answer yes to download prompt', default='')
+    parser.add_argument('--yes', help='answer yes to download prompt', action='store_true')
 
     return parser
 

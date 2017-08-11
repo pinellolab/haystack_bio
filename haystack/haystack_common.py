@@ -153,16 +153,17 @@ def run_testdata():
     test_data_dir= determine_path("test_data")
     os.chdir(test_data_dir)
 
-    cmd= "haystack_pipeline samples_names.txt hg19 --output_directory $HOME/haystack_test_output --bin_size 500 --chrom_exclude 'chr(?!21)'"
+    cmd= "haystack_pipeline samples_names.txt hg19 --output_directory $HOME/haystack_test_output --chrom_exclude 'chr(?!21)'"
 
     try:
-        print("running test")
+        info("running test")
         sb.call(cmd, shell=True)
+        info("Test completed successfully")
     except:
-        print("Cannot run test")
+        error("Cannot run test")
 
 def copy_haystack_data():
-    print("copying data")
+    info("copying data")
     data_root = determine_path()
 
 
@@ -175,5 +176,5 @@ def copy_haystack_data():
         copy_tree(*d_path('motif_databases'))
         print(os.listdir(os.path.join(data_root)))
     except:
-        print("Cannot move data")
+        info("Cannot move data")
 

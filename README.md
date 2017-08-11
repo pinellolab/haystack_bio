@@ -38,22 +38,27 @@ The Docker container can also be run on any platform that has the Docker softwar
 Installation 
 -----------------
 
-To install Haystack, Bioconda, a channel for the conda package manager, needs to be configured on your system.
-Bioconda streamlines the process of building and installing all the software dependencies that a package needs to have configured on the system.  Haystack depends on several other 
-Python packages and a number of bioinformatics software tools, so by running the following lines of code, Haystack and its dependencies can be installed automatically. 
-The installation consists of three steps: installing Miniconda, adding the Bioconda channel, and installing Haystack. 
+Haystack depends on several other Python packages and a number of bioinformatics software tools in order to run. To install Haystack, you need to have Bioconda, 
+a software repository channel for the conda package manager, configured on your system. Bioconda streamlines the process of building and installing any software dependency that a package requires.  so by running the following lines of code, Haystack and its dependencies can be installed automatically. 
+The entire installation process consists of three steps: installing Miniconda, adding the Bioconda channel, and installing Haystack. 
 For the following steps, we are assuming you are on a 64-bit Linux or a MacOS system and that you have not installed Miniconda/Anaconda before on your system. 
-In case you encounter difficulty in installing Miniconda or adding the Bioconda channel, please refer to the Bioconda project's website at https://bioconda.github.io/ for more detailed installation instructions.
+If you have Minicoda/Anaconda 3 alread installed, you would need to create a separate environment for Python 2.7. Please consult the following link for details. 
+
+    https://conda.io/docs/py2or3.html#create-python-2-or-3-environments
+    
+In case you encounter difficulty in installing Miniconda or adding the Bioconda channel, please refer to the Bioconda project's website at 
+
+    https://bioconda.github.io/ for more detailed installation instructions.
 
 **On Linux**
 
-The instructions are as follows. The first line downloads the latest Linux Miniconda 2 (Python 2) to your home directory. The second line gives permissions to execute the file as a program. The third line executes the program
+The instructions consist of the following commands. The first line downloads the latest Linux Miniconda 2 (Python 2.7) to your home directory. The second line gives permissions to execute the file as a program. The third line executes the program
  
     wget -c https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O $HOME/miniconda.sh
     chmod +x $HOME/miniconda.sh
     $HOME/miniconda.sh -b
 
-Next, update the conda repository and add the channels in the following order of priority by running these four lines in the order shown.
+Next, we update the conda repository and add the repository channels in the following order of priority by running these four lines in the order shown.
 
      conda update --all --yes
      conda config --add channels defaults
@@ -66,7 +71,7 @@ Lastly, you can install haystack and its dependencies by simply running:
 
 **On Mac**
 
-The instructions are as follows. The first line downloads the latest Linux Miniconda 2 (Python 2) to your home directory. The second line gives permissions to execute the file as a program. The third line executes the program
+The instructions consist of the following commands. The first line downloads the latest Linux Miniconda 2 (Python 2) to your home directory. The second line gives permissions to execute the file as a program. The third line executes the program
  
     wget -c https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -O $HOME/miniconda.sh
     chmod +x $HOME/miniconda.sh
