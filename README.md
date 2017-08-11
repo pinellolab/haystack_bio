@@ -157,18 +157,19 @@ To test whether the entire pipeline can run without any problems on your system,
 
 Note, that this is equivalent to running the following command manually.
 
-    haystack_pipeline samples_names.txt hg19 --output_directory $HOME/haystack_test_output --bin_size 500 --chrom_exclude 'chr(?!21)'
+    haystack_pipeline samples_names.txt hg19 --output_directory $HOME/haystack_test_output  --blacklist hg19 --chrom_exclude 'chr(?!21)'
 
-Here *haystack_test_output* is the name of the analysis output folder. For instructions on how to create the samples_names.txt file, 
+Here *haystack_test_output* is the name of the analysis output folder. The *--blacklist* flag takes the file path of a BED file of blacklisted regions. 
+We included inside the package a file of blacklisted regions for hg19.  For instructions on how to create the samples_names.txt file, 
 please refer to the section below on how to use haystack.	
 
-Note: Since the sample test data included in the package is limited to  a small fraction of the genome (i.e. Chromosome 21) and is for three  cell types only,
+Note: Since the sample test data included in the package is limited to  a small fraction of the genome (i.e. Chromosome 21) and is for four  cell types only,
 the final motif analysis step in the pipeline might not return any positive findings. To recreate the output produced by the pipeline when running on
- the entire genome with six cell types, please run on and download the complete set of BAM files from the ENCODE project or from here.
+ the entire genome with six cell types, please run on, and download the complete set of BAM files with the following command.
  
     wget http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/haystack_test_dataset_h3k27ac.tar.gz
 
-To decompress the archive file, run the following command. 
+To decompress the archive file, run
 	
 	tar xvzf haystack_test_dataset_h3k27ac.tar.gz
 
@@ -269,7 +270,7 @@ Suppose the utility **haystack_motif** created the folder called _HAYSTACK_MOTIF
 	haystack_tf_activity_plane HAYSTACK_MOTIFS_on_K562/ sample_names_tf_activity.txt K562
 
 
-### Option 2: The entire pipeline
+### Option 2: The Entire Pipeline
 
 
 The command *haystack_pipeline*  executes the whole pipeline automatically, i.e. 1) and 2) and optionally 3) (if gene expression files are provided) finding hotspots, specific regions, motifs and quantifiying their activity on nearby genes.

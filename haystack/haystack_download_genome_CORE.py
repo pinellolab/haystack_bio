@@ -48,8 +48,8 @@ def download_genome(name, answer):
                 urlpath = "http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % (name, name)
                 print 'Downloading %s in %s...' % (urlpath, genome_filename)
 
-                with TqdmUpTo(unit='B', unit_scale=True, mininterval=30, miniters=1, desc=url.split('/')[-1]) as t:
-                    urllib.urlretrieve(url,
+                with TqdmUpTo(unit='B', unit_scale=True, mininterval=30, miniters=1, desc=urlpath.split('/')[-1]) as t:
+                    urllib.urlretrieve(urlpath,
                                        filename=genome_filename,
                                        reporthook=t.update_to,
                                        data=None)
