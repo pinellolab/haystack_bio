@@ -10,7 +10,7 @@ import haystack_motifs_CORE as motifs
 import haystack_tf_activity_plane_CORE as tf_activity_plane
 import re
 # commmon functions
-from haystack_common import determine_path, query_yes_no, which, check_file
+from haystack_common import check_file
 import logging
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -88,7 +88,7 @@ def get_args_pipeline():
 
 def main(input_args=None):
     print '\n[H A Y S T A C K   P I P E L I N E]'
-    print('\n-SELECTION OF HOTSPOTS OF VARIABILITY AND ENRICHED MOTIFS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
+    print('\n-SELECTION OF HOTSPOTS OF VARIABILITY AND ENRICHED MOTIFS-\n')
     print 'Version %s\n' % HAYSTACK_VERSION
     parser = get_args_pipeline()
     args = parser.parse_args(input_args)

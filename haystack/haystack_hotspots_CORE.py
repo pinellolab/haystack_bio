@@ -9,7 +9,7 @@ from pybedtools import BedTool
 import multiprocessing
 import glob
 from haystack_common import determine_path, check_file, check_required_packages
-from haystack.haystack_download_genome_CORE import download_genome
+import haystack_download_genome_CORE as download_genome
 
 import logging
 logging.basicConfig(level=logging.INFO,
@@ -222,7 +222,9 @@ def initialize_genome(genome_name):
         Genome_2bit(genome_2bit)
     else:
         info("\nIt seems you don't have the required genome file.")
-        download_genome(genome_name,  answer='')
+
+        download_genome.main(input_args=[genome_name, '--yes'])
+
         if os.path.exists(genome_2bit):
             info('Genome correctly downloaded!')
             Genome_2bit(genome_2bit)
@@ -850,8 +852,7 @@ def main(input_args=None):
 
 
     print '\n[H A Y S T A C K   H O T S P O T]'
-    print('\n-SELECTION OF VARIABLE REGIONS- '
-          '[Luca Pinello - lpinello@jimmy.harvard.edu]\n')
+    print('\n-SELECTION OF VARIABLE REGIONS-\n')
     print 'Version %s\n' % HAYSTACK_VERSION
 
     # step 1

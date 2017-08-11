@@ -1,3 +1,4 @@
 GM12878 Gm12878H3k27ac_chr21.bam GM12878_genes.txt
 HEPG2	Hepg2H3k27ac_chr21.bam	HEPG2_genes.txt
 NHLF	NhlfH3k27ac_chr21.bam    NHLF_genes.txt
+K562    K562H3k27ac_chr21.bam	K562_genes.txt

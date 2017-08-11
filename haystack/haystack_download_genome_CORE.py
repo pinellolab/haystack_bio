@@ -1,26 +1,58 @@
 import os
 import sys
-import urllib2
-import shutil as sh
+import urllib
+from tqdm import tqdm
 from bioutilities import Genome_2bit
 from haystack_common import determine_path, query_yes_no
 
 HAYSTACK_VERSION = "0.5.0"
 
+
+def get_args_download_genome():
+    # mandatory
+    parser = argparse.ArgumentParser(description='download_genome parameters')
+    parser.add_argument('name', type=str,
+                        help='genome name. Example: haystack_download_genome hg19.')
+
+    # optional
+    parser.add_argument('--yes', help='Answer yes to download prompt', default='')
+
+    return parser
+
+#taken from tqdm website
+class TqdmUpTo(tqdm):
+    """Provides `update_to(n)` which uses `tqdm.update(delta_n)`."""
+    def update_to(self, b=1, bsize=1, tsize=None):
+        """
+        b  : int, optional
+            Number of blocks transferred so far [default: 1].
+        bsize  : int, optional
+            Size of each block (in tqdm units) [default: 1].
+        tsize  : int, optional
+            Total size (in tqdm units). If [default: None] remains unchanged.
+        """
+        if tsize is not None:
+            self.total = tsize
+        self.update(b * bsize - self.n)  # will also set self.n = b * bsize
+
+
 def download_genome(name, answer):
-    if answer== "--yes" or query_yes_no('Should I download it for you?'):
+    if answer or query_yes_no('Should I download it for you?'):
         output_directory= determine_path('genomes')
         print 'genome_directory: %s' % output_directory
         try:
-            urlpath = "http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % (name, name)
-            genome_url_origin = urllib2.urlopen(urlpath)
             genome_filename = os.path.join(output_directory, "%s.2bit" % name)
             if os.path.exists(genome_filename):
                 print 'File %s exists, skipping download' % genome_filename
             else:
+                urlpath = "http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % (name, name)
                 print 'Downloading %s in %s...' % (urlpath, genome_filename)
-                with open(genome_filename, 'wb') as genome_file_destination:
-                    sh.copyfileobj(genome_url_origin, genome_file_destination)
+
+                with TqdmUpTo(unit='B', unit_scale=True, mininterval=30, miniters=1, desc=url.split('/')[-1]) as t:
+                    urllib.urlretrieve(url,
+                                       filename=genome_filename,
+                                       reporthook=t.update_to,
+                                       data=None)
 
                 print 'Downloaded %s in %s:' % (urlpath, genome_filename)
 
@@ -48,14 +80,15 @@ def download_genome(name, answer):
         print('Sorry I need the genome file to perform the analysis. Exiting...')
         sys.exit(1)
 
-def main():
+def main(input_args=None):
+
     print '\n[H A Y S T A C K   G E N O M E   D O W L O A D E R]\n'
     print 'Version %s\n' % HAYSTACK_VERSION
-    if len(sys.argv) == 1:
-        sys.exit('Example: haystack_download_genome hg19\n')
-    elif len(sys.argv) == 2:
-        download_genome(sys.argv[1], answer='')
-    elif len(sys.argv) == 3:
-        download_genome(sys.argv[1], sys.argv[2])
-    else:
-        sys.exit('Too many arguments')
+
+    parser = get_args_download_genome()
+    args = parser.parse_args(input_args)
+    download_genome(args.name, args.yes)
+
+if __name__ == '__main__':
+    main()
+    sys.exit(0)

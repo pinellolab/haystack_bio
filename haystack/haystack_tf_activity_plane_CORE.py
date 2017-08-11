@@ -86,7 +86,7 @@ def get_args_activity():
 
 def main(input_args=None):
     print '\n[H A Y S T A C K   T F  A C T I V I T Y  P L A N E]'
-    print('\n-TFs Activity on Gene Expression- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
+    print('\n-TFs Activity on Gene Expression-\n')
     print 'Version %s\n' % HAYSTACK_VERSION
 
     parser = get_args_activity()
