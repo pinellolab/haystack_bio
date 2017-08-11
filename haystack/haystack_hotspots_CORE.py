@@ -146,6 +146,9 @@ def get_args():
                         help='Use the bigwig format instead of the bam format for the input. '
                              'Note: The files must have extension .bw',
                         action='store_true')
+    parser.add_argument('--keep_intermediate_files',
+                        help='keep intermediate bedgraph files ',
+                        action='store_true')
     parser.add_argument('--n_processes',
                         type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
@@ -404,7 +407,8 @@ def to_normalized_extended_reads_tracks(bam_filenames,
             info('Computing Scaling Factor...')
             scaling_factor = get_scaling_factor(bam_filename)
             info('Scaling Factor: %e' % scaling_factor)
-            info('Converting bam to bed and extending read length...')
+            info('Converting %s to bed and extending read length...' %bam_filename)
+            info('Normalizing counts by scaling factor...')
             BedTool(bam_filename). \
                 bam_to_bed(). \
                 slop(r=read_ext,
@@ -422,15 +426,15 @@ def to_normalized_extended_reads_tracks(bam_filenames,
             # bam_filename, read_ext, chr_len_filename, chr_len_filename, scaling_factor, bedgraph_filename)
             # sb.call(cmd, shell=True)
 
-        if not (os.path.exists(bigwig_filename) and do_not_recompute):
-            info('Converting BedGraph to BigWig')
-            cmd = 'bedGraphToBigWig "%s" "%s" "%s"' % (bedgraph_filename,
-                                                       chr_len_filename,
-                                                       bigwig_filename)
-            sb.call(cmd, shell=True)
+        if keep_intermediate_files:
+            if not (os.path.exists(bigwig_filename) and do_not_recompute):
+                info('Converting BedGraph to BigWig')
+                cmd = 'bedGraphToBigWig "%s" "%s" "%s"' % (bedgraph_filename,
+                                                           chr_len_filename,
+                                                           bigwig_filename)
+                sb.call(cmd, shell=True)
 
-            info('Computing coverage over bins...')
-            info('Normalizing counts by scaling factor...')
+                info('Converted %s to bigwig' % bedgraph_filename)
 
     return bedgraph_filenames, bigwig_filenames
 
@@ -485,6 +489,14 @@ def to_binned_tracks(bedgraph_filenames,
                                                        chr_len_filename,
                                                        bigwig_binned_filename)
             sb.call(cmd, shell=True)
+            info('Converted %s to bigwig' % bedgraph_binned_filename)
+            if not keep_intermediate_files:
+                info('Deleting %s' % bedgraph_binned_filename)
+                try:
+                    os.remove(bedgraph_binned_filename)
+                except:
+                    pass
+
     return binned_rpm_filenames
 
 def load_binned_rpm_tracks(binned_sample_names, binned_rpm_filenames):
@@ -539,6 +551,13 @@ def to_binned_normalized_tracks(df_chip,
                                                        chr_len_filename,
                                                        bigwig_binned_normalized_filename)
             sb.call(cmd, shell=True)
+            info('Converted %s to bigwig' % bedgraph_binned_normalized_filename)
+            if not keep_intermediate_files:
+                info('Deleting %s' % bedgraph_binned_normalized_filename)
+                try:
+                    os.remove(bedgraph_binned_normalized_filename)
+                except:
+                    pass
 
     return df_chip_normalized, bigwig_binned_normalized_filenames
 
@@ -862,8 +881,9 @@ def main(input_args=None):
     args = parser.parse_args(input_args)
     info(vars(args))
     global do_not_recompute
+    global keep_intermediate_files
     do_not_recompute = args.do_not_recompute
-
+    keep_intermediate_files= args.keep_intermediate_files
     # step 3: create directories
     if args.name:
         directory_name = 'HAYSTACK_HOTSPOTS_on_%s' % args.name

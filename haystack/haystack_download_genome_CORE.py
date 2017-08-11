@@ -4,6 +4,7 @@ import urllib
 from tqdm import tqdm
 from bioutilities import Genome_2bit
 from haystack_common import determine_path, query_yes_no
+import argparse
 
 HAYSTACK_VERSION = "0.5.0"
 

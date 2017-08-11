@@ -66,6 +66,9 @@ def get_args_pipeline():
     parser.add_argument('--plot_all',
                         help='Disable the filter on the TF activity and correlation (default z-score TF>0 and rho>0.3)',
                         action='store_true')
+    parser.add_argument('--keep_intermediate_files',
+                        help='keep intermediate bedgraph files ',
+                        action='store_true')
     parser.add_argument('--n_processes', type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
                         default=multiprocessing.cpu_count())
@@ -243,6 +246,10 @@ def main(input_args=None):
         input_args.append('--input_is_bigwig')
     if disable_quantile_normalization:
         input_args.append('--disable_quantile_normalization')
+    if keep_intermediate_files:
+        input_args.append('--keep_intermediate_files')
+
+
 
     hotspots.main(input_args=input_args)
 
