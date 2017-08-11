@@ -42,13 +42,10 @@ Haystack depends on several other Python packages and a number of bioinformatics
 a software repository channel for the conda package manager, configured on your system. Bioconda streamlines the process of building and installing any software dependency that a package requires.  so by running the following lines of code, Haystack and its dependencies can be installed automatically. 
 The entire installation process consists of three steps: installing Miniconda, adding the Bioconda channel, and installing Haystack. 
 For the following steps, we are assuming you are on a 64-bit Linux or a MacOS system and that you have not installed Miniconda/Anaconda before on your system. 
-If you have Minicoda/Anaconda 3 alread installed, you would need to create a separate environment for Python 2.7. Please consult the following link for details. 
-
-    https://conda.io/docs/py2or3.html#create-python-2-or-3-environments
-    
-In case you encounter difficulty in installing Miniconda or adding the Bioconda channel, please refer to the Bioconda project's website at 
-
-    https://bioconda.github.io/ for more detailed installation instructions.
+If you have Minicoda/Anaconda 3 alread installed, you would need to create a separate environment for Python 2.7. 
+Please consult [conda.io](https://conda.io/docs/py2or3.html#create-python-2-or-3-environments) for details. 
+In case you encounter difficulty in installing Miniconda or adding the Bioconda channel,
+ please refer to the Bioconda project's [website](https://bioconda.github.io/) for more detailed installation instructions.
 
 **On Linux**
 
@@ -91,20 +88,14 @@ Lastly, you can install haystack and its dependencies by simply running the foll
 **Docker Image**
 
 
-Please visit https://www.docker.com/ for instructions on how to install Docker on your platform. After installation is complete you can use the Docker image for haystack which can be found at this web address 
-
-	
-	https://hub.docker.com/r/lucapinello/haystack_bio/
-
+Please visit [docker.com](https://www.docker.com/) for instructions on how to install Docker on your platform.
+After the installation is complete you can use the Docker image for haystack which can be found [here](https://hub.docker.com/r/lucapinello/haystack_bio/) .
 To download the image onto your system simple run:
 
 	docker pull lucapinello/haystack_bio
 
-
-For Linux platforms, make sure to run the Docker post-installation instructions in order to run the command without sudo privileges.
-
-
- __If you get memory errors try to allocate at least 8GB to the docker image in order to run haystack __.
+For Linux platforms, make sure to run the Docker post-installation instructions in order to run the command without sudo privileges. 
+If you get memory errors try to allocate at least 8GB to the docker image in order to run Haystack.
 
 To run haystack use the following command:
 
@@ -128,21 +119,11 @@ If you see such a list, then the software has been installed successfully.
 
 To test the haystack pipeline, you would first need to download the genome file and then run the the pipeline on the sample data bundled inside the package. 
 
-The **haystack_download_genome** command allows you to download and add a reference genomes from UCSC to Haystack in the appropriate format. 
-To download a  particular genome run: 
-	
-	 haystack_download_genome genome_name 
-
-Note: Probably you do not need to call this command explicitly since it is called automatically when you run the pipeline. 
-
-**_Example_**
 To download the human genome assembly hg19, please run: 
 	
 	haystack_download_genome hg19
 
-Also note that this command downloads the hg19 genome build from the following location
-
-    http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
+Also note that this command downloads the hg19 genome build from the [UCSC server](http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit)
 
 and saves it to the genomes folder
 
@@ -303,6 +284,14 @@ If you have instead a file with the samples description containing .bam or .bw  
   
 All the results will be stored in the folder HAYSTACK_PIPELINE_RESULT.  This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
 
+### Download Genome
+
+The **haystack_download_genome** command allows you to download and add a reference genomes from UCSC to Haystack in the appropriate format. 
+To download a  particular genome run: 
+	
+	 haystack_download_genome genome_name 
+
+Note: Probably you do not need to call this command explicitly since it is called automatically when you run the pipeline. 
 
 Citation
 --------
