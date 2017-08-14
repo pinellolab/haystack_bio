@@ -17,8 +17,13 @@ try:
 except:
     import pickle as cp
 
+# commmon functions
+from haystack_common import determine_path, which, check_file, initialize_genome
+HAYSTACK_VERSION = "0.5.0"
 
-
+# dependencies
+from bioutilities import  Coordinate, Sequence, Fimo
+import numpy as np
 import logging
 
 logging.basicConfig(level=logging.INFO,
@@ -32,13 +37,7 @@ debug = logging.debug
 info = logging.info
 
 
-# commmon functions
-from haystack_common import determine_path, query_yes_no, which, check_file
-HAYSTACK_VERSION = "0.5.0"
 
-# dependencies
-from bioutilities import Genome_2bit, Coordinate, Sequence, Fimo
-import numpy as np
 
 np.seterr(divide='ignore')
 np.seterr(invalid='ignore')
@@ -151,14 +150,14 @@ def call_fimo(target_coords_fasta_filename, prefix, meme_motifs_filename, nucleo
     FNULL = open(os.devnull, 'w')
 
     if motif_id == 'ALL_MOTIFS':
-        sb.call("fimo --verbosity 0 --thresh %f --text  --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" % \
+        sb.call('fimo --verbosity 0 --thresh %f --text  --bgfile "%s" "%s" "%s" | sed "1d" | cut -f1,2,3,4 > "%s" 2>/dev/null' % \
                 (p_value, nucleotide_bg_filename, meme_motifs_filename, target_coords_fasta_filename, output_filename),
                 stdout = FNULL,
                 stderr = sb.STDOUT,
                 shell=True)
     else:
         sb.call(
-            "fimo --verbosity 0 --motif %s --thresh %f --text --bgfile %s %s %s | sed '1d' | cut -f1,2,3,4 > %s 2>/dev/null" % \
+            'fimo --verbosity 0 --motif %s --thresh %f --text --bgfile "%s" "%s" "%s" | sed "1d" | cut -f1,2,3,4 > "%s" 2>/dev/null'% \
             (motif_id, p_value, nucleotide_bg_filename, meme_motifs_filename, target_coords_fasta_filename,output_filename),
             stdout = FNULL,
             stderr = sb.STDOUT,
@@ -224,7 +223,7 @@ def parallel_fimo_scanning(target_coords,
         pool.close()
         pool.join()
         fimo_output_filename = os.path.join(temp_directory, prefix + '_fimo_output.motifs')
-        sb.call('cat %s*.motifs > %s' % (os.path.join(temp_directory, prefix), fimo_output_filename), shell=True)
+        sb.call('cat %s*.motifs > "%s"' % (os.path.join(temp_directory, prefix), fimo_output_filename), shell=True)
     else:
         call_fimo(target_coords_fasta_filename, prefix, meme_motifs_filename, nucleotide_bg_filename, temp_directory,
                   p_value, 'ALL_MOTIFS')
@@ -405,31 +404,9 @@ def main(input_args=None):
         % (bed_target_filename, bed_bg_filename, str(bg_target_ratio), str(c_g_correction), str(mask_repetitive),
            'ALL' if np.isinf(n_target_coordinates) else str(n_target_coordinates), output_directory))
 
-    info('Initializing Genome:%s' % genome_name)
 
-    genome_directory = determine_path('genomes')
-    genome_2bit = os.path.join(genome_directory, genome_name + '.2bit')
 
-    if os.path.exists(genome_2bit):
-        genome = Genome_2bit(genome_2bit)
-    else:
-        info("\nIt seems you don't have the required genome file.")
-        if query_yes_no('Should I download it for you?'):
-            sb.call('haystack_download_genome %s' % genome_name, shell=True)
-            if os.path.exists(genome_2bit):
-                info('Genome correctly downloaded!')
-                genome = Genome_2bit(genome_2bit)
-            else:
-                error('Sorry I cannot download the required file for you. Check your Internet connection.')
-                sys.exit(1)
-        else:
-            error('Sorry I need the genome file to perform the analysis. Exiting...')
-            sys.exit(1)
-
-    if not nucleotide_bg_filename:
-        nucleotide_bg_filename = os.path.join(genome_directory, genome_name + '_meme_bg')
-
-    check_file(nucleotide_bg_filename)
+    genome,_,nucleotide_bg_filename= initialize_genome(genome_name, answer='')
 
     N_TARGET = None
     N_BG = None

@@ -8,7 +8,6 @@ import multiprocessing
 import haystack_hotspots_CORE as hotspots
 import haystack_motifs_CORE as motifs
 import haystack_tf_activity_plane_CORE as tf_activity_plane
-import re
 # commmon functions
 from haystack_common import check_file
 import logging
@@ -90,6 +89,16 @@ def get_args_pipeline():
     return parser
 
 def main(input_args=None):
+
+
+    # input_args = ["/mnt/hd2/test_data/sample_data/samples_names_genes.txt",
+    #               "hg19",
+    #               '--blacklist',
+    #               "hg19",
+    #               '--output_directory',
+    #               "/mnt/hd2/test_data/HAYSTACK_PIPELINE_BLACKLISTED_BIN500_NOCHROM_XY"]
+
+
     print '\n[H A Y S T A C K   P I P E L I N E]'
     print('\n-SELECTION OF HOTSPOTS OF VARIABILITY AND ENRICHED MOTIFS-\n')
     print 'Version %s\n' % HAYSTACK_VERSION
@@ -257,8 +266,6 @@ def main(input_args=None):
     # CALL HAYSTACK MOTIFS
     motif_directory = os.path.join(output_directory,
                                    'HAYSTACK_MOTIFS')
-
-
     for sample_name in sample_names:
 
         specific_regions_filename = glob.glob(os.path.join(output_directory,

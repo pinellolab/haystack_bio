@@ -7,9 +7,9 @@ Created on Fri Apr 22 15:16:12 2016
 import subprocess as sb
 import sys
 import logging
-import os
 from distutils.dir_util import copy_tree
-
+import os
+from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -84,28 +84,6 @@ def check_required_packages():
             'Please install.')
         sys.exit(1)
 
-def query_yes_no(question, default="yes"):
-    valid = {"yes":True,   "y":True,  "ye":True,
-             "no":False,     "n":False}
-    if default == None:
-        prompt = " [y/n] "
-    elif default == "yes":
-        prompt = " [Y/n] "
-    elif default == "no":
-        prompt = " [y/N] "
-    else:
-        raise ValueError("invalid default answer: '%s'" % default)
-
-    while True:
-        sys.stdout.write(question + prompt)
-        choice = raw_input().lower()
-        if default is not None and choice == '':
-            return valid[default]
-        elif choice in valid:
-            return valid[choice]
-        else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "\
-                             "(or 'y' or 'n').\n")
 
 
 def query_yes_no(question, default="yes"):
@@ -178,3 +156,74 @@ def copy_haystack_data():
     except:
         info("Cannot move data")
 
+
+
+#taken from tqdm website
+class TqdmUpTo(tqdm):
+    """Provides `update_to(n)` which uses `tqdm.update(delta_n)`."""
+    def update_to(self, b=1, bsize=1, tsize=None):
+        """
+        b  : int, optional
+            Number of blocks transferred so far [default: 1].
+        bsize  : int, optional
+            Size of each block (in tqdm units) [default: 1].
+        tsize  : int, optional
+            Total size (in tqdm units). If [default: None] remains unchanged.
+        """
+        if tsize is not None:
+            self.total = tsize
+        self.update(b * bsize - self.n)  # will also set self.n = b * bsize
+
+
+def initialize_genome(genome_name, answer):
+    from bioutilities import Genome_2bit
+    import urllib
+    info('Initializing Genome:%s' % genome_name)
+
+    genome_directory = determine_path('genomes')
+    info('genome_directory: %s' % genome_directory)
+    genome_filename = os.path.join(genome_directory, "%s.2bit" % genome_name)
+    chr_len_filename = os.path.join(genome_directory, "%s_chr_lengths.txt" % genome_name)
+    meme_bg_filename = os.path.join(genome_directory, "%s_meme_bg" % genome_name)
+
+    if os.path.exists(genome_filename):
+                info('File %s exists, skipping download' % genome_filename)
+    else:
+        if answer or query_yes_no('Should I download it for you?'):
+            urlpath = "http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % (genome_name, genome_name)
+            info('Downloading %s in %s...' % (urlpath, genome_filename))
+            try:
+                with TqdmUpTo(unit='B', unit_scale=True, mininterval=30, miniters=1, desc=urlpath.split('/')[-1]) as t:
+                    urllib.urlretrieve(urlpath,
+                                       filename=genome_filename,
+                                       reporthook=t.update_to,
+                                       data=None)
+
+                info('Downloaded %s in %s:' % (urlpath, genome_filename))
+            except IOError, e:
+                        error("Can't retrieve %r to %r: %s" % (urlpath, genome_filename, e))
+                        info('Sorry I need the genome file to perform the analysis. Exiting...')
+                        sys.exit(1)
+
+    check_file(genome_filename)
+    genome = Genome_2bit(genome_filename, verbose=True)
+
+    if not os.path.exists(chr_len_filename):
+            info('Extracting chromosome lengths')
+            genome.write_chr_len(chr_len_filename)
+            info('Done!')
+    else:
+        info('File %s exists, skipping generation' % chr_len_filename)
+
+    if not os.path.exists(meme_bg_filename):
+        info('Calculating nucleotide frequencies....')
+        genome.write_meme_background(meme_bg_filename)
+        info('Done!')
+    else:
+        info('File %s exists, skipping generation' % meme_bg_filename)
+
+    check_file(chr_len_filename)
+    check_file(meme_bg_filename)
+
+
+    return genome, chr_len_filename, meme_bg_filename

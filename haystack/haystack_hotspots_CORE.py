@@ -8,8 +8,7 @@ import argparse
 from pybedtools import BedTool
 import multiprocessing
 import glob
-from haystack_common import determine_path, check_file, check_required_packages
-import haystack_download_genome_CORE as download_genome
+from haystack_common import determine_path, check_file, check_required_packages, initialize_genome
 
 import logging
 logging.basicConfig(level=logging.INFO,
@@ -210,33 +209,7 @@ def get_data_filepaths(samples_filename_or_bam_folder, input_is_bigwig):
         check_file(data_filename)
     return sample_names, data_filenames
 
-def initialize_genome(genome_name):
-    from bioutilities import Genome_2bit
-    info('Initializing Genome:%s' % genome_name)
-    genome_directory = determine_path('genomes')
 
-    info(genome_directory)
-
-    genome_2bit = os.path.join(genome_directory,
-                               genome_name + '.2bit')
-    chr_len_filename = os.path.join(genome_directory,
-                                    "%s_chr_lengths.txt" % genome_name)
-    if os.path.exists(genome_2bit):
-        Genome_2bit(genome_2bit)
-    else:
-        info("\nIt seems you don't have the required genome file.")
-
-        download_genome.main(input_args=[genome_name, '--yes'])
-
-        if os.path.exists(genome_2bit):
-            info('Genome correctly downloaded!')
-            Genome_2bit(genome_2bit)
-        else:
-            error('Sorry I cannot download the required file for you.'
-                  ' Check your Internet connection.')
-            sys.exit(1)
-    check_file(chr_len_filename)
-    return chr_len_filename
 
 def create_tiled_genome(genome_name,
                         output_directory,
@@ -916,7 +889,7 @@ def main(input_args=None):
     binned_sample_names = ['%s.%dbp' % (sample_name, args.bin_size)
                            for sample_name in sample_names]
     # step 5: get genome data
-    chr_len_filename = initialize_genome(args.genome_name)
+    _, chr_len_filename, _= initialize_genome(args.genome_name,answer='')
 
     # step 6: create tiled genome
     genome_sorted_bins_file = create_tiled_genome(args.genome_name,
