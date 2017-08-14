@@ -184,9 +184,9 @@ def get_data_filepaths(samples_filename_or_bam_folder, input_is_bigwig):
                 else:
                     error('The samples file format is wrong!')
                     sys.exit(1)
-        dir_path = os.path.dirname(os.path.realpath(samples_filename_or_bam_folder))
-        data_filenames = [os.path.join(dir_path, filename)
-                            for filename in data_filenames]
+        # dir_path = os.path.dirname(os.path.realpath(samples_filename_or_bam_folder))
+        # data_filenames = [os.path.join(dir_path, filename)
+        #                     for filename in data_filenames]
     else:
         if input_is_bigwig:
             extension_to_check = '.bw'

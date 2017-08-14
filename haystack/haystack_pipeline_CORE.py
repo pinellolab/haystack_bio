@@ -196,11 +196,11 @@ def main(input_args=None):
             error("The file or folder %s doesn't exist. Exiting." % samples_filename_or_bam_folder)
             sys.exit(1)
 
-    dir_path = os.path.dirname(os.path.realpath(samples_filename_or_bam_folder))
-    data_filenames = [os.path.join(dir_path, filename)
-                      for filename in data_filenames]
-    gene_expression_filenames = [os.path.join(dir_path, filename)
-                      for filename in gene_expression_filenames]
+    # dir_path = os.path.dirname(os.path.realpath(samples_filename_or_bam_folder))
+    # data_filenames = [os.path.join(dir_path, filename)
+    #                   for filename in data_filenames]
+    # gene_expression_filenames = [os.path.join(dir_path, filename)
+    #                   for filename in gene_expression_filenames]
 
     # check all the files before starting
     info('Checking samples files location...')
