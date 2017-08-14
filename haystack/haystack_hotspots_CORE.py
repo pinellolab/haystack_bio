@@ -394,10 +394,18 @@ def to_normalized_extended_reads_tracks(bam_filenames,
                 sort().\
                 saveas(bedgraph_filename)
 
+            if not keep_intermediate_files:
+                info('Deleting %s' % bam_filename)
+                try:
+                    os.remove(bam_filename)
+                except:
+                    pass
+
             # cmd = 'samtools view -b %s | bamToBed | slopBed  -r %s -l 0 -s -i stdin -g %s | ' \
             #       'genomeCoverageBed -g  %s -i stdin -bg -scale %.32f| bedtools sort -i stdin > %s' % (
             # bam_filename, read_ext, chr_len_filename, chr_len_filename, scaling_factor, bedgraph_filename)
             # sb.call(cmd, shell=True)
+
 
         if keep_intermediate_files:
             if not (os.path.exists(bigwig_filename) and do_not_recompute):
@@ -919,12 +927,16 @@ def main(input_args=None):
                                                 chr_len_filename,
                                                 args.read_ext)
 
+
+
         binned_rpm_filenames = to_binned_tracks(bedgraph_filenames,
                                                 binned_sample_names,
                                                 tracks_directory,
                                                 intermediate_directory,
                                                 chr_len_filename,
                                                 genome_sorted_bins_file)
+
+
     # step 8: quantile normalize the data
     df_chip = load_binned_rpm_tracks(binned_sample_names,
                                      binned_rpm_filenames)
