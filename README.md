@@ -149,7 +149,7 @@ The command will untar the data files archive into a folder called TEST_DATASET.
 
 
 Inside the folder you will see a _samples_names.txt_ file containing the relative paths to the data files.	
-The file is a tab delimited text file with two or three columns containing 
+The file is a tab delimited text file with three columns containing 
 
 1. the sample name 
 2. the path of the corresponding bam file 
@@ -179,7 +179,6 @@ The command is equivalent to running the following three commands in a row.
     haystack_tf_activity_plane motifs_output_folder sample_names_tf_activity_filename sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS
 
 where the last two commands iterate over the six cell types.
-
 
 -------------------
 
@@ -251,7 +250,7 @@ The inputs and outputs of the three modules of the pipeline are as follows.
 - A set of files containing gene expression data specified in a tab delimited file
 - The target cell-type name to use to perform the analysis. Each gene expression data file is a tab delimited text file with two columns: 
     1. gene symbol 
-    2. gene expression value. 
+    2. gene expression value
   
 Such a file (one for each cell-type profiled)  looks like this.
 ```
@@ -269,7 +268,7 @@ REM2	5.957589
 .
 .
 ```
-The file that describe the samples for example a file called  _sample_names_tf_activity.txt_ should have the following format.
+The file that describe the samples for example a file called  _sample_names_tf_activity.txt_ has the following format.
 ```
 K562	./INPUT_DATA/K562_genes.txt
 GM12878	./INPUT_DATA/GM12878_genes.txt
