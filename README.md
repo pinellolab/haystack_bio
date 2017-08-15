@@ -251,8 +251,9 @@ The output consist of an HTML report with:
 - list of closest genes to the regions with a particular motif 
 
 
-![HTML_REPORT](./figures/motif.png)
-
+<p align="center">
+  <img width="460" height="500" src="./figures/motif.png">
+</p>
 
 
 
