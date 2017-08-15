@@ -150,6 +150,7 @@ The command will untar the data files archive into a folder called TEST_DATASET.
 
 Inside the folder you will see a _samples_names.txt_ file containing the relative paths to the data files.	
 The file is a tab delimited text file with two or three columns containing 
+
 1. the sample name 
 2. the path of the corresponding bam file 
 3. the path of the gene expression file. Note that this last column is optional.
@@ -170,9 +171,15 @@ Step 3: Run the pipeline
 The command saves the output to the folder "HAYSTACK_OUTPUT_H3K27Aac" in your home directory. All the results will be stored in inside the sub-folder HAYSTACK_PIPELINE_RESULT. 
 This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
 
-Alternatively you can just provide the folder containing the BAM or bigwig files, but in this case the pipeline runs Module 1 and  Module 2, but not Module 3, since no gene expression data are provided.
 
-	haystack_pipeline ./TEST_DATASET/ hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
+The command is equivalent to running the following three commands in a row.
+
+	haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
+    haystack_motifs specific_regions_filename  hg19 --bed_bg_filename  background_regions_filename --name sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS 
+    haystack_tf_activity_plane motifs_output_folder sample_names_tf_activity_filename sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS
+
+where the last two commands iterate over the six cell types.
+
 
 -------------------
 
@@ -180,27 +187,27 @@ The inputs and outputs of the three modules of the pipeline are as follows.
 
 ### Module 1: *haystack_hotspots*
 
+**Command**: 	
 
-**Input**: The input is a folder containing BAM or bigwig files, or a tab delimited text file with two columns containing: 1. the sample name and 2. the path of the corresponding .bam/.bw file. For example you can write inside a file called _samples_names_hotspot.txt_ something like that:
+       haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
 
-```
-K562	./INPUT_DATA/K562H3k27ac_sorted_rmdup.bam	
-GM12878	./INPUT_DATA/Gm12878H3k27ac_sorted_rmdup.bam	
-HEPG2	./INPUT_DATA/Hepg2H3k27ac_sorted_rmdup.bam	
-H1hesc	./INPUT_DATA/H1hescH3k27ac_sorted_rmdup.bam	
-HSMM	./INPUT_DATA/HsmmH3k27ac_sorted_rmdup.bam	
-NHLF	./INPUT_DATA/NhlfH3k27ac_sorted_rmdup.bam
-```
 
-If you have instead a file with the samples description you can run the variability analysis with: 
-	
-	haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
+**Input**: 
+ - The first two columns of _samples_names.txt_  containing (1) the sample name and (2) the path of the corresponding .bam/.bw file. 
+     
+     ```
+    K562	./INPUT_DATA/K562H3k27ac_sorted_rmdup.bam	
+    GM12878	./INPUT_DATA/Gm12878H3k27ac_sorted_rmdup.bam	
+    HEPG2	./INPUT_DATA/Hepg2H3k27ac_sorted_rmdup.bam	
+    H1hesc	./INPUT_DATA/H1hescH3k27ac_sorted_rmdup.bam	
+    HSMM	./INPUT_DATA/HsmmH3k27ac_sorted_rmdup.bam	
+    NHLF	./INPUT_DATA/NhlfH3k27ac_sorted_rmdup.bam
+    ```
 
-Alternatively, you can run the variability analysis without creating a _samples_names.txt_ file by providing the folder name in which the BAM files are located
-	
-	haystack_hotspots ./TEST_DATASET/ hg19 --blacklist hg19
+ - The reference genome (e.g.hg19)
+ - An optional bed file with blacklisted regions (the one for hg19 has been provided)
 
-**Output**: The output consists of:
+**Output**: 
 - The normalized bigwig files for each track
 - The hotspots i.e. the regions that are most variable
 - The regions that are variable and specific for each track, this means that the signal is more enriched to a particular track compared to the rest.
@@ -213,23 +220,13 @@ Alternatively, you can run the variability analysis without creating a _samples_
 
 ### Module 2: **haystack_motifs**
 
+**Command**: 	
 
-**Input**: The input is a set of regions in .bed format (http://genome.ucsc.edu/FAQ/FAQformat.html#format1) and the reference genome.
+           haystack_motifs specific_regions_filename  hg19 --bed_bg_filename  background_regions_filename --name sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS 
 
-**_Examples_**
-To analyze the bed file file _myregions.bed_ on the _hg19_ genome run:
-	
-	haystack_motifs myregions.bed hg19
-
-To specify a custom background file for the analysis, for example _mybackgroundregions.bed_ run:
-	
-	haystack_motifs myregions.bed hg19 --bed_bg_filename mybackgroundregions.bed
-
-To use a particular motif database (the default is JASPAR) use:
-	
-	haystack_motifs myregions.bed hg19 --meme_motifs_filename my_database.meme
-
-The database file must be in the MEME format: http://meme.nbcr.net/meme/doc/meme-format.html#min_format
+**Input**: 
+- A set of regions in .bed format (http://genome.ucsc.edu/FAQ/FAQformat.html#format1)
+- the reference genome.
 
 
 **Output**: The output consists of an HTML report with
@@ -242,16 +239,21 @@ The database file must be in the MEME format: http://meme.nbcr.net/meme/doc/meme
   <img src="./figures/motif.png">
 </p>
 
-3) **haystack_tf_activity_plane**
+### Module 3: **haystack_tf_activity_plane**
 
-**Input**: The input consists of 
-- An output folder of the **haystack_motif** tool
+
+**Command**: 	
+
+        haystack_tf_activity_plane motifs_output_folder sample_names_tf_activity_filename sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_TFs_ACTIVITY_PLANES
+
+**Input**: 
+- An output folder generated by **haystack_motif** 
 - A set of files containing gene expression data specified in a tab delimited file
-- The target cell-type name to use to perform the analysis. Each gene expression data file must be a tab delimited text file with two columns: 
+- The target cell-type name to use to perform the analysis. Each gene expression data file is a tab delimited text file with two columns: 
     1. gene symbol 
     2. gene expression value. 
   
-Such a file (one for each cell-type profiled) should look like this.
+Such a file (one for each cell-type profiled)  looks like this.
 ```
 RNF14	7.408579
 UBE2Q1	9.107306
@@ -277,14 +279,44 @@ HSMM	./INPUT_DATA/HSMM_genes.txt
 NHLF	./INPUT_DATA/NHLF_genes.txt
 ```
 
-**Output**: The output is a set of figures each containing the TF activity plane for a given motif.
+**Output**: 
+- A set of figures each containing the TF activity plane for a given motif. 
+
+
+<p align="center">
+  <img src="./figures/6genes.png">
+</p>
+
 
 Notes	
 -------------------
+
+You can run the variability analysis as such
+	
+	haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
+
+or you can run it without creating a _samples_names.txt_ file by providing the folder containing the BAM or bigwig files. Note, however, that in this case the pipeline runs Module 1 and  Module 2, but not Module 3, since no gene expression data are provided.
+
+	haystack_pipeline ./TEST_DATASET/ hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
+	
+To analyze the bed file file _myregions.bed_ on the _hg19_ genome run:
+	
+	haystack_motifs myregions.bed hg19
+
+To specify a custom background file for the analysis, for example _mybackgroundregions.bed_ run:
+	
+	haystack_motifs myregions.bed hg19 --bed_bg_filename mybackgroundregions.bed
+
+To use a particular motif database (the default is JASPAR) use:
+	
+	haystack_motifs myregions.bed hg19 --meme_motifs_filename my_database.meme
+
+The database file must be in the MEME format: http://meme.nbcr.net/meme/doc/meme-format.html#min_format	
+	
 	
 **IMPORTANT:** Folder names and file paths should not have white spaces. Please use underscore instead. 	
 
-**Note:** If you are running haystack_hotspots using bigwig files you need to add the option: **--input_is_bigwig**
+If you are running haystack_hotspots using bigwig files you need to add the option: **--input_is_bigwig**
 
 The **haystack_download_genome** command allows you to download and add a reference genomes from UCSC to ***haystack_bio*** in the appropriate format. 
 To download a  particular genome run: 
