@@ -114,7 +114,6 @@ Note, that this is equivalent to running the following command manually.
 
     haystack_pipeline samples_names.txt hg19 --output_directory $HOME/haystack_test_output  --blacklist hg19 --chrom_exclude 'chr(?!21)'
 
-
 Note: Since the sample test data included in the package is limited to  a small fraction of the genome (i.e. Chromosome 21) and is for four  cell types only,
 the final motif analysis step in the pipeline might not return any positive findings. The test run output can be found in the folder $HOME/haystack_test_output. 
 
@@ -165,7 +164,6 @@ Step 4: Run the pipeline
 The command saves the output to the folder "HAYSTACK_OUTPUT_H3K27Aac" in your home directory. All the results will be stored in inside the sub-folder HAYSTACK_PIPELINE_RESULT. 
 This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
 
-
  
 Alternatively you can just provide the folder containing the BAM or bigwig files, but in this case the pipeline runs Module 1 and  Module 2, but not Module 3, since no gene expression data are provided.
 
@@ -197,22 +195,18 @@ Alternatively, you can run the variability analysis without creating a _samples_
 	
 	haystack_hotspots ./TEST_DATASET/ hg19 --blacklist hg19
 
-#### Output
-
-The output will consist of:
+**Output**: The output consists of:
 - The normalized bigwig files for each track
 - The hotspots i.e. the regions that are most variable
 - The regions that are variable and specific for each track, this means that the signal is more enriched to a particular track compared to the rest.
 - A session file (.xml) for the IGV software (http://www.broadinstitute.org/igv/) from the Broad Institute to easily visualize all the tracks produced, the hotspots and the specific regions for each cell line. To load it just drag and drop the file _OPEN_ME_WITH_IGV.xml_ from the output folder on top of the IGV window or alternatively load it in IGV with File-> Open Session... If you have trouble opening the file please update your IGV version. Additonaly, please don't move the .xml file only, you need all the files in the output folder to correctly load the session.
-
 
 <p align="center">
   <img src="./figures/hotspots.png">
 </p>
 
 
-2) **haystack_motifs**
-
+### Module 2: **haystack_motifs**
 
 
 **Input**: The input is a set of regions in .bed format (http://genome.ucsc.edu/FAQ/FAQformat.html#format1) and the reference genome.
@@ -233,26 +227,26 @@ To use a particular motif database (the default is JASPAR) use:
 The database file must be in the MEME format: http://meme.nbcr.net/meme/doc/meme-format.html#min_format
 
 
-**Output**: The output consist of an HTML report with:
-
-- motif enriched with p and q values
+**Output**: The output consists of an HTML report with
+- enriched motifs with corresponding p and q values
 - motif profiles and logos
 - list of regions with a particular motifs and coordinates of the motifs in those regions
 - list of closest genes to the regions with a particular motif 
-
 
 <p align="center">
   <img src="./figures/motif.png">
 </p>
 
-
 3) **haystack_tf_activity_plane**
 
 **Input**: The input consists of 
-
-1. An output folder of the **haystack_motif** tool
-2. A set of files containing gene expression data specified in a tab delimited file
-3. The target cell-type name to use to perform the analysis. Each gene expression data file must be a tab delimited text file with two columns: 1. gene symbol 2. gene expression value. Such a file (one for each cell-type profiled) should look like this:
+- An output folder of the **haystack_motif** tool
+- A set of files containing gene expression data specified in a tab delimited file
+- The target cell-type name to use to perform the analysis. Each gene expression data file must be a tab delimited text file with two columns: 
+    1. gene symbol 
+    2. gene expression value. 
+  
+Such a file (one for each cell-type profiled) should look like this.
 ```
 RNF14	7.408579
 UBE2Q1	9.107306
@@ -278,10 +272,7 @@ HSMM	./INPUT_DATA/HSMM_genes.txt
 NHLF	./INPUT_DATA/NHLF_genes.txt
 ```
 
-
 **Output**: The output is a set of figures each containing the TF activity plane for a given motif.
-
-
 
 Notes	
 -------------------
@@ -290,14 +281,12 @@ Notes
 
 **Note:** If you are running haystack_hotspots using bigwig files you need to add the option: **--input_is_bigwig**
 
-
 The **haystack_download_genome** command allows you to download and add a reference genomes from UCSC to ***haystack_bio*** in the appropriate format. 
 To download a  particular genome run: 
 	
 	 haystack_download_genome genome_name 
 
-Note: Probably you do not need to call this command explicitly since it is called automatically when you run the pipeline. 
-
+Probably you do not need to call this command explicitly since it is called automatically when you run the pipeline. 
 
 Other Installation Options
 -------------------
