@@ -216,7 +216,9 @@ The output will consist of:
 - A session file (.xml) for the IGV software (http://www.broadinstitute.org/igv/) from the Broad Institute to easily visualize all the tracks produced, the hotspots and the specific regions for each cell line. To load it just drag and drop the file _OPEN_ME_WITH_IGV.xml_ from the output folder on top of the IGV window or alternatively load it in IGV with File-> Open Session... If you have trouble opening the file please update your IGV version. Additonaly, please don't move the .xml file only, you need all the files in the output folder to correctly load the session.
 
 
-![IGV Screenshot](./figures/hotspots.png)
+<p align="center">
+  <img src="./figures/hotspots.png">
+</p>
 
 
 2) **haystack_motifs**
@@ -252,7 +254,7 @@ The output consist of an HTML report with:
 
 
 <p align="center">
-  <img width="460" height="500" src="./figures/motif.png">
+  <img src="./figures/motif.png">
 </p>
 
 
