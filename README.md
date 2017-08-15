@@ -17,11 +17,13 @@ haystack_bio identifies  highly variable regions across different cell types als
 
 haystack_bio can be used with  histone modifications data, DNase I hypersensitive sites data and methylation data obtained for example by ChIP-seq, DNase-Seq and Bisulfite-seq assays and measured across multiple cell-types. In addition, it  is also possible to integrate gene expression data obtained from array based or RNA-seq approaches.
 
-In particular, haystack highlights enriched TF motifs in  variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
+In particular, haystack highlights enriched TF motifs in variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
 
 A summary of the pipeline and an example on H3k27ac data is shown in the following figure:
 
-![Haystack Pipeline](http://bcb.dfci.harvard.edu/~lpinello/HAYSTACK/Final_figure.png)
+<p align="center">
+  <img src="./figures/pipeline.png">
+</p>
 
 
 **(A)** ***haystack_bio*** overview: modules and corresponding functions. **(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted.  **(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. **(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif.   
