@@ -145,8 +145,14 @@ Step 2: Decompress the archive file
 	
 	tar xvzf haystack_test_dataset_h3k27ac.tar.gz
 	
-The command will untar the data files archive into a folder called TEST_DATASET. Inside it you will see a _samples_names.txt_ file containing the relative paths to the data files.	
-The input is a tab delimited text file with two or three columns containing 1. the sample name 2. the path of the corresponding bam file 3. the path of the gene expression file with the same format described in 3); Note that this last column is optional.
+The command will untar the data files archive into a folder called TEST_DATASET. 
+
+
+Inside the folder you will see a _samples_names.txt_ file containing the relative paths to the data files.	
+The file is a tab delimited text file with two or three columns containing 
+1. the sample name 
+2. the path of the corresponding bam file 
+3. the path of the gene expression file. Note that this last column is optional.
 
 ```
 K562	./INPUT_DATA/K562H3k27ac_sorted_rmdup.bam	./INPUT_DATA/K562_genes.txt
@@ -157,14 +163,13 @@ HSMM	./INPUT_DATA/HsmmH3k27ac_sorted_rmdup.bam	./INPUT_DATA/HSMM_genes.txt
 NHLF	./INPUT_DATA/NhlfH3k27ac_sorted_rmdup.bam	./INPUT_DATA/NHLF_genes.txt
 ```
 
-Step 4: Run the pipeline 
+Step 3: Run the pipeline 
 	
 	 haystack_pipeline.py ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19 
 
 The command saves the output to the folder "HAYSTACK_OUTPUT_H3K27Aac" in your home directory. All the results will be stored in inside the sub-folder HAYSTACK_PIPELINE_RESULT. 
 This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
 
- 
 Alternatively you can just provide the folder containing the BAM or bigwig files, but in this case the pipeline runs Module 1 and  Module 2, but not Module 3, since no gene expression data are provided.
 
 	haystack_pipeline ./TEST_DATASET/ hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
@@ -316,7 +321,7 @@ For manual installation please execute the command
 
     python setup.py install 
 
-after having all the depenencies instaled.
+after having all the dependencies installed. The list of depencies can be found in the Docker file.
 
 Citation
 --------
