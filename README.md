@@ -14,9 +14,9 @@ Summary
 ***haystack_bio*** is a Python software package that implements a bioinformatics pipeline that computes measures of epigenetic variability, cross-cell-type plasticity of chromatin states, and transcription factors (TFs) motifs  with the aim of
 providing mechanistic insights into chromatin structure, cellular identity, and gene regulation. Through the integration of epigenomic, DNA sequence, and gene expression data, haystack_bio identifies highly variable regions across different cell types (called _hotspots_) and the potential regulators that mediate the cell-type specific variation. 
 
-haystack_bio can be used with histone modifications data, DNase I hypersensitive sites data, and methylation data obtained for example by ChIP-seq, DNase-Seq and Bisulfite-seq assays and measured across multiple cell-types. In addition, it  is also possible to integrate gene expression data obtained from array based or RNA-seq approaches.
+***haystack_bio*** can be used with histone modifications data, DNase I hypersensitive sites data, and methylation data obtained for example by ChIP-seq, DNase-Seq and Bisulfite-seq assays and measured across multiple cell-types. In addition, it  is also possible to integrate gene expression data obtained from array based or RNA-seq approaches.
 
-In particular, haystack_bio highlights enriched TF motifs in variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
+In particular, ***haystack_bio*** highlights enriched TF motifs in variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
 
 A summary of the pipeline and an example on H3k27ac data is shown in Figure 1 below.
 
@@ -205,17 +205,17 @@ Figure 2 is a screenshot of the IGV browser showing the bigwig tracks, the hotsp
 
 **Input**: 
 - Specific region file (i.e. *Regions_specific_for_K562.500bp_z_1.50.bed*)
-- the reference genome (i.e. hg19)
+- The reference genome (i.e. hg19)
 - Background regions file (i.e. *Background_for_K562.500bp_z_0.25.bed*)
-- sample_name (i.e. K562)
+- Sample name (i.e. K562)
 
 **Output**: The output consists of an HTML report with
-- enriched motifs with corresponding p and q values
-- motif profiles and logos
-- list of regions with a particular motifs and coordinates of the motifs in those regions
-- list of closest genes to the regions with a particular motif 
+- Enriched motifs with corresponding p and q values
+- Motif profiles and logos
+- List of regions with a particular motifs and coordinates of the motifs in those regions
+- List of closest genes to the regions with a particular motif 
 
-Figure 3 is a screenshot of the HTML report generated for the H1hesc sample. 
+Figure 3 is a screenshot of the HTML report generated for the *H1hesc* sample. 
 
 <p align="center">
 <figure>
@@ -339,7 +339,7 @@ after having all the dependencies installed. The list of dependencies can be fou
 Jupyter Analysis Notebook
 --------
 
-You can gain a more detailed insight of the pipeline by examining the code. We have provided an interactive analysis Jupyter notebook for the first module of the pipeline. It can be accessed [here](https://nbviewer.jupyter.org/github/rfarouni/haystack_bio/blob/master/haystack/haystack_jypyter_notebook.ipynb)
+We have provided an interactive analysis Jupyter notebook for the first module of the pipeline. You can gain a more detailed insight of this part of the pipeline by examining the code and output. The notebook can be accessed at this [link](https://nbviewer.jupyter.org/github/rfarouni/haystack_bio/blob/master/haystack/haystack_jypyter_notebook.ipynb).
 
 
 Citation
