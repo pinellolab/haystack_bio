@@ -37,23 +37,16 @@ A summary of the pipeline and an example on H3k27ac data is shown in Figure 1 be
 Installation 
 ----------------
 
-**Operating System Notes**
-
 The software has been tested on CentOS 6.5, Ubuntu 14.04 LTS, Ubuntu 16.04 LTS, OS X 10.11, and OS X 10.12. 
-Although ***haystack_bio*** supports only 64-bit Linux and Mac OSX, it can be run on Windows systems using a Docker container. 
-The Docker container can also be run on any platform that has the Docker software installed. For instructions on how to install the Docker software and the docker image, please see below.
+Although ***haystack_bio*** supports only 64-bit Linux and Mac OSX, it can be run on Windows systems using a Docker container. For instructions on how to install the Docker software and the docker image, please see below.
 
 **Bioconda Installation for Linux and MacOS**
 
 ***haystack_bio*** depends on several other Python packages and a number of bioinformatics software tools in order to run. The easiest way to install ***haystack_bio*** is through Bioconda, 
 a software repository channel for the conda package manager, configured on your system. Bioconda streamlines the process of building and installing any software dependency that a package requires. 
-By running the following lines of code, ***haystack_bio*** and its dependencies can be installed automatically. 
+By running the following lines of code, ***haystack_bio*** and its dependencies can be installed automatically.  
 The entire installation process consists of three steps: installing Miniconda, adding the Bioconda channel, and installing ***haystack_bio***. 
 For the following steps, we are assuming you are on a 64-bit Linux or a MacOS system and that you have not installed Miniconda/Anaconda before on your system. 
-If you have Minicoda/Anaconda 3 alread installed, you would need to create a separate environment for Python 2.7. 
-Please consult [conda.io](https://conda.io/docs/py2or3.html#create-python-2-or-3-environments) for details. 
-In case you encounter difficulty in installing Miniconda or adding the Bioconda channel, 
-please refer to the Bioconda project's [website](https://bioconda.github.io/) for more detailed installation instructions.
 
 **Step 1**: Download the latest Miniconda 2 (Python 2.7) to your home directory.
 
@@ -82,7 +75,10 @@ For Mac:
 
     conda install haystack_bio
     
-For other installation options, please consult the section *Other Installation Options*   
+
+For other installation options, please consult the section *Other Installation Options*. In case you encounter difficulty in installing Miniconda or adding the Bioconda channel, 
+please refer to the Bioconda project's [website](https://bioconda.github.io/) for more detailed installation instructions. Note that if you have Minicoda/Anaconda 3 already installed, you would need to create a separate environment for Python 2.7. 
+Please consult [conda.io](https://conda.io/docs/py2or3.html#create-python-2-or-3-environments) for details. 
     
 Testing Installation
 -----------------
@@ -101,14 +97,11 @@ To download the human genome assembly hg19, please run:
 	
 	haystack_download_genome hg19
 
-Also note that this command downloads the hg19 genome build from the [UCSC server](http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit)
-
-and saves it to the genomes folder
+Also note that this command downloads the hg19 genome build from the [UCSC server](http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit) and saves it to the genomes folder
 
     $HOME/miniconda/lib/python2.7/site-packages/haystack/haystack_data/genomes
   
-Also note that the *hg19.2bit* file is 778M in size and could take a long time to download on a slow connection.
-  
+Also note that the *hg19.2bit* file is 778M in size and could take a long time to download on a slow connection. 
 To test whether the entire pipeline can run without any problems on your system, please run  
     
          haystack_run_test
@@ -321,9 +314,9 @@ Other Installation Options
 
 ### **Docker Image**
 
-Please visit [docker.com](https://www.docker.com/) for instructions on how to install Docker on your platform. 
+***haystack_bio***  and its dependencies can be installed on any platform that has the Docker software installed. For instructions on how to install Docker on your platform, please visit [docker.com](https://www.docker.com/). 
 For Linux platforms, make sure to run the Docker post-installation instructions in order to run the command without *sudo* privileges. 
-After the installation is complete you can download the Docker image for ***haystack_bio***  onto your system by simply running:
+After the installation is complete you can download the Docker image for ***haystack_bio***  to your system by simply running
 
 	docker pull lucapinello/haystack_bio
 
