@@ -112,10 +112,6 @@ To test whether the entire pipeline can run without any problems on your system,
     
          haystack_run_test
 
-Note, that this is equivalent to running the following command manually.
-
-    haystack_pipeline samples_names.txt hg19 --output_directory $HOME/haystack_test_output  --blacklist hg19 --chrom_exclude 'chr(?!21)'
-
 Note: Since the sample test data included in the package is limited to  a small fraction of the genome (i.e. Chromosome 21) and is for four  cell types only,
 the final motif analysis step in the pipeline might not return any positive findings. The test run output can be found in the folder $HOME/haystack_test_output. 
 
@@ -130,7 +126,7 @@ How to use *haystack_bio*
 3) **haystack_tf_activity_plane**: quantifies the specificity and the activity of the TFs highlighed by the **haystack_motif** integrating gene expression data.
 
 
-The command **haystack_pipeline**  executes the whole pipeline automatically. That is, it executes Module 1 followed by Module 2 and Module 3 (if gene expression files are provided), 
+The command **haystack_pipeline**  executes the whole pipeline automatically. That is, it executes Module 1 followed by Module 2 and (optionally) Module 3 (if gene expression files are provided), 
 finding hotspots, specific regions, motifs and quantifying their activity on nearby genes.
 
 
@@ -148,14 +144,12 @@ Step 2: Decompress the archive file
 	tar xvzf haystack_test_dataset_h3k27ac.tar.gz
 	
 The command will untar the data files archive into a folder called TEST_DATASET. 
-
-
 Inside the folder you will see a _samples_names.txt_ file containing the relative paths to the data files.	
 The file is a tab delimited text file with three columns containing 
 
-1. the sample name 
-2. the path of the corresponding bam file 
-3. the path of the gene expression file. Note that this last column is optional.
+1. The sample name (cell type)
+2. The path of the corresponding bam file 
+3. The path of the gene expression file. Note that this last column is optional.
 
 ```
 K562	./INPUT_DATA/K562H3k27ac_sorted_rmdup.bam	./INPUT_DATA/K562_genes.txt
@@ -168,22 +162,11 @@ NHLF	./INPUT_DATA/NhlfH3k27ac_sorted_rmdup.bam	./INPUT_DATA/NHLF_genes.txt
 
 Step 3: Run the pipeline 
 	
-	 haystack_pipeline.py ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19 
+	 haystack_pipeline ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19 
 
-The command saves the output to the folder "HAYSTACK_OUTPUT_H3K27Aac" in your home directory. All the results will be stored in inside the sub-folder HAYSTACK_PIPELINE_RESULT. 
+The *haystack_pipeline* command saves the output to the folder "HAYSTACK_OUTPUT_H3K27Aac" in your home directory. All the results will be stored in inside the sub-folder HAYSTACK_PIPELINE_RESULT. 
 This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
-
-
-The command is equivalent to running the following three commands in a row.
-
-	haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
-    haystack_motifs specific_regions_filename  hg19 --bed_bg_filename  background_regions_filename --name sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS 
-    haystack_tf_activity_plane motifs_output_folder sample_names_tf_activity_filename sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS
-
-where the last two commands iterate over the six cell types.
-
--------------------
-
+The *haystack_pipeline* command is equivalent to running *haystack_hotspots* followed by *haystack_motifs* and *haystack_tf_activity_plane*.
 The inputs and outputs of the three modules of the pipeline are as follows.
 
 ### Module 1: *haystack_hotspots*
@@ -191,7 +174,6 @@ The inputs and outputs of the three modules of the pipeline are as follows.
 **Command**: 	
 
        haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
-
 
 **Input**: 
  - The first two columns of _samples_names.txt_  containing (1) the sample name and (2) the path of the corresponding .bam/.bw file. 
@@ -204,16 +186,18 @@ The inputs and outputs of the three modules of the pipeline are as follows.
     HSMM	./INPUT_DATA/HsmmH3k27ac_sorted_rmdup.bam	
     NHLF	./INPUT_DATA/NhlfH3k27ac_sorted_rmdup.bam
     ```
-
  - The reference genome (e.g.hg19)
  - An optional bed file with blacklisted regions (the one for hg19 has been provided)
 
 **Output**: 
-- The normalized bigwig files for each track
-- The hotspots i.e. the regions that are most variable
-- The regions that are variable and specific for each track, this means that the signal is more enriched to a particular track compared to the rest.
-- A session file (.xml) for the IGV software (http://www.broadinstitute.org/igv/) from the Broad Institute to easily visualize all the tracks produced, the hotspots and the specific regions for each cell line. To load it just drag and drop the file _OPEN_ME_WITH_IGV.xml_ from the output folder on top of the IGV window or alternatively load it in IGV with File-> Open Session... If you have trouble opening the file please update your IGV version. Additonaly, please don't move the .xml file only, you need all the files in the output folder to correctly load the session.
+- The normalized bigwig files for each of the six samples.
+- A file of specific regions for each of the six samples. These are regions in which the signal is more enriched for a particular sample compared to the rest.
+- A file of background regions for each of the six samples. 
+- A SELECTED_VARIABILITY_HOTSPOT.bedgraph file containing the hotspots (i.e. regions that are most variable)
+- A session file (.xml) for the IGV software (http://www.broadinstitute.org/igv/) from the Broad Institute to easily visualize all the tracks produced, 
+the hotspots and the specific regions for each cell line. To load it just drag and drop the file _OPEN_ME_WITH_IGV.xml_ from the output folder on top of the IGV window or alternatively load it in IGV with File-> Open Session... If you have trouble opening the file please update your IGV version. Additionally, please don't move the .xml file only, you need all the files in the output folder to correctly load the session.
 
+Figure 2 is a screenshot of the IGV browser showing the bigwig tracks, the hotspots, and the specific regions.
 <p align="center">
   <img src="./figures/hotspots.png">
 </p>
@@ -226,15 +210,18 @@ The inputs and outputs of the three modules of the pipeline are as follows.
            haystack_motifs specific_regions_filename  hg19 --bed_bg_filename  background_regions_filename --name sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS 
 
 **Input**: 
-- A set of regions in .bed format (http://genome.ucsc.edu/FAQ/FAQformat.html#format1)
-- the reference genome.
-
+- Specific region file (i.e. *Regions_specific_for_K562.500bp_z_1.50.bed*)
+- the reference genome (i.e. hg19)
+- Background regions file (i.e. *Background_for_K562.500bp_z_0.25.bed*)
+- sample_name (i.e. K562)
 
 **Output**: The output consists of an HTML report with
 - enriched motifs with corresponding p and q values
 - motif profiles and logos
 - list of regions with a particular motifs and coordinates of the motifs in those regions
 - list of closest genes to the regions with a particular motif 
+
+Figure 3 is a screenshot of the HTML report generated for the H1hesc sample. 
 
 <p align="center">
   <img src="./figures/motif.png">
@@ -245,16 +232,23 @@ The inputs and outputs of the three modules of the pipeline are as follows.
 
 **Command**: 	
 
-        haystack_tf_activity_plane motifs_output_folder sample_names_tf_activity_filename sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_TFs_ACTIVITY_PLANES
+        haystack_tf_activity_plane $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS  sample_names_tf_activity_filename sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_TFs_ACTIVITY_PLANES
 
 **Input**: 
 - An output folder generated by **haystack_motif** 
-- A set of files containing gene expression data specified in a tab delimited file
-- The target cell-type name to use to perform the analysis. Each gene expression data file is a tab delimited text file with two columns: 
+- The first and third column of _samples_names.txt_  (i.e sample_name and sample_names_tf_activity_filename)
+```
+K562	./INPUT_DATA/K562_genes.txt
+GM12878	./INPUT_DATA/GM12878_genes.txt
+HEPG2	./INPUT_DATA//HEPG2_genes.txt
+H1hesc	./INPUT_DATA/h1hesc_genes.txt
+HSMM	./INPUT_DATA/HSMM_genes.txt
+NHLF	./INPUT_DATA/NHLF_genes.txt
+```
+- The *sample_names_tf_activity_filename* contains gene expression data  where each file is a tab delimited text file with two columns. 
     1. gene symbol 
     2. gene expression value
-  
-Such a file (one for each cell-type profiled)  looks like this.
+
 ```
 RNF14	7.408579
 UBE2Q1	9.107306
@@ -270,23 +264,19 @@ REM2	5.957589
 .
 .
 ```
-The file that describe the samples for example a file called  _sample_names_tf_activity.txt_ has the following format.
-```
-K562	./INPUT_DATA/K562_genes.txt
-GM12878	./INPUT_DATA/GM12878_genes.txt
-HEPG2	./INPUT_DATA//HEPG2_genes.txt
-H1hesc	./INPUT_DATA/h1hesc_genes.txt
-HSMM	./INPUT_DATA/HSMM_genes.txt
-NHLF	./INPUT_DATA/NHLF_genes.txt
-```
 
 **Output**: 
 - A set of figures each containing the TF activity plane for a given motif. 
 
+Figure 4 shows the top activity plane corresponding to the mostly highly enriched motif for each of the six samples (cell types).
+
 
 <p align="center">
-  <img src="./figures/6genes.png">
-</p>
+<figure>
+  <img src="./figures/6genes.png" alt="Figure 4">
+   <figcaption>Figure 4</figcaption>
+</figure> 
+
 
 
 Notes	
