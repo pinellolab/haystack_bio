@@ -19,17 +19,19 @@ haystack_bio can be used with  histone modifications data, DNase I hypersensitiv
 
 In particular, haystack highlights enriched TF motifs in variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
 
-A summary of the pipeline and an example on H3k27ac data is shown in the following figure:
+A summary of the pipeline and an example on H3k27ac data is shown in Figure 1 below:
 
 <p align="center">
-  <img src="./figures/pipeline.png">
+<figure>
+  <img src="./figures/pipeline.png" alt="Figure 1">
+   <figcaption>  Figure 1</figcaption>
+</figure> 
 </p>
 
-
-**(A)** ***haystack_bio*** overview: modules and corresponding functions. **(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted.  **(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. **(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif.   
-
-***haystack_bio*** was designed to be highly modular. The whole pipeline can be called using the _haystack_pipeline_ command or alternatively the different modules can be used and combined indipendently.  For example it is possible to use only the motif analysis calling the _haystack_motifs_ module on a given set of genomic regions. A nice description of each module is present in the **_How to use haystack_bio_** section.
-
+- **(A)** ***haystack_bio*** overview: modules and corresponding functions.
+- **(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted. 
+- **(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. 
+- **(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif. 
 
 Installation 
 ----------------
@@ -198,10 +200,13 @@ The inputs and outputs of the three modules of the pipeline are as follows.
 the hotspots and the specific regions for each cell line. To load it just drag and drop the file _OPEN_ME_WITH_IGV.xml_ from the output folder on top of the IGV window or alternatively load it in IGV with File-> Open Session... If you have trouble opening the file please update your IGV version. Additionally, please don't move the .xml file only, you need all the files in the output folder to correctly load the session.
 
 Figure 2 is a screenshot of the IGV browser showing the bigwig tracks, the hotspots, and the specific regions.
-<p align="center">
-  <img src="./figures/hotspots.png">
-</p>
 
+<p align="center">
+<figure>
+  <img src="./figures/hotspots.png" alt="Figure 2">
+   <figcaption>  Figure 2</figcaption>
+</figure> 
+</p>
 
 ### Module 2: **haystack_motifs**
 
@@ -224,8 +229,12 @@ Figure 2 is a screenshot of the IGV browser showing the bigwig tracks, the hotsp
 Figure 3 is a screenshot of the HTML report generated for the H1hesc sample. 
 
 <p align="center">
-  <img src="./figures/motif.png">
+<figure>
+  <img src="./figures/motif.png" alt="Figure 3">
+   <figcaption>  Figure 3</figcaption>
+</figure> 
 </p>
+
 
 ### Module 3: **haystack_tf_activity_plane**
 
@@ -274,15 +283,16 @@ Figure 4 shows the top activity plane corresponding to the mostly highly enriche
 <p align="center">
 <figure>
   <img src="./figures/6genes.png" alt="Figure 4">
-   <figcaption>Figure 4</figcaption>
+   <figcaption>  Figure 4</figcaption>
 </figure> 
+</p>
 
 
 
 Notes	
 -------------------
 
-You can run the variability analysis as such
+You can run the variability analysis with the following command
 	
 	haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
 
@@ -290,7 +300,9 @@ or you can run it without creating a _samples_names.txt_ file by providing the f
 
 	haystack_pipeline ./TEST_DATASET/ hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
 	
-To analyze the bed file file _myregions.bed_ on the _hg19_ genome run:
+	
+It is possible to use only the motif analysis calling the _haystack_motifs_ module on a given set of genomic regions. For example, 
+to analyze the bed file file _myregions.bed_ on the _hg19_ genome run:
 	
 	haystack_motifs myregions.bed hg19
 
@@ -320,7 +332,6 @@ Other Installation Options
 -------------------
 
 ### **Docker Image**
-
 
 Please visit [docker.com](https://www.docker.com/) for instructions on how to install Docker on your platform. 
 For Linux platforms, make sure to run the Docker post-installation instructions in order to run the command without *sudo* privileges. 
