@@ -11,27 +11,28 @@ Epigenetic Variability and Motif Analysis Pipeline
 
 Summary
 -------
-***haystack_bio*** is a suite of computational tools to study  epigenetic variability, cross-cell-type plasticity of chromatin states and transcription factors (TFs) motifs providing mechanistic insights into chromatin structure, cellular identity and gene regulation. 
+***haystack_bio*** is a Python software package that implements a bioinformatics pipeline that computes measures of epigenetic variability, cross-cell-type plasticity of chromatin states, and transcription factors (TFs) motifs  with the aim of
+providing mechanistic insights into chromatin structure, cellular identity, and gene regulation. Through the integration of epigenomic, DNA sequence, and gene expression data, haystack_bio identifies highly variable regions across different cell types (called _hotspots_) and the potential regulators that mediate the cell-type specific variation. 
 
-haystack_bio identifies  highly variable regions across different cell types also called _hotspots_, and the potential regulators that mediate the cell-type specific variation through integration of multiple data-types. 
+haystack_bio can be used with histone modifications data, DNase I hypersensitive sites data, and methylation data obtained for example by ChIP-seq, DNase-Seq and Bisulfite-seq assays and measured across multiple cell-types. In addition, it  is also possible to integrate gene expression data obtained from array based or RNA-seq approaches.
 
-haystack_bio can be used with  histone modifications data, DNase I hypersensitive sites data and methylation data obtained for example by ChIP-seq, DNase-Seq and Bisulfite-seq assays and measured across multiple cell-types. In addition, it  is also possible to integrate gene expression data obtained from array based or RNA-seq approaches.
+In particular, haystack_bio highlights enriched TF motifs in variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
 
-In particular, haystack highlights enriched TF motifs in variable and cell-type specific regions and quantifies their activity and specificity on nearby genes if gene expression data are available.
-
-A summary of the pipeline and an example on H3k27ac data is shown in Figure 1 below:
+A summary of the pipeline and an example on H3k27ac data is shown in Figure 1 below.
 
 <p align="center">
 <figure>
   <img src="./figures/pipeline.png" alt="Figure 1">
-   <figcaption>  Figure 1</figcaption>
 </figure> 
 </p>
 
-- **(A)** ***haystack_bio*** overview: modules and corresponding functions.
-- **(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted. 
-- **(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. 
-- **(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif. 
+**(A)** haystack_bio overview: modules and corresponding functions.
+
+**(B)** Hotspot analysis on H3k27ac: signal tracks, variability track and the hotspots of variability are computed from the ChIP-seq aligned data; in addition, the regions specific for a given cell type are extracted. 
+
+**(C)** Motif analysis on the regions specific for the H1hesc cell line: Pou5f1::Sox2 is significant; p-value and q-value, motif logo and average profile are calculated. 
+
+**(D)** Transcription factor activity for Sox2 in H1esc (star) compared to the other cell types (circles), x-axis specificity of Sox2 expression (z-score), y-axis effect (z-score) on the gene nearby the regions containing the Sox2 motif. 
 
 Installation 
 ----------------
@@ -83,7 +84,6 @@ For Mac:
     
 For other installation options, please consult the section *Other Installation Options*   
     
-
 Testing Installation
 -----------------
 
@@ -109,14 +109,12 @@ and saves it to the genomes folder
   
 Also note that the *hg19.2bit* file is 778M in size and could take a long time to download on a slow connection.
   
-  
 To test whether the entire pipeline can run without any problems on your system, please run  
     
          haystack_run_test
 
 Note: Since the sample test data included in the package is limited to  a small fraction of the genome (i.e. Chromosome 21) and is for four  cell types only,
 the final motif analysis step in the pipeline might not return any positive findings. The test run output can be found in the folder $HOME/haystack_test_output. 
-
 
 How to use *haystack_bio*
 -------------------
@@ -127,10 +125,8 @@ How to use *haystack_bio*
 2) **haystack_motifs**: finds enriched transcription factor motifs in a given set of genomic regions.
 3) **haystack_tf_activity_plane**: quantifies the specificity and the activity of the TFs highlighed by the **haystack_motif** integrating gene expression data.
 
-
 The command **haystack_pipeline**  executes the whole pipeline automatically. That is, it executes Module 1 followed by Module 2 and (optionally) Module 3 (if gene expression files are provided), 
 finding hotspots, specific regions, motifs and quantifying their activity on nearby genes.
-
 
 ### Walk-Through Example Using Data from Six Cell Types
 -------------------
@@ -231,7 +227,6 @@ Figure 3 is a screenshot of the HTML report generated for the H1hesc sample.
 <p align="center">
 <figure>
   <img src="./figures/motif.png" alt="Figure 3">
-   <figcaption>  Figure 3</figcaption>
 </figure> 
 </p>
 
@@ -270,63 +265,56 @@ CBX4	7.070998
 REM1	6.148991
 REM2	5.957589
 .
-.
-.
 ```
 
 **Output**: 
 - A set of figures each containing the TF activity plane for a given motif. 
 
-Figure 4 shows the top activity plane corresponding to the mostly highly enriched motif for each of the six samples (cell types).
+Figure 4 below shows the top activity planes corresponding to the mostly highly enriched motif for each of the six samples (cell types).
 
 
 <p align="center">
 <figure>
   <img src="./figures/6genes.png" alt="Figure 4">
-   <figcaption>  Figure 4</figcaption>
 </figure> 
 </p>
-
-
 
 Notes	
 -------------------
 
-You can run the variability analysis with the following command
-	
-	haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
+- **IMPORTANT:** Folder names and file paths should not have white spaces. Please use underscore instead. 	
 
-or you can run it without creating a _samples_names.txt_ file by providing the folder containing the BAM or bigwig files. Note, however, that in this case the pipeline runs Module 1 and  Module 2, but not Module 3, since no gene expression data are provided.
+- If you are running haystack_hotspots using bigwig files you need to add the option: **--input_is_bigwig**
 
-	haystack_pipeline ./TEST_DATASET/ hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
-	
-	
-It is possible to use only the motif analysis calling the _haystack_motifs_ module on a given set of genomic regions. For example, 
-to analyze the bed file file _myregions.bed_ on the _hg19_ genome run:
-	
-	haystack_motifs myregions.bed hg19
-
-To specify a custom background file for the analysis, for example _mybackgroundregions.bed_ run:
-	
-	haystack_motifs myregions.bed hg19 --bed_bg_filename mybackgroundregions.bed
-
-To use a particular motif database (the default is JASPAR) use:
-	
-	haystack_motifs myregions.bed hg19 --meme_motifs_filename my_database.meme
-
-The database file must be in the MEME format: http://meme.nbcr.net/meme/doc/meme-format.html#min_format	
-	
-	
-**IMPORTANT:** Folder names and file paths should not have white spaces. Please use underscore instead. 	
-
-If you are running haystack_hotspots using bigwig files you need to add the option: **--input_is_bigwig**
-
-The **haystack_download_genome** command allows you to download and add a reference genomes from UCSC to ***haystack_bio*** in the appropriate format. 
+- The *haystack_download_genome* command allows you to download and add a reference genomes from UCSC to ***haystack_bio*** in the appropriate format. 
 To download a  particular genome run: 
 	
-	 haystack_download_genome genome_name 
+	      haystack_download_genome genome_name 
 
-Probably you do not need to call this command explicitly since it is called automatically when you run the pipeline. 
+     You probably would not need to call this command explicitly since it is called automatically when you run the pipeline. 
+
+- You can run the variability analysis with the following command
+
+        haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
+
+    or you can run it without creating a _samples_names.txt_ file by providing the folder containing the BAM or bigwig files. Note, however, that in this case the pipeline runs Module 1 and  Module 2, but not Module 3, since no gene expression data are provided.
+
+        haystack_pipeline ./TEST_DATASET/ hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
+		
+- It is possible to use only the motif analysis calling the _haystack_motifs_ module on a given set of genomic regions. For example, 
+to analyze the bed file file _myregions.bed_ on the _hg19_ genome run
+	
+	    haystack_motifs myregions.bed hg19
+  
+  To specify a custom background file for the analysis, for example _mybackgroundregions.bed_ run
+	
+	    haystack_motifs myregions.bed hg19 --bed_bg_filename mybackgroundregions.bed
+
+    To use a particular motif database (the default is JASPAR) use
+	
+	    haystack_motifs myregions.bed hg19 --meme_motifs_filename my_database.meme
+
+    The database file must be in the MEME format: http://meme.nbcr.net/meme/doc/meme-format.html#min_format		
 
 Other Installation Options
 -------------------
@@ -338,7 +326,6 @@ For Linux platforms, make sure to run the Docker post-installation instructions 
 After the installation is complete you can download the Docker image for ***haystack_bio***  onto your system by simply running:
 
 	docker pull lucapinello/haystack_bio
-
 
 To run ***haystack_bio*** use the following command:
 
@@ -355,7 +342,7 @@ For manual installation please execute the command
 
     python setup.py install 
 
-after having all the dependencies installed. The list of depencies can be found in the Docker file.
+after having all the dependencies installed. The list of dependencies can be found in the Docker file.
 
 Citation
 --------
