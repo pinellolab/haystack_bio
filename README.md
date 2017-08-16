@@ -38,7 +38,7 @@ Installation
 ----------------
 
 The software has been tested on CentOS 6.5, Ubuntu 14.04 LTS, Ubuntu 16.04 LTS, OS X 10.11, and OS X 10.12. 
-Although ***haystack_bio*** supports only 64-bit Linux and Mac OSX, it can be run on Windows systems using a Docker container. For instructions on how to install the Docker software and the docker image, please see below.
+Although ***haystack_bio*** supports only 64-bit Linux and macOS, it can be run on Windows systems using a Docker container. For instructions on how to install the Docker software and the docker image, please see below.
 
 **Bioconda Installation for Linux and MacOS**
 
@@ -167,7 +167,7 @@ The inputs and outputs of the three modules of the pipeline are as follows.
        haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
 
 **Input**: 
- - The first two columns of _samples_names.txt_  containing (1) the sample name and (2) the path of the corresponding .bam/.bw file. 
+ - The first two columns of _samples_names.txt_  containing (1) the sample name and (2) the full path of the corresponding .bam/.bw file. 
      
      ```
     K562	./INPUT_DATA/K562H3k27ac_sorted_rmdup.bam	
@@ -335,6 +335,12 @@ For manual installation please execute the command
     python setup.py install 
 
 after having all the dependencies installed. The list of dependencies can be found in the Docker file.
+
+Jupyter Analysis Notebook
+--------
+
+You can gain a more detailed insight of the pipeline by examining the code. We have provided an interactive analysis Jupyter notebook for the first module of the pipeline. It can be accessed [here](https://nbviewer.jupyter.org/github/rfarouni/haystack_bio/blob/master/haystack/haystack_jypyter_notebook.ipynb)
+
 
 Citation
 --------

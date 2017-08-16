@@ -25,7 +25,7 @@ HAYSTACK_VERSION = "0.5.0"
 
 
 do_not_recompute = None
-
+keep_intermediate_files= None
 
 
 def quantile_normalization(A):

@@ -258,10 +258,7 @@ def main(input_args=None):
     if keep_intermediate_files:
         input_args.append('--keep_intermediate_files')
 
-
-
     hotspots.main(input_args=input_args)
-
 
     # CALL HAYSTACK MOTIFS
     motif_directory = os.path.join(output_directory,
