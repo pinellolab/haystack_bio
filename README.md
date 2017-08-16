@@ -160,9 +160,9 @@ This will recreate the panels and the plots showed in the figure present in the 
 The *haystack_pipeline* command is equivalent to running *haystack_hotspots* followed by *haystack_motifs* and *haystack_tf_activity_plane*.
 The inputs and outputs of the three modules of the pipeline are as follows.
 
-### Module 1: *haystack_hotspots*
+#### Module 1: *haystack_hotspots*
 
-**Command**: 	
+**Sub-command run by _haystack_pipeline_**: 	
 
        haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
 
@@ -197,9 +197,9 @@ Figure 2 is a screenshot of the IGV browser showing the bigwig tracks, the hotsp
 </figure> 
 </p>
 
-### Module 2: **haystack_motifs**
+#### Module 2: **haystack_motifs**
 
-**Command**: 	
+**Sub-command run by _haystack_pipeline_** (for each sample): 	
 
            haystack_motifs specific_regions_filename  hg19 --bed_bg_filename  background_regions_filename --name sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS 
 
@@ -224,10 +224,9 @@ Figure 3 is a screenshot of the HTML report generated for the H1hesc sample.
 </p>
 
 
-### Module 3: **haystack_tf_activity_plane**
+#### Module 3: **haystack_tf_activity_plane**
 
-
-**Command**: 	
+**Sub-command run by _haystack_pipeline_** (for each sample): 	
 
         haystack_tf_activity_plane $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_MOTIFS  sample_names_tf_activity_filename sample_name --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac/HAYSTACK_PIPELINE_RESULT/HAYSTACK_TFs_ACTIVITY_PLANES
 
