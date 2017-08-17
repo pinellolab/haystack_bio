@@ -2,7 +2,7 @@
 ========
 Epigenetic Variability and Motif Analysis Pipeline       
 --------------------------------------------------
-**Current version**: v0.5
+**Current version**: v0.5.0
 
 [![Build Status](https://travis-ci.org/rfarouni/haystack_bio.svg?branch=master)](https://travis-ci.org/rfarouni/haystack_bio)
 
@@ -11,7 +11,7 @@ Epigenetic Variability and Motif Analysis Pipeline
 
 Summary
 -------
-***haystack_bio*** is a Python software package that implements a bioinformatics pipeline that computes measures of epigenetic variability, cross-cell-type plasticity of chromatin states, and transcription factors (TFs) motifs  with the aim of
+***haystack_bio*** is a Python 2.7 software package that implements a bioinformatics pipeline that computes measures of epigenetic variability, cross-cell-type plasticity of chromatin states, and transcription factors (TFs) motifs  with the aim of
 providing mechanistic insights into chromatin structure, cellular identity, and gene regulation. Through the integration of epigenomic, DNA sequence, and gene expression data, haystack_bio identifies highly variable regions across different cell types (called _hotspots_) and the potential regulators that mediate the cell-type specific variation. 
 
 ***haystack_bio*** can be used with histone modifications data, DNase I hypersensitive sites data, and methylation data obtained for example by ChIP-seq, DNase-Seq and Bisulfite-seq assays and measured across multiple cell-types. In addition, it  is also possible to integrate gene expression data obtained from array based or RNA-seq approaches.
@@ -375,7 +375,7 @@ After installing all the dependencies, please download the repository and execut
 Jupyter Analysis Notebook
 --------
 
-We have provided an interactive analysis Jupyter notebook for the first module of the pipeline. You can gain a more detailed insight of this part of the pipeline by examining the code and output. The notebook can be accessed at this [link](https://nbviewer.jupyter.org/github/rfarouni/haystack_bio/blob/master/haystack/haystack_jypyter_notebook.ipynb).
+We have provided an interactive analysis Jupyter notebook for the first module of the pipeline. You can gain a more detailed insight of this part of the pipeline by examining the code and output. The notebook can be accessed at this [link](http://nbviewer.jupyter.org/github/pinellolab/haystack_bio/blob/master/haystack/haystack_jypyter_notebook.ipynb).
 
 
 Citation
@@ -384,7 +384,8 @@ Citation
 
 Contacts
 --------
-Please send any comment or bug to lpinello AT jimmy DOT harvard DOT edu 
+
+We use [GitHub issues](https://github.com/pinellolab/haystack_bio/issues) for tracking requests and bugs. Please submit an new issue if you any comment or you would like to report a software bug. 
 
 Third part software included and used in this distribution
 -----------------------------------------------------------
