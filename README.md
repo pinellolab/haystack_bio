@@ -209,19 +209,28 @@ Figure 2 is a screenshot of the IGV browser showing the bigwig tracks, the hotsp
 - Background regions file (i.e. *Background_for_K562.500bp_z_0.25.bed*)
 - Sample name (i.e. K562)
 
-**Output**: The output consists of an HTML report with
-- Enriched motifs with corresponding p and q values
-- Motif profiles and logos
-- List of regions with a particular motifs and coordinates of the motifs in those regions
-- List of closest genes to the regions with a particular motif 
-
-Figure 3 is a screenshot of the HTML report generated for the *H1hesc* sample. 
+**Output**: The output consists of an HTML report for each sample. For example, Figure 3 is a screenshot of the HTML report generated for the *H1hesc* sample. 
 
 <p align="center">
 <figure>
   <img src="./figures/motif.png" alt="Figure 3">
 </figure> 
 </p>
+ 
+Each row in the table corresponds to an enriched motif. There are 12 columns in the table corresponding to following variables.
+
+- Motif id
+- Motif name
+- Presence in Target: Frequency of its presence in the  specific region file of the corresponding sample
+- Presence in BG: Frequency of its presence in the  background region file of the corresponding sample
+- The ratio of Presence in Target to Presence in BG
+- The p value (calculated with the Fisher’s exact test) 
+- The q values
+- Central enrichment
+- Motif profile
+- Motif logo
+- List of regions with a particular motifs and coordinates of the motifs in those regions
+- List of closest genes to the regions with a particular motif 
 
 
 #### Module 3: **haystack_tf_activity_plane**
@@ -262,8 +271,8 @@ REM2	5.957589
 **Output**: 
 - A set of figures each containing the TF activity plane for a given motif. 
 
-Figure 4 below shows the top activity planes corresponding to the mostly highly enriched motif for each of the six samples (cell types).
-
+This step acts as an additional filter to restrict the set of enriched transcription factors found in the previous step to those that also exhibit statistically significant correlations with the expression of genes found in hotspot regions.
+Figure 4 below shows the top activity planes corresponding to the mostly highly enriched motif for each of the six samples (cell types). Each sub-figure depicts the relationship between a functional transcription factor and  the expression level of the target genes of hotspot regions.
 
 <p align="center">
 <figure>
@@ -334,7 +343,7 @@ For manual installation please execute the command
 
     python setup.py install 
 
-after having all the dependencies installed. The list of dependencies can be found in the Docker file.
+after having all the dependencies installed. The list of dependencies can be found in the DOCKER_FILE_HAYSTACK file in the root directory of the package's Github repository.
 
 Jupyter Analysis Notebook
 --------
