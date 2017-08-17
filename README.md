@@ -339,23 +339,23 @@ If you run Docker on Window you have to specify the full path of the data:
 
 ### **Manual Installation**
 
-For manual installation please execute the command
 
-    python setup.py install 
+First make sure that the following software and package dependencies are installed.
 
-after having all the dependencies installed. The list of dependencies are as follows.
+Software
 
-Software:
-
+```
   - ghostscript 9.10 
   - meme 
   - bedtools 
   - sambamba 
   - ucsc bigwigaverageoverbed 
   - ucsc bedgraphtobigwig 
+````
  
-Python packages:
-  
+Python 2.7  packages
+
+```
   - setuptools 
   - bx-python  
   - numpy 
@@ -365,6 +365,11 @@ Python packages:
   - pandas  
   - pybedtools 
   - tqdm
+```
+
+After installing all the dependencies, please download the repository and execute the command inside the root folder.
+
+    python setup.py install 
 
 
 Jupyter Analysis Notebook
