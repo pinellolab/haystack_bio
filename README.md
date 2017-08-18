@@ -286,7 +286,6 @@ Figure 2 is a screenshot of the IGV browser showing the bigwig tracks, the hotsp
 <p align="center">
 <figure>
   <img src="./figures/hotspots.png" alt="Figure 2">
-   <figcaption>  Figure 2</figcaption>
 </figure> 
 </p>
 
@@ -343,9 +342,7 @@ H1hesc	./INPUT_DATA/h1hesc_genes.txt
 HSMM	./INPUT_DATA/HSMM_genes.txt
 NHLF	./INPUT_DATA/NHLF_genes.txt
 ```
-- The *sample_names_tf_activity_filename* contains gene expression data  where each file is a tab delimited text file with two columns. 
-    1. gene symbol 
-    2. gene expression value
+- The *sample_names_tf_activity_filename* contains gene expression data  where each file is a tab delimited text file with two columns: (1) gene symbol and (2) gene expression value
 
 ```
 RNF14	7.408579
