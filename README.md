@@ -121,6 +121,99 @@ How to use *haystack_bio*
 The command **haystack_pipeline**  executes the whole pipeline automatically. That is, it executes Module 1 followed by Module 2 and (optionally) Module 3 (if gene expression files are provided), 
 finding hotspots, specific regions, motifs and quantifying their activity on nearby genes.
 
+
+For usage instructions, please add the help flag to the module's command to display what parameters can be provided to the pipeline or the individual modules. For example,
+
+    haystack_pipeline.py -h
+    
+would output
+    
+````  
+[H A Y S T A C K   P I P E L I N E]
+
+-SELECTION OF HOTSPOTS OF VARIABILITY AND ENRICHED MOTIFS-
+
+Version 0.5.0
+
+usage: haystack_pipeline.py [-h] [--name NAME]
+                            [--output_directory OUTPUT_DIRECTORY]
+                            [--bin_size BIN_SIZE] [--do_not_recompute]
+                            [--depleted] [--input_is_bigwig]
+                            [--disable_quantile_normalization]
+                            [--transformation {angle,log2,none}]
+                            [--z_score_high Z_SCORE_HIGH]
+                            [--z_score_low Z_SCORE_LOW] [--th_rpm TH_RPM]
+                            [--meme_motifs_filename MEME_MOTIFS_FILENAME]
+                            [--motif_mapping_filename MOTIF_MAPPING_FILENAME]
+                            [--plot_all] [--keep_intermediate_files]
+                            [--n_processes N_PROCESSES]
+                            [--blacklist BLACKLIST]
+                            [--chrom_exclude CHROM_EXCLUDE]
+                            [--read_ext READ_EXT]
+                            [--temp_directory TEMP_DIRECTORY] [--version]
+                            samples_filename_or_bam_folder genome_name
+
+HAYSTACK Parameters
+
+positional arguments:
+  samples_filename_or_bam_folder
+                        A tab delimeted file with in each row (1) a sample
+                        name, (2) the path to the corresponding bam filename,
+                        (3 optional) the path to the corresponding gene
+                        expression filename.
+  genome_name           Genome assembly to use from UCSC (for example hg19,
+                        mm9, etc.)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --name NAME           Define a custom output filename for the report
+  --output_directory OUTPUT_DIRECTORY
+                        Output directory (default: current directory)
+  --bin_size BIN_SIZE   bin size to use(default: 500bp)
+  --do_not_recompute    Keep any file previously precalculated
+  --depleted            Look for cell type specific regions with depletion of
+                        signal instead of enrichment
+  --input_is_bigwig     Use the bigwig format instead of the bam format for
+                        the input. Note: The files must have extension .bw
+  --disable_quantile_normalization
+                        Disable quantile normalization (default: False)
+  --transformation {angle,log2,none}
+                        Variance stabilizing transformation among: none, log2,
+                        angle (default: angle)
+  --z_score_high Z_SCORE_HIGH
+                        z-score value to select the specific regions(default:
+                        1.5)
+  --z_score_low Z_SCORE_LOW
+                        z-score value to select the not specific
+                        regions(default: 0.25)
+  --th_rpm TH_RPM       Percentile on the signal intensity to consider for the
+                        hotspots (default: 99)
+  --meme_motifs_filename MEME_MOTIFS_FILENAME
+                        Motifs database in MEME format (default JASPAR CORE
+                        2016)
+  --motif_mapping_filename MOTIF_MAPPING_FILENAME
+                        Custom motif to gene mapping file (the default is for
+                        JASPAR CORE 2016 database)
+  --plot_all            Disable the filter on the TF activity and correlation
+                        (default z-score TF>0 and rho>0.3)
+  --keep_intermediate_files
+                        keep intermediate bedgraph files
+  --n_processes N_PROCESSES
+                        Specify the number of processes to use. The default is
+                        #cores available.
+  --blacklist BLACKLIST
+                        Exclude blacklisted regions. Blacklisted regions are
+                        not excluded by default. Use hg19 to blacklist regions
+                        for the human genome 19, otherwise provide the
+                        filepath for a bed file with blacklisted regions.
+  --chrom_exclude CHROM_EXCLUDE
+                        Exclude chromosomes. For example (_|chrM|chrX|chrY).
+  --read_ext READ_EXT   Read extension in bps (default: 200)
+  --temp_directory TEMP_DIRECTORY
+                        Directory to store temporary files (default: /tmp)
+  --version             Print version and exit.
+````
+
 ### Walk-Through Example Using Data from Six Cell Types
 -------------------
 
