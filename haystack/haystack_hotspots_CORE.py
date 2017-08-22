@@ -248,7 +248,7 @@ def create_tiled_genome(genome_name,
         elif blacklist=='hg19':
             info('Using hg19 blacklist file %s to filter out the regions' %blacklist)
             blacklist_filepath = os.path.join(genome_directory,
-                                              'blacklist.bed')
+                                              'hg19_blacklisted_regions.bed')
             check_file(blacklist_filepath)
             tiled_genome.intersect(blacklist_filepath,
                                    wa=True,
