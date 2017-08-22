@@ -28,7 +28,8 @@ before_install:
   - conda config --add channels defaults
   - conda config --add channels conda-forge
   - conda config --add channels bioconda
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION ghostscript=9.10 meme bedtools sambamba ucsc-bigwigaverageoverbed ucsc-bedgraphtobigwig setuptools bx-python  numpy scipy matplotlib  jinja2  pandas  pybedtools tqdm
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION ghostscript meme bedtools sambamba ucsc-bigwigaverageoverbed ucsc-bedgraphtobigwig setuptools bx-python numpy scipy matplotlib  jinja2  pandas  pybedtools tqdm
+  - pip install weblogo
 
 install: python setup.py install
 

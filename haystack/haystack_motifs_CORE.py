@@ -687,10 +687,8 @@ def main(input_args=None):
 
             # create motif logo
             img_logo = os.path.join(imgs_directory, 'logo_' + motif_ids[i])
-            generate_weblogo(motif_ids[i], meme_motifs_filename, img_logo, title=motif_ids[i],
-                             SEQLOGO=determine_path('extra') + '/seqlogo')
-            generate_weblogo(motif_ids[i], meme_motifs_filename, img_logo, title=motif_ids[i],
-                             SEQLOGO=determine_path('extra') + '/seqlogo', file_format='pdf')
+            generate_weblogo(motif_ids[i], meme_motifs_filename, img_logo, title=motif_ids[i])
+            generate_weblogo(motif_ids[i], meme_motifs_filename, img_logo, title=motif_ids[i], file_format='pdf')
             # fix the weblogo prefix problem
             img_logo_url = os.path.join('images', 'logo_' + motif_ids[i] + '.png')
 

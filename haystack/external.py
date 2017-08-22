@@ -1207,24 +1207,19 @@ def pwm_from_meme_file(meme_filename,motif_id):
             return pwm   
 
 
-def generate_weblogo(motif_id,meme_filename,output_filename,file_format='PNG',title=None,scale=2.0,SEQLOGO='seqlogo'):
+def generate_weblogo(motif_id,meme_filename,output_filename,file_format='PNG',title=None,scale=2.0):
 
     pwm=pwm_from_meme_file(meme_filename,motif_id)
     meme_motif=Motif_from_counts(pwm)
 
     kmers   = meme_motif.bogus_kmers(100)
-    width   = float(len(kmers[0]) )
-    height  = float(4)
-    width, height = width*scale, height*scale
+    width   = float(len(kmers[0]) ) *scale
+    #height  = float(4)
+    #width, height = width*scale, height*scale
     tmp     = tempfile.mktemp() + '.fsa'
     if title==None: title = output_filename
-
     seqs2fasta(kmers,tmp)
-    cmd = '%s -F %s -acpYn -w%d -h%d -k 1 -M -f %s -o %s -t "%s" '%(SEQLOGO, file_format,width, height, tmp, output_filename, title)
-
+    cmd = 'weblogo -F %s  --errorbars NO  --fineprint ""  --upper %d  -A dna  -f %s  -o %s  -t "%s" '%(file_format,width, tmp, output_filename, title)
     #print cmd 
     sb.call(cmd,shell=True)
-
-
-
 
