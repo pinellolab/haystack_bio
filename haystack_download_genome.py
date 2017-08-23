@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from haystack.haystack_download_genome_CORE import main
+from haystack.download_genome import main
 
 
 if __name__ == '__main__':

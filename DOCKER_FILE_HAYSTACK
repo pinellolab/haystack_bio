@@ -10,10 +10,8 @@ FROM ubuntu:16.04
 MAINTAINER Luca Pinello 
 
 RUN apt-get update && apt-get install git wget default-jre python-setuptools python-pip python-dev python-numpy python-scipy python-matplotlib python-pandas python-imaging python-setuptools unzip ghostscript make gcc g++ zlib1g-dev zlib1g -y
-
+RUN pip install weblogo pybedtools tqdm
 RUN pip install haystack_bio --no-use-wheel --verbose
-
-RUN haystack_download_genome hg19
-RUN haystack_download_genome mm9
+RUN haystack_download_genome hg19 --yes
 
 

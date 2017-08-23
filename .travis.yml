@@ -2,9 +2,9 @@ language: python
 
 matrix:
     include:
-        - os: linux
-          dist: trusty
-          python: 2.7
+#        - os: linux
+#          dist: trusty
+#          python: 2.7
         - os: linux
           dist: Xenial
           python: 2.7

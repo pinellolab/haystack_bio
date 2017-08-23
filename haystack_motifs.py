@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from haystack.haystack_motifs_CORE import main
+from haystack.find_motifs import main
 
 
 if __name__ == '__main__':

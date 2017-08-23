@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from haystack.haystack_pipeline_CORE import main
+from haystack.run_pipeline import main
 
 
 if __name__ == '__main__':
