@@ -1222,8 +1222,6 @@ def generate_weblogo(motif_id,meme_filename,output_filename,file_format='png',ti
     #width, height = width*scale, height*scale
     tmp     = tempfile.mktemp() + '.fsa'
     seqs2fasta(kmers,tmp)
-
-    tmp= "/home/rick/cap.fa"
     cmd = 'weblogo -F %s  -A dna  -f %s  -o %s  -t "%s"  --size large --errorbars NO  --fineprint "" '%(file_format, tmp, output_filename, title)
     #print cmd 
     sb.call(cmd,shell=True)
