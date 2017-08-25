@@ -17,7 +17,7 @@ RUN ln -s /haystack_bio/binaries/sambamba_v0.6.6 /haystack_bio/binaries/sambamba
 
 RUN apt-get update && \
     apt-get install -y bedtools default-jre python-setuptools python-pip python-dev python-numpy python-scipy python-matplotlib python-pandas python-imaging unzip libxml2-dev libxslt1-dev zlib1g-dev zlib1g libexpat1-dev libhtml-template-perl libxml-simple-perl libsoap-lite-perl imagemagick python-setuptools && \
-    pip install weblogo pybedtools tqdm && \
+    pip install bx-python weblogo pybedtools tqdm Jinja2 && \
     cpan Log::Log4perl HTML::PullParser HTML::Parse CGI::Application common::sense Types::Serialiser  XML::Compile::SOAP11 XML::Compile::WSDL11 XML::Compile::Transport::SOAPHTTP Math::CDF JSON && \
     apt-get remove -y python-pip && \
     rm -rf /var/lib/apt/lists/*
