@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Description: 
-Setup script for Haystack -- Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline
+Setup script for haystack_bio -- Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline
 @status:  beta
 @version: $Revision$
 @author:  Luca Pinello

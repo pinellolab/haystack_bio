@@ -1,22 +1,27 @@
+
+{% set version = "0.5.0" %}
+
+build:
+    number: 0
+
 package:
   name: haystack_bio
-  version: 'v0.5.0'
+  version: {{ version }}
 source:
-  fn:  haystack_bio-0.5.0.tar.gz
-  url: https://github.com/rfarouni/haystack_bio/archive/v0.5.0.tar.gz
+  fn:  haystack_bio-{{ version }}.tar.gz
+  url: https://github.com/rfarouni/haystack_bio/archive/{{ version }}.gz
   md5: 48596169d07f8368d394d752bd2748bd
 
 build:
   number: 0
   skip: true # [not py27 and osx]
   entry_points:
-    - haystack_pipeline = haystack.haystack_pipeline_CORE:main
-    - haystack_hotspots =  haystack.haystack_hotspots_CORE:main
-    - haystack_motifs = haystack.haystack_motifs_CORE:main
-    - haystack_tf_activity_plane = haystack.haystack_tf_activity_plane_CORE:main
-    - haystack_download_genome = haystack.haystack_download_genome_CORE:main
+    - haystack_pipeline = haystack.run_pipeline:main
+    - haystack_hotspots =  haystack.find_hotspots:main
+    - haystack_motifs = haystack.find_motifs:main
+    - haystack_tf_activity_plane = haystack.generate_tf_activity_plane:main
+    - haystack_download_genome = haystack.download_genome:main
     - haystack_run_test = haystack.haystack_common:run_testdata
-
 about:
     home: https://github.com/rfarouni/haystack_bio
     license: GPLv3
@@ -30,7 +35,8 @@ requirements:
     - meme
     - ucsc-bigwigaverageoverbed
     - ucsc-bedgraphtobigwig
-    - ghostscript ==9.10
+    - ghostscript
+    - weblogo
 
   run:
     - openjdk
@@ -39,7 +45,7 @@ requirements:
     - sambamba
     - ucsc-bigwigaverageoverbed
     - ucsc-bedgraphtobigwig
-    - ghostscript ==9.10
+    - ghostscript
     - bx-python 
     - numpy 
     - scipy 
@@ -47,6 +53,7 @@ requirements:
     - jinja2 
     - pandas
     - pybedtools
+    - weblogo
 test:
   commands:
     - haystack_hotspots -h
