@@ -12,7 +12,6 @@ WORKDIR /haystack_bio
 # Copy the current directory contents into the container at /haystack_bio
 COPY . /haystack_bio 
 
-VOLUME /haystack_bio/haystack/haystack_data/genomes
 
 ENV PATH /haystack_bio/binaries:/haystack_bio/binaries/meme/bin:$PATH
 
@@ -78,7 +77,6 @@ RUN apt-get update \
     curl \
 	&& rm -rf /var/lib/apt/lists/*
 
-
 WORKDIR /haystack_bio/binaries/meme_4.12.0 
 
 RUN ./configure --prefix=/haystack_bio/binaries/meme \
@@ -90,7 +88,7 @@ RUN ./configure --prefix=/haystack_bio/binaries/meme \
 
 WORKDIR /haystack_bio
 
-RUN python setup.py install \
-	&& haystack_download_genome hg19 --yes \
-	&& haystack_run_test
+RUN python setup.py install
+
+VOLUME /usr/local/lib/python2.7/dist-packages/haystack_bio-0.5.0-py2.7.egg/haystack/haystack_data/genomes/
 
