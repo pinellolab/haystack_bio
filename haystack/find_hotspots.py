@@ -220,6 +220,7 @@ def create_tiled_genome(genome_name,
 
     from re import search
     genome_directory = determine_path('genomes')
+    annotations_directory = determine_path('gene_annotations')
 
     genome_sorted_bins_file = os.path.join(output_directory, '%s.%dbp.bins.sorted.bed'
                                            % (os.path.basename(genome_name), bin_size))
@@ -247,7 +248,7 @@ def create_tiled_genome(genome_name,
             tiled_genome.saveas(genome_sorted_bins_file)
         elif blacklist=='hg19':
             info('Using hg19 blacklist file %s to filter out the regions' %blacklist)
-            blacklist_filepath = os.path.join(genome_directory,
+            blacklist_filepath = os.path.join(annotations_directory,
                                               'hg19_blacklisted_regions.bed')
             check_file(blacklist_filepath)
             tiled_genome.intersect(blacklist_filepath,

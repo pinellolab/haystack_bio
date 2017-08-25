@@ -45,14 +45,15 @@ def main():
             'Programming Language :: Python',
         ],
         install_requires=[
-            'numpy>=1.8.2',
+            'numpy>=1.12.1',
             'pandas>=0.13.1',
             'matplotlib>=1.3.1',
             'scipy>=0.13.3',
             'jinja2>=2.7.3',
-            'bx-python>=0.7.3',
             'pybedtools>=0.7.10',
-            'tqdm>=4.15.0']
+            'tqdm>=4.15.0',
+            'weblogo>=3.5.0',
+            'bx-python>=0.7.3']
     )
 
 if __name__ == '__main__':
@@ -60,5 +61,3 @@ if __name__ == '__main__':
     check_required_packages()
     print("Installing Package")
     main()
-   # print("Copying Data")
-   # copy_haystack_data()
