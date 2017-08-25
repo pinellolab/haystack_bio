@@ -19,7 +19,6 @@ def main():
         include_package_data=True,
         packages=["haystack"],
         package_dir={'haystack': 'haystack'},
-        package_data={'haystack': ['./haystack_data']},
         entry_points={
             "console_scripts": ['haystack_pipeline = haystack.run_pipeline:main',
                                 'haystack_hotspots =  haystack.find_hotspots:main',
