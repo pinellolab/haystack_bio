@@ -418,14 +418,17 @@ After the installation is complete you can download the Docker image for ***hays
 
 	docker pull lucapinello/haystack_bio
 
-To run ***haystack_bio*** use the following command:
+To launch an instance of the ***haystack_bio*** image, first create a _haystack_genomes_ folder in your home directory to keep a persistent copy of the genomes you will or have already downloaded,
+ then run docker container using the *_v* option to link the full path of the  _haystack_genomes_  folder you have created on host to the  _haystack_genomes_ folder that already exists inside the _haystack_bio_ container
 
-	docker run -v ${PWD}:/DATA -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
+    docker run   -v ${HOME}/haystack_genomes:/haystack_genomes haystack_bio COMMAND
+
+where _COMMAND_  refers to one of the commands discussed above. For example, to run the entire pipeline, use
+
+	docker run   -v ${HOME}/haystack_genomes:/haystack_genomes haystack_bio COMMAND haystack_pipeline samples_names.txt hg19 
 	
 If you get memory errors try to allocate at least 8GB to the docker image in order to run ***haystack_bio***. 
-If you run Docker on Window you have to specify the full path of the data:
 
-	docker run -v //c/Users/Luca/Downloads/TEST_DATASET:/DATA -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
 
 ### **Manual Installation**
 

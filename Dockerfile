@@ -12,7 +12,6 @@ WORKDIR /haystack_bio
 # Copy the current directory contents into the container at /haystack_bio
 COPY . /haystack_bio 
 
-
 ENV PATH /haystack_bio/binaries:/haystack_bio/binaries/meme/bin:$PATH
 
 RUN apt-get update \
@@ -90,5 +89,6 @@ WORKDIR /haystack_bio
 
 RUN python setup.py install
 
-VOLUME /usr/local/lib/python2.7/dist-packages/haystack_bio-0.5.0-py2.7.egg/haystack/haystack_data/genomes/
+RUN  ln -s /usr/local/lib/python2.7/dist-packages/haystack_bio-0.5.0-py2.7.egg/haystack/haystack_data/genomes/ /haystack_genomes
+VOLUME /haystack_genomes
 
