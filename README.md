@@ -40,13 +40,13 @@ Installation
 The software has been tested on CentOS 6.5, Ubuntu 14.04 LTS, Ubuntu 16.04 LTS, OS X 10.11, and OS X 10.12. 
 Although ***haystack_bio*** supports only 64-bit Linux and macOS, it can be run on Windows systems using a Docker container. For instructions on how to install the Docker software and the docker image, please see below.
 
-**Bioconda Installation for Linux and MacOS**
+**Bioconda installation for Linux and macOS**
 
 ***haystack_bio*** depends on several other Python packages and a number of bioinformatics software tools in order to run. The easiest way to install ***haystack_bio*** is through Bioconda, 
 a software repository channel for the conda package manager, configured on your system. Bioconda streamlines the process of building and installing any software dependency that a package requires. 
 By running the following lines of code, ***haystack_bio*** and its dependencies can be installed automatically.  
 The entire installation process consists of three steps: installing Miniconda, adding the Bioconda channel, and installing ***haystack_bio***. 
-For the following steps, we are assuming you are on a 64-bit Linux or a MacOS system and that you have not installed Miniconda/Anaconda before on your system. 
+For the following steps, we are assuming you are on a 64-bit Linux or a macOS system and that you have not installed Miniconda/Anaconda before on your system. 
 
 **Step 1**: Download the latest Miniconda 2 (Python 2.7) to your home directory.
 
@@ -101,12 +101,12 @@ Also note that this command downloads the hg19 genome build from the [UCSC serve
 
     $HOME/miniconda/lib/python2.7/site-packages/haystack/haystack_data/genomes
   
-Also note that the *hg19.2bit* file is 778M in size and could take a long time to download on a slow connection. 
+Note that the path could be slightly different depending on the Anaconda/Miniconda version installed (e.g. $HOME/miniconda2). Also note that the *hg19.2bit* file is 778M in size and could take a long time to download on a slow connection. 
 To test whether the entire pipeline can run without any problems on your system, please run  
     
          haystack_run_test
 
-Note: Since the sample test data included in the package is limited to  a small fraction of the genome (i.e. Chromosome 21) and is for four  cell types only,
+Since the sample test data included in the package is for 4 cell types only and is limited to a small fraction of the genome (i.e. Chromosome 21), the motif analysis step in the pipeline might not return any positive findings. The test run output can be found in the folder $HOME/haystack_test_output. Since the sample test data included in the package is limited to  a small fraction of the genome (i.e. Chromosome 21) and is for four  cell types only,
 the final motif analysis step in the pipeline might not return any positive findings. The test run output can be found in the folder $HOME/haystack_test_output. 
 
 How to use *haystack_bio*
@@ -114,7 +114,7 @@ How to use *haystack_bio*
 
 ***haystack_bio*** consists of the following three modules.
 
-1) **haystack_hotspots**: finds regions that are variable across different ChIP-seq, DNase-seq or Bisulfite-seq tracks (only BigWig processed file are supported for methylation data). 
+1) **haystack_hotspots**: finds regions that are variable across different ChIP-seq, DNase-seq or Bisulfite-seq tracks (only bigWig processed file are supported for methylation data). 
 2) **haystack_motifs**: finds enriched transcription factor motifs in a given set of genomic regions.
 3) **haystack_tf_activity_plane**: quantifies the specificity and the activity of the TFs highlighed by the **haystack_motif** integrating gene expression data.
 
@@ -214,7 +214,7 @@ optional arguments:
   --version             Print version and exit.
 ````
 
-### Walk-Through Example Using Data from Six Cell Types
+### A walk-through example using ENCODE ChIP-seq data for the H3K27ac histone mark in six cell types
 -------------------
 
 In this section, we showcase the commands using the example we have in the paper. We recreate the output produced by the pipeline when running on the entire genome with six cell types.
@@ -232,7 +232,7 @@ Inside the folder you will see a _samples_names.txt_ file containing the relativ
 The file is a tab delimited text file with three columns containing 
 
 1. The sample name (cell type)
-2. The path of the corresponding bam file 
+2. The path of the corresponding BAM file 
 3. The path of the gene expression file. Note that this last column is optional.
 
 ```
@@ -249,18 +249,25 @@ Step 3: Run the pipeline
 	 haystack_pipeline ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19 
 
 The *haystack_pipeline* command saves the output to the folder "HAYSTACK_OUTPUT_H3K27Aac" in your home directory. All the results will be stored in inside the sub-folder HAYSTACK_PIPELINE_RESULT. 
-This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset.
+This will recreate the panels and the plots showed in the figure present in the summary, plus other panels and plots for all the other cell-types contained in the test dataset. 
+
+The --blacklist command accepts a file of blacklisted genomic regions in BED format. We suggest excluding those regions since they are characterized by artifact signals. 
+For hg19, we have provided a BED file of blacklisted regions inside the package and this can be automatically loaded specifying just the string ‘hg19’ as in our example. 
+This file was obtained merging the ENCODE Data Analysis Consortium (DAC) Blacklisted Regions, the Duke Excluded Regions, and gap locations such as centromeres, telomeres, and contigs into one file.
+
 The *haystack_pipeline* command is equivalent to running *haystack_hotspots* followed by *haystack_motifs* and *haystack_tf_activity_plane*.
 The inputs and outputs of the three modules of the pipeline are as follows.
 
 #### Module 1: *haystack_hotspots*
+
+This step finds hotspots, which we define as regions that are highly variable among different cell types for a given epigenetic mark.
 
 **Sub-command run by _haystack_pipeline_**: 	
 
        haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
 
 **Input**: 
- - The first two columns of _samples_names.txt_  containing (1) the sample name and (2) the full path of the corresponding .bam/.bw file. 
+ - The first two columns of _samples_names.txt_  containing (1) the sample name and (2) the full path of the corresponding BAM or bigWig file. 
      
      ```
     K562	./INPUT_DATA/K562H3k27ac_sorted_rmdup.bam	
@@ -274,14 +281,14 @@ The inputs and outputs of the three modules of the pipeline are as follows.
  - An optional bed file with blacklisted regions (the one for hg19 has been provided)
 
 **Output**: 
-- The normalized bigwig files for each of the six samples.
+- The normalized bigWig files for each of the six samples.
 - A file of specific regions for each of the six samples. These are regions in which the signal is more enriched for a particular sample compared to the rest.
 - A file of background regions for each of the six samples. 
 - A SELECTED_VARIABILITY_HOTSPOT.bedgraph file containing the hotspots (i.e. regions that are most variable)
 - A session file (.xml) for the IGV software (http://www.broadinstitute.org/igv/) from the Broad Institute to easily visualize all the tracks produced, 
 the hotspots and the specific regions for each cell line. To load it just drag and drop the file _OPEN_ME_WITH_IGV.xml_ from the output folder on top of the IGV window or alternatively load it in IGV with File-> Open Session... If you have trouble opening the file please update your IGV version. Additionally, please don't move the .xml file only, you need all the files in the output folder to correctly load the session.
 
-Figure 2 is a screenshot of the IGV browser showing the bigwig tracks, the hotspots, and the specific regions.
+Figure 2 is a screenshot of the IGV browser showing the bigWig tracks, the hotspots, and the specific regions.
 
 <p align="center">
 <figure>
@@ -290,6 +297,8 @@ Figure 2 is a screenshot of the IGV browser showing the bigwig tracks, the hotsp
 </p>
 
 #### Module 2: **haystack_motifs**
+
+This step takes in a set of genomic region hotspots for each cell-type sample and identifies transcription factors whose binding sequence motifs are enriched in those regions.
 
 **Sub-command run by _haystack_pipeline_** (for each sample): 	
 
@@ -326,6 +335,9 @@ Each row in the table corresponds to an enriched motif. There are 12 columns in 
 
 
 #### Module 3: **haystack_tf_activity_plane**
+
+This step acts as an additional filter to restrict the set of enriched transcription factors found in the previous step to those that also exhibit statistically 
+significant correlations with the expression of genes found in hotspot regions.
 
 **Sub-command run by _haystack_pipeline_** (for each sample): 	
 
@@ -375,7 +387,7 @@ Notes
 
 - **IMPORTANT:** Folder names and file paths should not have white spaces. Please use underscore instead. 	
 
-- If you are running haystack_hotspots using bigwig files you need to add the option: **--input_is_bigwig**
+- If you are running haystack_hotspots using bigWig files you need to add the option: **--input_is_bigwig**
 
 - The *haystack_download_genome* command allows you to download and add a reference genomes from UCSC to ***haystack_bio*** in the appropriate format. 
 To download a  particular genome run: 
@@ -388,7 +400,7 @@ To download a  particular genome run:
 
         haystack_hotspots ./TEST_DATASET/samples_names.txt  hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
 
-    or you can run it without creating a _samples_names.txt_ file by providing the folder containing the BAM or bigwig files. Note, however, that in this case the pipeline runs Module 1 and  Module 2, but not Module 3, since no gene expression data are provided.
+    or you can run it without creating a _samples_names.txt_ file by providing the folder containing the BAM or bigWig files. Note, however, that in this case the pipeline runs Module 1 and  Module 2, but not Module 3, since no gene expression data are provided.
 
         haystack_pipeline ./TEST_DATASET/ hg19 --output_directory $HOME/HAYSTACK_OUTPUT_H3K27Aac --blacklist hg19
 		
@@ -401,11 +413,11 @@ to analyze the bed file file _myregions.bed_ on the _hg19_ genome run
 	
 	    haystack_motifs myregions.bed hg19 --bed_bg_filename mybackgroundregions.bed
 
-    To use a particular motif database (the default is JASPAR) use
+  To use a particular motif database (the default is JASPAR) use
 	
 	    haystack_motifs myregions.bed hg19 --meme_motifs_filename my_database.meme
 
-    The database file must be in the MEME format: http://meme.nbcr.net/meme/doc/meme-format.html#min_format		
+  The database file must be in the MEME format: http://meme.nbcr.net/meme/doc/meme-format.html#min_format		
 
 Other Installation Options
 -------------------
@@ -421,11 +433,21 @@ After the installation is complete you can download the Docker image for ***hays
 To launch an instance of the ***haystack_bio*** image, first create a _haystack_genomes_ folder in your home directory to keep a persistent copy of the genomes you will or have already downloaded,
  then run docker container using the *_v* option to link the full path of the  _haystack_genomes_  folder you have created on host to the  _haystack_genomes_ folder that already exists inside the _haystack_bio_ container
 
-    docker run   -v ${HOME}/haystack_genomes:/haystack_genomes haystack_bio COMMAND
+    docker run  -v ${HOME}/haystack_genomes:/haystack_genomes haystack_bio COMMAND
 
-where _COMMAND_  refers to one of the commands discussed above. For example, to run the entire pipeline, use
+where _COMMAND_  refers to one of the commands discussed above.  The *-v* option links the fullpath of the haystack_genomes folder you have created on your host to the haystack_genomes  folder used inside the haystack_bio container. 
+You need also to mount the data folder containing the files you are going to use with an additional *-v* option. For example, assuming you have the samples_names.txt and the bam files listed in it the current folder, you can use the following command
 
-	docker run   -v ${HOME}/haystack_genomes:/haystack_genomes haystack_bio COMMAND haystack_pipeline samples_names.txt hg19 
+    docker run -v ${PWD}:/DATA \
+               -v {HOME}/haystack_genomes:/haystack_genomes \
+               -w /DATA -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
+    
+If you run Docker on Window you should specify the full path of the data as such
+
+    docker run -v //c/Users/Luca/Downloads/TEST_DATASET:/DATA \
+               -v //c/Users/Luca/haystack_genomes:/haystack_genomes \ 
+               -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 	
+	
 	
 If you get memory errors try to allocate at least 8GB to the docker image in order to run ***haystack_bio***. 
 
@@ -463,6 +485,10 @@ Python 2.7  packages
 After installing all the dependencies, please download the repository and execute the command inside the root folder.
 
     python setup.py install 
+    
+    
+The docker image recipe found in [Dockerfile](Dockerfile) installs and builds the above-listed dependencies on Ubuntu 16.04.  
+You can modify the build steps to manually install haystack_bio on macOS and Centos platforms.    
 
 
 Jupyter Analysis Notebook
