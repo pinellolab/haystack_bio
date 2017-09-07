@@ -19,8 +19,7 @@ except:
 
 # commmon functions
 from haystack_common import determine_path, which, check_file, initialize_genome
-HAYSTACK_VERSION = "0.5.0"
-
+HAYSTACK_VERSION = "0.5.1"
 # dependencies
 from bioutilities import  Coordinate, Sequence, Fimo
 import numpy as np

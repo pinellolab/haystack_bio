@@ -5,8 +5,8 @@ package:
 
 source:
   fn:  haystack_bio.{{ version }}.tar.gz
-  url: https://github.com/rfarouni/haystack_bio/archive/.{{ version }}.tar.gz
-  md5: 9a17fe6ed3fc4e9b8b90eb3a8ef3b457
+  url: https://github.com/rfarouni/haystack_bio/archive/{{ version }}.tar.gz
+  md5: ed10524601688b88acd3237be0f9651e
 
 build:
   number: 1

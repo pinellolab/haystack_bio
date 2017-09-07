@@ -21,7 +21,7 @@ warn = logging.warning
 debug = logging.debug
 info = logging.info
 
-HAYSTACK_VERSION = "0.5.0"
+HAYSTACK_VERSION = "0.5.1"
 
 
 do_not_recompute = None
