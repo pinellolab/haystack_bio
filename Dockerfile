@@ -90,5 +90,4 @@ WORKDIR /haystack_bio
 RUN python setup.py install
 
 RUN  ln -s /usr/local/lib/python2.7/dist-packages/haystack_bio-0.5.0-py2.7.egg/haystack/haystack_data/genomes/ /haystack_genomes
-VOLUME /haystack_genomes
 

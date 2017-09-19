@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Apr 22 15:16:12 2016
 
-@author: lpinello
-"""
 import subprocess as sb
 import sys
 import logging

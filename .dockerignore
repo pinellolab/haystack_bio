@@ -1,5 +1,3 @@
 # comment
  *.md
-haystack/haystack_data/genomes/*
 .*
-binaries

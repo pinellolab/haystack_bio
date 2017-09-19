@@ -232,7 +232,7 @@ def main(input_args=None):
                                    label='rest of cell-types')
                         ax.plot(tf_values[target_cell_type], ds_values[target_cell_type], '*r', markersize=30,
                                 linestyle='None', label=target_cell_type)
-                        ax.legend(loc='center', bbox_to_anchor=(0.5, -0.1), ncol=3, fancybox=True, shadow=True,
+                        ax.legend(loc='center', bbox_to_anchor=(0.5, -0.25), ncol=3, fancybox=True, shadow=True,
                                   numpoints=1)
 
                         ax.set_aspect('equal')
