@@ -439,14 +439,14 @@ where _COMMAND_  refers to one of the commands discussed above.  The *-v* option
 You need also to mount the data folder containing the files you are going to use with an additional *-v* option. For example, assuming you have the samples_names.txt and the bam files listed in it the current folder, you can use the following command
 
     docker run -v ${PWD}:/DATA \
-               -v {HOME}/haystack_genomes:/haystack_genomes \
-               -w /DATA -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 
+               -v ${HOME}/haystack_genomes:/haystack_genomes \
+               -w /DATA -it lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19  --blacklist hg19
     
 If you run Docker on Window you should specify the full path of the data as such
 
     docker run -v //c/Users/Luca/Downloads/TEST_DATASET:/DATA \
                -v //c/Users/Luca/haystack_genomes:/haystack_genomes \ 
-               -w /DATA  -i lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 	
+               -w /DATA  -it lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 	--blacklist hg19
 	
 	
 If you get memory errors try to allocate at least 8GB to the docker image in order to run ***haystack_bio***. 
