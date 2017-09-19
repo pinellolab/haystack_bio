@@ -171,20 +171,92 @@ class TqdmUpTo(tqdm):
         self.update(b * bsize - self.n)  # will also set self.n = b * bsize
 
 
+def check_md5sum(genome_filename, genome_name):
+
+    import hashlib
+
+    def hash_bytestr_iter(bytesiter, hasher, ashexstr=True):
+        # taken from https://stackoverflow.com/a/3431835
+
+        for block in bytesiter:
+            hasher.update(block)
+        return (hasher.hexdigest() if ashexstr else hasher.digest())
+
+    def file_as_blockiter(afile, blocksize=65536):
+        # taken from https://stackoverflow.com/a/3431835
+
+        with afile:
+            block = afile.read(blocksize)
+            while len(block) > 0:
+                yield block
+                block = afile.read(blocksize)
+
+
+    md5_dic = {"hg38": "dcc3ea27079aa6dc3f9deccd7275e0f8",
+               "hg19": "bcdbfbe9da62f19bee88b74dabef8cd3",
+               "hg18": "05e8d31e39545273914397ad6204448e",
+               "mm10": "fcfcc276799031793a513e2e9c07adad",
+               "mm9": "e47354d24b9d95e832c337d42b9f8f71",
+               "ce10": "3d0bab4bc255fc5b3276a476e13d230c",
+               "sacCer3": "880201a7d1ec95c0185b0b4783c80411",
+               "sacCer2": "ed3b980b89a22f7d869091bee874d4b5",
+               "dm6": "62f44f8cbf76c78ce923cb6d87559963",
+               "dm3": "4ec509b470010829be44ed8e7bfd7f57"}
+
+
+    if genome_name in md5_dic.keys():
+
+        md5_source = md5_dic[genome_name]
+
+        md5_hash_returned = hash_bytestr_iter(file_as_blockiter(open(genome_filename, 'rb')),
+                                              hashlib.md5())
+
+        check_flag = (md5_source == md5_hash_returned)
+
+        if check_flag:
+            info("MD5 verification Succeeded!")
+        else:
+            info("MD5 verification failed!.")
+
+    else:
+        info( 'Cannot verify MD5 sum. The MD5 hash for %s is not found in the internal saved list' %genome_name )
+        info(' '.join(md5_dic.keys()))
+        check_flag= True
+
+    return check_flag
+
 def initialize_genome(genome_name, answer):
+
     from bioutilities import Genome_2bit
     import urllib
-    info('Initializing Genome:%s' % genome_name)
 
+    info('Initializing Genome:%s' % genome_name)
     genome_directory = determine_path('genomes')
     info('genome_directory: %s' % genome_directory)
     genome_filename = os.path.join(genome_directory, "%s.2bit" % genome_name)
     chr_len_filename = os.path.join(genome_directory, "%s_chr_lengths.txt" % genome_name)
     meme_bg_filename = os.path.join(genome_directory, "%s_meme_bg" % genome_name)
 
+    download_genome = True
     if os.path.exists(genome_filename):
-                info('File %s exists, skipping download' % genome_filename)
-    else:
+
+        try:
+            Genome_2bit(genome_filename, verbose=True)
+
+            md5_check_flag = check_md5sum(genome_filename, genome_name)
+
+            if md5_check_flag:
+                download_genome = False
+                info('File %s exists. Skipping genome download' % genome_filename)
+
+            else:
+                download_genome = True
+        except:
+            download_genome = True
+            error("Unable to check MD5 sum. Downloading genome.")
+
+
+    if download_genome:
         if answer or query_yes_no('Should I download it for you?'):
             urlpath = "http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % (genome_name, genome_name)
             info('Downloading %s in %s...' % (urlpath, genome_filename))
