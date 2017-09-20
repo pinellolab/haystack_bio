@@ -358,7 +358,7 @@ Other Installation Options
 Note: For Linux platforms, make sure to run the Docker post-installation instructions so you can run the command without sudo privileges.
 After the installation is complete you can download the Docker image for haystack_bio by simply running
 
-        docker pull lucapinello/haystack_bio
+        docker pull pinellolab/haystack_bio
 
 Before using the haystack_bio image, first create a haystack_genomes folder in your home directory to keep a persistent copy of the genomes you will be downloading:
 
@@ -370,13 +370,13 @@ the BAM files listed in it the current folder, you can use the following command
 
         docker run -v ${PWD}:${HOME}/data_h3k27ac_6cells
                    -v ${HOME}/haystack_genomes:/haystack_genomes
-                   -w ${HOME}/data_h3k27ac_6cells -it lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19  --blacklist hg19
+                   -w ${HOME}/data_h3k27ac_6cells -it pinellolab/haystack_bio haystack_pipeline samples_names.txt hg19  --blacklist hg19
 
 If you run Docker on Window you should specify the full path of the data as such
 
-        docker run -v //c/Users/Luca/Downloads/data_h3k27ac_6cells:/data_h3k27ac_6cells
-                   -v //c/Users/Luca/haystack_genomes:/haystack_genomes
-                   -w /data_h3k27ac_6cells  -it lucapinello/haystack_bio haystack_pipeline samples_names.txt hg19 --blacklist hg19
+        docker run -v //c/Users/pinellolab/Downloads/data_h3k27ac_6cells:/data_h3k27ac_6cells
+                   -v //c/Users/pinellolab/haystack_genomes:/haystack_genomes
+                   -w /data_h3k27ac_6cells  -it pinellolab/haystack_bio haystack_pipeline samples_names.txt hg19 --blacklist hg19
 
 If you get memory errors, try to allocate at least 8GB to the docker container in order to run haystack_bio.  Running other commands can be done with the same syntax.
 
@@ -542,7 +542,10 @@ optional arguments:
                         for the human genome 19, otherwise provide the
                         filepath for a bed file with blacklisted regions.
   --chrom_exclude CHROM_EXCLUDE
-                        Exclude chromosomes. For example (_|chrM|chrX|chrY).
+                        Exclude chromosomes that contain given (regex) string.
+                        For example _random|chrX|chrY excludes
+                        random, X, and Y chromosome regions
+                        (default='_|chrM|chrX|chrY)
   --read_ext READ_EXT   Read extension in bps (default: 200)
   --temp_directory TEMP_DIRECTORY
                         Directory to store temporary files (default: /tmp)
@@ -581,7 +584,10 @@ optional arguments:
                        Output directory (default: current directory)
  --bin_size BIN_SIZE   bin size to use(default: 500bp)
  --chrom_exclude CHROM_EXCLUDE
-                       Exclude chromosomes. For example (_|chrM|chrX|chrY).
+                        Exclude chromosomes that contain given (regex) string.
+                        For example _random|chrX|chrY excludes
+                        random, X, and Y chromosome regions
+                        (default='_|chrM|chrX|chrY)
  --th_rpm TH_RPM       Percentile on the signal intensity to consider for the
                        hotspots (default: 99)
  --transformation {angle,log2,none}
