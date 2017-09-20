@@ -97,7 +97,7 @@ def get_args():
     parser.add_argument('--chrom_exclude',
                         type=str,
                         help='Exclude chromosomes that contain given (regex) string. For example _random|chrX|chrY excludes  random, X, and Y chromosome regions',
-                        default='_|chrM|chrX|chrY')
+                        default='_|chrX|chrY')
     parser.add_argument('--th_rpm',
                         type=float,
                         help='Percentile on the signal intensity to consider for the hotspots (default: 99)',
