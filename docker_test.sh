@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 
-docker pull lucapinello/haystack_bio
+docker pull pinellolab/haystack_bio
 mkdir ${HOME}/haystack_genomes
 wget https://www.dropbox.com/s/4yjx7ypj0c82ryh/data_h3k27ac_6cells.zip?dl=1
 unzip data_h3k27ac_6cells.zip?dl=1 -d $HOME
