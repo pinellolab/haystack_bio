@@ -374,9 +374,9 @@ the BAM files listed in it the current folder, you can use the following command
 
 If you run Docker on Window you should specify the full path of the data as such
 
-        docker run -v //c/Users/pinellolab/Downloads/data_h3k27ac_6cells:/data_h3k27ac_6cells
-                   -v //c/Users/pinellolab/haystack_genomes:/haystack_genomes
-                   -w /data_h3k27ac_6cells  -it pinellolab/haystack_bio haystack_pipeline samples_names.txt hg19 --blacklist hg19
+        docker run -v ${PWD}:/data_h3k27ac_6cells
+                   -v ${HOME}/haystack_genomes:/haystack_genomes
+                    -w /data_h3k27ac_6cells -it pinellolab/haystack_bio haystack_pipeline samples_names.txt hg19  --blacklist hg19
 
 If you get memory errors, try to allocate at least 8GB to the docker container in order to run haystack_bio.  Running other commands can be done with the same syntax.
 

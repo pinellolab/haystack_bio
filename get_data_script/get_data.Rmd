@@ -1,0 +1,354 @@
+---
+title: "Get Epigenome RoadMap Data"
+author: "Rick Farouni"
+date: "Sep 2017"
+output:
+  html_document:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+
+### Load Packages
+
+```{r, eval=FALSE}
+source("https://bioconductor.org/biocLite.R")
+biocLite("AnnotationHub")
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(AnnotationHub)
+library(biomaRt)
+library(tidyverse) # ggplot2, dplyr, tidyr, readr, purrr, tibble
+library(stringr) # string manipulation
+library(data.table)
+```
+
+
+### Set directory paths
+
+```{r}
+proj_dir <- "/mnt/hd2/Dropbox (Partners HealthCare)/projects/2017_06_haystack/get_data_script"
+
+#proj_dir <- "/data/pinello/PROJECTS/2017_06_HAYSTACK/haystack_bio/get_data_script"
+sample_names_dir <-  file.path(proj_dir,  "sample_names")
+#dir.create(sample_names_dir)
+output_dir <- file.path(proj_dir,"files_source_urls")
+
+data_dir <- "/data/molpath/common_data/roadmap"
+bigwig_dir <- file.path(data_dir, "bigwig") 
+rpkm_output_dir <- file.path(data_dir, "gene_expression" ,"rpkm")
+
+
+#dir.create(rpkm_output_dir)
+```
+
+### Download Gene expression metadata
+
+
+```{r, eval=FALSE}
+
+download.file("http://egg2.wustl.edu/roadmap/data/byDataType/rna/expression/EG.name.txt",
+              "EG.name.txt")
+```
+
+
+### Read data
+
+```{r}
+eg_names <- fread(input = "EG.name.txt", 
+                    header = FALSE, 
+                    col.names = c("epigenome", 
+                                  "celltypes")) %>% 
+  filter(epigenome != "E000" )
+
+eg_names 
+```
+
+
+## Get experiments metada from RoadMap Epigenomics
+
+```{r , message=FALSE, warning=FALSE}
+
+ah <- AnnotationHub()
+
+# Searching for  epigenomes in the roadmap database
+
+epiFiles <- query(ah, c("EpigenomeRoadMap", "^E"))
+epiFiles <- query(epiFiles , c( "H3K27ac.fc.signal.bigwig",
+                                "H3K27me3.fc.signal.bigwig",
+                                "H3K4me3.fc.signal.bigwig",
+                                "DNase.fc.signal.bigwig",
+                                "WGBS_FractionalMethylation.bigwig"), 
+                  pattern.op= `|`)
+
+epiFiles
+```
+
+
+## Create  epigenome-by-mark array 
+
+```{r}
+RMEP_dt <- data.table(title= epiFiles$title,
+                          sourceurl= epiFiles$sourceurl) %>%
+    bind_cols(do(., data.frame(
+      str_split(.$title,
+                "-|.fc|_WGBS_",
+                simplify = TRUE)[,1:2],
+      stringsAsFactors = FALSE)))  %>%
+  select(-title) %>%
+  rename( epigenome= "X1",
+          mark= "X2") %>%
+     mutate(mark=replace(mark, 
+                         mark== "FractionalMethylation.bigwig", 
+                         "methylation"))
+
+marks <- RMEP_dt %>% 
+  select(mark) %>% 
+  unique  %>% 
+  unlist
+
+RMEP_dt
+```
+
+
+
+```{r}
+epifiles_dt<- RMEP_dt %>% 
+  dcast( epigenome ~ mark )
+
+epifiles_dt
+```
+
+## Filter Epigenomes
+
+Epigenomes that have gene expression data
+
+```{r , message=FALSE, warning=FALSE}
+epifiles_dt  <- left_join(eg_names,
+                          epifiles_dt,
+                      by='epigenome')
+
+epifiles_dt
+```
+
+
+Number of epigenomes with gene expression data that have 1, 2, 3, or 4 of the marks (DNase, methylation, H3K27ac, H3K27me3 ) 
+```{r}
+epifiles_dt$marks_num <- epifiles_dt %>%
+     select(-epigenome, -celltypes)  %>%
+     is.na %>% 
+    `!` %>% 
+    rowSums 
+
+epifiles_dt
+```
+
+### Frequency counts of marks
+
+```{r}
+epifiles_dt %>% 
+  select(marks_num) %>% 
+  table
+
+```
+
+
+Epigenomes with all 5 marks
+
+```{r}
+epifiles_dt %>%
+  filter(marks_num==5)
+```
+
+Epigenomes with  4 or 5 marks
+
+```{r}
+selected_epigenomes <- epifiles_dt %>%
+  filter(marks_num >=4) %>%
+  arrange(marks_num) %>%
+  filter(epigenome!="E056")
+
+selected_epigenomes 
+```
+
+
+## Save source urls to file
+
+
+```{r, eval=FALSE}
+for (mark_target in marks){
+  RMEP_dt  %>% 
+  filter(epigenome %in% selected_epigenomes$epigenome) %>% 
+  filter(mark == mark_target )  %>% 
+  select(sourceurl) %>% 
+   fwrite(file= file.path(output_dir, paste0(mark_target,"_urls.txt")),
+          sep='\t',
+          col.names = FALSE)
+}
+
+```
+
+
+### Preprocess RPKM matrix
+
+```{r}
+ah <- AnnotationHub()
+
+RPKM_query <- query(ah, c("EpigenomeRoadMap", "exon.RPKM.pc"))
+RPKM_query
+```
+
+
+
+```{r}
+RPKM_dt <- ah[["AH49026"]]
+RPKM_dt
+```
+
+
+
+```{r}
+rpkm_genes <- data.frame(gene_id = 
+                           rowData(RPKM_dt)$gene_id %>% 
+                           as.character,
+                         stringsAsFactors = FALSE) %>% 
+  cbind( . , 
+        RPKM_dt %>% 
+        assay() %>% 
+        data.frame()
+  )
+rpkm_genes
+```
+
+
+### Query biomart
+
+
+Define biomart object
+
+```{r}
+
+mart <- useMart(biomart = "ensembl", 
+                dataset = "hsapiens_gene_ensembl")
+
+#Get gene names
+results <- getBM(attributes = c("ensembl_gene_id", 
+                                "external_gene_name"),
+                 filters = "ensembl_gene_id", 
+                 values = rpkm_genes$gene_id,
+                 mart = mart) 
+results 
+```
+
+rename
+
+```{r}
+results <- results  %>%
+  dplyr::rename(gene_id ="ensembl_gene_id")
+
+results 
+```
+
+### Add gene names to rpkm data
+
+```{r}
+rpkm_genes <- full_join(rpkm_genes, 
+                        results, 
+                        by = "gene_id")
+
+rpkm_genes
+```
+
+### Compute average of transcipt expression rpkm over genes
+
+```{r}
+rpkm_genes_avg <- rpkm_genes %>%
+  select(-gene_id) %>% 
+  group_by(external_gene_name) %>% 
+  summarise_all(funs(mean))
+
+rpkm_epigenomes <- colnames(rpkm_genes_avg)[-1]
+
+rpkm_genes_avg
+```
+
+### Save rpkm file for each epigenome
+
+
+```{r, eval=FALSE}
+for (epigenome in rpkm_epigenomes){
+  rpkm_genes_avg  %>%
+  select(external_gene_name,
+         epigenome ) %>% 
+  fwrite(file= file.path(rpkm_output_dir,
+                         paste0(epigenome, 
+                                "_avg_rpkm.txt")),
+         sep='\t',
+         col.names = FALSE)
+}
+```
+
+
+
+## Create haystack sample name files for all marks
+
+### prepare gene expression metadata
+
+```{r}
+rpkm_epigenome_dt <- data.table(epigenome = rpkm_epigenomes,
+                                input_name = paste(rpkm_epigenomes, 
+                                                  substring(eg_names$celltypes, 1,7), 
+                                                  sep='_') , 
+                                rpkm_filepath = file.path(rpkm_output_dir,
+                                                       paste0(rpkm_epigenomes, 
+                                                              "_avg_rpkm.txt")
+                                                       )
+                                )
+rpkm_epigenome_dt
+```
+
+## Save sample name metadata to file
+
+```{r, eval=FALSE}
+
+for (mark_target in marks){
+  sample_names_dt <- RMEP_dt  %>% 
+    filter(epigenome %in% selected_epigenomes$epigenome) %>% 
+    filter(mark == mark_target )  %>% 
+    select(sourceurl, 
+           epigenome)  %>% 
+    rowwise() %>%
+    mutate(sourceurl = basename(sourceurl), 
+           filepath =  file.path(bigwig_dir, 
+                                mark_target,
+                                sourceurl)
+           ) %>%
+    left_join(. , 
+              rpkm_epigenome_dt, 
+              by = "epigenome") %>%
+    select(input_name,
+           filepath,
+           rpkm_filepath)
+ 
+   fwrite(
+    sample_names_dt,
+    file.path(sample_names_dir, 
+              paste0("sample_names_",
+                     mark_target,
+                     ".txt")),
+    col.names = FALSE,
+    sep = "\t"
+  )
+}
+
+```
+
+
+```{r}
+sessionInfo()
+```
