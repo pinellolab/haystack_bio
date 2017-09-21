@@ -22,7 +22,7 @@ warn = logging.warning
 debug = logging.debug
 info = logging.info
 
-HAYSTACK_VERSION = "0.5.1"
+HAYSTACK_VERSION = "0.5.2"
 
 def get_args_pipeline():
     # mandatory

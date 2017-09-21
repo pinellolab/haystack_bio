@@ -14,7 +14,7 @@ from itertools import chain
 import logging
 from haystack_common import determine_path, check_file
 
-HAYSTACK_VERSION = "0.5.1"
+HAYSTACK_VERSION = "0.5.2"
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',

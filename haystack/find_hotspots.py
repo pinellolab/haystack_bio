@@ -5,7 +5,7 @@ import subprocess as sb
 import numpy as np
 import pandas as pd
 import argparse
-from pybedtools import BedTool
+#from pybedtools import BedTool
 import multiprocessing
 import glob
 from haystack_common import determine_path, check_file, check_required_packages, initialize_genome
@@ -21,8 +21,7 @@ warn = logging.warning
 debug = logging.debug
 info = logging.info
 
-HAYSTACK_VERSION = "0.5.1"
-
+HAYSTACK_VERSION = "0.5.2"
 
 do_not_recompute = None
 keep_intermediate_files= None
@@ -239,30 +238,62 @@ def create_tiled_genome(genome_name,
         else:
             chr_len_filtered_filename = chr_len_filename
 
-        tiled_genome = BedTool(). \
-            window_maker(g=chr_len_filtered_filename,
-                         w=bin_size).sort()
+
+        cmd = 'bedtools makewindows -g "%s" -w %s  | bedtools sort -i stdin > "%s" ' % (chr_len_filtered_filename,
+                                                                                            bin_size,
+                                                                                            genome_sorted_bins_file)
+
+        sb.call(cmd, shell=True)
+
+        # cmd = 'bedtools sort -i "%s" > "%s"' % (genome_sorted_bins_file, genome_sorted_bins_file)
+        #
+        # sb.call(cmd, shell=True)
+
+
+        # tiled_genome = BedTool(). \
+        #     window_maker(g=chr_len_filtered_filename,
+        #                  w=bin_size).sort()
+
 
         if blacklist=='':
             info('Tiled genome file created will not be blacklisted')
-            tiled_genome.saveas(genome_sorted_bins_file)
         elif blacklist=='hg19':
             info('Using hg19 blacklist file %s to filter out the regions' %blacklist)
             blacklist_filepath = os.path.join(annotations_directory,
                                               'hg19_blacklisted_regions.bed')
             check_file(blacklist_filepath)
-            tiled_genome.intersect(blacklist_filepath,
-                                   wa=True,
-                                   v=True,
-                                   output=genome_sorted_bins_file)
+
+            genome_sorted_bins_file_temp = genome_sorted_bins_file.replace('.bed','.filtered.bed')
+
+            cmd = 'bedtools intersect -a "%s" -b "%s"  -v  > %s ' % (genome_sorted_bins_file,
+                                                                        blacklist_filepath,
+                                                                     genome_sorted_bins_file_temp)
+            genome_sorted_bins_file = genome_sorted_bins_file_temp
+
+            sb.call(cmd, shell=True)
+
+
+            # tiled_genome.intersect(blacklist_filepath,
+            #                        wa=True,
+            #                        v=True,
+            #                        output=genome_sorted_bins_file)
+
         elif os.path.isfile(blacklist):
             info('Using blacklist file %s to filter out the regions' %blacklist)
             blacklist_filepath = blacklist
             check_file(blacklist_filepath)
-            tiled_genome.intersect(blacklist_filepath,
-                                   wa=True,
-                                   v=True,
-                                   output=genome_sorted_bins_file)
+
+            genome_sorted_bins_file_temp = genome_sorted_bins_file.replace('.bed','.filtered.bed')
+
+            cmd = 'bedtools intersect -a "%s" -b "%s"  -v  > %s ' % (genome_sorted_bins_file,
+                                                                        blacklist_filepath,
+                                                                     genome_sorted_bins_file_temp)
+            genome_sorted_bins_file = genome_sorted_bins_file_temp
+
+            # tiled_genome.intersect(blacklist_filepath,
+            #                        wa=True,
+            #                        v=True,
+            #                        output=genome_sorted_bins_file)
         else:
             error('Incorrect blacklist option provided. '
                   'It is neither a file nor a genome')
@@ -297,8 +328,8 @@ def to_binned_tracks_if_bigwigs(data_filenames,
         if not (os.path.exists(binned_rpm_filename) and do_not_recompute):
             info('Processing:%s' % data_filename)
 
-            cmd = 'bigWigAverageOverBed %s %s  /dev/stdout |' \
-                  ' sort -s -n -k 1,1 | cut -f5 > %s' % (data_filename,
+            cmd = 'bigWigAverageOverBed "%s" "%s"  /dev/stdout |' \
+                  ' sort -s -n -k 1,1 | cut -f5 > "%s"' % (data_filename,
                                                          genome_sorted_bins_file,
                                                          binned_rpm_filename)
             sb.call(cmd, shell=True)
@@ -383,17 +414,24 @@ def to_normalized_extended_reads_tracks(bam_filenames,
             info('Scaling Factor: %e' % scaling_factor)
             info('Converting %s to bed and extending read length...' %bam_filename)
             info('Normalizing counts by scaling factor...')
-            BedTool(bam_filename). \
-                bam_to_bed(). \
-                slop(r=read_ext,
-                     l=0,
-                     s=True,
-                     g=chr_len_filename). \
-                genome_coverage(bg=True,
-                                scale=scaling_factor,
-                                g=chr_len_filename).\
-                sort().\
-                saveas(bedgraph_filename)
+
+
+            cmd = 'samtools view -b "%s" | bamToBed | slopBed  -r "%s" -l 0 -s -i stdin -g "%s" | ' \
+                  'genomeCoverageBed -g  "%s" -i stdin -bg -scale %.64f| bedtools sort -i stdin > "%s"' % (
+            bam_filename, read_ext, chr_len_filename, chr_len_filename, scaling_factor, bedgraph_filename)
+            sb.call(cmd, shell=True)
+
+            # BedTool(bam_filename). \
+            #     bam_to_bed(). \
+            #     slop(r=read_ext,
+            #          l=0,
+            #          s=True,
+            #          g=chr_len_filename). \
+            #     genome_coverage(bg=True,
+            #                     scale=scaling_factor,
+            #                     g=chr_len_filename).\
+            #     sort().\
+            #     saveas(bedgraph_filename)
 
             if not keep_intermediate_files:
                 info('Deleting %s' % bam_filename)
@@ -401,12 +439,6 @@ def to_normalized_extended_reads_tracks(bam_filenames,
                     os.remove(bam_filename)
                 except:
                     pass
-
-            # cmd = 'samtools view -b %s | bamToBed | slopBed  -r %s -l 0 -s -i stdin -g %s | ' \
-            #       'genomeCoverageBed -g  %s -i stdin -bg -scale %.32f| bedtools sort -i stdin > %s' % (
-            # bam_filename, read_ext, chr_len_filename, chr_len_filename, scaling_factor, bedgraph_filename)
-            # sb.call(cmd, shell=True)
-
 
         if keep_intermediate_files:
             if not (os.path.exists(bigwig_filename) and do_not_recompute):
@@ -447,16 +479,26 @@ def to_binned_tracks(bedgraph_filenames,
 
         if not (os.path.exists(binned_rpm_filename) and do_not_recompute):
             info('Making constant binned rpm values file: %s' % binned_rpm_filename)
-            bedgraph = BedTool(genome_sorted_bins_file). \
-                map(b=bedgraph_filename,
-                    c=4,
-                    o='mean',
-                    null=0.0).\
-                saveas(bedgraph_binned_filename)
 
-            bedgraph.to_dataframe()['name'].\
-                to_csv(binned_rpm_filename,
-                       index=False)
+            cmd = 'bedtools map -a "%s" - b "%s" - c 4 - o mean - null 0.0 > "%s"' % (genome_sorted_bins_file,
+                                                                                       bedgraph_filename,
+                                                                                       bedgraph_binned_filename)
+            sb.call(cmd, shell=True)
+
+
+            # bedgraph = BedTool(genome_sorted_bins_file). \
+            #     map(b=bedgraph_filename,
+            #         c=4,
+            #         o='mean',
+            #         null=0.0).\
+            #     saveas(bedgraph_binned_filename)
+
+            cmd = 'cut -f4 "%s"  > "%s" ' % (bedgraph_binned_filename, binned_rpm_filename)
+            sb.call(cmd, shell=True)
+
+            # bedgraph.to_dataframe()['name'].\
+            #     to_csv(binned_rpm_filename,
+            #            index=False)
 
             # bedgraph = BedTool(genome_sorted_bins_file). \
             #     intersect(bed_extended, c=True). \

@@ -2,7 +2,7 @@
 ========
 Epigenetic Variability and Motif Analysis Pipeline       
 --------------------------------------------------
-**Current version**: 0.5.1
+**Current version**: 0.5.2
 
 [![Build Status](https://travis-ci.org/pinellolab/haystack_bio.svg?branch=master)](https://travis-ci.org/pinellolab/haystack_bio)
 
