@@ -416,7 +416,7 @@ def to_normalized_extended_reads_tracks(bam_filenames,
             info('Normalizing counts by scaling factor...')
 
 
-            cmd = 'samtools view -b "%s" | bamToBed | slopBed  -r "%s" -l 0 -s -i stdin -g "%s" | ' \
+            cmd = 'sambamba view -f bam "%s" | bamToBed | slopBed  -r "%s" -l 0 -s -i stdin -g "%s" | ' \
                   'genomeCoverageBed -g  "%s" -i stdin -bg -scale %.64f| bedtools sort -i stdin > "%s"' % (
             bam_filename, read_ext, chr_len_filename, chr_len_filename, scaling_factor, bedgraph_filename)
             sb.call(cmd, shell=True)
