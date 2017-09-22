@@ -140,6 +140,10 @@ def get_args():
     parser.add_argument('--do_not_recompute',
                         help='Keep any file previously precalculated',
                         action='store_true')
+    parser.add_argument('--do_not_filter_bams',
+                        help='Use BAM files as provided. Do not remove reads that are unmapped, mate unmapped,'
+                             ' not primary aligned or low MAPQ reads, reads failing qc and optical duplicates',
+                        action='store_true')
     parser.add_argument('--input_is_bigwig',
                         help='Use the bigwig format instead of the bam format for the input. '
                              'Note: The files must have extension .bw',
@@ -959,7 +963,11 @@ def main(input_args=None):
                                                            binned_sample_names,
                                                            genome_sorted_bins_file)
     else:
-        bam_filtered_nodup_filenames=to_filtered_deduped_bams(data_filenames,
+
+        if args.do_not_filter_bams:
+            bam_filtered_nodup_filenames= data_filenames
+        else:
+            bam_filtered_nodup_filenames=to_filtered_deduped_bams(data_filenames,
                                                               output_directory,
                                                               args.n_processes)
 

@@ -39,6 +39,10 @@ def get_args_pipeline():
     parser.add_argument('--do_not_recompute',
                         help='Keep any file previously precalculated',
                         action='store_true')
+    parser.add_argument('--do_not_filter_bams',
+                        help='Use BAM files as provided. Do not remove reads that are unmapped, mate unmapped,'
+                             ' not primary aligned or low MAPQ reads, reads failing qc and optical duplicates',
+                        action='store_true')
     parser.add_argument('--depleted',
                         help='Look for cell type specific regions with depletion of signal instead of enrichment',
                         action='store_true')
@@ -248,6 +252,8 @@ def main(input_args=None):
                 '{:d}'.format(read_ext)]
     if do_not_recompute:
         input_args.append('--do_not_recompute')
+    if do_not_filter_bams:
+        input_args.append('--do_not_filter_bams')
     if depleted:
         input_args.append('--depleted')
     if input_is_bigwig:

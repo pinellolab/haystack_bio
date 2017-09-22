@@ -483,7 +483,7 @@ haystack_pipeline.py [-h] [--name NAME]
                             [--motif_mapping_filename MOTIF_MAPPING_FILENAME]
                             [--plot_all] [--keep_intermediate_files]
                             [--n_processes N_PROCESSES]
-                            [--blacklist BLACKLIST]
+                            [--blacklist BLACKLIST] [--do_not_filter_bams]
                             [--chrom_exclude CHROM_EXCLUDE]
                             [--read_ext READ_EXT]
                             [--temp_directory TEMP_DIRECTORY] [--version]
@@ -533,6 +533,9 @@ optional arguments:
                         (default z-score TF>0 and rho>0.3)
   --keep_intermediate_files
                         keep intermediate bedgraph files
+  --do_not_filter_bams  Use BAM files as provided. Do not remove reads that
+                       are unmapped, mate unmapped not primary aligned or
+                       low MAPQ reads, reads failing qc and optical duplicates
   --n_processes N_PROCESSES
                         Specify the number of processes to use. The default is
                         #cores available.
@@ -564,7 +567,8 @@ haystack_hotspots [-h] [--output_directory OUTPUT_DIRECTORY]
                        [--max_regions_percentage MAX_REGIONS_PERCENTAGE]
                        [--name NAME] [--blacklist BLACKLIST] [--depleted]
                        [--disable_quantile_normalization]
-                       [--do_not_recompute] [--input_is_bigwig]
+                       [--do_not_recompute] [--do_not_filter_bams]
+                       [--input_is_bigwig]
                        [--keep_intermediate_files]
                        [--n_processes N_PROCESSES] [--version]
                        samples_filename_or_bam_folder genome_name
@@ -614,6 +618,9 @@ optional arguments:
  --disable_quantile_normalization
                        Disable quantile normalization (default: False)
  --do_not_recompute    Keep any file previously precalculated
+ --do_not_filter_bams  Use BAM files as provided. Do not remove reads that
+                       are unmapped, mate unmapped not primary aligned or
+                       low MAPQ reads, reads failing qc and optical duplicates
  --input_is_bigwig     Use the bigwig format instead of the bam format for
                        the input. Note: The files must have extension .bw
  --keep_intermediate_files

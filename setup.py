@@ -4,7 +4,7 @@ Setup script for haystack_bio -- Epigenetic Variability and Transcription Factor
 @status:  beta
 @version: $Revision$
 @author:  Luca Pinello
-@contact: lpinello@jimmy.harvard.edu
+@contact: lpinello@mgh.harvard.edu
 """
 from setuptools import setup
 
@@ -31,7 +31,7 @@ def main():
         maintainer= 'Luca Pinello , Rick Farouni',
         maintainer_email='lpinello@jimmy.harvard.edu, tfarouni@mgh.harvard.edu',
         author='Luca Pinello, Rick Farouni',
-        author_email='lpinello@jimmy.harvard.edu, tfarouni@mgh.harvard.edu',
+        author_email='lpinello@mgh.harvard.edu, tfarouni@mgh.harvard.edu',
         url='http://github.com/lucapinello/Haystack',
         classifiers=[
             'Development Status :: 5 - Beta',
