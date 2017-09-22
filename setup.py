@@ -14,7 +14,7 @@ from haystack.haystack_common import check_required_packages
 def main():
 
     setup(
-        version="0.5.1",
+        version="0.5.2",
         name="haystack_bio",
         include_package_data=True,
         packages=["haystack"],
@@ -50,7 +50,6 @@ def main():
             'matplotlib>=1.3.1',
             'scipy>=0.13.3',
             'jinja2>=2.7.3',
-            'pybedtools>=0.7.10',
             'tqdm>=4.15.0',
             'weblogo>=3.5.0',
             'bx-python>=0.7.3']
