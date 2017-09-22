@@ -397,8 +397,7 @@ def to_filtered_deduped_bams(bam_filenames,
             #                                                                                          bam_temp_filename)
             sb.call(cmd, shell=True)
             info('Removing  optical duplicates')
-            cmd = 'sambamba markdup  -l 5 -t %d --hash-table-size=17592186044416' \
-                  ' --overflow-list-size=20000000 --io-buffer-size=256 "%s" "%s" ' % (
+            cmd = 'sambamba markdup  -l 5 -t %d  "%s" "%s" ' % (
                 n_processes,
                 bam_temp_filename,
                 bam_filtered_nodup_filename)
