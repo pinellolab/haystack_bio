@@ -480,7 +480,7 @@ def to_binned_tracks(bedgraph_filenames,
         if not (os.path.exists(binned_rpm_filename) and do_not_recompute):
             info('Making constant binned rpm values file: %s' % binned_rpm_filename)
 
-            cmd = 'bedtools map -a "%s" - b "%s" - c 4 - o mean - null 0.0 > "%s"' % (genome_sorted_bins_file,
+            cmd = 'bedtools map -a "%s" -b "%s" -c 4 -o mean -null 0.0 > "%s"' % (genome_sorted_bins_file,
                                                                                        bedgraph_filename,
                                                                                        bedgraph_binned_filename)
             sb.call(cmd, shell=True)
