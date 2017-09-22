@@ -33,7 +33,6 @@ else
 	sudo pip install \
 	bx-python \
 	Jinja2 \
-	pybedtools \
 	tqdm \
 	weblogo
 	sudo cpan \
@@ -47,7 +46,7 @@ else
 	XML::Compile::SOAP11 \
 	XML::Compile::WSDL11 \
 	XML::Compile::Transport::SOAPHTTP
-    curl -fL  https://github.com/pinellolab/haystack_bio/archive/0.5.0.tar.gz \
+    curl -fL  https://github.com/pinellolab/haystack_bio/archive/0.5.2.tar.gz \
 		-o $HOME/haystack_bio.tar.gz \
     tar -xzf $HOME/haystack_bio.tar.gz -C $HOME 
     mv  $HOME/haystack_bio-0.5.0 $HOME/haystack_bio 
