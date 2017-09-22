@@ -326,17 +326,34 @@ def to_binned_tracks_if_bigwigs(data_filenames,
                                          '%s.rpm' % binned_sample_name)
                             for binned_sample_name in binned_sample_names]
 
-    for data_filename, binned_rpm_filename in zip(data_filenames,
-                                                  binned_rpm_filenames):
+
+    binned_bedgraph_filenames = [os.path.join(intermediate_directory,
+                                         '%s.rpm.bedgraph' % binned_sample_name)
+                            for binned_sample_name in binned_sample_names]
+
+    for data_filename, binned_rpm_filename, binned_bedgraph_filename in zip(data_filenames,
+                                                  binned_rpm_filenames,
+                                                  binned_bedgraph_filenames):
 
         if not (os.path.exists(binned_rpm_filename) and do_not_recompute):
             info('Processing:%s' % data_filename)
 
-            cmd = 'bigWigAverageOverBed "%s" "%s"  /dev/stdout |' \
-                  ' sort -s -n -k 1,1 | cut -f5 > "%s"' % (data_filename,
-                                                         genome_sorted_bins_file,
-                                                         binned_rpm_filename)
+
+            awk_command =  "awk \'{printf(\"%s\\t%d\\t%d\\tp_%s\\n\", $1,$2,$3,NR)}\'"
+
+            cmd = awk_command +  ' < "%s" | bigWigAverageOverBed "%s" /dev/stdin /dev/stdout -bedOut="%s" | cut -f5 >  "%s"' % (genome_sorted_bins_file,
+                                                                                                                                data_filename,
+                                                                                                                                binned_bedgraph_filename,
+                                                                                                                                binned_rpm_filename)
+
             sb.call(cmd, shell=True)
+
+            if not keep_intermediate_files:
+                info('Deleting %s' % binned_bedgraph_filename)
+                try:
+                    os.remove(binned_bedgraph_filename)
+                except:
+                    pass
 
     return binned_rpm_filenames
 #######
@@ -944,7 +961,7 @@ def main(input_args=None):
     binned_sample_names = ['%s.%dbp' % (sample_name, args.bin_size)
                            for sample_name in sample_names]
     # step 5: get genome data
-    _, chr_len_filename, _= initialize_genome(args.genome_name,answer='')
+    _, chr_len_filename, _= initialize_genome(args.genome_name, answer='')
 
     # step 6: create tiled genome
     genome_sorted_bins_file = create_tiled_genome(args.genome_name,
