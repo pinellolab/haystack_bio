@@ -442,7 +442,7 @@ To install on AWS, first launch and connect to the Amazon Instance you have chos
 Jupyter Analysis Notebook
 --------
 
-We have provided an interactive analysis Jupyter notebook for the first module of the pipeline. You can gain a more detailed insight of this part of the pipeline by examining the code and output. The notebook can be accessed at this [link](http://nbviewer.jupyter.org/github/pinellolab/haystack_bio/blob/master/haystack/haystack_jypyter_notebook.ipynb).
+We have provided an interactive analysis Jupyter notebook for the first module of the pipeline. You can gain a more detailed insight of this part of the pipeline by examining the code and output. The notebook can be accessed at this [link](http://nbviewer.jupyter.org/github/pinellolab/haystack_bio/blob/master/scripts/haystack_jypyter_notebook.ipynb).
 
 Auxiliary Analysis Scripts
 --------------------------
@@ -454,7 +454,7 @@ These scripts can help you in the following tasks:
  - Preprocessing gene expression data and converting gene id's from one form to another (Ensembl ID).
  - Creating sample_names text files with the data file paths for the haystack pipeline
 
-The scipts and the interactive notebook can be found in the  [haystack_bio/scripts/roadmap_data_scripts folder](./scripts/roadmap_data_scripts folder)
+The scipts and the interactive notebook can be found in the  *haystack_bio/scripts/roadmap_data_scripts* [folder](./scripts/roadmap_data_scripts folder/)
 
 
 
