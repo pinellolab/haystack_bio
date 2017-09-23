@@ -450,11 +450,11 @@ Auxiliary Analysis Scripts
 We have also provided R scripts and notebook showing how to accomplish several tasks you would probably need if you will be working with large amount of data from the ENCODE, Roadmap Epigenomics projects, or other consortia.
 These scripts can help you in the following tasks:
  - Downloading epigenomic data for any experiment and cell type,
- - Determing which combination of histone mark\experiment are present across a given set of cell types,
+ - Determing which combination of histone mark (experiment) are present across a given set of cell types,
  - Preprocessing gene expression data and converting gene id's from one form to another (Ensembl ID).
  - Creating sample_names text files with the data file paths for the haystack pipeline
 
-The scipts and the interactive notebook can be found in the  *haystack_bio/scripts/roadmap_data_scripts* [folder](./scripts/roadmap_data_scripts folder/)
+The scripts and the interactive notebook can be found in the  *haystack_bio/scripts/roadmap_data_scripts* [folder](https://github.com/pinellolab/haystack_bio/tree/master/scripts/roadmap_data_scripts)
 
 
 
