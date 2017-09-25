@@ -375,7 +375,7 @@ def get_args_motif():
                         help='Optional mapping file between gene ids to gene names (relevant only if --gene_annotation_filename is used)')
     parser.add_argument('--n_processes', type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
-                        default=mp.cpu_count())
+                        default= min(4, mp.cpu_count()))
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
 

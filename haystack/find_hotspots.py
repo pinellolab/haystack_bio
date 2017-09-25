@@ -243,7 +243,7 @@ def create_tiled_genome(genome_name,
             chr_len_filtered_filename = chr_len_filename
 
 
-        cmd = 'bedtools makewindows -g "%s" -w %s  | bedtools sort -i stdin > "%s" ' % (chr_len_filtered_filename,
+        cmd = 'bedtools makewindows -g "%s" -w %s  | sort -k1,1 -k2,2n -s -V > "%s" ' % (chr_len_filtered_filename,
                                                                                             bin_size,
                                                                                             genome_sorted_bins_file)
 
@@ -302,6 +302,7 @@ def create_tiled_genome(genome_name,
             error('Incorrect blacklist option provided. '
                   'It is neither a file nor a genome')
             sys.exit(1)
+
     return genome_sorted_bins_file
 
 ### if bigwig
@@ -442,7 +443,7 @@ def to_normalized_extended_reads_tracks(bam_filenames,
 
 
             cmd = 'sambamba view -f bam "%s" | bamToBed | slopBed  -r "%s" -l 0 -s -i stdin -g "%s" | ' \
-                  'genomeCoverageBed -g  "%s" -i stdin -bg -scale %.64f| bedtools sort -i stdin > "%s"' % (
+                  'genomeCoverageBed -g  "%s" -i stdin -bg -scale %.64f| sort -k1,1 -k2,2n -s -V  > "%s"' % (
             bam_filename, read_ext, chr_len_filename, chr_len_filename, scaling_factor, bedgraph_filename)
             sb.call(cmd, shell=True)
 
@@ -749,7 +750,7 @@ def hpr_to_bedgraph(hpr_idxs,
     if not (os.path.exists(bed_hpr_filename) and do_not_recompute):
 
         info('Writing the HPRs in: "%s"' % bed_hpr_filename)
-        sb.call('sort -k1,1 -k2,2n "%s" |'
+        sb.call('sort -k1,1 -k2,2n -s -V  "%s" |'
                 ' bedtools merge -i stdin >  "%s"' % (bedgraph_hpr_filename,
                                                       bed_hpr_filename),
                 shell=True)
@@ -786,7 +787,7 @@ def write_specific_regions(coordinates_bin,
                                          index=False)
 
             info('Writing:%s' % specific_output_bed_filename)
-            sb.call('sort -k1,1 -k2,2n "%s" |'
+            sb.call('sort -k1,1 -k2,2n -s -V  "%s" |'
                     ' bedtools merge -i stdin >  "%s"' % (specific_output_filename,
                                                           specific_output_bed_filename),
                     shell=True)
@@ -819,7 +820,7 @@ def write_specific_regions(coordinates_bin,
 
             info('Writing:%s' % bg_output_bed_filename)
             sb.call(
-                'sort -k1,1 -k2,2n -i "%s" |'
+                'sort -k1,1 -k2,2n -s -V  "%s" |'
                 ' bedtools merge -i stdin >  "%s"' % (bg_output_filename,
                                                       bg_output_bed_filename),
                 shell=True)
@@ -917,7 +918,6 @@ def create_igv_track_file(hpr_iod_scores,
 
 
 def main(input_args=None):
-
 
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS-\n')
