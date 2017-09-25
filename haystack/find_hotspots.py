@@ -341,19 +341,24 @@ def to_binned_tracks_if_bigwigs(data_filenames,
 
             awk_command =  "awk \'{printf(\"%s\\t%d\\t%d\\tp_%s\\n\", $1,$2,$3,NR)}\'"
 
-            cmd = awk_command +  ' < "%s" | bigWigAverageOverBed "%s" /dev/stdin /dev/stdout -bedOut="%s" | cut -f5 >  "%s"' % (genome_sorted_bins_file,
-                                                                                                                                data_filename,
-                                                                                                                                binned_bedgraph_filename,
-                                                                                                                                binned_rpm_filename)
+
+            if keep_intermediate_files:
+                info('Creating %s' % binned_bedgraph_filename)
+
+                cmd = awk_command + ' < "%s" | bigWigAverageOverBed "%s" /dev/stdin /dev/stdout -bedOut="%s" | cut -f5 >  "%s"' % (
+                    genome_sorted_bins_file,
+                    data_filename,
+                    binned_bedgraph_filename,
+                    binned_rpm_filename)
+
+            else:
+
+                cmd = awk_command + ' < "%s" | bigWigAverageOverBed "%s" /dev/stdin /dev/stdout | cut -f5 >  "%s"' % (
+                    genome_sorted_bins_file,
+                    data_filename,
+                    binned_rpm_filename)
 
             sb.call(cmd, shell=True)
-
-            if not keep_intermediate_files:
-                info('Deleting %s' % binned_bedgraph_filename)
-                try:
-                    os.remove(binned_bedgraph_filename)
-                except:
-                    pass
 
     return binned_rpm_filenames
 #######
