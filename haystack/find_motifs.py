@@ -386,6 +386,7 @@ def get_target_motifs_filepaths(target_motifs_filepaths_file):
 ###############################################################################
 
 def main(input_args=None):
+def main():
     print '\n[H A Y S T A C K   M O T I F S]'
     print('\n-MOTIF ENRICHMENT ANALYSIS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
     print 'Version %s\n' % HAYSTACK_VERSION
