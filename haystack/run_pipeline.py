@@ -94,12 +94,17 @@ def get_args_pipeline():
 def main(input_args=None):
 
 
-    # input_args = ["/mnt/hd2/test_data/sample_data/samples_names_genes.txt",
+    # input_args = ["/mnt/hd2/DATA_PINELLO//PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/sample_names_H3K27ac.txt",
     #               "hg19",
     #               '--blacklist',
     #               "hg19",
     #               '--output_directory',
-    #               "/mnt/hd2/test_data/HAYSTACK_PIPELINE_BLACKLISTED_BIN500_NOCHROM_XY"]
+    #               "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/th_rpm99_zscore1_try2_ml002"]
+
+
+    #output_directory= "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/th_rpm99_zscore1_try2_ml002"
+
+    #samples_filename_or_bam_folder= "/mnt/hd2/DATA_PINELLO//PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/sample_names_H3K27ac.txt"
 
 
     print '\n[H A Y S T A C K   P I P E L I N E]'
@@ -229,6 +234,7 @@ def main(input_args=None):
         for sample_name, data_filename in zip(sample_names, data_filenames):
             outfile.write('%s\t%s\n' % (sample_name, data_filename))
 
+
     # CALL HAYSTACK HOTSPOTS
     input_args=[sample_names_hotspots_filename,
                 genome_name,
@@ -265,38 +271,96 @@ def main(input_args=None):
 
     hotspots.main(input_args=input_args)
 
+
+
+    # write motifs conf files
+    target_motifs_filepaths_file = os.path.join(output_directory,
+                                                  'target_motifs_bed_filepaths.txt')
+
+
+    with open(target_motifs_filepaths_file, 'w+') as outfile:
+
+        for sample_name in sample_names:
+            specific_regions_filename = glob.glob(os.path.join(output_directory,
+                                                               'HAYSTACK_HOTSPOTS',
+                                                               'SPECIFIC_REGIONS',
+                                                               'Regions_specific_for_%s*.bed' % sample_name))[0]
+
+            bg_regions_filename = glob.glob(os.path.join(output_directory,
+                                                         'HAYSTACK_HOTSPOTS',
+                                                         'SPECIFIC_REGIONS',
+                                                         'Background_for_%s*.bed' % sample_name))[0]
+
+            outfile.write('%s\t%s\t%s\n' % (sample_name, specific_regions_filename, bg_regions_filename))
+
+
+
+
+
+    # input_args = ["/mnt/hd2/DATA_PINELLO//PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/sample_names_H3K27ac.txt",
+    #               "hg19",
+    #               '--blacklist',
+    #               "hg19",
+    #               '--output_directory',
+    #               "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/th_rpm99_zscore1_try2_ml002"]
+
+
     # CALL HAYSTACK MOTIFS
+
     motif_directory = os.path.join(output_directory,
                                    'HAYSTACK_MOTIFS')
-    for sample_name in sample_names:
 
-        specific_regions_filename = glob.glob(os.path.join(output_directory,
-                                                 'HAYSTACK_HOTSPOTS',
-                                                 'SPECIFIC_REGIONS',
-                                                 'Regions_specific_for_%s*.bed' % sample_name))[0]
+    input_args_motif = [target_motifs_filepaths_file,
+                        genome_name,
+                        '--output_directory',
+                        motif_directory]
 
-        bg_regions_filename = glob.glob(os.path.join(output_directory,
-                                                     'HAYSTACK_HOTSPOTS',
-                                                     'SPECIFIC_REGIONS',
-                                                     'Background_for_%s*.bed' % sample_name))[0]
+    if meme_motifs_filename:
+        input_args_motif.extend(['--meme_motifs_filename', meme_motifs_filename])
+    if n_processes:
+        input_args_motif.extend(['--n_processes', '{:d}'.format(n_processes)])
+    if temp_directory:
+        input_args_motif.extend(['--temp_directory', temp_directory])
+
+    motifs.main(input_args_motif)
 
 
-        input_args_motif = [specific_regions_filename,
-                            genome_name,
-                            '--bed_bg_filename',
-                            bg_regions_filename,
-                            '--output_directory',
-                            motif_directory,
-                            '--name',
-                            sample_name]
 
-        if meme_motifs_filename:
-            input_args_motif.extend(['--meme_motifs_filename', meme_motifs_filename])
-        if n_processes:
-            input_args_motif.extend(['--n_processes', '{:d}'.format(n_processes)])
-        if temp_directory:
-            input_args_motif.extend(['--temp_directory', temp_directory])
-        motifs.main(input_args_motif)
+
+    #for sample_name in sample_names:
+
+        # specific_regions_filename = glob.glob(os.path.join(output_directory,
+        #                                          'HAYSTACK_HOTSPOTS',
+        #                                          'SPECIFIC_REGIONS',
+        #                                          'Regions_specific_for_%s*.bed' % sample_name))[0]
+        #
+        # bg_regions_filename = glob.glob(os.path.join(output_directory,
+        #                                              'HAYSTACK_HOTSPOTS',
+        #                                              'SPECIFIC_REGIONS',
+        #                                              'Background_for_%s*.bed' % sample_name))[0]
+        #
+        #
+        # input_args_motif = [specific_regions_filename,
+        #                     genome_name,
+        #                     '--bed_bg_filename',
+        #                     bg_regions_filename,
+        #                     '--output_directory',
+        #                     motif_directory,
+        #                     '--name',
+        #                     sample_name]
+
+
+        # input_args_motif = [genome_name,
+        #                     '--output_directory',
+        #                     motif_directory]
+        #
+        # if meme_motifs_filename:
+        #     input_args_motif.extend(['--meme_motifs_filename', meme_motifs_filename])
+        # if n_processes:
+        #     input_args_motif.extend(['--n_processes', '{:d}'.format(n_processes)])
+        # if temp_directory:
+        #     input_args_motif.extend(['--temp_directory', temp_directory])
+        # motifs.main(input_args_motif)
 
     if USE_GENE_EXPRESSION:
 
