@@ -210,6 +210,8 @@ def parallel_fimo_scanning(target_coords,
 
     motifs_in_sequences_matrix = np.zeros((len(target_coords), len(fimo.motif_ids)))
 
+    num_consumers= num_consumers -2
+
     # compute motifs with fimo
     if num_consumers > 1:
 
@@ -218,7 +220,7 @@ def parallel_fimo_scanning(target_coords,
                                        nucleotide_bg_filename, temp_directory, p_value)
 
         pool = mp.Pool(processes=num_consumers)
-        results = pool.map(compute_single_motif, fimo.motif_ids)
+        pool.map(compute_single_motif, fimo.motif_ids)
         pool.close()
         pool.join()
         fimo_output_filename = os.path.join(temp_directory, prefix + '_fimo_output.motifs')
@@ -375,7 +377,7 @@ def get_args_motif():
                         help='Optional mapping file between gene ids to gene names (relevant only if --gene_annotation_filename is used)')
     parser.add_argument('--n_processes', type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
-                        default= min(4, mp.cpu_count()))
+                        default= mp.cpu_count())
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
 
