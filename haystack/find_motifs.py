@@ -210,6 +210,8 @@ def parallel_fimo_scanning(target_coords,
 
     motifs_in_sequences_matrix = np.zeros((len(target_coords), len(fimo.motif_ids)))
 
+    # num_consumers= num_consumers -2
+
     # compute motifs with fimo
     if num_consumers > 1:
 
@@ -385,7 +387,7 @@ def get_target_motifs_filepaths(target_motifs_filepaths_file):
 
 ###############################################################################
 
-def main(input_args=None):
+#def main(input_args=None):
 def main():
     print '\n[H A Y S T A C K   M O T I F S]'
     print('\n-MOTIF ENRICHMENT ANALYSIS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
