@@ -73,7 +73,7 @@ def get_args_pipeline():
                         action='store_true')
     parser.add_argument('--n_processes', type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
-                        default=multiprocessing.cpu_count())
+                        default=min(4, multiprocessing.cpu_count()))
     parser.add_argument('--blacklist',
                         type=str,
                         help='Exclude blacklisted regions. Blacklisted regions are not excluded by default. '
