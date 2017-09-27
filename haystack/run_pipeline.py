@@ -5,6 +5,7 @@ import glob
 import shutil
 import argparse
 import multiprocessing
+import subprocess as sb
 #import find_hotspots as hotspots
 #import find_motifs as motifs
 #import generate_tf_activity_plane as tf_activity_plane
