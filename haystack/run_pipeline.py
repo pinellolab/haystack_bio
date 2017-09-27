@@ -234,43 +234,7 @@ def main(input_args=None):
         for sample_name, data_filename in zip(sample_names, data_filenames):
             outfile.write('%s\t%s\n' % (sample_name, data_filename))
 
-"""
-    # CALL HAYSTACK HOTSPOTS
-    input_args=[sample_names_hotspots_filename,
-                genome_name,
-                '--blacklist',
-                blacklist,
-                '--output_directory',
-                output_directory,
-                '--bin_size',
-                '{:d}'.format(bin_size),
-                '--chrom_exclude',
-                chrom_exclude,
-                '--th_rpm',
-                '{:f}'.format(th_rpm),
-                '--transformation',
-                transformation,
-                '--z_score_high',
-                '{:f}'.format(z_score_high),
-                '--z_score_low',
-                '{:f}'.format(z_score_low),
-                '--read_ext',
-                '{:d}'.format(read_ext)]
-    if do_not_recompute:
-        input_args.append('--do_not_recompute')
-    if do_not_filter_bams:
-        input_args.append('--do_not_filter_bams')
-    if depleted:
-        input_args.append('--depleted')
-    if input_is_bigwig:
-        input_args.append('--input_is_bigwig')
-    if disable_quantile_normalization:
-        input_args.append('--disable_quantile_normalization')
-    if keep_intermediate_files:
-        input_args.append('--keep_intermediate_files')
 
-    hotspots.main(input_args=input_args)    
-"""  
         #CALL HAYSTACK HOTSPOTS
     cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s %s' % \
                 (sample_names_hotspots_filename, genome_name,output_directory,bin_size,
@@ -437,26 +401,6 @@ def main(input_args=None):
               sb.call(cmd_to_run,shell=True) 
                     
                     
-                                  """
-                input_args_activity= [motifs_output_folder,
-                                      sample_names_tf_activity_filename,
-                                      sample_name,
-                                      '--output_directory',
-                                      tf_activity_directory]
-                if motif_mapping_filename:
-                    input_args_activity.extend(['--motif_mapping_filename',
-                                                motif_mapping_filename])
-                if plot_all:
-                    input_args_activity.append(['--plot_all'])      
-
-                tf_activity_plane.main(input_args_activity)
-                
-              """
-         
-              
-              
-              
-              
                 
                 
                 
