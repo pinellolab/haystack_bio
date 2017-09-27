@@ -234,20 +234,7 @@ def main(input_args=None):
         for sample_name, data_filename in zip(sample_names, data_filenames):
             outfile.write('%s\t%s\n' % (sample_name, data_filename))
 
-    print (sample_names_hotspots_filename, genome_name,output_directory,bin_size,
-                 ('--do_not_filter_bams' if do_not_filter_bams else ''),
-                 ('--depleted' if depleted else ''),
-                 ('--do_not_recompute' if do_not_recompute else ''),
-                 ('--keep_intermediate_files' if keep_intermediate_files else ''),
-                 ('--input_is_bigwig' if input_is_bigwig else ''),
-                 ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
-                 '--transformation %s' % transformation,
-                 '--chrom_exclude %s', chrom_exclude,
-                 '--z_score_high %f' % z_score_high,
-                 '--z_score_low %f' % z_score_low,
-                 '--th_rpm %f' % th_rpm,
-                 '--blacklist %s', blacklist,
-                 '--read_ext %f', read_ext)
+
     #CALL HAYSTACK HOTSPOTS
     cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s %s %s %s %s %s %s' % \
                 (sample_names_hotspots_filename, genome_name,output_directory,bin_size,
@@ -258,12 +245,12 @@ def main(input_args=None):
                  ('--input_is_bigwig' if input_is_bigwig else ''),
                  ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
                  '--transformation %s' % transformation,
-                 '--chrom_exclude %s', chrom_exclude,
+                 '--chrom_exclude %s' % chrom_exclude,
                  '--z_score_high %f' % z_score_high,
                  '--z_score_low %f' % z_score_low,
                  '--th_rpm %f' % th_rpm,
-                 '--blacklist %s', blacklist,
-                 '--read_ext %f', read_ext)
+                 '--blacklist %s' % blacklist,
+                 '--read_ext %f' % read_ext)
     print cmd_to_run
     sb.call(cmd_to_run ,shell=True)  
 
