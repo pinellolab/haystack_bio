@@ -448,9 +448,24 @@ def main(input_args=None):
     genome, _, nucleotide_bg_filename = initialize_genome(genome_name, answer='')
 
 
+
+
+    # if name:
+    #     directory_name = 'HAYSTACK_MOTIFS_on_' + name
+    # else:
+    #     directory_name = 'HAYSTACK_on_' + target_name + '_VS_' + bg_name
+    #
+    # if output_directory:
+    #     output_directory = os.path.join(output_directory, directory_name)
+    # else:
+    #     output_directory = directory_name
+
+
     for name, bed_target_filename, bed_bg_filename in zip(sample_names,
                                               specific_regions_filenames,
                                               bg_regions_filenames):
+
+        output_directory = 'HAYSTACK_MOTIFS_on_' + name
 
 
 
@@ -459,15 +474,7 @@ def main(input_args=None):
         bg_name = ntpath.basename(bed_bg_filename.replace('.bed', ''))
         # timestamp=(datetime.datetime.now().isoformat()[:-3].replace('T','(')+str(np.random.randint(10000))+')').replace(':','.')
 
-        if name:
-            directory_name = 'HAYSTACK_MOTIFS_on_' + name
-        else:
-            directory_name = 'HAYSTACK_on_' + target_name + '_VS_' + bg_name
 
-        if output_directory:
-            output_directory = os.path.join(output_directory, directory_name)
-        else:
-            output_directory = directory_name
 
         info(
             '###PARAMETERS USED###\n\t\t -TARGET: %s \n\t\t -BACKGROUND: %s \n\t\t -BG_TARGET_RATIO: %s\n\t\t -C+G CORRECTION: %s\n\t\t -MASKING REPETITIVE: %s\n\t\t -COORDINATES TO ANALYZE: %s\n\t\t -OUTPUT DIRECTORY: %s\n' \

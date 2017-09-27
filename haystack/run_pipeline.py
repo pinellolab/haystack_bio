@@ -84,7 +84,7 @@ def get_args_pipeline():
                         type=str,
                         help='Exclude chromosomes that contain given (regex) string. For example _random|chrX|chrY excludes  random, X, and Y chromosome regions',
                         default='_|chrX|chrY')
-    parser.add_argument('--read_ext', type=int, help='Read extension in bps (default: 200)', default='200')
+    parser.add_argument('--read_ext', type=int, help='Read extension in bps (default: 200)', default=200)
     parser.add_argument('--temp_directory', help='Directory to store temporary files  (default: /tmp)', default='/tmp')
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
