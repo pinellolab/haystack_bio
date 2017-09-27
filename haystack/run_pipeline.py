@@ -5,9 +5,9 @@ import glob
 import shutil
 import argparse
 import multiprocessing
-import find_hotspots as hotspots
-import find_motifs as motifs
-import generate_tf_activity_plane as tf_activity_plane
+#import find_hotspots as hotspots
+#import find_motifs as motifs
+#import generate_tf_activity_plane as tf_activity_plane
 # commmon functions
 from haystack_common import check_file
 import logging
@@ -234,7 +234,7 @@ def main(input_args=None):
         for sample_name, data_filename in zip(sample_names, data_filenames):
             outfile.write('%s\t%s\n' % (sample_name, data_filename))
 
-
+"""
     # CALL HAYSTACK HOTSPOTS
     input_args=[sample_names_hotspots_filename,
                 genome_name,
@@ -269,7 +269,27 @@ def main(input_args=None):
     if keep_intermediate_files:
         input_args.append('--keep_intermediate_files')
 
-    hotspots.main(input_args=input_args)
+    hotspots.main(input_args=input_args)    
+"""  
+        #CALL HAYSTACK HOTSPOTS
+    cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s %s' % \
+                (sample_names_hotspots_filename, genome_name,output_directory,bin_size,
+                 ('--recompute_all' if recompute_all else ''),
+                 ('--do_not_filter_bams' if do_not_filter_bams else ''),
+                 ('--depleted' if depleted else ''),
+                 ('--do_not_recompute' if do_not_recompute else ''),
+                 ('--keep_intermediate_files' if keep_intermediate_files else ''),
+                 ('--input_is_bigwig' if input_is_bigwig else ''),
+                 ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
+                 '--transformation %s' % transformation,
+                 '--chrom_exclude %s', chrom_exclude,
+                 '--z_score_high %f' % z_score_high,
+                 '--z_score_low %f' % z_score_low,
+                 '--th_rpm %f' % th_rpm,
+                 '--blacklist %s', blacklist,
+                 '--read_ext %f', read_ext)
+    print cmd_to_run
+    sb.call(cmd_to_run ,shell=True)  
 
 
     #
@@ -403,7 +423,21 @@ def main(input_args=None):
                                                 'HAYSTACK_MOTIFS_on_%s' % sample_name)
 
             if os.path.exists(motifs_output_folder):
-
+              
+              cmd_to_run='haystack_tf_activity_plane %s %s %s --output_directory %s'  %(motifs_output_folder,sample_names_tf_activity_filename,sample_name,tf_activity_directory)
+              
+              if motif_mapping_filename:
+                cmd_to_run+=' --motif_mapping_filename %s' %  motif_mapping_filename       
+              
+              if plot_all:
+                        cmd_to_run+=' --plot_all'
+                        
+                    
+              print cmd_to_run
+              sb.call(cmd_to_run,shell=True) 
+                    
+                    
+                                  """
                 input_args_activity= [motifs_output_folder,
                                       sample_names_tf_activity_filename,
                                       sample_name,
@@ -413,9 +447,20 @@ def main(input_args=None):
                     input_args_activity.extend(['--motif_mapping_filename',
                                                 motif_mapping_filename])
                 if plot_all:
-                    input_args_activity.append(['--plot_all'])
+                    input_args_activity.append(['--plot_all'])      
 
                 tf_activity_plane.main(input_args_activity)
+                
+              """
+         
+              
+              
+              
+              
+                
+                
+                
+                
 
 if __name__ == '__main__':
     main()
