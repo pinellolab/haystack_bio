@@ -494,8 +494,8 @@ def main():
 
     check_file(bed_target_filename)
 
-        if not bed_bg_filename == 'random_background':
-    check_file(bed_bg_filename)
+    if not bed_bg_filename == 'random_background':
+        check_file(bed_bg_filename)
 
     if meme_motifs_filename:
         check_file(meme_motifs_filename)
