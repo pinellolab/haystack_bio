@@ -238,7 +238,6 @@ def main(input_args=None):
         #CALL HAYSTACK HOTSPOTS
     cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s %s' % \
                 (sample_names_hotspots_filename, genome_name,output_directory,bin_size,
-                 ('--recompute_all' if recompute_all else ''),
                  ('--do_not_filter_bams' if do_not_filter_bams else ''),
                  ('--depleted' if depleted else ''),
                  ('--do_not_recompute' if do_not_recompute else ''),
