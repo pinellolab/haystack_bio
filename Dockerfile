@@ -83,10 +83,11 @@ WORKDIR /haystack_bio_setup
 # Copy the current directory contents into the container at /haystack_bio
 COPY . /haystack_bio_setup
 
+
+ENV PATH /haystack_bio/binaries:/haystack_bio/binaries/meme/bin:$PATH
+
 RUN python setup.py install
 
 RUN  ln -s /usr/local/lib/python2.7/dist-packages/haystack_bio-0.5.2-py2.7.egg/haystack/haystack_data/genomes/ /haystack_genomes
-
-ENV PATH /haystack_bio/binaries:/haystack_bio/binaries/meme/bin:$PATH
 
 RUN rm -Rf /haystack_bio_setup
