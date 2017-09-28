@@ -246,12 +246,13 @@ def main(input_args=None):
                  ('--input_is_bigwig' if input_is_bigwig else ''),
                  ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
                  '--transformation %s' % transformation,
-                 '--chrom_exclude %s' % chrom_exclude,
+                 '--chrom_exclude "%s"' % chrom_exclude,
                  '--z_score_high %f' % z_score_high,
                  '--z_score_low %f' % z_score_low,
                  '--th_rpm %f' % th_rpm,
                  '--blacklist %s' % blacklist,
-                 '--read_ext %d' % read_ext)
+                 '--read_ext %d' % read_ext,
+                 '--n_processes  %d' % n_processes)
     print(cmd_to_run)
     sb.call(cmd_to_run ,shell=True)  
 

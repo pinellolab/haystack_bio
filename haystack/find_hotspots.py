@@ -155,7 +155,7 @@ def get_args():
     parser.add_argument('--n_processes',
                         type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
-                        default=min(4, multiprocessing.cpu_count()-1))
+                        default=min(4, multiprocessing.cpu_count()))
     parser.add_argument('--version',
                         help='Print version and exit.',
                         action='version',
@@ -973,6 +973,8 @@ def main(input_args=None):
     # step 2
     parser = get_args()
     args = parser.parse_args(input_args)
+
+    args.n_processes = max(1, args.n_processes - 1)
     info(vars(args))
     global do_not_recompute
     global keep_intermediate_files

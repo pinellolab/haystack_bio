@@ -9,9 +9,6 @@ def get_args_download_genome():
     parser.add_argument('name', type=str,
                         help='genome name. Example: haystack_download_genome hg19.')
 
-    # optional
-    parser.add_argument('--yes', help='answer yes to download prompt', action='store_true')
-
     return parser
 
 
@@ -21,7 +18,7 @@ def main(input_args=None):
     print 'Version %s\n' % HAYSTACK_VERSION
     parser = get_args_download_genome()
     args = parser.parse_args(input_args)
-    initialize_genome(args.name, args.yes)
+    initialize_genome(args.name)
 
 if __name__ == '__main__':
     main()

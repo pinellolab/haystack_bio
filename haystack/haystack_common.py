@@ -82,28 +82,7 @@ def check_required_packages():
 
 
 
-def query_yes_no(question, default="yes"):
-    valid = {"yes":True,   "y":True,  "ye":True,
-             "no":False,     "n":False}
-    if default == None:
-        prompt = " [y/n] "
-    elif default == "yes":
-        prompt = " [Y/n] "
-    elif default == "no":
-        prompt = " [y/N] "
-    else:
-        raise ValueError("invalid default answer: '%s'" % default)
 
-    while True:
-        sys.stdout.write(question + prompt)
-        choice = raw_input().lower()
-        if default is not None and choice == '':
-            return valid[default]
-        elif choice in valid:
-            return valid[choice]
-        else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "
-                             "(or 'y' or 'n').\n")
 
 def determine_path(folder=''):
 
@@ -225,7 +204,7 @@ def check_md5sum(genome_filename, genome_name):
 
     return check_flag
 
-def initialize_genome(genome_name, answer):
+def initialize_genome(genome_name):
 
     from bioutilities import Genome_2bit
     import urllib
@@ -257,21 +236,21 @@ def initialize_genome(genome_name, answer):
 
 
     if download_genome:
-        if answer or query_yes_no('Should I download it for you?'):
-            urlpath = "http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % (genome_name, genome_name)
-            info('Downloading %s in %s...' % (urlpath, genome_filename))
-            try:
-                with TqdmUpTo(unit='B', unit_scale=True, mininterval=30, miniters=1, desc=urlpath.split('/')[-1]) as t:
-                    urllib.urlretrieve(urlpath,
-                                       filename=genome_filename,
-                                       reporthook=t.update_to,
-                                       data=None)
+        info('Sorry I need the genome file to perform the analysis. Downloading...')
+        urlpath = "http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.2bit" % (genome_name, genome_name)
+        info('Downloading %s in %s...' % (urlpath, genome_filename))
+        try:
+            with TqdmUpTo(unit='B', unit_scale=True, mininterval=30, miniters=1, desc=urlpath.split('/')[-1]) as t:
+                urllib.urlretrieve(urlpath,
+                                   filename=genome_filename,
+                                   reporthook=t.update_to,
+                                   data=None)
 
-                info('Downloaded %s in %s:' % (urlpath, genome_filename))
-            except IOError, e:
-                        error("Can't retrieve %r to %r: %s" % (urlpath, genome_filename, e))
-                        info('Sorry I need the genome file to perform the analysis. Exiting...')
-                        sys.exit(1)
+            info('Downloaded %s in %s:' % (urlpath, genome_filename))
+        except IOError, e:
+                    error("Can't retrieve %r to %r: %s" % (urlpath, genome_filename, e))
+                    info('Sorry I need the genome file to perform the analysis. Exiting...')
+                    sys.exit(1)
 
     check_file(genome_filename)
     genome = Genome_2bit(genome_filename, verbose=True)
