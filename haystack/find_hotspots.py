@@ -5,7 +5,6 @@ import subprocess as sb
 import numpy as np
 import pandas as pd
 import argparse
-from memory_profiler import profile
 #from pybedtools import BedTool
 import multiprocessing
 import glob
@@ -26,6 +25,7 @@ HAYSTACK_VERSION = "0.5.2"
 
 do_not_recompute = None
 keep_intermediate_files= None
+
 
 
 def quantile_normalization(A):
@@ -214,7 +214,6 @@ def get_data_filepaths(samples_filename_or_bam_folder, input_is_bigwig):
     return sample_names, data_filenames
 
 
-
 def create_tiled_genome(genome_name,
                         output_directory,
                         chr_len_filename,
@@ -331,7 +330,6 @@ def create_tiled_genome(genome_name,
 
 ### if bigwig
 
-@profile
 def create_tiled_genome_with_id(genome_sorted_bins_file):
 
     if os.path.exists(genome_sorted_bins_file):
@@ -351,7 +349,6 @@ def create_tiled_genome_with_id(genome_sorted_bins_file):
 
     return genome_sorted_bins_id_file
 
-@profile
 def to_binned_tracks_if_bigwigs(data_filenames,
                                 intermediate_directory,
                                 binned_sample_names,
@@ -401,7 +398,6 @@ def to_binned_tracks_if_bigwigs(data_filenames,
 #######
 # convert bam files to genome-wide rpm tracks
 
-@profile
 def to_filtered_deduped_bams(bam_filenames,
                              output_directory,
                              n_processes):
@@ -456,7 +452,6 @@ def to_filtered_deduped_bams(bam_filenames,
     return bam_filtered_nodup_filenames
 
 
-@profile
 def to_normalized_extended_reads_tracks(bam_filenames,
                                         sample_names,
                                         tracks_directory,
@@ -518,7 +513,6 @@ def to_normalized_extended_reads_tracks(bam_filenames,
 
     return bedgraph_filenames, bigwig_filenames
 
-@profile
 def to_binned_tracks(bedgraph_filenames,
                      binned_sample_names,
                      tracks_directory,
@@ -589,7 +583,6 @@ def to_binned_tracks(bedgraph_filenames,
 
     return binned_rpm_filenames
 
-@profile
 def load_binned_rpm_tracks(binned_sample_names, binned_rpm_filenames):
     # load all the tracks
     info('Loading the processed tracks')
@@ -608,7 +601,7 @@ def load_binned_rpm_tracks(binned_sample_names, binned_rpm_filenames):
 
     return df_chip
 
-@profile
+
 def to_binned_normalized_tracks(df_chip,
                                 coordinates_bin,
                                 binned_sample_names,
@@ -653,7 +646,6 @@ def to_binned_normalized_tracks(df_chip,
 
     return df_chip_normalized, bigwig_binned_normalized_filenames
 
-@profile
 def find_hpr_coordinates(df_chip,
                          coordinates_bin,
                          th_rpm,
@@ -768,6 +760,7 @@ def hpr_to_bigwig(coordinates_bin,
         except:
             pass
     return bw_iod_track_filename
+
 
 def hpr_to_bedgraph(hpr_idxs,
                     coordinates_bin,

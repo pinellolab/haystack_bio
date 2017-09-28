@@ -4,15 +4,7 @@
 ############################################################
 
 # Set the base image to Ubuntu
-FROM ubuntu:16.04 
-
-# Set the working directory to /haystack_bio
-WORKDIR /haystack_bio
-
-# Copy the current directory contents into the container at /haystack_bio
-COPY . /haystack_bio 
-
-ENV PATH /haystack_bio/binaries:/haystack_bio/binaries/meme/bin:$PATH
+FROM ubuntu:16.04
 
 RUN apt-get update \
 	&& apt-get install -y \
@@ -21,7 +13,7 @@ RUN apt-get update \
 	libopenblas-dev \
 	liblapack-dev \
 	subversion \
-	bedtools \ 
+	bedtools \
 	curl \
 	unzip \
 	zlib1g-dev \
@@ -34,7 +26,7 @@ RUN apt-get update \
 	libxslt1-dev \
 	python-pip \
     python-numpy \
-    python-scipy\ 
+    python-scipy\
     python-matplotlib \
     python-pandas \
 	python-setuptools \
@@ -64,18 +56,17 @@ RUN apt-get update \
 	&& curl -fL  https://github.com/lomereiter/sambamba/releases/download/v0.6.6/sambamba_v0.6.6_linux.tar.bz2 \
 		-o /haystack_bio/binaries/sambamba_v0.6.6_linux.tar.bz2 \
 	&& tar -xvjf /haystack_bio/binaries/sambamba_v0.6.6_linux.tar.bz2 -C /haystack_bio/binaries \
-	&& rm -f /haystack_bio/binaries/sambamba_v0.6.6_linux.tar.bz2 \ 
+	&& rm -f /haystack_bio/binaries/sambamba_v0.6.6_linux.tar.bz2 \
     && ln -s /haystack_bio/binaries/sambamba_v0.6.6 /haystack_bio/binaries/sambamba \
 	&& curl -fL http://alternate.meme-suite.org/meme-software/4.12.0/meme_4.12.0.tar.gz \
 		-o /haystack_bio/binaries/meme_4.12.0.tar.gz  \
 	&& tar -xzf /haystack_bio/binaries/meme_4.12.0.tar.gz -C /haystack_bio/binaries \
 	&& rm -f /haystack_bio/binaries/meme_4.12.0.tar.gz \
-	&& apt-get remove -y \
-	python-pip \
-    curl \
 	&& rm -rf /var/lib/apt/lists/*
 
-WORKDIR /haystack_bio/binaries/meme_4.12.0 
+RUN mkdir -p /haystack_bio/binaries/
+
+WORKDIR /haystack_bio/binaries/meme_4.12.0
 
 RUN ./configure --prefix=/haystack_bio/binaries/meme \
 	&& make clean \
@@ -84,9 +75,18 @@ RUN ./configure --prefix=/haystack_bio/binaries/meme \
 	&& rm -rf /haystack_bio/binaries/meme_4.12.0
 
 
-WORKDIR /haystack_bio
+RUN pip install numpy==1.12.1
+
+# Set the working directory to /haystack_bio
+WORKDIR /haystack_bio_setup
+
+# Copy the current directory contents into the container at /haystack_bio
+COPY . /haystack_bio_setup
 
 RUN python setup.py install
 
 RUN  ln -s /usr/local/lib/python2.7/dist-packages/haystack_bio-0.5.2-py2.7.egg/haystack/haystack_data/genomes/ /haystack_genomes
 
+ENV PATH /haystack_bio/binaries:/haystack_bio/binaries/meme/bin:$PATH
+
+RUN rm -Rf /haystack_bio_setup

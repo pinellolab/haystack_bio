@@ -10,6 +10,7 @@ import find_motifs as motifs
 import generate_tf_activity_plane as tf_activity_plane
 from memory_profiler import profile
 
+
 # commmon functions
 from haystack_common import check_file
 import logging
@@ -23,6 +24,8 @@ error = logging.critical
 warn = logging.warning
 debug = logging.debug
 info = logging.info
+
+f = open('pipeline_memory.txt', 'w+')
 
 HAYSTACK_VERSION = "0.5.2"
 
@@ -93,7 +96,13 @@ def get_args_pipeline():
 
     return parser
 
+
+
+
+
+@profile(stream=f)
 def main(input_args=None):
+
 
 
     # input_args = ["/mnt/hd2/DATA_PINELLO//PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/sample_names_H3K27ac.txt",
