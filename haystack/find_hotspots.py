@@ -228,24 +228,32 @@ def create_tiled_genome(genome_name,
     genome_sorted_bins_file = os.path.join(output_directory, '%s.%dbp.bins.sorted.bed'
                                            % (os.path.basename(genome_name), bin_size))
 
+
     if not (os.path.exists(genome_sorted_bins_file) and do_not_recompute):
+
+        info('Sorting chromosome lengths file once again to double check....')
+
+        cmd = ' sort -k1,1 -k2,2n  "%s" -o  "%s" ' % (chr_len_filename,
+                                                      chr_len_filename)
+
+        sb.call(cmd, shell=True)
 
         info('Creating bins of %dbp in %s' % (bin_size, genome_sorted_bins_file))
 
         if chrom_exclude:
-            chr_len_filtered_filename = os.path.join(output_directory,
-                                                     "%s_chr_lengths_filtered.txt" % genome_name)
+            chr_len_filtered_sorted_filename = os.path.join(output_directory,
+                                                            "%s_chr_lengths_filtered_sorted.txt" % genome_name)
 
-            with open(chr_len_filtered_filename, 'wb') as f:
+            with open(chr_len_filtered_sorted_filename, 'wb') as f:
                 f.writelines(line for line in open(chr_len_filename)
                              if not search(chrom_exclude, line.split()[0]))
         else:
-            chr_len_filtered_filename = chr_len_filename
+            chr_len_filtered_sorted_filename = chr_len_filename
 
 
-        cmd = 'bedtools makewindows -g "%s" -w %s  | sort -k1,1 -k2,2n -s -V > "%s" ' % (chr_len_filtered_filename,
-                                                                                            bin_size,
-                                                                                            genome_sorted_bins_file)
+        cmd = 'bedtools makewindows -g "%s" -w %s   > "%s" ' % (chr_len_filtered_sorted_filename,
+                                                                bin_size,
+                                                                genome_sorted_bins_file)
 
         sb.call(cmd, shell=True)
 
@@ -255,73 +263,96 @@ def create_tiled_genome(genome_name,
 
 
         # tiled_genome = BedTool(). \
-        #     window_maker(g=chr_len_filtered_filename,
+        #     window_maker(g=chr_len_filtered_sorted_filename,
         #                  w=bin_size).sort()
 
 
         if blacklist=='':
-            info('Tiled genome file created will not be blacklisted')
-        elif blacklist=='hg19':
-            info('Using hg19 blacklist file %s to filter out the regions' %blacklist)
-            blacklist_filepath = os.path.join(annotations_directory,
-                                              'hg19_blacklisted_regions.bed')
-            check_file(blacklist_filepath)
+            info('Tiled genome file created will not be blacklist filtered')
 
-            genome_sorted_bins_file_temp = genome_sorted_bins_file.replace('.bed','.filtered.bed')
+        else:
+            info('Tiled genome file created will be blacklist filtered')
 
-            cmd = 'bedtools intersect -a "%s" -b "%s"  -v  > %s ' % (genome_sorted_bins_file,
-                                                                        blacklist_filepath,
-                                                                     genome_sorted_bins_file_temp)
-            genome_sorted_bins_file = genome_sorted_bins_file_temp
+            if blacklist=='hg19':
+                info('Using hg19 blacklist file %s to filter out the regions' %blacklist)
+                blacklist_filepath = os.path.join(annotations_directory,
+                                                  'hg19_blacklisted_regions.bed')
+                check_file(blacklist_filepath)
+            elif os.path.isfile(blacklist):
+
+                info('Using blacklist file %s to filter out the regions' % blacklist)
+                blacklist_filepath = blacklist
+                check_file(blacklist_filepath)
+
+            else:
+                error('Incorrect blacklist option provided. '
+                      'It is neither a file nor a genome')
+                sys.exit(1)
+
+
+            info('Sort blacklist file')
+
+            cmd = ' sort -k1,1 -k2,2n  "%s" -o  "%s" ' % (blacklist_filepath,
+                                                          blacklist_filepath)
 
             sb.call(cmd, shell=True)
 
 
+            genome_sorted_bins_filtered_file = genome_sorted_bins_file.replace('.bed', '.filtered.bed')
+
+            info(' filter out blacklist regions')
+
+            cmd = 'bedtools intersect -sorted -a "%s" -b "%s"  -v  > %s ' % (genome_sorted_bins_file,
+                                                                             blacklist_filepath,
+                                                                             genome_sorted_bins_filtered_file)
+
+            sb.call(cmd, shell=True)
+
+            if not keep_intermediate_files:
+                info('Deleting %s' % genome_sorted_bins_file)
+                try:
+                    os.remove(genome_sorted_bins_file)
+                except:
+                    pass
+
+            genome_sorted_bins_file = genome_sorted_bins_filtered_file
+
+
             # tiled_genome.intersect(blacklist_filepath,
             #                        wa=True,
             #                        v=True,
             #                        output=genome_sorted_bins_file)
-
-        elif os.path.isfile(blacklist):
-            info('Using blacklist file %s to filter out the regions' %blacklist)
-            blacklist_filepath = blacklist
-            check_file(blacklist_filepath)
-
-            genome_sorted_bins_file_temp = genome_sorted_bins_file.replace('.bed','.filtered.bed')
-
-            cmd = 'bedtools intersect -a "%s" -b "%s"  -v  > %s ' % (genome_sorted_bins_file,
-                                                                        blacklist_filepath,
-                                                                     genome_sorted_bins_file_temp)
-            genome_sorted_bins_file = genome_sorted_bins_file_temp
-
-            # tiled_genome.intersect(blacklist_filepath,
-            #                        wa=True,
-            #                        v=True,
-            #                        output=genome_sorted_bins_file)
-        else:
-            error('Incorrect blacklist option provided. '
-                  'It is neither a file nor a genome')
-            sys.exit(1)
 
     return genome_sorted_bins_file
 
+
 ### if bigwig
-def copy_bigwigs(data_filenames, sample_names, tracks_directory):
-    import shutil
-    bigwig_filenames = [os.path.join(tracks_directory,
-                                     '%s.bw' % sample_name)
-                        for sample_name in sample_names]
 
-    for data_filename, bigwig_filename in zip(data_filenames,
-                                              bigwig_filenames):
-        shutil.copy2(data_filename, bigwig_filename)
+@profile
+def create_tiled_genome_with_id(genome_sorted_bins_file):
 
-    return bigwig_filenames
+    if os.path.exists(genome_sorted_bins_file):
 
+        info(' Adding an id column to tiled genome file')
+
+        genome_sorted_bins_id_file = genome_sorted_bins_file.replace('.bed', '_with_id.bed')
+
+        awk_command = "awk \'{printf(\"%s\\t%d\\t%d\\tp_%s\\n\", $1,$2,$3,NR)}\'" + ' < "%s" > "%s" '  % (genome_sorted_bins_file,
+                                                                                                          genome_sorted_bins_id_file)
+
+        sb.call(awk_command, shell=True)
+
+    else:
+        error('The file %s does not exist. Tiled genome was not generated in previous step' % genome_sorted_bins_file)
+        sys.exit(1)
+
+    return genome_sorted_bins_id_file
+
+@profile
 def to_binned_tracks_if_bigwigs(data_filenames,
                                 intermediate_directory,
                                 binned_sample_names,
-                                genome_sorted_bins_file):
+                                genome_sorted_bins_id_file):
 
     binned_rpm_filenames = [os.path.join(intermediate_directory,
                                          '%s.rpm' % binned_sample_name)
@@ -332,38 +363,42 @@ def to_binned_tracks_if_bigwigs(data_filenames,
                                          '%s.rpm.bedgraph' % binned_sample_name)
                             for binned_sample_name in binned_sample_names]
 
+
     for data_filename, binned_rpm_filename, binned_bedgraph_filename in zip(data_filenames,
                                                   binned_rpm_filenames,
                                                   binned_bedgraph_filenames):
 
+        info('Processing:%s' % data_filename)
+
         if not (os.path.exists(binned_rpm_filename) and do_not_recompute):
-            info('Processing:%s' % data_filename)
+            info('Computing average score of bigwig over each bin in tiled genome')
+
+            cmd1 = 'bigWigAverageOverBed "%s" "%s" /dev/null -bedOut="%s"' % (
+                data_filename,
+                genome_sorted_bins_id_file,
+                binned_bedgraph_filename)
+
+            sb.call(cmd1, shell=True)
 
 
-            awk_command =  "awk \'{printf(\"%s\\t%d\\t%d\\tp_%s\\n\", $1,$2,$3,NR)}\'"
+            info('Sorting the output of bigWigAverageOverBed and saving the fifth column (mean) to rpm file')
 
+            cmd2 = ' sort -k1,1 -k2,2n "%s" | cut -f5 > "%s"' % (binned_bedgraph_filename, binned_rpm_filename)
 
-            if keep_intermediate_files:
-                info('Creating %s' % binned_bedgraph_filename)
+            sb.call(cmd2, shell=True)
 
-                cmd = awk_command + ' < "%s" | bigWigAverageOverBed "%s" /dev/stdin /dev/stdout -bedOut="%s" | cut -f5 >  "%s"' % (
-                    genome_sorted_bins_file,
-                    data_filename,
-                    binned_bedgraph_filename,
-                    binned_rpm_filename)
-
-            else:
-
-                cmd = awk_command + ' < "%s" | bigWigAverageOverBed "%s" /dev/stdin /dev/stdout | cut -f5 >  "%s"' % (
-                    genome_sorted_bins_file,
-                    data_filename,
-                    binned_rpm_filename)
-
-            sb.call(cmd, shell=True)
+            if not keep_intermediate_files:
+                info('Deleting %s' % binned_bedgraph_filename)
+                try:
+                    os.remove(binned_bedgraph_filename)
+                except:
+                    pass
 
     return binned_rpm_filenames
 #######
 # convert bam files to genome-wide rpm tracks
+
+@profile
 def to_filtered_deduped_bams(bam_filenames,
                              output_directory,
                              n_processes):
@@ -417,6 +452,8 @@ def to_filtered_deduped_bams(bam_filenames,
 
     return bam_filtered_nodup_filenames
 
+
+@profile
 def to_normalized_extended_reads_tracks(bam_filenames,
                                         sample_names,
                                         tracks_directory,
@@ -443,7 +480,7 @@ def to_normalized_extended_reads_tracks(bam_filenames,
 
 
             cmd = 'sambamba view -f bam "%s" | bamToBed | slopBed  -r "%s" -l 0 -s -i stdin -g "%s" | ' \
-                  'genomeCoverageBed -g  "%s" -i stdin -bg -scale %.64f| sort -k1,1 -k2,2n -s -V  > "%s"' % (
+                  'genomeCoverageBed -g  "%s" -i stdin -bg -scale %.64f| sort -k1,1 -k2,2n  > "%s"' % (
             bam_filename, read_ext, chr_len_filename, chr_len_filename, scaling_factor, bedgraph_filename)
             sb.call(cmd, shell=True)
 
@@ -478,7 +515,7 @@ def to_normalized_extended_reads_tracks(bam_filenames,
 
     return bedgraph_filenames, bigwig_filenames
 
-
+@profile
 def to_binned_tracks(bedgraph_filenames,
                      binned_sample_names,
                      tracks_directory,
@@ -549,6 +586,7 @@ def to_binned_tracks(bedgraph_filenames,
 
     return binned_rpm_filenames
 
+@profile
 def load_binned_rpm_tracks(binned_sample_names, binned_rpm_filenames):
     # load all the tracks
     info('Loading the processed tracks')
@@ -567,6 +605,7 @@ def load_binned_rpm_tracks(binned_sample_names, binned_rpm_filenames):
 
     return df_chip
 
+@profile
 def to_binned_normalized_tracks(df_chip,
                                 coordinates_bin,
                                 binned_sample_names,
@@ -611,6 +650,7 @@ def to_binned_normalized_tracks(df_chip,
 
     return df_chip_normalized, bigwig_binned_normalized_filenames
 
+@profile
 def find_hpr_coordinates(df_chip,
                          coordinates_bin,
                          th_rpm,
@@ -750,7 +790,7 @@ def hpr_to_bedgraph(hpr_idxs,
     if not (os.path.exists(bed_hpr_filename) and do_not_recompute):
 
         info('Writing the HPRs in: "%s"' % bed_hpr_filename)
-        sb.call('sort -k1,1 -k2,2n -s -V  "%s" |'
+        sb.call('sort -k1,1 -k2,2n  "%s" |'
                 ' bedtools merge -i stdin >  "%s"' % (bedgraph_hpr_filename,
                                                       bed_hpr_filename),
                 shell=True)
@@ -787,8 +827,7 @@ def write_specific_regions(coordinates_bin,
                                          index=False)
 
             info('Writing:%s' % specific_output_bed_filename)
-            sb.call('sort -k1,1 -k2,2n -s -V  "%s" |'
-                    ' bedtools merge -i stdin >  "%s"' % (specific_output_filename,
+            sb.call(' bedtools merge -i  "%s" >  "%s"' % (specific_output_filename,
                                                           specific_output_bed_filename),
                     shell=True)
     # write background
@@ -820,8 +859,7 @@ def write_specific_regions(coordinates_bin,
 
             info('Writing:%s' % bg_output_bed_filename)
             sb.call(
-                'sort -k1,1 -k2,2n -s -V  "%s" |'
-                ' bedtools merge -i stdin >  "%s"' % (bg_output_filename,
+                ' bedtools merge -i "%s" >  "%s"' % (bg_output_filename,
                                                       bg_output_bed_filename),
                 shell=True)
 
@@ -976,10 +1014,12 @@ def main(input_args=None):
                                                   args.blacklist)
     # step 7:Convert files to genome-wide rpm tracks
     if args.input_is_bigwig:
-        bigwig_filenames = copy_bigwigs(data_filenames,
-                                        sample_names,
-                                        tracks_directory)
-        binned_rpm_filenames = to_binned_tracks_if_bigwigs(bigwig_filenames,
+
+        genome_sorted_bins_file = create_tiled_genome_with_id(genome_sorted_bins_file)
+
+
+
+        binned_rpm_filenames = to_binned_tracks_if_bigwigs(data_filenames,
                                                            intermediate_directory,
                                                            binned_sample_names,
                                                            genome_sorted_bins_file)

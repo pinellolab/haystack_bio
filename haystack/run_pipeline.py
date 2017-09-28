@@ -102,9 +102,20 @@ def main(input_args=None):
     #               "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/th_rpm99_zscore1_try2_ml002"]
 
 
+    # input_args = ["/home/rick/Desktop/test/sample_names.txt",
+    #               "hg19",
+    #               '--blacklist',
+    #               "hg19",
+    #               '--output_directory',
+    #               "/home/rick/Desktop/test/test4"]
+    # input_args.append('--input_is_bigwig')
+    # input_args.append('--keep_intermediate_files')
+
+
+
     #output_directory= "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/th_rpm99_zscore1_try2_ml002"
 
-    #samples_filename_or_bam_folder= "/mnt/hd2/DATA_PINELLO//PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/sample_names_H3K27ac.txt"
+    #samples_filename_or_bam_folder= "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/sample_names_H3K27ac.txt"
 
 
     print '\n[H A Y S T A C K   P I P E L I N E]'
@@ -271,7 +282,7 @@ def main(input_args=None):
 
     hotspots.main(input_args=input_args)
 
-
+    #'--chrom_exclude "%s" ' %chrom_exclude,
 
     # write motifs conf files
     target_motifs_filepaths_file = os.path.join(output_directory,
