@@ -375,7 +375,7 @@ def get_args_motif():
                         help='Optional mapping file between gene ids to gene names (relevant only if --gene_annotation_filename is used)')
     parser.add_argument('--n_processes', type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
-                        default= min(4, mp.cpu_count()-1))
+                        default= min(4, mp.cpu_count()))
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
 
@@ -395,6 +395,8 @@ def main(input_args=None):
 
     parser = get_args_motif()
     args = parser.parse_args(input_args)
+
+    args.n_processes = max(1, args.n_processes - 1)
 
     args_dict = vars(args)
     for key, value in args_dict.items():
@@ -443,7 +445,7 @@ def main(input_args=None):
             use_gene_annotations = False
             info('No gene annotations file specified')
 
-    genome, _, nucleotide_bg_filename = initialize_genome(genome_name, answer='')
+    genome, _, nucleotide_bg_filename = initialize_genome(genome_name)
 
 
 

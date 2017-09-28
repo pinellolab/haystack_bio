@@ -18,7 +18,7 @@ def main(input_args=None):
     print 'Version %s\n' % HAYSTACK_VERSION
     parser = get_args_download_genome()
     args = parser.parse_args(input_args)
-initialize_genome(args.name)
+    initialize_genome(args.name)
 
 if __name__ == '__main__':
     main()
