@@ -35,6 +35,7 @@ RUN apt-get update \
 	Jinja2 \
 	tqdm \
 	weblogo \
+	numpy==1.12.1 \
 	&& cpan \
 	common::sense \
 	CGI::Application \
@@ -74,8 +75,7 @@ RUN ./configure --prefix=/haystack_bio/binaries/meme \
 	&& make install \
 	&& rm -rf /haystack_bio/binaries/meme_4.12.0
 
-
-RUN pip install numpy==1.12.1
+RUN apt-get remove -y python-pip curl && apt-get clean
 
 # Set the working directory to /haystack_bio
 WORKDIR /haystack_bio_setup
