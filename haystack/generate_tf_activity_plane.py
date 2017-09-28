@@ -91,6 +91,7 @@ def main(input_args=None):
 
     parser = get_args_activity()
     args = parser.parse_args(input_args)
+
     info(vars(args))
 
     haystack_motifs_output_folder = args.haystack_motifs_output_folder

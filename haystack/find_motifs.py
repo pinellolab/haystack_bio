@@ -311,91 +311,7 @@ def get_target_motifs_filepaths(target_motifs_filepaths_file):
     return sample_names, specific_regions_filenames, bg_regions_filenames
 
 
-# def get_args_motif():
-#     # mandatory
-#     parser = argparse.ArgumentParser(description='Haystack Motifs Parameters')
-#
-#     # parser.add_argument('target_motifs_filepaths_file',
-#     #                     type=str,
-#     #                     help='A tab delimited file with in each row (1) a sample name, '
-#     #                          '(2) the path to the bed file containing the target regions on the genome of reference. '
-#     #                          '(3) optional: the path to the bed file containing the background regions on the genome of reference'
-#     #                          ' (default random sampled regions from the genome)')
-#
-#     parser.add_argument('bed_target_filename', type=str,
-#                          help='A bed file containing the target coordinates on the genome of reference')
-#     parser.add_argument('genome_name', type=str, help='Genome assembly to use from UCSC (for example hg19, mm9, etc.)')
-#
-#     # optional
-#     parser.add_argument('--bed_bg_filename', type=str,
-#                          help="A bed file containing the backround coordinates on the genome of reference (default random sampled regions from the genome)",
-#                          default='random_background')
-#     parser.add_argument('--meme_motifs_filename', type=str,
-#                         help='Motifs database in MEME format (default JASPAR CORE 2016)')
-#     parser.add_argument('--nucleotide_bg_filename', type=str,
-#                         help='Nucleotide probability for the background in MEME format (default precomupted on the Genome)')
-#     parser.add_argument('--p_value', type=float,
-#                         help='FIMO p-value for calling a motif hit significant (deafult: 1e-4)', default=1e-4)
-#     parser.add_argument('--no_c_g_correction', help='Disable the matching of the C+G density of the background',
-#                         action='store_true')
-#     parser.add_argument('--c_g_bins', type=int, help='Number of bins for the C+G density correction (default: 8)',
-#                         default=8)
-#     parser.add_argument('--mask_repetitive', help='Mask repetitive sequences', action='store_true')
-#     parser.add_argument('--n_target_coordinates', type=int, help='Number of target coordinates to use (default: all)',
-#                         default=np.inf)
-#     parser.add_argument('--use_entire_bg',
-#                         help='Use the entire background file (use only when the cg correction is disabled)',
-#                         action='store_true')
-#     parser.add_argument('--bed_score_column', type=int,
-#                         help='Column in the bedfile that represents the score (default: 5)', default=5)
-#     parser.add_argument('--bg_target_ratio', type=int, help='Background size/Target size ratio (default: 1.0)',
-#                         default=2)
-#     parser.add_argument('--bootstrap',
-#                         help='Enable the bootstrap if the target set or the background set are too small, choices: True, False (default: False)',
-#                         action='store_true')
-#     parser.add_argument('--temp_directory', help='Directory to store temporary files  (default: /tmp)', default='/tmp')
-#     parser.add_argument('--no_random_sampling_target',
-#                         help='Select the best --n_target_coordinates using the score column from the target file instead of randomly select them',
-#                         action='store_true')
-#     parser.add_argument('--name', help='Define a custom output filename for the report', default='')
-#     parser.add_argument('--internal_window_length', type=int,
-#                         help='Window length in bp for the enrichment (default: average lenght of the target sequences)')
-#     parser.add_argument('--window_length', type=int,
-#                         help='Window length in bp for the profiler (default:internal_window_length*5)')
-#     parser.add_argument('--min_central_enrichment', type=float,
-#                         help='Minimum central enrichment to report a motif (default:>1.0)', default=1.0)
-#     parser.add_argument('--disable_ratio', help='Disable target/bg ratio filter', action='store_true')
-#     parser.add_argument('--dump', help='Dump all the intermediate data, choices: True, False (default: False)',
-#                         action='store_true')
-#     parser.add_argument('--output_directory', type=str, help='Output directory (default: current directory)',
-#                         default='')
-#     parser.add_argument('--smooth_size', type=int,
-#                         help='Size in bp for the smoothing window (default: internal_window_length/4)')
-#     parser.add_argument('--gene_annotations_filename', type=str,
-#                         help='Optional gene annotations file from the UCSC Genome Browser in bed format to map each region to its closes gene')
-#     parser.add_argument('--gene_ids_to_names_filename', type=str,
-#                         help='Optional mapping file between gene ids to gene names (relevant only if --gene_annotation_filename is used)')
-#     parser.add_argument('--n_processes', type=int,
-#                         help='Specify the number of processes to use. The default is #cores available.',
-#                         default= min(4, mp.cpu_count()))
-#     parser.add_argument('--version', help='Print version and exit.', action='version',
-#                         version='Version %s' % HAYSTACK_VERSION)
-#
-#     return parser
-
-
-
-###############################################################################
-
-#def main(input_args=None):
-def main():
-    print '\n[H A Y S T A C K   M O T I F S]'
-    print('\n-MOTIF ENRICHMENT ANALYSIS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
-    print 'Version %s\n' % HAYSTACK_VERSION
-
-    bootstrap = False
-    ngram_correction = 'g'
-
+def get_args_motif():
     # mandatory
     parser = argparse.ArgumentParser(description='Haystack Motifs Parameters')
 
@@ -407,13 +323,13 @@ def main():
     #                          ' (default random sampled regions from the genome)')
 
     parser.add_argument('bed_target_filename', type=str,
-                         help='A bed file containing the target coordinates on the genome of reference')
+                        help='A bed file containing the target coordinates on the genome of reference')
     parser.add_argument('genome_name', type=str, help='Genome assembly to use from UCSC (for example hg19, mm9, etc.)')
 
     # optional
     parser.add_argument('--bed_bg_filename', type=str,
-                         help="A bed file containing the backround coordinates on the genome of reference (default random sampled regions from the genome)",
-                         default='random_background')
+                        help="A bed file containing the backround coordinates on the genome of reference (default random sampled regions from the genome)",
+                        default='random_background')
     parser.add_argument('--meme_motifs_filename', type=str,
                         help='Motifs database in MEME format (default JASPAR CORE 2016)')
     parser.add_argument('--nucleotide_bg_filename', type=str,
@@ -461,14 +377,28 @@ def main():
                         help='Optional mapping file between gene ids to gene names (relevant only if --gene_annotation_filename is used)')
     parser.add_argument('--n_processes', type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
-                        default= min(4, mp.cpu_count()))
+                        default=min(4, mp.cpu_count()))
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
 
-    #parser = get_args_motif()
-    #args = parser.parse_args(input_args)
+    return parser
 
-    args = parser.parse_args()
+
+
+###############################################################################
+
+def main(input_args=None):
+    print '\n[H A Y S T A C K   M O T I F S]'
+    print('\n-MOTIF ENRICHMENT ANALYSIS- [Luca Pinello - lpinello@jimmy.harvard.edu]\n')
+    print 'Version %s\n' % HAYSTACK_VERSION
+
+    bootstrap = False
+    ngram_correction = 'g'
+
+    parser = get_args_motif()
+    args = parser.parse_args(input_args)
+
+    args.n_processes = max(1, args.n_processes - 1)
 
     args_dict = vars(args)
     for key, value in args_dict.items():

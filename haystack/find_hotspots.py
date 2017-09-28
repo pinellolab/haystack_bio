@@ -961,9 +961,6 @@ def main(input_args=None):
     #               "/home/rick/Desktop/test/test5"]
     # input_args.append('--input_is_bigwig')
 
-
-    #input_args.append('--keep_intermediate_files')
-
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS-\n')
     print 'Version %s\n' % HAYSTACK_VERSION
