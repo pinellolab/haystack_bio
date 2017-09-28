@@ -1009,7 +1009,7 @@ def main(input_args=None):
     binned_sample_names = ['%s.%dbp' % (sample_name, args.bin_size)
                            for sample_name in sample_names]
     # step 5: get genome data
-    _, chr_len_filename, _= initialize_genome(args.genome_name, answer='')
+    _, chr_len_filename, _= initialize_genome(args.genome_name)
 
     # step 6: create tiled genome
     genome_sorted_bins_file = create_tiled_genome(args.genome_name,

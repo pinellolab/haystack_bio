@@ -252,7 +252,7 @@ def main(input_args=None):
                  '--th_rpm %f' % th_rpm,
                  '--blacklist %s' % blacklist,
                  '--read_ext %d' % read_ext,
-                 '--n_processes  %d' % n_processes)
+                 '--n_processes %d' % n_processes)
     print(cmd_to_run)
     sb.call(cmd_to_run ,shell=True)  
 

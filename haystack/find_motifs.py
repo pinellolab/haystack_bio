@@ -452,7 +452,7 @@ def main(input_args=None):
             use_gene_annotations = False
             info('No gene annotations file specified')
 
-    genome, _, nucleotide_bg_filename = initialize_genome(genome_name, answer='')
+    genome, _, nucleotide_bg_filename = initialize_genome(genome_name)
 
 
     # for name, bed_target_filename, bed_bg_filename in zip(sample_names,
