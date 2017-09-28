@@ -210,8 +210,6 @@ def parallel_fimo_scanning(target_coords,
 
     motifs_in_sequences_matrix = np.zeros((len(target_coords), len(fimo.motif_ids)))
 
-    num_consumers= num_consumers -2
-
     # compute motifs with fimo
     if num_consumers > 1:
 
@@ -377,7 +375,7 @@ def get_args_motif():
                         help='Optional mapping file between gene ids to gene names (relevant only if --gene_annotation_filename is used)')
     parser.add_argument('--n_processes', type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
-                        default= mp.cpu_count())
+                        default= min(4, mp.cpu_count()-1))
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
 

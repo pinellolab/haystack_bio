@@ -155,7 +155,7 @@ def get_args():
     parser.add_argument('--n_processes',
                         type=int,
                         help='Specify the number of processes to use. The default is #cores available.',
-                        default=multiprocessing.cpu_count())
+                        default=min(4, multiprocessing.cpu_count()-1))
     parser.add_argument('--version',
                         help='Print version and exit.',
                         action='version',
@@ -230,6 +230,10 @@ def create_tiled_genome(genome_name,
                                            % (os.path.basename(genome_name), bin_size))
 
 
+    chr_len_sorted_filtered_filename = os.path.join(output_directory,
+                                                    "%s_chr_lengths_sorted_filtered.txt" % genome_name)
+
+
     if not (os.path.exists(genome_sorted_bins_file) and do_not_recompute):
 
         info('Sorting chromosome lengths file once again to double check....')
@@ -242,17 +246,15 @@ def create_tiled_genome(genome_name,
         info('Creating bins of %dbp in %s' % (bin_size, genome_sorted_bins_file))
 
         if chrom_exclude:
-            chr_len_filtered_sorted_filename = os.path.join(output_directory,
-                                                            "%s_chr_lengths_filtered_sorted.txt" % genome_name)
 
-            with open(chr_len_filtered_sorted_filename, 'wb') as f:
+            with open(chr_len_sorted_filtered_filename, 'wb') as f:
                 f.writelines(line for line in open(chr_len_filename)
                              if not search(chrom_exclude, line.split()[0]))
         else:
-            chr_len_filtered_sorted_filename = chr_len_filename
+            chr_len_sorted_filtered_filename = chr_len_filename
 
 
-        cmd = 'bedtools makewindows -g "%s" -w %s   > "%s" ' % (chr_len_filtered_sorted_filename,
+        cmd = 'bedtools makewindows -g "%s" -w %s   > "%s" ' % (chr_len_sorted_filtered_filename,
                                                                 bin_size,
                                                                 genome_sorted_bins_file)
 
@@ -791,8 +793,7 @@ def hpr_to_bedgraph(hpr_idxs,
     if not (os.path.exists(bed_hpr_filename) and do_not_recompute):
 
         info('Writing the HPRs in: "%s"' % bed_hpr_filename)
-        sb.call('sort -k1,1 -k2,2n  "%s" |'
-                ' bedtools merge -i stdin >  "%s"' % (bedgraph_hpr_filename,
+        sb.call(' bedtools merge -i "%s" >  "%s"' % (bedgraph_hpr_filename,
                                                       bed_hpr_filename),
                 shell=True)
 
@@ -957,6 +958,18 @@ def create_igv_track_file(hpr_iod_scores,
 
 
 def main(input_args=None):
+
+
+    # input_args = ["/home/rick/Desktop/test/sample_names.txt",
+    #               "hg19",
+    #               '--blacklist',
+    #               "hg19",
+    #               '--output_directory',
+    #               "/home/rick/Desktop/test/test5"]
+    # input_args.append('--input_is_bigwig')
+
+
+    #input_args.append('--keep_intermediate_files')
 
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS-\n')
