@@ -251,8 +251,8 @@ def main(input_args=None):
                  '--z_score_low %f' % z_score_low,
                  '--th_rpm %f' % th_rpm,
                  '--blacklist %s' % blacklist,
-                 '--read_ext %f' % read_ext)
-    print cmd_to_run
+                 '--read_ext %d' % read_ext)
+    print(cmd_to_run)
     sb.call(cmd_to_run ,shell=True)  
 
 
@@ -304,7 +304,7 @@ def main(input_args=None):
         if temp_directory:
             cmd_to_run += ' --temp_directory %s' % temp_directory
 
-        print cmd_to_run
+        print(cmd_to_run)
 
 
         sb.call(cmd_to_run, shell=True)
@@ -387,24 +387,17 @@ def main(input_args=None):
                                                 'HAYSTACK_MOTIFS_on_%s' % sample_name)
 
             if os.path.exists(motifs_output_folder):
+                cmd_to_run='haystack_tf_activity_plane %s %s %s --output_directory %s'  %(motifs_output_folder,sample_names_tf_activity_filename,sample_name,tf_activity_directory)
               
-              cmd_to_run='haystack_tf_activity_plane %s %s %s --output_directory %s'  %(motifs_output_folder,sample_names_tf_activity_filename,sample_name,tf_activity_directory)
-              
-              if motif_mapping_filename:
+            if motif_mapping_filename:
                 cmd_to_run+=' --motif_mapping_filename %s' %  motif_mapping_filename       
               
-              if plot_all:
-                        cmd_to_run+=' --plot_all'
-                        
-                    
-              print cmd_to_run
-              sb.call(cmd_to_run,shell=True) 
-                    
-                    
-                
-                
-                
-                
+            if plot_all:
+                cmd_to_run+=' --plot_all'
+
+            print(cmd_to_run)
+            sb.call(cmd_to_run,shell=True)
+
 
 if __name__ == '__main__':
     main()
