@@ -5,6 +5,7 @@ import subprocess as sb
 import numpy as np
 import pandas as pd
 import argparse
+from memory_profiler import profile
 #from pybedtools import BedTool
 import multiprocessing
 import glob

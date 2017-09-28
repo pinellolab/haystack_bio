@@ -8,6 +8,8 @@ import multiprocessing
 import find_hotspots as hotspots
 import find_motifs as motifs
 import generate_tf_activity_plane as tf_activity_plane
+from memory_profiler import profile
+
 # commmon functions
 from haystack_common import check_file
 import logging
