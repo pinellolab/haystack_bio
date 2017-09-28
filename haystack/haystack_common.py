@@ -293,5 +293,12 @@ def initialize_genome(genome_name, answer):
     check_file(chr_len_filename)
     check_file(meme_bg_filename)
 
+    info('Sorting chromosome lengths file....')
+
+    cmd = ' sort -k1,1 -k2,2n  "%s" -o  "%s" ' % (chr_len_filename,
+                                                  chr_len_filename)
+
+    sb.call(cmd, shell=True)
+
 
     return genome, chr_len_filename, meme_bg_filename
