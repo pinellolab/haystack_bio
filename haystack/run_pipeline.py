@@ -24,7 +24,7 @@ warn = logging.warning
 debug = logging.debug
 info = logging.info
 
-from memory_profiler import profile
+#from memory_profiler import profile
 #f = open('pipeline_memory.txt', 'w+')
 
 HAYSTACK_VERSION = "0.5.2"
@@ -96,7 +96,7 @@ def get_args_pipeline():
 
     return parser
 
-@profile
+#@profile
 def main(input_args=None):
 
 
