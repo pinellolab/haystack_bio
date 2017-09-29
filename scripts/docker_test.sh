@@ -7,6 +7,6 @@ cd $HOME/data_h3k27ac_6cells
 
 docker run -v ${PWD}:/docker_data \
            -v ${HOME}/haystack_genomes:/haystack_genomes \
-           -w ${HOME}/docker_data -it pinellolab/haystack_bio haystack_pipeline samples_names.txt hg19  --blacklist hg19
+           -w /docker_data -it pinellolab/haystack_bio haystack_pipeline samples_names.txt hg19  --blacklist hg19
 
 
