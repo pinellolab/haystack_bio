@@ -25,7 +25,7 @@ warn = logging.warning
 debug = logging.debug
 info = logging.info
 
-f = open('pipeline_memory.txt', 'w+')
+#f = open('pipeline_memory.txt', 'w+')
 
 HAYSTACK_VERSION = "0.5.2"
 
@@ -100,7 +100,7 @@ def get_args_pipeline():
 
 
 
-@profile(stream=f)
+@profile
 def main(input_args=None):
 
 
@@ -277,7 +277,10 @@ def main(input_args=None):
                 '--z_score_low',
                 '{:f}'.format(z_score_low),
                 '--read_ext',
-                '{:d}'.format(read_ext)]
+                '{:d}'.format(read_ext),
+                '--n_processes',
+                '{:d}'.format(n_processes)]
+
     if do_not_recompute:
         input_args.append('--do_not_recompute')
     if do_not_filter_bams:
