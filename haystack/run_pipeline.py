@@ -5,11 +5,9 @@ import glob
 import shutil
 import argparse
 import multiprocessing
-import find_hotspots as hotspots
-import find_motifs as motifs
-import generate_tf_activity_plane as tf_activity_plane
 
-# commmon functions
+import subprocess as sb
+
 from haystack_common import check_file
 
 import logging
@@ -98,32 +96,6 @@ def get_args_pipeline():
 
 #@profile
 def main(input_args=None):
-
-
-
-    # input_args = ["/mnt/hd2/DATA_PINELLO//PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/sample_names_H3K27ac.txt",
-    #               "hg19",
-    #               '--blacklist',
-    #               "hg19",
-    #               '--output_directory',
-    #               "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/th_rpm99_zscore1_try2_ml002"]
-
-
-    # input_args = ["/home/rick/Desktop/test/sample_names.txt",
-    #               "hg19",
-    #               '--blacklist',
-    #               "hg19",
-    #               '--output_directory',
-    #               "/home/rick/Desktop/test/test4"]
-    # input_args.append('--input_is_bigwig')
-    # input_args.append('--keep_intermediate_files')
-
-
-
-    #output_directory= "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/th_rpm99_zscore1_try2_ml002"
-
-    #samples_filename_or_bam_folder= "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/sample_names_H3K27ac.txt"
-
 
     print '\n[H A Y S T A C K   P I P E L I N E]'
     print('\n-SELECTION OF HOTSPOTS OF VARIABILITY AND ENRICHED MOTIFS-\n')
@@ -222,12 +194,6 @@ def main(input_args=None):
             error("The file or folder %s doesn't exist. Exiting." % samples_filename_or_bam_folder)
             sys.exit(1)
 
-    # dir_path = os.path.dirname(os.path.realpath(samples_filename_or_bam_folder))
-    # data_filenames = [os.path.join(dir_path, filename)
-    #                   for filename in data_filenames]
-    # gene_expression_filenames = [os.path.join(dir_path, filename)
-    #                   for filename in gene_expression_filenames]
-
     # check all the files before starting
     info('Checking samples files location...')
     for data_filename in data_filenames:
@@ -253,135 +219,51 @@ def main(input_args=None):
             outfile.write('%s\t%s\n' % (sample_name, data_filename))
 
 
-    # CALL HAYSTACK HOTSPOTS
-    input_args=[sample_names_hotspots_filename,
-                genome_name,
-                '--blacklist',
-                blacklist,
-                '--output_directory',
-                output_directory,
-                '--bin_size',
-                '{:d}'.format(bin_size),
-                '--chrom_exclude',
-                chrom_exclude,
-                '--th_rpm',
-                '{:f}'.format(th_rpm),
-                '--transformation',
-                transformation,
-                '--z_score_high',
-                '{:f}'.format(z_score_high),
-                '--z_score_low',
-                '{:f}'.format(z_score_low),
-                '--read_ext',
-                '{:d}'.format(read_ext),
-                '--n_processes',
-                '{:d}'.format(n_processes)]
-
-    if do_not_recompute:
-        input_args.append('--do_not_recompute')
-    if do_not_filter_bams:
-        input_args.append('--do_not_filter_bams')
-    if depleted:
-        input_args.append('--depleted')
-    if input_is_bigwig:
-        input_args.append('--input_is_bigwig')
-    if disable_quantile_normalization:
-        input_args.append('--disable_quantile_normalization')
-    if keep_intermediate_files:
-        input_args.append('--keep_intermediate_files')
-
-    hotspots.main(input_args=input_args)
-
-    #'--chrom_exclude "%s" ' %chrom_exclude,
-
-    # write motifs conf files
-    target_motifs_filepaths_file = os.path.join(output_directory,
-                                                  'target_motifs_bed_filepaths.txt')
-
-
-    with open(target_motifs_filepaths_file, 'w+') as outfile:
-
-        for sample_name in sample_names:
-            specific_regions_filename = glob.glob(os.path.join(output_directory,
-                                                               'HAYSTACK_HOTSPOTS',
-                                                               'SPECIFIC_REGIONS',
-                                                               'Regions_specific_for_%s*.bed' % sample_name))[0]
-
-            bg_regions_filename = glob.glob(os.path.join(output_directory,
-                                                         'HAYSTACK_HOTSPOTS',
-                                                         'SPECIFIC_REGIONS',
-                                                         'Background_for_%s*.bed' % sample_name))[0]
-
-            outfile.write('%s\t%s\t%s\n' % (sample_name, specific_regions_filename, bg_regions_filename))
-
-
-
-
-
-    # input_args = ["/mnt/hd2/DATA_PINELLO//PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/sample_names_H3K27ac.txt",
-    #               "hg19",
-    #               '--blacklist',
-    #               "hg19",
-    #               '--output_directory',
-    #               "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K27ac/th_rpm99_zscore1_try2_ml002"]
+    #CALL HAYSTACK HOTSPOTS
+    cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s %s %s %s %s %s %s %s' % \
+                (sample_names_hotspots_filename, genome_name,output_directory,bin_size,
+                 ('--do_not_filter_bams' if do_not_filter_bams else ''),
+                 ('--depleted' if depleted else ''),
+                 ('--do_not_recompute' if do_not_recompute else ''),
+                 ('--keep_intermediate_files' if keep_intermediate_files else ''),
+                 ('--input_is_bigwig' if input_is_bigwig else ''),
+                 ('--disable_quantile_normalization' if disable_quantile_normalization else ''),
+                 '--transformation %s' % transformation,
+                 '--chrom_exclude "%s"' % chrom_exclude,
+                 '--z_score_high %f' % z_score_high,
+                 '--z_score_low %f' % z_score_low,
+                 '--th_rpm %f' % th_rpm,
+                 '--blacklist %s' % blacklist,
+                 '--read_ext %d' % read_ext,
+                 '--n_processes %d' % n_processes)
+    print(cmd_to_run)
+    sb.call(cmd_to_run ,shell=True)
 
 
     # CALL HAYSTACK MOTIFS
-
-    motif_directory = os.path.join(output_directory,
-                                   'HAYSTACK_MOTIFS')
-
-    input_args_motif = [target_motifs_filepaths_file,
-                        genome_name,
-                        '--output_directory',
-                        motif_directory]
-
-    if meme_motifs_filename:
-        input_args_motif.extend(['--meme_motifs_filename', meme_motifs_filename])
-    if n_processes:
-        input_args_motif.extend(['--n_processes', '{:d}'.format(n_processes)])
-    if temp_directory:
-        input_args_motif.extend(['--temp_directory', temp_directory])
-
-    motifs.main(input_args_motif)
+    motif_directory = os.path.join(output_directory,'HAYSTACK_MOTIFS')
 
 
+    for sample_name in sample_names:
+        specific_regions_filename = os.path.join(output_directory, 'HAYSTACK_HOTSPOTS', 'SPECIFIC_REGIONS',
+                                                 'Regions_specific_for_%s*.bed' % sample_name)
+        bg_regions_filename = glob.glob(os.path.join(output_directory, 'HAYSTACK_HOTSPOTS', 'SPECIFIC_REGIONS',
+                                                     'Background_for_%s*.bed' % sample_name))[0]
+        cmd_to_run = 'haystack_motifs %s %s --bed_bg_filename %s --output_directory %s --name %s' % (
+        specific_regions_filename, genome_name, bg_regions_filename, motif_directory, sample_name)
 
+        if meme_motifs_filename:
+            cmd_to_run += ' --meme_motifs_filename %s' % meme_motifs_filename
 
-    #for sample_name in sample_names:
+        if n_processes:
+            cmd_to_run += ' --n_processes %d' % n_processes
 
-        # specific_regions_filename = glob.glob(os.path.join(output_directory,
-        #                                          'HAYSTACK_HOTSPOTS',
-        #                                          'SPECIFIC_REGIONS',
-        #                                          'Regions_specific_for_%s*.bed' % sample_name))[0]
-        #
-        # bg_regions_filename = glob.glob(os.path.join(output_directory,
-        #                                              'HAYSTACK_HOTSPOTS',
-        #                                              'SPECIFIC_REGIONS',
-        #                                              'Background_for_%s*.bed' % sample_name))[0]
-        #
-        #
-        # input_args_motif = [specific_regions_filename,
-        #                     genome_name,
-        #                     '--bed_bg_filename',
-        #                     bg_regions_filename,
-        #                     '--output_directory',
-        #                     motif_directory,
-        #                     '--name',
-        #                     sample_name]
+        if temp_directory:
+            cmd_to_run += ' --temp_directory %s' % temp_directory
 
+        print(cmd_to_run)
+        sb.call(cmd_to_run, shell=True)
 
-        # input_args_motif = [genome_name,
-        #                     '--output_directory',
-        #                     motif_directory]
-        #
-        # if meme_motifs_filename:
-        #     input_args_motif.extend(['--meme_motifs_filename', meme_motifs_filename])
-        # if n_processes:
-        #     input_args_motif.extend(['--n_processes', '{:d}'.format(n_processes)])
-        # if temp_directory:
-        #     input_args_motif.extend(['--temp_directory', temp_directory])
-        # motifs.main(input_args_motif)
 
     if USE_GENE_EXPRESSION:
 
@@ -407,19 +289,17 @@ def main(input_args=None):
                                                 'HAYSTACK_MOTIFS_on_%s' % sample_name)
 
             if os.path.exists(motifs_output_folder):
+                cmd_to_run='haystack_tf_activity_plane %s %s %s --output_directory %s'  %(motifs_output_folder,sample_names_tf_activity_filename,sample_name,tf_activity_directory)
 
-                input_args_activity= [motifs_output_folder,
-                                      sample_names_tf_activity_filename,
-                                      sample_name,
-                                      '--output_directory',
-                                      tf_activity_directory]
-                if motif_mapping_filename:
-                    input_args_activity.extend(['--motif_mapping_filename',
-                                                motif_mapping_filename])
-                if plot_all:
-                    input_args_activity.append(['--plot_all'])
+            if motif_mapping_filename:
+                cmd_to_run+=' --motif_mapping_filename %s' %  motif_mapping_filename
 
-                tf_activity_plane.main(input_args_activity)
+            if plot_all:
+                cmd_to_run+=' --plot_all'
+
+            print(cmd_to_run)
+            sb.call(cmd_to_run,shell=True)
+
 
 if __name__ == '__main__':
     main()

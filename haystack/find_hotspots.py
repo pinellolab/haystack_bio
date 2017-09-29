@@ -55,9 +55,6 @@ def log2_transform(x):
 def angle_transform(x):
     return np.arcsin(np.sqrt(x) / 1000000.0)
 
-# def normalize_count(feature, scaling_factor):
-#     feature.name = str(int(feature.name) * scaling_factor)
-#     return feature
 def get_scaling_factor(bam_filename):
 
     cmd = 'sambamba view -c %s' % bam_filename
@@ -67,10 +64,7 @@ def get_scaling_factor(bam_filename):
     (stdout, stderr) = proc.communicate()
     # print stdout,stderr
     scaling_factor = (1.0 / float(stdout.strip())) * 1000000
-    # from pysam import AlignmentFile
-    # infile = AlignmentFile(bam_filename, "rb")
-    # numreads = infile.count(until_eof=True)
-    # scaling_factor = (1.0 / float(numreads)) * 1000000
+
     return scaling_factor
 
 def get_args():
@@ -259,16 +253,6 @@ def create_tiled_genome(genome_name,
 
         sb.call(cmd, shell=True)
 
-        # cmd = 'bedtools sort -i "%s" > "%s"' % (genome_sorted_bins_file, genome_sorted_bins_file)
-        #
-        # sb.call(cmd, shell=True)
-
-
-        # tiled_genome = BedTool(). \
-        #     window_maker(g=chr_len_filtered_sorted_filename,
-        #                  w=bin_size).sort()
-
-
         if blacklist=='':
             info('Tiled genome file created will not be blacklist filtered')
 
@@ -286,11 +270,11 @@ def create_tiled_genome(genome_name,
                 blacklist_filepath = blacklist
                 check_file(blacklist_filepath)
 
+
             else:
                 error('Incorrect blacklist option provided. '
                       'It is neither a file nor a genome')
                 sys.exit(1)
-
 
             info('Sort blacklist file')
 
@@ -318,12 +302,6 @@ def create_tiled_genome(genome_name,
                     pass
 
             genome_sorted_bins_file = genome_sorted_bins_filtered_file
-
-
-            # tiled_genome.intersect(blacklist_filepath,
-            #                        wa=True,
-            #                        v=True,
-            #                        output=genome_sorted_bins_file)
 
     return genome_sorted_bins_file
 
@@ -482,18 +460,6 @@ def to_normalized_extended_reads_tracks(bam_filenames,
             bam_filename, read_ext, chr_len_filename, chr_len_filename, scaling_factor, bedgraph_filename)
             sb.call(cmd, shell=True)
 
-            # BedTool(bam_filename). \
-            #     bam_to_bed(). \
-            #     slop(r=read_ext,
-            #          l=0,
-            #          s=True,
-            #          g=chr_len_filename). \
-            #     genome_coverage(bg=True,
-            #                     scale=scaling_factor,
-            #                     g=chr_len_filename).\
-            #     sort().\
-            #     saveas(bedgraph_filename)
-
             if not keep_intermediate_files:
                 info('Deleting %s' % bam_filename)
                 try:
@@ -545,25 +511,8 @@ def to_binned_tracks(bedgraph_filenames,
                                                                                        bedgraph_binned_filename)
             sb.call(cmd, shell=True)
 
-
-            # bedgraph = BedTool(genome_sorted_bins_file). \
-            #     map(b=bedgraph_filename,
-            #         c=4,
-            #         o='mean',
-            #         null=0.0).\
-            #     saveas(bedgraph_binned_filename)
-
             cmd = 'cut -f4 "%s"  > "%s" ' % (bedgraph_binned_filename, binned_rpm_filename)
             sb.call(cmd, shell=True)
-
-            # bedgraph.to_dataframe()['name'].\
-            #     to_csv(binned_rpm_filename,
-            #            index=False)
-
-            # bedgraph = BedTool(genome_sorted_bins_file). \
-            #     intersect(bed_extended, c=True). \
-            #     each(normalize_count, scaling_factor). \
-            #     saveas(bedgraph_filename)
 
             info('Binned Bedgraph saved...')
 
@@ -658,10 +607,6 @@ def find_hpr_coordinates(df_chip,
     mpl.use('Agg')
     import pylab as pl
 
-    # th_rpm=args.th_rpm
-    # transformation=args.transformation
-    # max_regions_percentage=args.max_regions_percentage
-    # th_rpm=np.min(df_chip.apply(lambda x: np.percentile(x,th_rpm)))
     th_rpm_est = find_th_rpm(df_chip, th_rpm)
     info('Estimated th_rpm:%s' % th_rpm_est)
 
@@ -951,18 +896,6 @@ def create_igv_track_file(hpr_iod_scores,
 
 
 def main(input_args=None):
-
-
-    # input_args = ["/home/rick/Desktop/test/sample_names.txt",
-    #               "hg19",
-    #               '--blacklist',
-    #               "hg19",
-    #               '--output_directory',
-    #               "/home/rick/Desktop/test/test5"]
-    # input_args.append('--input_is_bigwig')
-
-
-    #input_args.append('--keep_intermediate_files')
 
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS-\n')
