@@ -460,12 +460,16 @@ def main(input_args=None):
     # else:
     #     output_directory = directory_name
 
+    output_directory_root=output_directory
+
 
     for name, bed_target_filename, bed_bg_filename in zip(sample_names,
                                               specific_regions_filenames,
                                               bg_regions_filenames):
 
-        output_directory = 'HAYSTACK_MOTIFS_on_' + name
+        directory_name = 'HAYSTACK_MOTIFS_on_' + name
+
+        output_directory = os.path.join(output_directory_root, directory_name)
 
 
 
