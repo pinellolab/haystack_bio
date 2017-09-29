@@ -237,7 +237,7 @@ def main(input_args=None):
 
 
     #CALL HAYSTACK HOTSPOTS
-    cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s %s %s %s %s %s %s' % \
+    cmd_to_run='haystack_hotspots %s %s --output_directory %s --bin_size %d %s %s %s %s %s %s %s %s %s %s %s %s %s %s' % \
                 (sample_names_hotspots_filename, genome_name,output_directory,bin_size,
                  ('--do_not_filter_bams' if do_not_filter_bams else ''),
                  ('--depleted' if depleted else ''),
