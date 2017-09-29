@@ -8,11 +8,10 @@ import multiprocessing
 import find_hotspots as hotspots
 import find_motifs as motifs
 import generate_tf_activity_plane as tf_activity_plane
-from memory_profiler import profile
-
 
 # commmon functions
 from haystack_common import check_file
+
 import logging
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -25,6 +24,7 @@ warn = logging.warning
 debug = logging.debug
 info = logging.info
 
+from memory_profiler import profile
 #f = open('pipeline_memory.txt', 'w+')
 
 HAYSTACK_VERSION = "0.5.2"
@@ -95,10 +95,6 @@ def get_args_pipeline():
                         version='Version %s' % HAYSTACK_VERSION)
 
     return parser
-
-
-
-
 
 @profile
 def main(input_args=None):
