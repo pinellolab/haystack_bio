@@ -27,7 +27,6 @@ do_not_recompute = None
 keep_intermediate_files= None
 
 
-
 def quantile_normalization(A):
     AA = np.zeros_like(A)
     I = np.argsort(A, axis=0)
@@ -908,13 +907,6 @@ def create_igv_track_file(hpr_iod_scores,
 
 def main(input_args=None):
 
-    input_args = ["/home/rick/Desktop/test/sample_names.txt",
-                  "hg19",
-                  '--blacklist',
-                  "hg19",
-                  '--output_directory',
-                  "/home/rick/Desktop/test/test9"]
-    input_args.append('--input_is_bigwig')
 
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS-\n')
