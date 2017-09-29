@@ -359,14 +359,22 @@ def to_binned_tracks_if_bigwigs(data_filenames,
                             for binned_sample_name in binned_sample_names]
 
 
+    binned_bedgraph_unsorted_filenames = [os.path.join(intermediate_directory,
+                                         '%s.unsorted.rpm.bedgraph' % binned_sample_name)
+                            for binned_sample_name in binned_sample_names]
+
+
     binned_bedgraph_filenames = [os.path.join(intermediate_directory,
                                          '%s.rpm.bedgraph' % binned_sample_name)
                             for binned_sample_name in binned_sample_names]
 
 
-    for data_filename, binned_rpm_filename, binned_bedgraph_filename in zip(data_filenames,
-                                                  binned_rpm_filenames,
-                                                  binned_bedgraph_filenames):
+
+
+    for data_filename, binned_bedgraph_unsorted_filename, binned_rpm_filename, binned_bedgraph_filename in zip(data_filenames,
+                                                                                                               binned_bedgraph_unsorted_filenames,
+                                                                                                               binned_rpm_filenames,
+                                                                                                               binned_bedgraph_filenames):
 
         info('Processing:%s' % data_filename)
 
@@ -376,21 +384,24 @@ def to_binned_tracks_if_bigwigs(data_filenames,
             cmd1 = 'bigWigAverageOverBed "%s" "%s" /dev/null -bedOut="%s"' % (
                 data_filename,
                 genome_sorted_bins_id_file,
-                binned_bedgraph_filename)
+                binned_bedgraph_unsorted_filename)
 
             sb.call(cmd1, shell=True)
 
 
             info('Sorting the output of bigWigAverageOverBed and saving the fifth column (mean) to rpm file')
 
-            cmd2 = ' sort -k1,1 -k2,2n "%s" | cut -f5 > "%s"' % (binned_bedgraph_filename, binned_rpm_filename)
+
+            cmd2 = 'sort -k1,1 -k2,2n "%s" | cut -f1,2,3,5 | tee "%s" | cut -f4 > "%s"' % (binned_bedgraph_unsorted_filename,
+                                                                           binned_bedgraph_filename,
+                                                                           binned_rpm_filename)
 
             sb.call(cmd2, shell=True)
 
             if not keep_intermediate_files:
-                info('Deleting %s' % binned_bedgraph_filename)
+                info('Deleting %s' % binned_bedgraph_unsorted_filename)
                 try:
-                    os.remove(binned_bedgraph_filename)
+                    os.remove(binned_bedgraph_unsorted_filename)
                 except:
                     pass
 
