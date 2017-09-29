@@ -107,7 +107,7 @@ def combine_pvalues(x):
 def sample_wr(population, k):
     "Chooses k random elements (with replacement) from a population"
     n = len(population)
-    _random, _int = random.random, int  # speed hack 
+    _random, _int = random.random, int  # speed hack
     result = [None] * k
     for i in xrange(k):
         j = _int(_random() * n)
@@ -315,13 +315,6 @@ def get_args_motif():
     # mandatory
     parser = argparse.ArgumentParser(description='Haystack Motifs Parameters')
 
-    # parser.add_argument('target_motifs_filepaths_file',
-    #                     type=str,
-    #                     help='A tab delimited file with in each row (1) a sample name, '
-    #                          '(2) the path to the bed file containing the target regions on the genome of reference. '
-    #                          '(3) optional: the path to the bed file containing the background regions on the genome of reference'
-    #                          ' (default random sampled regions from the genome)')
-
     parser.add_argument('bed_target_filename', type=str,
                         help='A bed file containing the target coordinates on the genome of reference')
     parser.add_argument('genome_name', type=str, help='Genome assembly to use from UCSC (for example hg19, mm9, etc.)')
@@ -407,9 +400,6 @@ def main(input_args=None):
         else:
             exec ('%s=%s' % (key, repr(value)))
 
-
-    #sample_names, specific_regions_filenames, bg_regions_filenames = get_target_motifs_filepaths(target_motifs_filepaths_file)
-
     bed_score_column -= 1
 
     if no_c_g_correction:
@@ -453,14 +443,6 @@ def main(input_args=None):
             info('No gene annotations file specified')
 
     genome, _, nucleotide_bg_filename = initialize_genome(genome_name)
-
-
-    # for name, bed_target_filename, bed_bg_filename in zip(sample_names,
-    #                                           specific_regions_filenames,
-    #                                           bg_regions_filenames):
-
-
-
     target_name = ntpath.basename(bed_target_filename.replace('.bed', ''))
 
     bg_name = ntpath.basename(bed_bg_filename.replace('.bed', ''))

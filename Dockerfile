@@ -25,18 +25,21 @@ RUN apt-get update \
 	libxml2-dev \
 	libxslt1-dev \
 	python-pip \
-    python-numpy \
-    python-scipy\
-    python-matplotlib \
-    python-pandas \
-	python-setuptools \
-	&& pip install \
+  python-numpy \
+  python-scipy\
+  python-matplotlib \
+  python-pandas \
+	python-setuptools
+
+	RUN pip install \
 	bx-python \
 	Jinja2 \
 	tqdm \
 	weblogo \
-	numpy==1.12.1 \
-	&& cpan \
+	numpy==1.12.1
+
+	RUN cpan \
+	inc::latest \
 	common::sense \
 	CGI::Application \
 	Log::Log4perl \
@@ -46,8 +49,10 @@ RUN apt-get update \
 	Types::Serialiser  \
 	XML::Compile::SOAP11 \
 	XML::Compile::WSDL11 \
-	XML::Compile::Transport::SOAPHTTP\
-	&& mkdir -p /haystack_bio/binaries\
+	XML::Compile::Transport::SOAPHTTP
+
+
+	RUN mkdir -p /haystack_bio/binaries \
 	&& curl -fL http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/bedGraphToBigWig \
 		-o /haystack_bio/binaries/bedGraphToBigWig  \
     && chmod +x /haystack_bio/binaries/bedGraphToBigWig \
@@ -59,21 +64,21 @@ RUN apt-get update \
 	&& tar -xvjf /haystack_bio/binaries/sambamba_v0.6.6_linux.tar.bz2 -C /haystack_bio/binaries \
 	&& rm -f /haystack_bio/binaries/sambamba_v0.6.6_linux.tar.bz2 \
     && ln -s /haystack_bio/binaries/sambamba_v0.6.6 /haystack_bio/binaries/sambamba \
-	&& curl -fL http://alternate.meme-suite.org/meme-software/4.12.0/meme_4.12.0.tar.gz \
-		-o /haystack_bio/binaries/meme_4.12.0.tar.gz  \
-	&& tar -xzf /haystack_bio/binaries/meme_4.12.0.tar.gz -C /haystack_bio/binaries \
-	&& rm -f /haystack_bio/binaries/meme_4.12.0.tar.gz \
+	&& curl -fL http://meme-suite.org/meme-software/4.11.2/meme_4.11.2_2.tar.gz \
+		-o /haystack_bio/binaries/meme_4.11.2_2.tar.gz  \
+	&& tar -xzf /haystack_bio/binaries/meme_4.11.2_2.tar.gz -C /haystack_bio/binaries \
+	&& rm -f /haystack_bio/binaries/meme_4.11.2_2.tar.gz \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /haystack_bio/binaries/
 
-WORKDIR /haystack_bio/binaries/meme_4.12.0
+WORKDIR /haystack_bio/binaries/meme_4.11.2
 
 RUN ./configure --prefix=/haystack_bio/binaries/meme \
 	&& make clean \
 	&& make AM_CFLAGS='-DNAN="(0.0/0.0)"' \
 	&& make install \
-	&& rm -rf /haystack_bio/binaries/meme_4.12.0
+	&& rm -rf /haystack_bio/binaries/meme_4.11.2
 
 RUN apt-get remove -y python-pip curl && apt-get clean
 
