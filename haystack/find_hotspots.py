@@ -270,11 +270,11 @@ def create_tiled_genome(genome_name,
                 blacklist_filepath = blacklist
                 check_file(blacklist_filepath)
 
+
             else:
                 error('Incorrect blacklist option provided. '
                       'It is neither a file nor a genome')
                 sys.exit(1)
-
 
             info('Sort blacklist file')
 
@@ -302,8 +302,6 @@ def create_tiled_genome(genome_name,
                     pass
 
             genome_sorted_bins_file = genome_sorted_bins_filtered_file
-
-
 
     return genome_sorted_bins_file
 
@@ -899,7 +897,6 @@ def create_igv_track_file(hpr_iod_scores,
 
 def main(input_args=None):
 
-
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS-\n')
     print 'Version %s\n' % HAYSTACK_VERSION
@@ -911,6 +908,7 @@ def main(input_args=None):
     args = parser.parse_args(input_args)
 
     args.n_processes = max(1, args.n_processes - 1)
+
     info(vars(args))
     global do_not_recompute
     global keep_intermediate_files

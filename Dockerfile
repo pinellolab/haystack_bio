@@ -68,11 +68,14 @@ RUN apt-get update \
 		-o /haystack_bio/binaries/meme_4.11.2_2.tar.gz  \
 	&& tar -xzf /haystack_bio/binaries/meme_4.11.2_2.tar.gz -C /haystack_bio/binaries \
 	&& rm -f /haystack_bio/binaries/meme_4.11.2_2.tar.gz \
+
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /haystack_bio/binaries/
 
+
 WORKDIR /haystack_bio/binaries/meme_4.11.2
+
 
 RUN ./configure --prefix=/haystack_bio/binaries/meme \
 	&& make clean \
@@ -90,6 +93,7 @@ COPY . /haystack_bio_setup
 
 
 ENV PATH /haystack_bio/binaries:/haystack_bio/binaries/meme/bin:$PATH
+
 
 RUN python setup.py install
 

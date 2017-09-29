@@ -220,7 +220,7 @@ def parallel_fimo_scanning(target_coords,
                                        nucleotide_bg_filename, temp_directory, p_value)
 
         pool = mp.Pool(processes=num_consumers)
-        results = pool.map(compute_single_motif, fimo.motif_ids)
+        pool.map(compute_single_motif, fimo.motif_ids)
         pool.close()
         pool.join()
         fimo_output_filename = os.path.join(temp_directory, prefix + '_fimo_output.motifs')
@@ -443,10 +443,12 @@ def main(input_args=None):
             info('No gene annotations file specified')
 
     genome, _, nucleotide_bg_filename = initialize_genome(genome_name)
+
     target_name = ntpath.basename(bed_target_filename.replace('.bed', ''))
 
     bg_name = ntpath.basename(bed_bg_filename.replace('.bed', ''))
     # timestamp=(datetime.datetime.now().isoformat()[:-3].replace('T','(')+str(np.random.randint(10000))+')').replace(':','.')
+
 
     if name:
         directory_name = 'HAYSTACK_MOTIFS_on_' + name
@@ -462,8 +464,6 @@ def main(input_args=None):
         '###PARAMETERS USED###\n\t\t -TARGET: %s \n\t\t -BACKGROUND: %s \n\t\t -BG_TARGET_RATIO: %s\n\t\t -C+G CORRECTION: %s\n\t\t -MASKING REPETITIVE: %s\n\t\t -COORDINATES TO ANALYZE: %s\n\t\t -OUTPUT DIRECTORY: %s\n' \
         % (bed_target_filename, bed_bg_filename, str(bg_target_ratio), str(c_g_correction), str(mask_repetitive),
            'ALL' if np.isinf(n_target_coordinates) else str(n_target_coordinates), output_directory))
-
-
 
 
     N_TARGET = None

@@ -5,8 +5,11 @@ import glob
 import shutil
 import argparse
 import multiprocessing
+
 import subprocess as sb
+
 from haystack_common import check_file
+
 import logging
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -18,6 +21,9 @@ error = logging.critical
 warn = logging.warning
 debug = logging.debug
 info = logging.info
+
+#from memory_profiler import profile
+#f = open('pipeline_memory.txt', 'w+')
 
 HAYSTACK_VERSION = "0.5.2"
 
@@ -88,6 +94,7 @@ def get_args_pipeline():
 
     return parser
 
+#@profile
 def main(input_args=None):
 
     print '\n[H A Y S T A C K   P I P E L I N E]'
@@ -231,6 +238,7 @@ def main(input_args=None):
                  '--n_processes %d' % n_processes)
     print(cmd_to_run)
     sb.call(cmd_to_run ,shell=True)
+
 
     # CALL HAYSTACK MOTIFS
     motif_directory = os.path.join(output_directory,'HAYSTACK_MOTIFS')
