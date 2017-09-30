@@ -1,6 +1,7 @@
 #!/usr/bin/env bash 
 mkdir ${HOME}/haystack_genomes
-wget -O bigwigs_h3k27ac_6cells.zip  https://www.dropbox.com/s/puz6azpn5z51lm6/bigwigs_h3k27ac_6cells.zip?dl=1
+wget -O bigwigs_h3k27ac_6cells.zip https://www.dropbox.com/s/5x9gz54y4p1tsr8/h3k27ac_6cells_bigwigs.zip?dl=1
+rm -Rf $HOME/bigwigs_h3k27ac_6cells
 unzip bigwigs_h3k27ac_6cells.zip -d $HOME
 rm bigwigs_h3k27ac_6cells.zip
 cd $HOME/bigwigs_h3k27ac_6cells

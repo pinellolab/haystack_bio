@@ -1,6 +1,7 @@
 #!/usr/bin/env bash 
 mkdir ${HOME}/haystack_genomes
 wget -O data_h3k27ac_6cells.zip https://www.dropbox.com/s/4yjx7ypj0c82ryh/data_h3k27ac_6cells.zip?dl=1
+rm -Rf $HOME/data_h3k27ac_6cells
 unzip data_h3k27ac_6cells.zip -d $HOME
 rm data_h3k27ac_6cells.zip
 cd $HOME/data_h3k27ac_6cells

@@ -830,7 +830,7 @@ def main(input_args=None):
                                       os.path.join(dump_directory, 'BG_coordinates_selected_on_' + bg_name + '.bed'),
                                       minimal_format=True)
     #info('Motif analysis for Sample %s completed' %name)
-    info('Motif analysis for all samples completed! Ciao!')
+    info('Motif analysis completed! Ciao!')
 
 if __name__ == '__main__':
     main()
