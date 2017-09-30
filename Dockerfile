@@ -25,11 +25,12 @@ RUN apt-get update \
 	libxml2-dev \
 	libxslt1-dev \
 	python-pip \
-  python-numpy \
-  python-scipy\
-  python-matplotlib \
-  python-pandas \
-	python-setuptools
+  	python-numpy \
+  	python-scipy\
+  	python-matplotlib \
+  	python-pandas \
+ 	python-setuptools \
+	ghostscript
 
 	RUN pip install \
 	bx-python \
@@ -84,6 +85,7 @@ RUN ./configure --prefix=/haystack_bio/binaries/meme \
 	&& rm -rf /haystack_bio/binaries/meme_4.11.2
 
 RUN apt-get remove -y python-pip curl && apt-get clean
+
 
 # Set the working directory to /haystack_bio
 WORKDIR /haystack_bio_setup
