@@ -1,0 +1,2 @@
+python /data/pinello/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/haystack_bio_master/haystack/run_pipeline.py /data/pinello/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K4me3/sample_names_H3K4me3.txt hg19 --output_directory /data/pinello/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/H3K4me3/default_param  --input_is_bigwig --blacklist hg19 --n_processes 24
+

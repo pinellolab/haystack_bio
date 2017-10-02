@@ -139,7 +139,7 @@ The command **haystack_pipeline**  executes the whole pipeline automatically. Th
 finding hotspots, specific regions, motifs and quantifying their activity on nearby genes.
 
 
-### A walk-through example using ENCODE ChIP-seq data for the H3K27ac histone mark in six cell types
+## A walk-through example using ENCODE ChIP-seq data for the H3K27ac histone mark in six cell types
 -------------------
 
 In this section, we showcase the commands using the example we have in the paper. We recreate the output produced by the pipeline when running on the entire genome with six cell types.
@@ -185,7 +185,7 @@ This file was obtained merging the ENCODE Data Analysis Consortium (DAC) Blackli
 The *haystack_pipeline* command is equivalent to running *haystack_hotspots* followed by *haystack_motifs* and *haystack_tf_activity_plane*.
 The inputs and outputs of the three modules of the pipeline are as follows.
 
-## Module 1: *haystack_hotspots*
+### Module 1: *haystack_hotspots*
 
 This step finds hotspots, which we define as regions that are highly variable among different cell types for a given epigenetic mark.
 
@@ -224,7 +224,7 @@ Figure 2 is a screenshot of the IGV browser showing the bigWig tracks, the hotsp
 </p>
 
 
-### Notes:
+#### Notes:
 
 - IMPORTANT: Folder names and file paths should not have white spaces. Please use underscore instead.
 
@@ -246,7 +246,7 @@ or you can run it without creating a samples_names.txt file by providing the fol
 Note, however, that in this case the pipeline runs Module 1 and Module 2, but not Module 3, since no gene expression data are provided.
 
 
-## Module 2: **haystack_motifs**
+### Module 2: **haystack_motifs**
 
 This step takes in a set of genomic region hotspots for each cell-type sample and identifies transcription factors whose binding sequence motifs are enriched in those regions.
 
@@ -283,7 +283,7 @@ Each row in the table corresponds to an enriched motif. There are 12 columns in 
 - List of regions with a particular motifs and coordinates of the motifs in those regions
 - List of closest genes to the regions with a particular motif 
 
-### Notes:
+#### Notes:
 
 - It is possible to run the motif analysis only by calling the haystack_motifs module on a given set of genomic regions.  For example, to analyze the BED file myregions.bed on the hg19 genome, run
 
@@ -301,7 +301,7 @@ Each row in the table corresponds to an enriched motif. There are 12 columns in 
 
 
 
-## Module 3: **haystack_tf_activity_plane**
+### Module 3: **haystack_tf_activity_plane**
 
 This step acts as an additional filter to restrict the set of enriched transcription factors found in the previous step to those that also exhibit statistically 
 significant correlations with the expression of genes found in hotspot regions.
@@ -349,12 +349,13 @@ Figure 4 below shows the top activity planes corresponding to the mostly highly 
 </figure> 
 </p>
 
-
-
-### Analysis of Roadmap Epigenomic Project Data
 --------------------------
 
-## 1. Precomputed tracks weblinks
+
+## Analysis of Roadmap Epigenomic Project Data
+
+
+### 1. Precomputed tracks weblinks
 
 Precomputed results for four epigenetic marks can be downloaded using the following links.
 
@@ -363,7 +364,7 @@ Precomputed results for four epigenetic marks can be downloaded using the follow
 - H3K4me3 (41 cell types):
 - DNase I hypersensitivity (25 cell types):
 
-## 2 . Sample Figures
+### 2 . Sample Figures
 
 Here we provide three sample figures taken from the analysis output for the H3K27ac histone mark across 41 cell types.
 These correspond to the figures shown in Section 3 for the sample data for the H3K27ac histone mark across 6 cell types.
@@ -396,7 +397,7 @@ Figure S7 shows the transcription factor activity for Sox2 in H1esc (star) compa
 </p>
 
 
-## 3. Auxiliary Analysis Scripts
+### 3. Auxiliary Analysis Scripts
 
 We have also provided R scripts and notebook showing how to accomplish several tasks you would probably need if you will be working with large amount of data from the ENCODE, Roadmap Epigenomics projects, or other consortia.
 These scripts can help you in the following tasks:
@@ -408,12 +409,13 @@ These scripts can help you in the following tasks:
 
 The scripts and the interactive notebook can be found in the  *haystack_bio/scripts/roadmap_data_scripts* [folder](https://github.com/pinellolab/haystack_bio/tree/master/scripts/roadmap_data_scripts)
 
+--------------------------
 
 
 Other Installation Options
 --------------------------
 
-##  Docker image
+###  Docker image
 
 **haystack_bio** can be easily used without installation using our provided Docker image. Docker is a virtualization technology that allows the creation of reproducible and isolated environments for any software. You can install Docker by following the instruction for your platform at https://www.docker.com.
 Note: For Linux platforms, make sure to run the Docker post-installation instructions so you can run the command without sudo privileges.
@@ -444,7 +446,7 @@ If you run Docker on Window you should specify the full path of the data as such
 
 Where *Username* is your Windows user name. If you get memory errors, try to allocate at least 8GB to the docker container in order to run haystack_bio.  Running other commands can be done with the same syntax.
 
-## Advanced Installation
+### Advanced Installation
 
 First make sure that the following software and package dependencies are installed.
 
@@ -500,6 +502,7 @@ To install on AWS, first launch and connect to the Amazon Instance you have chos
 
  Then, download and execute the  **manual_build.sh** script file
 
+--------------------------
 
 Jupyter Analysis Notebook
 --------
