@@ -1,6 +1,6 @@
 marks <- c('H3K27ac', 'DNase', 'H3K4me3', 'H3K27me3', 'methylation')
 output_root_dir <- "/data/pinello/PROJECTS/2017_06_HAYSTACK/precomputed_tracks"
-genome <- "hg19"
+genome <- " hg19 "
 
 output_dir <- "/mnt/hd2/DATA_PINELLO/PROJECTS/2017_06_HAYSTACK/precomputed_tracks/jobscripts"
 
@@ -16,8 +16,8 @@ for (mark in marks){
   
   fileConn <- file(filenames[[mark]])
   
-  mark_dir <- file.path(output_root_dir, mark, sprintf("sample_names_%s.txt ", mark)) 
-  samplefile <- file.path(output_root_dir, mark, "conda") 
+samplefile <-file.path(output_root_dir, mark, sprintf("sample_names_%s.txt ", mark))
+mark_dir <-  file.path(output_root_dir, mark, "output_dir")
   
   cmd <- paste0(sprintf("#BSUB -J %s \n", mark),
                 sprintf("#BSUB -o log.%s \n", mark),
@@ -26,7 +26,7 @@ for (mark in marks){
                 "#BSUB -q big-multi \n",
                 "#BSUB -N \n \n",
                 "source activate haystack_conda \n",
-                "run_pipeline.py ",
+                "haystack_pipeline ",
                 samplefile,
                 genome,
                 "--output_directory ",
