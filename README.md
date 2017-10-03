@@ -443,8 +443,23 @@ If you run Docker on Window you should specify the full path of the data as such
                    -w /docker_data -it pinelloalab/haystack_bio
                       haystack_pipeline samples_names.txt hg19  --blacklist hg19
 
+Where *Username* is your Windows user name. Running other commands can be done with the same syntax.
 
-Where *Username* is your Windows user name. If you get memory errors, try to allocate at least 8GB to the docker container in order to run haystack_bio.  Running other commands can be done with the same syntax.
+***Allocation of memory for Docker containers***
+
+It might be necessary to manually allocate enough memory to the container.
+The default memory  assigned by Docker may depend on the version and on the machine upon which it is run.
+To run the haystack_bio container, we suggest assigning at least 8GB of RAM to the docker container.
+For analysis involving large number of tracks, it may be necessary to increase the amount of allocated memory under the Settings…/ Advanced panel (See Figure S8.).
+
+
+<p align="center">
+<figure>
+  <img src="./figures/docker_settings.png" alt="Figure 8">
+</figure>
+</p>
+
+
 
 ### Advanced Installation
 
