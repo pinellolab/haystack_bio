@@ -60,7 +60,7 @@ For Mac:
 **Step 2**: Give permissions to execute the file as a program and execute the program
  
     chmod +x $HOME/miniconda.sh
-    $HOME/miniconda.sh -b
+    $HOME/miniconda.sh
 
 **Step 3**: Update the conda repository and add the repository channels in the following order of priority by running these four lines in the order shown.
 
