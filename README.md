@@ -359,10 +359,10 @@ Figure 4 below shows the top activity planes corresponding to the mostly highly 
 
 Precomputed results for four epigenetic marks can be downloaded using the following links.
 
-- H3K27ac (41 cell types):
-- H3K27me3 (41 cell types):
-- H3K4me3 (41 cell types):
-- DNase I hypersensitivity (25 cell types):
+- [H3K27ac (41 cell types)](https://www.dropbox.com/s/30vcy2kasv5azp6/haystack_H3K27ac_41cells.zip?dl=1)
+- [H3K27me3 (41 cell types)](https://www.dropbox.com/s/pwvy7lum0d4iums/haystack_H3K27me3_41cells.zip?dl=1)
+- [H3K4me3 (41 cell types)](https://www.dropbox.com/s/mgvwb9mepbqn6tz/haystack_H3K4me3_41cells.zip?dl=1)
+- [DNase I hypersensitivity (25 cell types)](https://www.dropbox.com/s/51wsk91zg01sx3y/haystack_DNase_25cells.zip?dl=1)
 
 ### 2 . Sample Figures
 
