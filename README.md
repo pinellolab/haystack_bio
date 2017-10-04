@@ -145,8 +145,8 @@ In this section, we showcase the commands using the example we have in the paper
  
 Step 1: Open a command terminal in the directory of your choosing and download the complete set of data files as an archive file to that directory.
  
-     wget -O data_h3k27ac_6cells.zip
-          https://www.dropbox.com/s/4yjx7ypj0c82ryh/data_h3k27ac_6cells.zip?dl=1
+     wget -O data_h3k27ac_6cells.zip \
+     https://www.dropbox.com/s/4yjx7ypj0c82ryh/data_h3k27ac_6cells.zip?dl=1
 
 Step 2: Decompress the archive file and change directory
 	
@@ -428,17 +428,14 @@ This allows the use of the -v option to link the fullpath of the haystack_genome
 You need also to mount the data folder containing the files you are going to use with an additional -v option. For example, assuming you have the samples_names.txt and
 the BAM files listed in it the current folder (i.e. $PWD), you can use the following command to run the haystack docker image.
 
-        docker run 	-v ${PWD}:/docker_data
-                    -v ${HOME}/haystack_genomes:/haystack_genomes
-                    -w /docker_data -it pinellolab/haystack_bio
+        docker run 	-v ${PWD}:/docker_data \
+                    -v ${HOME}/haystack_genomes:/haystack_genomes \
+                    -w /docker_data -it pinellolab/haystack_bio \
                        haystack_pipeline  samples_names.txt hg19 --blacklist hg19
 
 If you run Docker on Window you should specify the full path of the data as such
 
-        docker run -v //c/Users/Username/Downloads/data_h3k27ac_6cells:/docker_data
-                   -v //c/Users/Username/haystack_genomes/:/haystack_genomes
-                   -w /docker_data -it pinelloalab/haystack_bio
-                      haystack_pipeline samples_names.txt hg19  --blacklist hg19
+        docker run -v //c/Users/Username/Downloads/data_h3k27ac_6cells:/docker_data -v //c/Users/Username/haystack_genomes/:/haystack_genomes -w /docker_data -it pinelloalab/haystack_bio haystack_pipeline samples_names.txt hg19  --blacklist hg19
 
 Where *Username* is your Windows user name. Running other commands can be done with the same syntax.
 
@@ -492,9 +489,7 @@ Installation script for Ubuntu 16.04 on a local machine or on a cloud instance o
 We provide an installation script that downloads, builds, and installs haystack_bio and all its dependencies. To download and execute the file, run the following three commands.
 
     wget -c https://raw.githubusercontent.com/pinellolab/haystack_bio/master/scripts/manual_build.sh -O $HOME/manual_build.sh
-
     chmod +x $HOME/manual_build.sh
-
     $HOME/manual_build.sh -b
 
 After the script executes, edit the file named *.bashrc*  in your home direction to add the following line.
