@@ -95,7 +95,7 @@ We strongly suggest testing the entire pipeline on your system using the sample 
 
     haystack_run_test
 
-The command will download the hg19 reference genome automatically if you had not downloaded it before. Since it is necessary to download about 800MB, this step could take a long time on a slow internet connection. We do not include any reference genome with the installation since those files tend to be rather big. If the test completes successfully, you should see the message “Test complete successfully” in the console.
+The command will download the hg19 reference genome automatically if you had not downloaded it before. Since it is necessary to download about 800MB, this step could take a long time on a slow internet connection. We do not include any reference genome with the installation since those files tend to be rather big. If the test completes successfully, you should see the message “Test completed successfully” in the console.
 The reference genome hg19 (or any other genome such as mm9, mm10, hg38) can be also downloaded before performing the test with the command
 
     haystack_download_genome hg19
@@ -130,7 +130,7 @@ How to use *haystack_bio*
 
 ***haystack_bio*** consists of the following three modules.
 
-1) **haystack_hotspots**: finds regions that are variable across different ChIP-seq, DNase-seq or Bisulfite-seq tracks (only bigWig processed file are supported for methylation data). 
+1) **haystack_hotspots**: finds regions that are variable across different ChIP-seq, DNase-seq, ATAC-seq or similar assays.
 2) **haystack_motifs**: finds enriched transcription factor motifs in a given set of genomic regions.
 3) **haystack_tf_activity_plane**: quantifies the specificity and the activity of the TFs highlighed by the **haystack_motif** integrating gene expression data.
 
