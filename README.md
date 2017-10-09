@@ -1,20 +1,6 @@
 *haystack_bio* 
-========
-Epigenetic Variability and Motif Analysis Pipeline       
---------------------------------------------------
-**Current version**: 0.5.2
+=============
 
-[![Build Status](https://travis-ci.org/pinellolab/haystack_bio.svg?branch=master)](https://travis-ci.org/pinellolab/haystack_bio)
-
-
-[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat-square)](http://bioconda.github.io/recipes/haystack_bio/README.html)
-
-
-Summary
--------
-
-*haystack_bio* 
-========
 Epigenetic Variability and Motif Analysis Pipeline       
 --------------------------------------------------
 **Current version**: 0.5.2
