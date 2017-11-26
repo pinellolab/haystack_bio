@@ -132,7 +132,7 @@ Step 1: Open a command terminal in the directory of your choosing and download t
 
 Step 2: Decompress the archive file and change directory
 	
-	    unzip data_h3k27ac_6cells.zip?dl=1 -d $HOME
+	    unzip data_h3k27ac_6cells.zip -d $HOME
 	    cd $HOME/data_h3k27ac_6cells
 	
 The command will unzip the data files archive into a folder called data_h3k27ac_6cells.
