@@ -179,7 +179,7 @@ def main(input_args=None):
         info('Analyzing %s from:%s' % (current_motif_id, motif_gene_filename))
 
         # genes closeby the motif sites
-        mapped_genes = map(str.upper, list(pd.read_table(motif_gene_filename)['Symbol'].values))
+        mapped_genes = map(str.upper, list(pd.read_table(motif_gene_filename,keep_default_na=False,na_values='null').dropna()['Symbol'].values.astype(str)))
 
         # target genes average activity
         if USE_ZSCORE:
