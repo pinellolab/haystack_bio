@@ -82,7 +82,7 @@ def get_args_pipeline():
                         help='Exclude blacklisted regions. Blacklisted regions are not excluded by default. '
                              'Use hg19 to blacklist regions for the human genome 19, '
                              'otherwise provide the filepath for a bed file with blacklisted regions.',
-                        default='')
+                        default='none')
     parser.add_argument('--chrom_exclude',
                         type=str,
                         help='Exclude chromosomes that contain given (regex) string. For example _random|chrX|chrY excludes  random, X, and Y chromosome regions',

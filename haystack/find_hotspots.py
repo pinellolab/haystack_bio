@@ -252,7 +252,7 @@ def create_tiled_genome(genome_name,
 
         sb.call(cmd, shell=True)
 
-        if blacklist=='':
+        if blacklist == 'none':
             info('Tiled genome file created will not be blacklist filtered')
 
         else:
