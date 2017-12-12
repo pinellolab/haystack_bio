@@ -1,8 +1,8 @@
 
-from haystack_common import initialize_genome
+from haystack_common import initialize_genome, HAYSTACK_VERSION
 import argparse
 import sys
-HAYSTACK_VERSION = "0.5.2"
+
 def get_args_download_genome():
     # mandatory
     parser = argparse.ArgumentParser(description='download_genome parameters')

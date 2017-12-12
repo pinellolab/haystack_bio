@@ -12,9 +12,8 @@ import numpy as np
 import argparse
 from itertools import chain
 import logging
-from haystack_common import determine_path, check_file
+from haystack_common import determine_path, check_file, HAYSTACK_VERSION
 
-HAYSTACK_VERSION = "0.5.2"
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)-5s @ %(asctime)s:\n\t %(message)s \n',
@@ -77,6 +76,14 @@ def get_args_activity():
     parser.add_argument('--plot_all',
                         help='Disable the filter on the TF activity and correlation (default z-score TF>0 and rho>0.3)',
                         action='store_true')
+    parser.add_argument('--rho_cutoff',
+                        type=float,
+                        default=0.3,
+                        help='The cutoff absolute correlation value (0.0 to 1)  for which activity plots are generated (default: 0.3)')
+    parser.add_argument('--tf_value_cuttoff',
+                        type=float,
+                        default=0.0,
+                        help='The cutoff z-score tf_value for which activity plots are generated (default: 0.0) ')
     parser.add_argument('--version',
                         help='Print version and exit.',
                         action='version',
@@ -209,16 +216,16 @@ def main(input_args=None):
 
                 if USE_ZSCORE:
                     # correlation
-                    ro = np.corrcoef(tf_values, ds_values)[0, 1]
+                    rho = np.corrcoef(tf_values, ds_values)[0, 1]
 
                     tf_value = tf_values[target_cell_type]
                     ds_value = ds_values[target_cell_type]
 
                     info('Gene:%s TF z-score:%.2f Targets z-score:%.2f  Correlation:%.2f' % (
-                        gene_name, tf_value, ds_value, ro))
+                        gene_name, tf_value, ds_value, rho))
 
                     # make plots
-                    if (tf_value > 0 and np.abs(ro) > 0.3) or args.plot_all:
+                    if (tf_value >  args.tf_value_cuttoff and np.abs(rho) > args.rho_cutoff) or args.plot_all:
                         x_min = min(-4, tf_values.min() * 1.1)
                         x_max = max(4, tf_values.max() * 1.1)
                         y_min = min(-4, ds_values.min() * 1.1)
@@ -237,7 +244,7 @@ def main(input_args=None):
                                   numpoints=1)
 
                         ax.set_aspect('equal')
-                        plt.text(x_min * 0.98, y_max * 0.85, r'$\rho$=%.2f' % ro, fontsize=14)
+                        plt.text(x_min * 0.98, y_max * 0.85, r'$\rho$=%.2f' % rho, fontsize=14)
                         plt.xlim(x_min, x_max)
                         plt.ylim(y_min, y_max)
 

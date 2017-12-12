@@ -18,8 +18,8 @@ except:
     import pickle as cp
 
 # commmon functions
-from haystack_common import determine_path, which, check_file, initialize_genome
-HAYSTACK_VERSION = "0.5.2"
+from haystack_common import determine_path, which, check_file, initialize_genome, HAYSTACK_VERSION
+
 # dependencies
 from bioutilities import  Coordinate, Sequence, Fimo
 import numpy as np

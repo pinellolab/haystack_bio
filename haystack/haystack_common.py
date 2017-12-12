@@ -18,6 +18,10 @@ warn = logging.warning
 debug = logging.debug
 info = logging.info
 
+
+__version__ = "0.5.3"
+HAYSTACK_VERSION=__version__
+
 def check_file(filename):
     try:
         with open(filename): pass

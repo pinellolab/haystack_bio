@@ -8,7 +8,7 @@ import multiprocessing
 
 import subprocess as sb
 
-from haystack_common import check_file
+from haystack_common import check_file, HAYSTACK_VERSION
 
 import logging
 logging.basicConfig(level=logging.INFO,
@@ -25,7 +25,6 @@ info = logging.info
 #from memory_profiler import profile
 #f = open('pipeline_memory.txt', 'w+')
 
-HAYSTACK_VERSION = "0.5.2"
 
 def get_args_pipeline():
     # mandatory
@@ -89,6 +88,14 @@ def get_args_pipeline():
                         default='_|chrX|chrY')
     parser.add_argument('--read_ext', type=int, help='Read extension in bps (default: 200)', default=200)
     parser.add_argument('--temp_directory', help='Directory to store temporary files  (default: /tmp)', default='/tmp')
+    parser.add_argument('--rho_cutoff',
+                        type=float,
+                        default=0.3,
+                        help='The cutoff absolute correlation value (0.0 to 1)  for which activity plots are generated (default: 0.3)')
+    parser.add_argument('--tf_value_cuttoff',
+                        type=float,
+                        default=0.0,
+                        help='The cutoff z-score tf_value for which activity plots are generated (default: 0.0) ')
     parser.add_argument('--version', help='Print version and exit.', action='version',
                         version='Version %s' % HAYSTACK_VERSION)
 
@@ -289,7 +296,10 @@ def main(input_args=None):
                                                 'HAYSTACK_MOTIFS_on_%s' % sample_name)
 
             if os.path.exists(motifs_output_folder):
-                cmd_to_run='haystack_tf_activity_plane %s %s %s --output_directory %s'  %(motifs_output_folder,sample_names_tf_activity_filename,sample_name,tf_activity_directory)
+                cmd_to_run='haystack_tf_activity_plane %s %s %s --output_directory %s'  %(motifs_output_folder,
+                                                                                          sample_names_tf_activity_filename,
+                                                                                          sample_name,
+                                                                                          tf_activity_directory)
 
             if motif_mapping_filename:
                 cmd_to_run+=' --motif_mapping_filename %s' %  motif_mapping_filename
@@ -297,8 +307,14 @@ def main(input_args=None):
             if plot_all:
                 cmd_to_run+=' --plot_all'
 
+            if rho_cutoff:
+                cmd_to_run += ' --rho_cutoff %f' % rho_cutoff
+
+            if tf_value_cuttoff:
+                cmd_to_run += ' --tf_value_cuttoff %f' % tf_value_cuttoff
+
             print(cmd_to_run)
-            sb.call(cmd_to_run,shell=True)
+            sb.call(cmd_to_run, shell=True)
 
 
 if __name__ == '__main__':

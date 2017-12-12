@@ -8,7 +8,7 @@ import argparse
 #from pybedtools import BedTool
 import multiprocessing
 import glob
-from haystack_common import determine_path, check_file, check_required_packages, initialize_genome
+from haystack_common import determine_path, check_file, check_required_packages, initialize_genome, HAYSTACK_VERSION
 
 import logging
 logging.basicConfig(level=logging.INFO,
@@ -20,8 +20,6 @@ error = logging.critical
 warn = logging.warning
 debug = logging.debug
 info = logging.info
-
-HAYSTACK_VERSION = "0.5.2"
 
 do_not_recompute = None
 keep_intermediate_files= None
