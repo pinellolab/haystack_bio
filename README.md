@@ -785,31 +785,40 @@ optional arguments:
 
 ```
 haystack_tf_activity_plane [-h]
-                                 [--motif_mapping_filename MOTIF_MAPPING_FILENAME]
-                                 [--output_directory OUTPUT_DIRECTORY]
-                                 [--name NAME] [--plot_all] [--version]
-                                 haystack_motifs_output_folder
-                                 gene_expression_samples_filename
-                                 target_cell_type
+                                  [--motif_mapping_filename MOTIF_MAPPING_FILENAME]
+                                  [--output_directory OUTPUT_DIRECTORY]
+                                  [--name NAME] [--plot_all]
+                                  [--rho_cutoff RHO_CUTOFF]
+                                  [--tf_value_cuttoff TF_VALUE_CUTTOFF]
+                                  [--version]
+                                  haystack_motifs_output_folder
+                                  gene_expression_samples_filename
+                                  target_cell_type
 
 positional arguments:
- haystack_motifs_output_folder
-                       A path to a folder created by the haystack_motifs
-                       utility
- gene_expression_samples_filename
-                       A file containing the list of sample names and
-                       locations
- target_cell_type      The sample name to use as a target for the analysis
+  haystack_motifs_output_folder
+                        A path to a folder created by the haystack_motifs
+                        utility
+  gene_expression_samples_filename
+                        A file containing the list of sample names and
+                        locations
+  target_cell_type      The sample name to use as a target for the analysis
 
 optional arguments:
- -h, --help            show this help message and exit
- --motif_mapping_filename MOTIF_MAPPING_FILENAME
-                       Custom motif to gene mapping file (the default is for
-                       JASPAR CORE 2016 database)
- --output_directory OUTPUT_DIRECTORY
-                       Output directory (default: current directory)
- --name NAME           Define a custom output filename for the report
- --plot_all            Disable the filter on the TF activity and correlation
-                       (default z-score TF>0 and rho>0.3)
- --version             Print version and exit.
+  -h, --help            show this help message and exit
+  --motif_mapping_filename MOTIF_MAPPING_FILENAME
+                        Custom motif to gene mapping file (the default is for
+                        JASPAR CORE 2016 database)
+  --output_directory OUTPUT_DIRECTORY
+                        Output directory (default: current directory)
+  --name NAME           Define a custom output filename for the report
+  --plot_all            Disable the filter on the TF activity and correlation
+                        (default z-score TF>0 and rho>0.3)
+  --rho_cutoff RHO_CUTOFF
+                        The cutoff absolute correlation value (0.0 to 1) for
+                        which activity plots are generated (default: 0.3)
+  --tf_value_cuttoff TF_VALUE_CUTTOFF
+                        The cutoff z-score tf_value for which activity plots
+                        are generated (default: 0.0)
+  --version             Print version and exit.
 ```
