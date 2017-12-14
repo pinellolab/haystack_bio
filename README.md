@@ -419,7 +419,7 @@ You need also to mount the data folder containing the files you are going to use
 
 If you run Docker on Window you should specify the full path of the data as such
 
-        docker run -v //c/Users/Username/Downloads/data_h3k27ac_6cells:/docker_data -v //c/Users/Username/haystack_genomes/:/haystack_genomes -w /docker_data -it pinelloalab/haystack_bio haystack_pipeline samples_names.txt hg19  --blacklist hg19
+        docker run -v //c/Users/Username/Downloads/data_h3k27ac_6cells:/docker_data -v //c/Users/Username/haystack_genomes/:/haystack_genomes -w /docker_data -it pinellolab/haystack_bio haystack_pipeline samples_names.txt hg19  --blacklist hg19
 
 Where *Username* is your Windows user name. Running other commands can be done with the same syntax.
 
