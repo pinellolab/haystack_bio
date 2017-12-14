@@ -99,6 +99,6 @@ ENV PATH /haystack_bio/binaries:/haystack_bio/binaries/meme/bin:$PATH
 
 RUN python setup.py install
 
-RUN  ln -s /usr/local/lib/python2.7/dist-packages/haystack_bio-0.5.2-py2.7.egg/haystack/haystack_data/genomes/ /haystack_genomes
+RUN  ln -s /usr/local/lib/python2.7/dist-packages/haystack_bio-0.5.3-py2.7.egg/haystack/haystack_data/genomes/ /haystack_genomes
 
 RUN rm -Rf /haystack_bio_setup
