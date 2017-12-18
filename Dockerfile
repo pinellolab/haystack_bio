@@ -25,9 +25,19 @@ RUN apt-get update \
 	python-pip \
 	unzip \
 	bedtools \
-	ghostscript
-
-RUN cpan \
+	ghostscript \
+	&& rm -rf /var/lib/apt/lists/* \
+    && python -m pip install --user \
+    setuptools==37.0.0 \
+	bx-python==0.7.3 \
+	Jinja2==2.9.6 \
+	tqdm==4.19.4 \
+	weblogo==3.5.0 \
+    numpy==1.13.3 \
+  	scipy==1.0.0 \
+  	matplotlib==2.1.0 \
+  	pandas==0.21.0  \
+    && cpan \
 	inc::latest \
 	common::sense \
 	CGI::Application \
@@ -39,7 +49,6 @@ RUN cpan \
 	XML::Compile::SOAP11 \
 	XML::Compile::WSDL11 \
 	XML::Compile::Transport::SOAPHTTP
-
 
 RUN mkdir -p /haystack_bio/binaries \
 	&& curl -fL http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/bedGraphToBigWig \
@@ -56,15 +65,10 @@ RUN mkdir -p /haystack_bio/binaries \
 	&& curl -fL http://meme-suite.org/meme-software/4.11.2/meme_4.11.2_2.tar.gz \
 		-o /haystack_bio/binaries/meme_4.11.2_2.tar.gz  \
 	&& tar -xzf /haystack_bio/binaries/meme_4.11.2_2.tar.gz -C /haystack_bio/binaries \
-	&& rm -f /haystack_bio/binaries/meme_4.11.2_2.tar.gz \
-
-	&& rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /haystack_bio/binaries/
+	&& rm -f /haystack_bio/binaries/meme_4.11.2_2.tar.gz 
 
 
 WORKDIR /haystack_bio/binaries/meme_4.11.2
-
 
 RUN ./configure --prefix=/haystack_bio/binaries/meme \
 	&& make clean \
@@ -76,17 +80,6 @@ RUN apt-get remove -y python-pip curl && apt-get clean
 
 # Set the working directory to /haystack_bio
 WORKDIR /haystack_bio_setup
-
-RUN python -m pip install --user \
-    setuptools==37.0.0 \
-	bx-python==0.7.3 \
-	Jinja2==2.9.6 \
-	tqdm==4.19.4 \
-	weblogo==3.5.0 \
-    numpy==1.13.3 \
-  	scipy==1.0.0 \
-  	matplotlib==2.1.0 \
-  	pandas==0.21.0 
 
 
 # Copy the current directory contents into the container at /haystack_bio
