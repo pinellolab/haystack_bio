@@ -27,18 +27,7 @@ RUN apt-get update \
 	bedtools \
 	ghostscript
 
-	RUN python -m pip install --user \
-    setuptools==37.0.0 \
-	bx-python==0.7.3 \
-	Jinja2==2.9.6 \
-	tqdm==4.19.4 \
-	weblogo==3.5.0 \
-    numpy==1.13.3 \
-  	scipy==1.0.0 \
-  	matplotlib==2.1.0 \
-  	pandas==0.21.0 
-
-	RUN cpan \
+RUN cpan \
 	inc::latest \
 	common::sense \
 	CGI::Application \
@@ -52,7 +41,7 @@ RUN apt-get update \
 	XML::Compile::Transport::SOAPHTTP
 
 
-	RUN mkdir -p /haystack_bio/binaries \
+RUN mkdir -p /haystack_bio/binaries \
 	&& curl -fL http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/bedGraphToBigWig \
 		-o /haystack_bio/binaries/bedGraphToBigWig  \
     && chmod +x /haystack_bio/binaries/bedGraphToBigWig \
@@ -85,16 +74,25 @@ RUN ./configure --prefix=/haystack_bio/binaries/meme \
 
 RUN apt-get remove -y python-pip curl && apt-get clean
 
-
 # Set the working directory to /haystack_bio
 WORKDIR /haystack_bio_setup
+
+RUN python -m pip install --user \
+    setuptools==37.0.0 \
+	bx-python==0.7.3 \
+	Jinja2==2.9.6 \
+	tqdm==4.19.4 \
+	weblogo==3.5.0 \
+    numpy==1.13.3 \
+  	scipy==1.0.0 \
+  	matplotlib==2.1.0 \
+  	pandas==0.21.0 
+
 
 # Copy the current directory contents into the container at /haystack_bio
 COPY . /haystack_bio_setup
 
-
 ENV PATH /haystack_bio/binaries:/haystack_bio/binaries/meme/bin:$PATH
-
 
 RUN python setup.py install
 
