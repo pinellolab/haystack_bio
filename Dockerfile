@@ -12,32 +12,31 @@ RUN apt-get update \
 	gfortran \
 	libopenblas-dev \
 	liblapack-dev \
-	subversion \
-	bedtools \
-	curl \
-	unzip \
 	zlib1g-dev \
-	default-jre \
 	libexpat1-dev \
 	libhtml-template-perl \
 	libxml-simple-perl \
 	libsoap-lite-perl \
 	libxml2-dev \
 	libxslt1-dev \
+	default-jre \
+	subversion \
+	curl \
 	python-pip \
-  	python-numpy \
-  	python-scipy\
-  	python-matplotlib \
-  	python-pandas \
- 	python-setuptools \
+	unzip \
+	bedtools \
 	ghostscript
 
-	RUN pip install \
-	bx-python \
-	Jinja2 \
-	tqdm \
-	weblogo \
-	numpy==1.12.1
+	RUN python -m pip install --user \
+    setuptools==37.0.0 \
+	bx-python==0.7.3 \
+	Jinja2==2.9.6 \
+	tqdm==4.19.4 \
+	weblogo==3.5.0 \
+    numpy==1.13.3 \
+  	scipy==1.0.0 \
+  	matplotlib==2.1.0 \
+  	pandas==0.21.0 
 
 	RUN cpan \
 	inc::latest \

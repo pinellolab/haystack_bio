@@ -3,7 +3,7 @@
 Setup script for haystack_bio -- Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline
 @status:  beta
 @version: $Revision$
-@author:  Luca Pinello
+@author:  Luca Pinello, Rick Farouni
 @contact: lpinello@mgh.harvard.edu
 """
 from setuptools import setup
@@ -14,7 +14,7 @@ from haystack.haystack_common import check_required_packages
 def main():
 
     setup(
-        version="0.5.2",
+        version="0.5.3",
         name="haystack_bio",
         include_package_data=True,
         packages=["haystack"],
@@ -29,28 +29,28 @@ def main():
         },
         description="Epigenetic Variability and Transcription Factor Motifs Analysis Pipeline",
         maintainer= 'Luca Pinello , Rick Farouni',
-        maintainer_email='lpinello@jimmy.harvard.edu, tfarouni@mgh.harvard.edu',
+        maintainer_email='lpinello@mgh.harvard.edu, tfarouni@mgh.harvard.edu',
         author='Luca Pinello, Rick Farouni',
         author_email='lpinello@mgh.harvard.edu, tfarouni@mgh.harvard.edu',
-        url='http://github.com/lucapinello/Haystack',
+        url='https://github.com/pinellolab/haystack_bio',
         classifiers=[
-            'Development Status :: 5 - Beta',
+            'Development Status :: 5 - Stable',
             'Environment :: Console',
             'Intended Audience :: Developers',
             'Intended Audience :: Science/Research',
-            'License :: OSI Approved :: BSD License',
+            'License :: OSI Approved :: GNU Affero General Public License v3',
             'Operating System :: MacOS :: MacOS X',
-            'Operating System :: POSIX',
+            'Operating System :: POSIX:: Linux',
             'Topic :: Scientific/Engineering :: Bio-Informatics',
-            'Programming Language :: Python',
+            'Programming Language :: Python:: 2.7',
         ],
         install_requires=[
-            'numpy>=1.12.1',
-            'pandas>=0.13.1',
-            'matplotlib>=1.3.1',
-            'scipy>=0.13.3',
-            'jinja2>=2.7.3',
-            'tqdm>=4.15.0',
+            'numpy>=1.13.3',
+            'pandas>=0.21.0',
+            'matplotlib>=2.1.0',
+            'scipy>=1.0.0',
+            'jinja2>=2.9.6',
+            'tqdm>=4.19.4',
             'weblogo>=3.5.0',
             'bx-python>=0.7.3']
     )
