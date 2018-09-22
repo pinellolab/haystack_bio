@@ -661,7 +661,8 @@ def find_hpr_coordinates(df_chip,
     # we remove the regions "without" signal in any of the cell types
     coordinates_bin.dropna(inplace=True)
 
-    df_chip_hpr_zscore = df_chip_not_empty.loc[hpr_idxs, :].apply(zscore, axis=1)
+    df_chip_hpr_zscore = df_chip_not_empty.loc[hpr_idxs, :].apply(zscore, axis=1,
+                                                                  result_type ='broadcast')
 
 
     ###plot selection
@@ -905,6 +906,15 @@ def create_igv_track_file(hpr_iod_scores,
 
 def main(input_args=None):
 
+    # input_args = ["/home/rfarouni/Documents/haystack_bio/haystack/haystack_data/test_data/samples_names_hotspots.txt",
+    #               "hg19",
+    #               '--blacklist',
+    #               "hg19",
+    #               '--output_directory',
+    #               "/home/rfarouni/haystack_test_output/HAYSTACK_PIPELINE_RESULTS2",
+    #               "--chrom_exclude",
+    #               'chr(?!21)']
+    # input_args.append('--keep_intermediate_files')
 
     print '\n[H A Y S T A C K   H O T S P O T]'
     print('\n-SELECTION OF VARIABLE REGIONS-\n')
