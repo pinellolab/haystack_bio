@@ -19,7 +19,7 @@ debug = logging.debug
 info = logging.info
 
 
-__version__ = "0.5.3"
+__version__ = "0.5.4"
 HAYSTACK_VERSION=__version__
 
 def check_file(filename):
