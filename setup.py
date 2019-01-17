@@ -14,7 +14,7 @@ from haystack.haystack_common import check_required_packages
 def main():
 
     setup(
-        version="0.5.3",
+        version="0.5.5",
         name="haystack_bio",
         include_package_data=True,
         packages=["haystack"],
