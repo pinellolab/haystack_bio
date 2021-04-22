@@ -74,10 +74,10 @@ For Mac:
 
 **Step 4**: Install ***haystack_bio*** and its dependencies by simply running:
 
-    conda install haystack_bio
+    conda install haystack_bio pandas==0.21
     
     
-**IMPORTANT**: Please run `conda install pandas==0.21` after `conda install haystack_bio` finishes running. The more recent versions of pandas cause an error when a particular file is read from disk.  
+**IMPORTANT**:The more recent versions of pandas cause an error when a particular file is read from disk.  Please make sure you have version 0.21 installed.
     
 
 Notes on installation: In case you encounter difficulty in installing Miniconda or adding the Bioconda channel,
