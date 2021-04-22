@@ -76,6 +76,9 @@ For Mac:
 
     conda install haystack_bio
     
+    
+**IMPORTANT**: Please run `conda install pandas==0.21` after `conda install haystack_bio` finishes running. The more recent versions of pandas cause an error when a particular file is read from disk.  
+    
 
 Notes on installation: In case you encounter difficulty in installing Miniconda or adding the Bioconda channel,
 please refer to the Bioconda project's [website](https://bioconda.github.io/) for more detailed installation instructions. Note that if you have Minicoda/Anaconda 3 already installed, you would need to create a separate environment for Python 2.7. 
