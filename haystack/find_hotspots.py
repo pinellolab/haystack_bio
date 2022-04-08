@@ -194,7 +194,7 @@ def get_data_filepaths(samples_filename_or_bam_folder, input_is_bigwig):
                                                 '*' + extension_to_check))
         if not data_filenames:
             error('No bam/bigwig  files to analyze in %s. Exiting.'
-                  %  samples_filename_or_bam_folder_or_bam_folder)
+                  %  samples_filename_or_bam_folder)
             sys.exit(1)
         sample_names = [os.path.basename(data_filename).replace(extension_to_check, '')
                         for data_filename in data_filenames]
